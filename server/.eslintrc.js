@@ -10,8 +10,11 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json'
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname
   },
   plugins: ['@typescript-eslint'],
-  rules: {}
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 0
+  }
 };
