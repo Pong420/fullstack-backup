@@ -8,10 +8,12 @@
     "experimentalDecorators": true,
     "target": "es2017",
     "sourceMap": true,
+    "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "strict": true
   },
+  "files": ["src/server.d.ts"],
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

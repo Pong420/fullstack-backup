@@ -1,12 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
 import { UserModel } from './model/user.model';
-import {
-  CreateUserDto,
-  RemoveUserDto,
-  UpdateUserDto,
-  ModifyUserPasswordDto
-} from './dto';
+import { CreateUserDto, RemoveUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -33,6 +28,10 @@ export class UserService {
     return UserModel.findOneAndUpdate({ username }, changes, {
       new: true
     });
+  }
+
+  findOne(username: string) {
+    return UserModel.findOne({ username });
   }
 
   // TODO: remove it from production

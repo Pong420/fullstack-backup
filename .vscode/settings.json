@@ -3,5 +3,6 @@
     "$shared": {
       "baseUrl": "http://localhost:5000/api"
     }
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

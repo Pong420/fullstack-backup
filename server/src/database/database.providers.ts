@@ -7,6 +7,14 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
+mongoose.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: <T extends { _id: string }>(_: unknown, ret: T) => {
+    delete ret._id;
+  }
+});
+
 export const databaseProviders = [
   {
     provide: DATABASE_CONNECTION,

@@ -17,22 +17,11 @@ export class User {
   @prop({ required: true })
   role!: string;
 
-  @prop()
   createdAt!: string;
 
-  @prop()
   updatedAt!: string;
 }
 
 export const UserModel = getModelForClass(User, {
-  schemaOptions: {
-    timestamps: true,
-    toJSON: {
-      virtuals: true,
-      versionKey: false,
-      transform: (_, ret) => {
-        delete ret._id;
-      }
-    }
-  }
+  schemaOptions: { timestamps: true }
 });
