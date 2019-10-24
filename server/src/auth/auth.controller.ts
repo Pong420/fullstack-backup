@@ -1,11 +1,15 @@
 import { Controller, Req, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FastifyRequest } from 'fastify';
-import { UserService, CreateUserDto } from '../user';
+import { UserService, CreateUserDto, UserModel } from '../user';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService
+  ) {}
 
   @Post('/registor')
   registor(@Body() createUserDto: CreateUserDto) {
@@ -15,6 +19,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('/login')
   async login(@Req() req: FastifyRequest) {
-    return req.user;
+    const user = req.user as typeof UserModel;
+    return this.authService.login(user);
   }
 }

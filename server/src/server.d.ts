@@ -1,4 +1,3 @@
-// eslint-disable
 import * as fastify from 'fastify';
 
 declare module 'fastify' {
