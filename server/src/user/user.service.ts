@@ -35,14 +35,6 @@ export class UserService {
     });
   }
 
-  modifyPassword({ username, newPassword }: ModifyUserPasswordDto) {
-    return UserModel.findOneAndUpdate(
-      { username },
-      { password: newPassword },
-      { new: true }
-    );
-  }
-
   // TODO: remove it from production
   findAll() {
     return UserModel.find();

@@ -7,7 +7,11 @@ export class UpdateUserDto implements Partial<Omit<User, 'id' | 'password'>> {
 
   @IsString()
   @IsOptional()
-  role?: string;
+  password?: string;
+
+  @IsString()
+  @IsOptional()
+  public role?: string;
 }
 
 export class ModifyUserPasswordDto

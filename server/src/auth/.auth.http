@@ -7,35 +7,7 @@
 POST {{baseUrl}}/auth/registor HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
-username={{username}}&password={{password}}&role=admin
-
-###
-
-# @name users
-GET {{baseUrl}}/auth/users HTTP/1.1
-
-###
-
-# @name remove
-DELETE  {{baseUrl}}/auth/remove HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-
 username={{username}}
+&password={{password}}
+&role=admin
 
-###
-
-# @name update
-PATCH   {{baseUrl}}/auth/update HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-
-username={{username}}&role=client
-
-###
-
-# @name modify-password
-PATCH   {{baseUrl}}/auth/modify-password HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-
-username={{username}}&password={{password}}&newPassword={{newPassword}}&confirmNewPassword={{newPassword}}
-
-###

@@ -1,0 +1,47 @@
+
+@username = foo
+@password = bar
+@newPassword = foo
+
+# @name users
+GET {{baseUrl}}/user/list HTTP/1.1
+
+###
+
+# @name add
+POST {{baseUrl}}/user/add HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}
+&password={{password}}
+&role=admin
+
+###
+
+# @name remove
+DELETE  {{baseUrl}}/user/remove HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}
+
+###
+
+# @name update
+PATCH   {{baseUrl}}/user/update HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}
+&role=client
+
+###
+
+# @name modify-password
+PATCH   {{baseUrl}}/user/modify-password HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}
+&password={{password}}
+&newPassword={{newPassword}}
+&confirmNewPassword={{newPassword}}
+
+###
