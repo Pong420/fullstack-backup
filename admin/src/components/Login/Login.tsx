@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Card, Button, InputGroup } from '@blueprintjs/core';
 import { FormControl } from '../FormControl';
 import { useForm, FormBuilder } from '../../hooks/useForm';
@@ -7,6 +7,7 @@ import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { Param$Login } from '../../typings';
 import { login } from '../../store';
 import { loginStatusSelector } from '../../store';
+import { useActions } from '../../hooks/useActions';
 import * as validators from '../../utils/validators';
 
 interface LoginFormProps {
@@ -52,10 +53,10 @@ const LoginForm = React.memo<LoginFormProps>(({ loading, onSumbit }) => {
 });
 
 export const Login = () => {
-  const dispatch = useDispatch();
   const loginsStatus = useSelector(loginStatusSelector);
-  const onSubmit: LoginFormProps['onSumbit'] = params =>
-    dispatch(login(params));
+  const actions = useActions({ login });
+
+  const onSubmit: LoginFormProps['onSumbit'] = params => actions.login(params);
 
   return (
     <div className="login">

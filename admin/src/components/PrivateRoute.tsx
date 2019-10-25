@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { PATHS } from '../constants';
+import { useActions } from '../hooks/useActions';
 import { refreshToken, loginStatusSelector } from '../store';
+
+const actions = { refreshToken };
 
 export function PrivateRoute({
   component: Component,
   render,
   ...rest
 }: RouteProps) {
-  const dispatch = useDispatch();
+  const { refreshToken } = useActions(actions);
   const loginStatus = useSelector(loginStatusSelector);
 
   useEffect(() => {
-    loginStatus === 'unknown' && dispatch(refreshToken());
-  }, [dispatch, loginStatus]);
+    loginStatus === 'unknown' && refreshToken();
+  }, [refreshToken, loginStatus]);
 
   if (loginStatus === 'unknown') {
     return null;
