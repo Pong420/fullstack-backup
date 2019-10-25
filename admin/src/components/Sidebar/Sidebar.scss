@@ -1,5 +1,6 @@
 $sidebar-width: 250px;
 $sidebar-padding-x: 15px;
+$radius: 5px;
 
 .sidebar {
   @include sq-dimen(100%);
@@ -22,31 +23,57 @@ $sidebar-padding-x: 15px;
 
 .sidebar-header {
   @include flex(center);
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
 
   svg {
     color: $dark-gray5;
-    font-size: 76px;
+    font-size: 2.5em;
     margin-right: 15px;
+  }
+
+  span {
+    font-size: 1em;
   }
 }
 
 .sidebar-body {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .sidebar-item {
-  @include dimen(100%, 35px);
-  @include flex(center);
+  @include relative();
+  @include margin-x(-$sidebar-padding-x);
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  padding-left: 15px;
 
-  font-weight: bold;
+  .sidebar-item-body {
+    @include dimen(100%, 50px);
+    @include flex(center);
+    @include relative();
+  }
 
   .icon {
     @include sq-dimen(28px);
     @include flex(center, center);
     margin-right: 10px;
     border-radius: 9px;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:before {
+    @include absolute(0, 0, 0);
+    @include margin-y(auto);
+    @include dimen(calc(100% - #{$sidebar-padding-x}), 100%);
+
+    border-radius: $radius;
+    content: '';
+    margin-left: -$radius;
   }
 
   + .sidebar-item {
@@ -57,23 +84,33 @@ $sidebar-padding-x: 15px;
   @each $color in $colors {
     $i: index($colors, $color);
     &:nth-child(#{$i}) {
-      .label {
-        color: inherit;
-      }
-
       .icon {
-        color: $color;
-        background-color: rgba($color, 0.2);
+        color: #fff;
+        background-color: $color;
       }
 
-      &:hover,
+      &:hover {
+        color: $color;
+
+        &:before {
+          background-color: rgba($color, 0.1);
+        }
+      }
+
       &.active {
-        .icon {
-          background-color: $color;
+        & {
           color: #fff;
         }
-        .label {
+
+        .icon {
+          background-color: #fff;
           color: $color;
+        }
+
+        &:before {
+          background-color: $color;
+          box-shadow: 0 0 0 1px rgba($color, 0.1), 0 2px 4px rgba($color, 0.2),
+            0 8px 24px rgba($color, 0.2);
         }
       }
     }

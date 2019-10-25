@@ -14,10 +14,12 @@ interface SidebarItemProps {
 const SidebarItem = React.memo<SidebarItemProps>(
   ({ to, icon, children, iconSize = 16 }) => (
     <NavLink to={to} exact className="sidebar-item">
-      <div className="icon">
-        <Icon icon={icon} iconSize={iconSize} />
+      <div className="sidebar-item-body">
+        <div className="icon">
+          <Icon icon={icon} iconSize={iconSize} />
+        </div>
+        <span className="label">{children}</span>
       </div>
-      <span className="label">{children}</span>
     </NavLink>
   )
 );

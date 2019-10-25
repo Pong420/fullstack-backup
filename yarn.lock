@@ -13989,6 +13989,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typeface-muli@^0.0.71:
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/typeface-muli/-/typeface-muli-0.0.71.tgz#e25f4bd4158a1636a1c93cfd6d04346bc3c7fb82"
+  integrity sha512-gWRJSv8D938dsngyYSrx3vLLPtuYwTHuDqa0isvB+p3x6f72QnWBbpKns+BNOe3P+7xsWZcTxQWbIrbGzfzq+w==
+
 typescript@3.4.5:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
