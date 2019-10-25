@@ -4,9 +4,9 @@ import { FastifyCookieOptions } from 'fastify-cookie';
 import { ConfigService } from '../config';
 import { UserService } from '../user';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
+import { RefreshTokenModel } from './model/refreshToken.modal';
 import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
 import bcrypt from 'bcrypt';
-import { RefreshTokenModel } from './model/refreshToken.modal';
 
 @Injectable()
 export class AuthService {
@@ -84,13 +84,14 @@ export class AuthService {
   }
 
   async findAllToken() {
-    // await RefreshTokenModel.deleteMany({});
-    // await RefreshTokenModel.collection.dropIndexes();
-    return RefreshTokenModel.collection.indexes();
-    // return RefreshTokenModel.find();
+    return RefreshTokenModel.find();
   }
 
   async login(user: JWTSignPayload) {
     return this.signJwt(user);
+  }
+
+  logout(refreshToken: string) {
+    return RefreshTokenModel.deleteOne({ refreshToken });
   }
 }

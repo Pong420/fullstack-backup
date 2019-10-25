@@ -6,12 +6,14 @@ import {
   Body,
   UseGuards,
   HttpStatus,
-  Get
+  Get,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService, CreateUserDto, UserModel } from '../user';
 import { AuthService } from './auth.service';
+import { transformResponse } from '../utils/interceptors';
 import uuidv4 from 'uuid/v4';
 
 const REFRESH_TOKEN = 'refresh_token';
@@ -30,7 +32,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('/login')
-  async login(@Req() req: FastifyRequest, @Res() reply: FastifyReply<unknown>) {
+  async login(@Req() req: FastifyRequest, @Res() reply: FastifyReply) {
     const user = req.user as typeof UserModel;
     const sign = await this.authService.signJwt(user);
     const refreshToken = uuidv4();
@@ -44,14 +46,11 @@ export class AuthController {
         this.authService.getRefreshTokenCookieOps()
       )
       .status(HttpStatus.OK)
-      .send(sign);
+      .send(transformResponse(sign, reply));
   }
 
   @Post('/refresh_token')
-  async refreshToken(
-    @Req() req: FastifyRequest,
-    @Res() reply: FastifyReply<unknown>
-  ) {
+  async refreshToken(@Req() req: FastifyRequest, @Res() reply: FastifyReply) {
     const tokenFromCookies = req.cookies[REFRESH_TOKEN];
 
     if (tokenFromCookies) {
@@ -71,7 +70,7 @@ export class AuthController {
             this.authService.getRefreshTokenCookieOps()
           )
           .status(HttpStatus.OK)
-          .send(payload);
+          .send(transformResponse(payload, reply));
       }
 
       return reply.status(HttpStatus.BAD_REQUEST).send('Invalid refresh token');
@@ -86,5 +85,22 @@ export class AuthController {
   @Get('/refresh_token')
   async findAllToken() {
     return this.authService.findAllToken();
+  }
+
+  @Post('logout')
+  async logout(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      await this.authService.logout(req.cookies[REFRESH_TOKEN]);
+
+      res
+        .setCookie(REFRESH_TOKEN, '', {
+          httpOnly: true,
+          expires: new Date(0)
+        })
+        .status(HttpStatus.OK)
+        .send(transformResponse('OK', res));
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

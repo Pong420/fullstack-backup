@@ -34,8 +34,7 @@ export class UserService {
     return UserModel.findOne({ username });
   }
 
-  // TODO: remove it from production
   findAll() {
-    return UserModel.find();
+    return UserModel.find({}, '-password');
   }
 }
