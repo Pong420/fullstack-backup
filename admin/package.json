@@ -20,8 +20,6 @@
     "@types/react-redux": "^7.1.5",
     "@types/react-router-dom": "^5.1.0",
     "customize-cra": "^0.8.0",
-    "husky": "^3.0.9",
-    "lint-staged": "^9.4.2",
     "node-sass": "4.12.0",
     "pong-react-scripts": "^3.1.2",
     "prettier": "^1.18.2",
@@ -45,39 +43,11 @@
     "rxjs": "^6.5.3",
     "use-rx-async": "^1.0.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint",
-      "prettier --ignore-path .eslintignore --write",
-      "git add"
-    ],
-    "{*.json,.{babelrc,eslintrc,prettierrc}}": [
-      "prettier --ignore-path .eslintignore --parser json --write",
-      "git add"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write",
-      "git add"
-    ],
-    "*.{yml,md}": [
-      "prettier --ignore-path .eslintignore --single-quote --write",
-      "git add"
-    ]
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
