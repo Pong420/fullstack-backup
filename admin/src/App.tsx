@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import { PrivateRoute } from './components/PrivateRoute';
 import { Sidebar } from './components/Sidebar';
 import { Home } from './components/Home';
 import { PATHS } from './constants';
@@ -7,7 +8,7 @@ import { PATHS } from './constants';
 const App = () => (
   <Switch>
     <Sidebar />
-    <Route exact path={PATHS.HOME} component={Home} />
+    <PrivateRoute exact path={PATHS.HOME} component={Home} />
   </Switch>
 );
 

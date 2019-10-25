@@ -1,12 +1,12 @@
 import React, { FormEvent } from 'react';
-import { useRxAsync } from 'use-rx-async';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button, InputGroup } from '@blueprintjs/core';
 import { FormControl } from '../FormControl';
 import { useForm, FormBuilder } from '../../hooks/useForm';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { Param$Login } from '../../typings';
-import { login } from '../../services';
-import { Toaster } from '../../utils/toaster';
+import { login } from '../../store';
+import { loginStatusSelector } from '../../store';
 import * as validators from '../../utils/validators';
 
 interface LoginFormProps {
@@ -23,9 +23,10 @@ const LoginForm = React.memo<LoginFormProps>(({ loading, onSumbit }) => {
   const { values, errors, handler, validate } = useForm(formProps);
 
   const onSubmitCallback = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     const hasError = validate();
     !hasError && onSumbit(values);
-    event.preventDefault();
   };
 
   return (
@@ -51,10 +52,10 @@ const LoginForm = React.memo<LoginFormProps>(({ loading, onSumbit }) => {
 });
 
 export const Login = () => {
-  const { run, loading } = useRxAsync(login, {
-    defer: true,
-    onFailure: Toaster.apiError
-  });
+  const dispatch = useDispatch();
+  const loginsStatus = useSelector(loginStatusSelector);
+  const onSubmit: LoginFormProps['onSumbit'] = params =>
+    dispatch(login(params));
 
   return (
     <div className="login">
@@ -63,7 +64,7 @@ export const Login = () => {
           <Logo />
         </div>
         <div className="login-card-body">
-          <LoginForm loading={loading} onSumbit={run} />
+          <LoginForm loading={loginsStatus === 'loading'} onSumbit={onSubmit} />
         </div>
       </Card>
     </div>
