@@ -1,0 +1,10 @@
+.#{$ns}-form-group {
+  &.form-control {
+    margin-bottom: 10px;
+
+    .#{$ns}-form-helper-text {
+      min-height: 1em;
+      line-height: 1em;
+    }
+  }
+}
