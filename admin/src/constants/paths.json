@@ -2,7 +2,7 @@
   "HOME": "/",
   "ORDERS": "/orders",
   "PRODUCTS": "/products",
-  "ACCOUNTS": "/accounts",
+  "USERS": "/users",
   "SETTINGS": "/settings",
   "LOGIN": "/login"
 }

@@ -3,13 +3,17 @@ import { Switch } from 'react-router-dom';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Sidebar } from './components/Sidebar';
 import { Home } from './components/Home';
+import { Users } from './components/Users';
 import { PATHS } from './constants';
 
 const App = () => (
-  <Switch>
+  <>
     <Sidebar />
-    <PrivateRoute exact path={PATHS.HOME} component={Home} />
-  </Switch>
+    <Switch>
+      <PrivateRoute exact path={PATHS.HOME} component={Home} />
+      <PrivateRoute exact path={PATHS.USERS} component={Users} />
+    </Switch>
+  </>
 );
 
 export default App;

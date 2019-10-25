@@ -40,7 +40,7 @@ export const Sidebar = () => {
           <SidebarItem to={PATHS.PRODUCTS} icon="box">
             Products
           </SidebarItem>
-          <SidebarItem to={PATHS.ACCOUNTS} icon="user">
+          <SidebarItem to={PATHS.USERS} icon="user">
             Users
           </SidebarItem>
           <SidebarItem to={PATHS.SETTINGS} icon="cog">
