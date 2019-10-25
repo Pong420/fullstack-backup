@@ -5,6 +5,7 @@ import {
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+import cookieParser from 'fastify-cookie';
 
 const PORT = process.env.PORT || 5000;
 
@@ -13,6 +14,8 @@ async function bootstrap(): Promise<void> {
     AppModule,
     new FastifyAdapter()
   );
+
+  app.register(cookieParser);
 
   app.setGlobalPrefix('api');
 

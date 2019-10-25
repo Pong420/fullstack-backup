@@ -1,9 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { FastifyCookieOptions } from 'fastify-cookie';
 import { ConfigService } from '../config';
 import { UserService } from '../user';
-import bcrypt from 'bcrypt';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
+import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
+import bcrypt from 'bcrypt';
+import { RefreshTokenModel } from './model/refreshToken.modal';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +14,21 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly usersService: UserService,
     private readonly jwtService: JwtService
-  ) {}
+  ) {
+    const index = 'updatedAt';
+    RefreshTokenModel.collection
+      .dropIndex(`${index}_1`)
+      .catch(err => err)
+      .then(() => {
+        RefreshTokenModel.collection.createIndex(
+          { [index]: 1 },
+          {
+            expireAfterSeconds:
+              Number(this.configService.get('REFRESH_TOKEN_EXPIRES')) * 60
+          }
+        );
+      });
+  }
 
   async validateUser(username: string, pass: string) {
     const user = await this.usersService.findOne(username);
@@ -41,6 +58,36 @@ export class AuthService {
         now + Number(this.configService.get('JWT_TOKEN_EXPIRES')) * 60 * 1000
       )
     };
+  }
+
+  getRefreshTokenCookieOps(): FastifyCookieOptions {
+    return {
+      maxAge:
+        Number(this.configService.get('REFRESH_TOKEN_EXPIRES')) * 60 * 1000,
+      httpOnly: true,
+      secure: false
+    };
+  }
+
+  findAndUpdateRefreshToken(
+    { refreshToken }: UpdateRefreshTokenDto,
+    newRefreshToken: string,
+    upsert?: boolean
+  ) {
+    return RefreshTokenModel.findOneAndUpdate(
+      { refreshToken },
+      {
+        refreshToken: newRefreshToken
+      },
+      { upsert }
+    );
+  }
+
+  async findAllToken() {
+    // await RefreshTokenModel.deleteMany({});
+    // await RefreshTokenModel.collection.dropIndexes();
+    return RefreshTokenModel.collection.indexes();
+    // return RefreshTokenModel.find();
   }
 
   async login(user: JWTSignPayload) {
