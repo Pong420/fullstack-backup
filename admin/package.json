@@ -27,6 +27,7 @@
     "typescript": "3.6.4"
   },
   "dependencies": {
+    "@blueprintjs/core": "^3.19.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-router-dom": "^5.1.2"
