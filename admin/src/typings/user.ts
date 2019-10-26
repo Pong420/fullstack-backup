@@ -15,3 +15,11 @@ interface Schema$JWT {
   token: string;
   expiry: string;
 }
+
+export interface Schema$User {
+  id: string;
+  username: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}

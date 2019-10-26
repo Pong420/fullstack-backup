@@ -1,0 +1,28 @@
+.layout.users {
+  .#{$ns}-card {
+    @include sq-dimen(100%);
+  }
+
+  table {
+    tr {
+      th,
+      td {
+        @include dimen(200px);
+
+        &:nth-last-child(2) {
+          @include dimen(1000px);
+        }
+
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .bp3-popover-wrapper {
+    + .bp3-popover-wrapper {
+      margin-left: 5px;
+    }
+  }
+}

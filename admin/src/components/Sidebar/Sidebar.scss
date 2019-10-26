@@ -7,6 +7,7 @@ $radius: 5px;
   @include relative();
   width: $sidebar-width;
   flex: 0 0 auto;
+  z-index: 100000;
 }
 
 .sidebar-inner {

@@ -5,5 +5,15 @@
 
   .layout-content {
     @include sq-dimen(100%);
+    margin-top: 15px;
+  }
+
+  .#{$ns}-navbar {
+    position: sticky;
+    top: 15px;
+
+    .#{$ns}-navbar-heading {
+      font-weight: bold;
+    }
   }
 }

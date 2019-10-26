@@ -10,6 +10,7 @@ import configureStore, { history, logout } from './store';
 import * as serviceWorker from './serviceWorker';
 
 import './index.scss';
+import 'typeface-muli';
 
 const store = configureStore();
 
