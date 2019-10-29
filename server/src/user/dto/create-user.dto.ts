@@ -1,5 +1,6 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 import { User } from '../model/user.model';
+import { Role } from '../../typings';
 
 export class CreateUserDto
   implements Pick<User, 'username' | 'password' | 'role'> {
@@ -9,7 +10,7 @@ export class CreateUserDto
   @IsString()
   password!: string;
 
-  @IsString()
+  @IsEnum(Role)
   @IsOptional()
-  role!: string;
+  role!: Role;
 }

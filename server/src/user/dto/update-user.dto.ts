@@ -1,5 +1,6 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 import { User } from '../model/user.model';
+import { Role } from '../../typings';
 
 export class UpdateUserDto implements Partial<Omit<User, 'id' | 'password'>> {
   @IsString()
@@ -9,9 +10,9 @@ export class UpdateUserDto implements Partial<Omit<User, 'id' | 'password'>> {
   @IsOptional()
   password?: string;
 
-  @IsString()
+  @IsEnum(Role)
   @IsOptional()
-  role?: string;
+  role?: Role;
 }
 
 export class ModifyUserPasswordDto

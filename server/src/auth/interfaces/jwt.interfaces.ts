@@ -1,6 +1,8 @@
+import { Role } from '../../typings';
+
 export interface JWTSignPayload {
   username: string;
-  role?: string;
+  role?: Role;
 }
 
 export interface ValidatePayload extends JWTSignPayload {

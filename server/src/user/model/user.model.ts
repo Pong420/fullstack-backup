@@ -1,4 +1,5 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import { Role } from '../../typings';
 import bcrypt from 'bcrypt';
 
 function hashPassword(pwd: string) {
@@ -14,8 +15,8 @@ export class User {
   @prop({ required: true, set: hashPassword, get: pwd => pwd })
   password!: string;
 
-  @prop()
-  role?: string;
+  @prop({ enum: Role })
+  role?: Role;
 
   createdAt!: string;
 

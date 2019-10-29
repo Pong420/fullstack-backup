@@ -5,7 +5,8 @@ import {
   Delete,
   Get,
   Patch,
-  BadRequestException
+  BadRequestException,
+  UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -14,33 +15,39 @@ import {
   UpdateUserDto,
   ModifyUserPasswordDto
 } from './dto';
+import { RoleGuard } from '../utils/guards';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/list')
+  @UseGuards(RoleGuard())
   getUsers() {
     return this.userService.findAll();
   }
 
   @Post('/add')
+  @UseGuards(RoleGuard())
   add(@Body() removeUserDto: CreateUserDto) {
     return this.userService.create(removeUserDto);
   }
 
   @Delete('/remove')
+  @UseGuards(RoleGuard())
   remove(@Body() removeUserDto: RemoveUserDto) {
     return this.userService.remove(removeUserDto);
   }
 
   @Patch('/update')
+  @UseGuards(RoleGuard())
   update(@Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.password;
     return this.userService.update(updateUserDto);
   }
 
   @Patch('/modify-password')
+  @UseGuards(RoleGuard())
   modifyPassword(@Body() modifyPasswordUserDto: ModifyUserPasswordDto) {
     const {
       username,
