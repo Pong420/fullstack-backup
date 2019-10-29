@@ -14,8 +14,8 @@ export class User {
   @prop({ required: true, set: hashPassword, get: pwd => pwd })
   password!: string;
 
-  @prop({ required: true })
-  role!: string;
+  @prop()
+  role?: string;
 
   createdAt!: string;
 

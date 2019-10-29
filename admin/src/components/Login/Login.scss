@@ -1,6 +1,7 @@
 .login {
   @include sq-dimen(100%);
   @include flex(center, center);
+  align-self: center;
 
   .login-card {
     @include dimen(100%);

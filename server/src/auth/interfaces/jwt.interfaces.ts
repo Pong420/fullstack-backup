@@ -1,6 +1,6 @@
 export interface JWTSignPayload {
   username: string;
-  role: string;
+  role?: string;
 }
 
 export interface ValidatePayload extends JWTSignPayload {

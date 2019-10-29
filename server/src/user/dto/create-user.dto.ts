@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 import { User } from '../model/user.model';
 
 export class CreateUserDto
@@ -10,5 +10,6 @@ export class CreateUserDto
   password!: string;
 
   @IsString()
+  @IsOptional()
   role!: string;
 }
