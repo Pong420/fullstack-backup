@@ -10,6 +10,10 @@ export const api = axios.create({
   baseURL: '/api'
 });
 
+function isJWT(data: any): data is Schema$JWT {
+  return !!(data && data.expiry && data.token);
+}
+
 api.interceptors.request.use(async config => {
   if (jwtToken) {
     if ((+new Date(jwtToken.expiry) - +new Date()) / (60 * 1000) <= 1) {
@@ -30,8 +34,10 @@ api.interceptors.request.use(async config => {
 
 api.interceptors.response.use((response: AxiosResponse<Response$API<any>>) => {
   const data = response.data.data;
-  if (data && data.expiry && data.token) {
+
+  if (isJWT(data)) {
     jwtToken = { token: data.token, expiry: data.expiry };
   }
+
   return response;
 });

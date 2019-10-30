@@ -37,13 +37,13 @@ export class AuthController {
     const sign = await this.authService.signJwt(user);
     const refreshToken = uuidv4();
 
-    await this.authService.findAndUpdateRefreshToken({}, refreshToken, true);
+    await this.authService.createRefreshToken({ ...user, refreshToken });
 
     return reply
       .setCookie(
         REFRESH_TOKEN,
         refreshToken,
-        this.authService.getRefreshTokenCookieOps()
+        this.authService.getTokenCookieOpts()
       )
       .status(HttpStatus.OK)
       .send(transformResponse(sign, reply));
@@ -67,7 +67,7 @@ export class AuthController {
           .setCookie(
             REFRESH_TOKEN,
             newRefreshToken,
-            this.authService.getRefreshTokenCookieOps()
+            this.authService.getTokenCookieOpts()
           )
           .status(HttpStatus.OK)
           .send(transformResponse(payload, reply));

@@ -5,7 +5,7 @@ import { ConfigService } from '../config';
 import { UserService } from '../user';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
 import { RefreshTokenModel } from './model/refreshToken.modal';
-import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
+import { CreateRefreshTokenDto, UpdateRefreshTokenDto } from './dto';
 import { Role } from '../typings';
 import bcrypt from 'bcrypt';
 
@@ -70,7 +70,7 @@ export class AuthService {
     };
   }
 
-  getRefreshTokenCookieOps(): FastifyCookieOptions {
+  getTokenCookieOpts(): FastifyCookieOptions {
     return {
       maxAge:
         Number(this.configService.get('REFRESH_TOKEN_EXPIRES')) * 60 * 1000,
@@ -79,17 +79,20 @@ export class AuthService {
     };
   }
 
+  createRefreshToken(createRefreshTokenDto: CreateRefreshTokenDto) {
+    const createdToken = new RefreshTokenModel(createRefreshTokenDto);
+    return createdToken.save();
+  }
+
   findAndUpdateRefreshToken(
     { refreshToken }: UpdateRefreshTokenDto,
-    newRefreshToken: string,
-    upsert?: boolean
+    newRefreshToken: string
   ) {
     return RefreshTokenModel.findOneAndUpdate(
       { refreshToken },
       {
         refreshToken: newRefreshToken
-      },
-      { upsert }
+      }
     );
   }
 

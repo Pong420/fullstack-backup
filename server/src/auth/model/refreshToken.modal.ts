@@ -1,7 +1,15 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import { JWTSignPayload } from '../interfaces/jwt.interfaces';
+import { Role } from '../../typings';
 
-export class RefreshToken {
+export class RefreshToken implements JWTSignPayload {
   id!: string;
+
+  @prop({ required: true })
+  username!: string;
+
+  @prop()
+  role?: Role;
 
   @prop({ required: true })
   refreshToken!: string;
