@@ -1,6 +1,7 @@
 import { api } from './api';
-import { Response$User } from '../typings';
+import { Param$CreateUser, Response$User } from '../typings';
 
 export const getUsers = () => api.get<Response$User>('/user/list');
 
-export const createUser = () => api.post('/user/add');
+export const createUser = (params: Param$CreateUser) =>
+  api.post('/user/add', params);

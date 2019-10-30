@@ -21,13 +21,11 @@ const formProps = FormBuilder({
 });
 
 const LoginForm = React.memo<LoginFormProps>(({ loading, onSumbit }) => {
-  const { values, errors, handler, validate } = useForm(formProps);
+  const { values, errors, handler, isValid } = useForm(formProps);
 
   const onSubmitCallback = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const hasError = validate();
-    !hasError && onSumbit(values);
+    isValid() && onSumbit(values);
   };
 
   return (

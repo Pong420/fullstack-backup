@@ -55,7 +55,7 @@ export function useForm<
     [validators]
   );
 
-  const validate = useCallback(
+  const isValid = useCallback(
     (field?: F | F[]) => {
       let hasError = false;
       function validate(fields: F[]) {
@@ -67,7 +67,7 @@ export function useForm<
 
       validate(field ? (Array.isArray(field) ? field : [field]) : fields);
 
-      return hasError;
+      return !hasError;
     },
     [values, fields, validate_]
   );
@@ -128,5 +128,5 @@ export function useForm<
     setErrors({});
   }, [initialValues]);
 
-  return { values, errors, handler, validate, resetForm };
+  return { values, errors, handler, isValid, resetForm };
 }

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Card, ButtonGroup } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { Column } from 'react-table';
 import { useRxAsync } from 'use-rx-hooks';
 import { Layout } from '../Layout';
 import { Table } from '../Table';
-import { ButtonPopover } from '../ButtonPopover';
+import { CreateUser } from './CreateUser';
+import { UserControls } from './UserControls';
 import { Schema$User } from '../../typings';
 import { getUsers } from '../../services';
 import dayjs from 'dayjs';
@@ -21,13 +22,7 @@ const columns: Column<Schema$User>[] = [
   },
   {
     id: 'constrols',
-    Cell: () => (
-      <ButtonGroup>
-        <ButtonPopover icon="info-sign" content="More info" />
-        <ButtonPopover icon="edit" content="Edit" />
-        <ButtonPopover icon="trash" content="Remove" />
-      </ButtonGroup>
-    )
+    Cell: ({ cell }) => <UserControls {...cell.row.original} />
   }
 ];
 
@@ -37,7 +32,7 @@ export function Users() {
   const { data } = useRxAsync(getUsersHoc);
 
   return (
-    <Layout className="users" title="Users">
+    <Layout className="users" title="Users" navbar={<CreateUser />}>
       {data && (
         <Card>
           <Table data={data} columns={columns} />
