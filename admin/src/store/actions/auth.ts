@@ -1,6 +1,6 @@
 import { Param$Login } from '../../typings';
 
-export enum UserActionTypes {
+export enum AuthActionTypes {
   LOGIN = 'LOGIN',
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
   LOGIN_FAILURE = 'LOGIN_FAILURE',
@@ -11,36 +11,36 @@ export enum UserActionTypes {
 }
 
 export interface Login {
-  type: UserActionTypes.LOGIN;
+  type: AuthActionTypes.LOGIN;
   payload: Param$Login;
 }
 
 export interface LoginSuccess {
-  type: UserActionTypes.LOGIN_SUCCESS;
+  type: AuthActionTypes.LOGIN_SUCCESS;
 }
 
 export interface LoginFailure {
-  type: UserActionTypes.LOGIN_FAILURE;
+  type: AuthActionTypes.LOGIN_FAILURE;
   payload: any;
 }
 
 export interface Logout {
-  type: UserActionTypes.LOGOUT;
+  type: AuthActionTypes.LOGOUT;
 }
 
 export interface LogoutSuccess {
-  type: UserActionTypes.LOGOUT_SUCCESS;
+  type: AuthActionTypes.LOGOUT_SUCCESS;
 }
 
 export interface LogoutFailure {
-  type: UserActionTypes.LOGOUT_FAILURE;
+  type: AuthActionTypes.LOGOUT_FAILURE;
 }
 
 export interface RefreshToken {
-  type: UserActionTypes.REFRESH_TOKEN;
+  type: AuthActionTypes.REFRESH_TOKEN;
 }
 
-export type UserActions =
+export type AuthActions =
   | Login
   | LoginSuccess
   | LoginFailure
@@ -51,19 +51,19 @@ export type UserActions =
 
 export function login(payload: Login['payload']): Login {
   return {
-    type: UserActionTypes.LOGIN,
+    type: AuthActionTypes.LOGIN,
     payload
   };
 }
 
 export function logout(): Logout {
   return {
-    type: UserActionTypes.LOGOUT
+    type: AuthActionTypes.LOGOUT
   };
 }
 
 export function refreshToken(): RefreshToken {
   return {
-    type: UserActionTypes.REFRESH_TOKEN
+    type: AuthActionTypes.REFRESH_TOKEN
   };
 }

@@ -3,30 +3,30 @@ import { switchMap, catchError, mergeMap } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
 import {
-  UserActions,
-  UserActionTypes,
+  AuthActions,
+  AuthActionTypes,
   Login,
   RefreshToken,
   Logout
-} from '../actions/user';
+} from '../actions/auth';
 import { RootState } from '../reducers';
 import { login, refreshToken, logout } from '../../services';
 import { PATHS } from '../../constants';
 import { Toaster } from '../../utils/toaster';
 import { isLocation } from '../../utils/isLocation';
 
-type Actions = UserActions | RouterAction;
-type UserEpic = Epic<Actions, Actions, RootState>;
+type Actions = AuthActions | RouterAction;
+type AuthEpic = Epic<Actions, Actions, RootState>;
 
-const loginEpic: UserEpic = (action$, state$) =>
+const loginEpic: AuthEpic = (action$, state$) =>
   action$.pipe(
     ofType<Actions, Login | RefreshToken>(
-      UserActionTypes.LOGIN,
-      UserActionTypes.REFRESH_TOKEN
+      AuthActionTypes.LOGIN,
+      AuthActionTypes.REFRESH_TOKEN
     ),
     switchMap(action => {
       const request =
-        action.type === UserActionTypes.LOGIN
+        action.type === AuthActionTypes.LOGIN
           ? login(action.payload)
           : refreshToken();
 
@@ -40,30 +40,30 @@ const loginEpic: UserEpic = (action$, state$) =>
             : undefined;
 
           return merge<Actions>(
-            of({ type: UserActionTypes.LOGIN_SUCCESS }),
+            of({ type: AuthActionTypes.LOGIN_SUCCESS }),
             redirect ? of<Actions>(replace(redirect, {})) : empty()
           );
         }),
         catchError(payload => {
-          action.type === UserActionTypes.LOGIN && Toaster.apiError(payload);
-          return of<Actions>({ type: UserActionTypes.LOGIN_FAILURE, payload });
+          action.type === AuthActionTypes.LOGIN && Toaster.apiError(payload);
+          return of<Actions>({ type: AuthActionTypes.LOGIN_FAILURE, payload });
         })
       );
     })
   );
 
-const logoutEpic: UserEpic = action$ =>
+const logoutEpic: AuthEpic = action$ =>
   action$.pipe(
-    ofType<Actions, Logout>(UserActionTypes.LOGOUT),
+    ofType<Actions, Logout>(AuthActionTypes.LOGOUT),
     switchMap(() =>
       from(logout()).pipe(
         mergeMap(() =>
           merge<Actions>(
             of<Actions>(replace(PATHS.LOGIN, {})),
-            of<Actions>({ type: UserActionTypes.LOGOUT_SUCCESS })
+            of<Actions>({ type: AuthActionTypes.LOGOUT_SUCCESS })
           )
         ),
-        catchError(() => of<Actions>({ type: UserActionTypes.LOGOUT_FAILURE }))
+        catchError(() => of<Actions>({ type: AuthActionTypes.LOGOUT_FAILURE }))
       )
     )
   );

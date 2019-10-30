@@ -1,4 +1,4 @@
-import { UserActionTypes, UserActions } from '../actions';
+import { AuthActionTypes, AuthActions } from '../actions';
 import { LoginStatus } from '../../typings';
 
 interface State {
@@ -11,16 +11,16 @@ const initialState: State = {
 
 export default function(
   state: State = initialState,
-  action: UserActions
+  action: AuthActions
 ): State {
   switch (action.type) {
-    case UserActionTypes.LOGIN:
+    case AuthActionTypes.LOGIN:
       return { ...state, loginStatus: 'loading' };
 
-    case UserActionTypes.LOGIN_SUCCESS:
+    case AuthActionTypes.LOGIN_SUCCESS:
       return { ...state, loginStatus: 'loggedIn' };
 
-    case UserActionTypes.LOGIN_FAILURE:
+    case AuthActionTypes.LOGIN_FAILURE:
       return { ...state, loginStatus: 'required' };
 
     default:
