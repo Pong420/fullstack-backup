@@ -6,6 +6,7 @@ import { UserService } from '../user';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
 import { RefreshTokenModel } from './model/refreshToken.modal';
 import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
+import { Role } from '../typings';
 import bcrypt from 'bcrypt';
 
 @Injectable()
@@ -30,7 +31,7 @@ export class AuthService {
       });
   }
 
-  async validateUser(username: string, pass: string) {
+  async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
     const user = await this.usersService.findOne(username);
 
     if (user) {
@@ -41,6 +42,15 @@ export class AuthService {
       }
 
       throw new BadRequestException('Invalid Password');
+    } else {
+      const [defaultUsername, defaultPassword] = this.configService.get([
+        'DEFAULT_USERNAME',
+        'DEFAULT_PASSWORD'
+      ]);
+
+      if (username === defaultUsername && pass === defaultPassword) {
+        return { username: defaultUsername, role: Role.ADMIN };
+      }
     }
 
     throw new BadRequestException('User Not Found');

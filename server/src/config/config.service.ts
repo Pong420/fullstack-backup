@@ -20,7 +20,15 @@ export class ConfigService {
     this.envConfig = envConfig;
   }
 
-  get(key: string): string {
-    return process.env[key] || this.envConfig[key];
+  get(key: string): string;
+  get(key: string[]): string[];
+  get(key: string | string[]): string | string[] {
+    const getter = (key: string) => process.env[key] || this.envConfig[key];
+
+    if (Array.isArray(key)) {
+      return key.map(getter);
+    }
+
+    return getter(key);
   }
 }
