@@ -8,6 +8,7 @@
       th,
       td {
         @include dimen(200px);
+        vertical-align: middle;
 
         &:nth-last-child(2) {
           @include dimen(1000px);
