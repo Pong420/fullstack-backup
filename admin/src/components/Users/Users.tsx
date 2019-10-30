@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from '@blueprintjs/core';
 import { Column } from 'react-table';
+import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { Layout } from '../Layout';
 import { Table } from '../Table';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
+import { addUser, resetUsers, userListSelector } from '../../store';
 import { Schema$User } from '../../typings';
-import { getUsers } from '../../services';
+import { getUsers as getUsersAPI } from '../../services';
+import { useActions } from '../../hooks/useActions';
+import { Toaster } from '../../utils/toaster';
 import dayjs from 'dayjs';
 
 const columns: Column<Schema$User>[] = [
@@ -26,16 +30,26 @@ const columns: Column<Schema$User>[] = [
   }
 ];
 
-const getUsersHoc = () => getUsers().then(res => res.data.data);
+const getUsers_ = () => getUsersAPI().then(res => res.data.data);
+const onFailure = (error: any) => Toaster.apiError(error);
+const actions = { resetUsers, addUser };
 
 export function Users() {
-  const { data } = useRxAsync(getUsersHoc);
+  const { resetUsers, addUser } = useActions(actions);
+  const users = useSelector(userListSelector);
+
+  useEffect(resetUsers, []);
+
+  useRxAsync(getUsers_, {
+    onSuccess: addUser,
+    onFailure
+  });
 
   return (
     <Layout className="users" title="Users" navbar={<CreateUser />}>
-      {data && (
+      {!!users.length && (
         <Card>
-          <Table data={data} columns={columns} />
+          <Table data={users} columns={columns} />
         </Card>
       )}
     </Layout>

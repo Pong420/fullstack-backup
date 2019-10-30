@@ -9,7 +9,10 @@ export class UserService {
     const createdUser = new UserModel(createUserDto);
 
     try {
-      return await createdUser.save();
+      await createdUser.save();
+      // eslint-disable-next-line
+      const { password, ...user } = createdUser.toJSON();
+      return user;
     } catch (error) {
       if (error instanceof MongoError) {
         switch (error.code) {
@@ -26,7 +29,8 @@ export class UserService {
 
   update({ username, ...changes }: UpdateUserDto) {
     return UserModel.findOneAndUpdate({ username }, changes, {
-      new: true
+      new: true,
+      projection: '-password'
     });
   }
 

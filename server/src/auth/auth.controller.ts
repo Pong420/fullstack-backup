@@ -10,8 +10,9 @@ import {
   InternalServerErrorException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { UserService, CreateUserDto, UserModel } from '../user';
+import { UserService, CreateUserDto } from '../user';
 import { AuthService } from './auth.service';
 import { transformResponse } from '../utils/interceptors';
 import uuidv4 from 'uuid/v4';
@@ -33,7 +34,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('/login')
   async login(@Req() req: FastifyRequest, @Res() reply: FastifyReply) {
-    const user = req.user as typeof UserModel;
+    const user = isDocument(req.user) ? req.user.toJSON() : req.user;
     const sign = await this.authService.signJwt(user);
     const refreshToken = uuidv4();
 

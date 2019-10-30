@@ -16,10 +16,10 @@ type UnionToIntersection<U> = (U extends any
 type GetFunction<Fn extends (params?: any) => any> = Parameters<
   Fn
 >[0] extends undefined
-  ? (() => ReturnType<Fn>)
+  ? (() => void)
   : UnionToIntersection<Parameters<Fn>[0]> extends undefined
-  ? ((params?: Parameters<Fn>[0]) => ReturnType<Fn>)
-  : ((params: Parameters<Fn>[0]) => ReturnType<Fn>);
+  ? ((params?: Parameters<Fn>[0]) => void)
+  : ((params: Parameters<Fn>[0]) => void);
 
 export function useActions<A extends Actions>(actions: A) {
   const dispatch = useDispatch();
@@ -28,7 +28,9 @@ export function useActions<A extends Actions>(actions: A) {
     const handler = {} as any;
 
     for (const key in actions) {
-      handler[key] = (params?: any) => dispatch(actions[key](params));
+      handler[key] = (params?: any) => {
+        dispatch(actions[key](params));
+      };
     }
 
     return handler as {

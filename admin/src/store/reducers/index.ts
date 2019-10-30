@@ -2,11 +2,13 @@ import { combineReducers, Reducer, AnyAction } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { AuthActionTypes } from '../actions';
 import auth from './auth';
+import user from './user';
 
 const appReducer = (history: Parameters<typeof connectRouter>[0]) =>
   combineReducers({
     router: connectRouter(history),
-    auth
+    auth,
+    user
   });
 
 // reset store after user logout

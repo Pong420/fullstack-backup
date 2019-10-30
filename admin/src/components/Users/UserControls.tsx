@@ -2,12 +2,14 @@ import React from 'react';
 import { ButtonGroup } from '@blueprintjs/core';
 import { ButtonPopover } from '../ButtonPopover';
 import { Schema$User } from '../../typings';
+import { updateUser } from '../../store';
+import { updateUser as updateUserAPI } from '../../services';
 import { useBoolean } from '../../hooks/useBoolean';
 import { UserDialog } from './UserDialog';
 
 interface Props extends Schema$User {}
 
-function EditUser(props: Schema$User) {
+const EditUser = React.memo((props: Schema$User) => {
   const [dialogOpen, setDialogOpen] = useBoolean();
   return (
     <>
@@ -15,13 +17,15 @@ function EditUser(props: Schema$User) {
       <UserDialog
         icon="edit"
         title="Edit User"
+        action={updateUser}
         isOpen={dialogOpen}
         initialValues={props}
         onClose={setDialogOpen.off}
+        apiRequest={updateUserAPI}
       />
     </>
   );
-}
+});
 
 export function UserControls(props: Props) {
   return (

@@ -1,10 +1,10 @@
 import { ExecutionContext, CanActivate, Type, mixin } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { FastifyRequest } from 'fastify';
-import { Role } from '../../typings';
 import { from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FastifyRequest } from 'fastify';
 import { ValidatePayload } from '../../auth';
+import { Role } from '../../typings';
 
 export function RoleGuard(role: Role = Role.ADMIN) {
   class RoleGuard extends AuthGuard('jwt') {

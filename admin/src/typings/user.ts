@@ -10,12 +10,16 @@ export interface Param$CreateUser
   password: string;
 }
 
+export interface Param$UpdateUser extends Partial<Schema$User> {
+  username: string;
+}
+
 export type Response$User = Response$API<Schema$User[]>;
 
 export interface Schema$User {
   id: string;
   username: string;
-  role: string;
+  role?: Role;
   createdAt: string;
   updatedAt: string;
 }

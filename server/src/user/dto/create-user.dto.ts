@@ -10,7 +10,7 @@ export class CreateUserDto
   @IsString()
   password!: string;
 
-  @IsEnum(Role)
   @IsOptional()
+  @IsEnum(Role)
   role!: Role;
 }
