@@ -1,31 +1,43 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
-import { User } from '../model/user.model';
-import { Role } from '../../typings';
+import {
+  IsOptional,
+  IsEnum,
+  IsNotEmpty,
+  IsEmpty,
+  IsString
+} from 'class-validator';
+import { User, UserRole } from '../model/user.model';
 
-export class UpdateUserDto implements Partial<Omit<User, 'id' | 'password'>> {
-  @IsString()
-  username!: string;
+export class UpdateUserDto implements Partial<User> {
+  @IsEmpty()
+  id!: string;
 
-  @IsString()
+  @IsOptional()
+  email?: string;
+
+  @IsEmpty()
+  username?: string;
+
   @IsOptional()
   password?: string;
 
-  @IsEnum(Role)
   @IsOptional()
-  role?: Role;
+  avatar?: string;
+
+  @IsEnum(UserRole)
+  @IsOptional()
+  role?: UserRole;
 }
 
-export class ModifyUserPasswordDto
-  implements Pick<User, 'username' | 'password'> {
-  @IsString()
-  username!: string;
+export class ModifyUserPasswordDto implements Partial<User> {
+  @IsNotEmpty()
+  id!: string;
 
-  @IsString()
+  @IsNotEmpty()
   password!: string;
 
-  @IsString()
+  @IsNotEmpty()
   newPassword!: string;
 
-  @IsString()
+  @IsNotEmpty()
   confirmNewPassword!: string;
 }

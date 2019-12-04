@@ -1,15 +1,15 @@
 import { IsString, IsOptional, IsEnum } from 'class-validator';
 import { RefreshToken } from '../model/refreshToken.modal';
-import { Role } from 'src/typings';
+import { UserRole } from '../../user';
 
 export class CreateRefreshTokenDto
   implements Omit<RefreshToken, 'id' | 'createdAt' | 'updatedAt'> {
   @IsString()
   username!: string;
 
-  @IsEnum(Role)
+  @IsEnum(UserRole)
   @IsOptional()
-  role?: Role;
+  role?: UserRole;
 
   @IsString()
   refreshToken!: string;

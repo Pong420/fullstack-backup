@@ -1,22 +1,37 @@
+import { IsEmail } from 'class-validator';
 import { prop, getModelForClass } from '@typegoose/typegoose';
-import { Role } from '../../typings';
 import bcrypt from 'bcrypt';
 
 function hashPassword(pwd: string) {
   return bcrypt.hashSync(pwd, 10);
 }
 
+export enum UserRole {
+  ADMIN = 'admin',
+  GENERAL = 'general',
+  CLIENT = 'client'
+}
+
 export class User {
   id!: string;
 
-  @prop({ required: true, index: true, unique: true })
+  @prop({ required: true, unique: true })
+  email!: string;
+
+  @prop({ required: true, unique: true })
   username!: string;
 
   @prop({ required: true, set: hashPassword, get: pwd => pwd })
   password!: string;
 
-  @prop({ enum: Role })
-  role?: Role;
+  @prop({ enum: UserRole, default: UserRole.CLIENT })
+  role!: UserRole;
+
+  @prop()
+  nickname!: string;
+
+  @prop({ default: null })
+  avatar!: string | null;
 
   createdAt!: string;
 

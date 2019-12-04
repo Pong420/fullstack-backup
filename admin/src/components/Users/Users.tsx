@@ -20,6 +20,7 @@ const columns: Column<Schema$User>[] = [
     accessor: 'username'
   },
   { Header: 'Role', accessor: 'role' },
+  { Header: 'Email', accessor: 'email' },
   {
     Header: 'Created At',
     accessor: ({ createdAt }) => dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')

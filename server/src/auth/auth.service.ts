@@ -2,11 +2,10 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { FastifyCookieOptions } from 'fastify-cookie';
 import { ConfigService } from '../config';
-import { UserService } from '../user';
+import { UserService, UserRole } from '../user';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
 import { RefreshTokenModel } from './model/refreshToken.modal';
 import { CreateRefreshTokenDto, UpdateRefreshTokenDto } from './dto';
-import { Role } from '../typings';
 import bcrypt from 'bcrypt';
 
 @Injectable()
@@ -49,7 +48,7 @@ export class AuthService {
       ]);
 
       if (username === defaultUsername && pass === defaultPassword) {
-        return { username: defaultUsername, role: Role.ADMIN };
+        return { username: defaultUsername, role: UserRole.ADMIN };
       }
     }
 

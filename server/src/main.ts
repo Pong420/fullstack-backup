@@ -5,7 +5,7 @@ import {
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
-import { ResponseInterceptor } from './utils/interceptors';
+import { ResponseInterceptor } from './interceptors';
 import cookieParser from 'fastify-cookie';
 
 const PORT = process.env.PORT || 5000;

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import { ConfigService } from '../config';
-import { DATABASE_CONNECTION } from '../constants';
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -14,6 +13,8 @@ mongoose.set('toJSON', {
     delete ret._id;
   }
 });
+
+export const DATABASE_CONNECTION = 'DATABASE_CONNECTION';
 
 export const databaseProviders = [
   {

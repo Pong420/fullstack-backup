@@ -1,9 +1,16 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
-import { User } from '../model/user.model';
-import { Role } from '../../typings';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsEmail,
+  IsLowercase
+} from 'class-validator';
+import { User, UserRole } from '../model/user.model';
 
-export class CreateUserDto
-  implements Pick<User, 'username' | 'password' | 'role'> {
+export class CreateUserDto implements Partial<User> {
+  @IsEmail()
+  email!: string;
+
   @IsString()
   username!: string;
 
@@ -11,6 +18,6 @@ export class CreateUserDto
   password!: string;
 
   @IsOptional()
-  @IsEnum(Role)
-  role!: Role;
+  @IsEnum(UserRole)
+  role!: UserRole;
 }

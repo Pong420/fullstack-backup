@@ -1,8 +1,8 @@
-import { Role } from '../../typings';
+import { UserRole } from '../../user';
 
 export interface JWTSignPayload {
   username: string;
-  role?: Role;
+  role?: UserRole;
 }
 
 export interface ValidatePayload extends JWTSignPayload {

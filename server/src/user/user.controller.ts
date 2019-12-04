@@ -6,47 +6,48 @@ import {
   Get,
   Patch,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  Param
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {
-  CreateUserDto,
-  RemoveUserDto,
-  UpdateUserDto,
-  ModifyUserPasswordDto
-} from './dto';
-import { RoleGuard } from '../utils/guards';
+import { CreateUserDto, UpdateUserDto, ModifyUserPasswordDto } from './dto';
+import { RoleGuard } from '../guards';
 
 @UseGuards(RoleGuard())
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/list')
+  @Get('/')
   getUsers() {
     return this.userService.findAll();
   }
 
-  @Post('/add')
-  add(@Body() removeUserDto: CreateUserDto) {
-    return this.userService.create(removeUserDto);
+  @Get('/:id')
+  getUser(@Param('id') id: string) {
+    return this.userService.findOne(id);
   }
 
-  @Delete('/remove')
-  remove(@Body() removeUserDto: RemoveUserDto) {
-    return this.userService.remove(removeUserDto);
+  @Post('/')
+  addUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
-  @Patch('/update')
-  update(@Body() updateUserDto: UpdateUserDto) {
+  @Delete('/:id')
+  removeUser(@Param('id') id: string) {
+    return this.userService.remove(id);
+  }
+
+  @Patch('/:id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.password;
-    return this.userService.update(updateUserDto);
+    return this.userService.update({ ...updateUserDto, id });
   }
 
   @Patch('/modify-password')
   modifyPassword(@Body() modifyPasswordUserDto: ModifyUserPasswordDto) {
     const {
-      username,
+      id,
       password,
       newPassword,
       confirmNewPassword
@@ -64,6 +65,6 @@ export class UserController {
       );
     }
 
-    return this.userService.update({ username, password: newPassword });
+    return this.userService.update({ id, password: newPassword });
   }
 }

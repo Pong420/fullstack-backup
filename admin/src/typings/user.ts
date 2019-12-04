@@ -1,25 +1,30 @@
 import { Response$API } from '.';
 
-export enum Role {
+export enum UserRole {
   ADMIN = 'admin',
-  GENERAL = 'general'
+  GENERAL = 'general',
+  CLIENT = 'client'
 }
 
 export interface Param$CreateUser
-  extends Pick<Schema$User, 'username' | 'role'> {
+  extends Pick<Schema$User, 'email' | 'username' | 'role'> {
   password: string;
 }
 
-export interface Param$UpdateUser extends Partial<Schema$User> {
-  username: string;
+export interface Param$UpdateUser
+  extends Partial<Omit<Schema$User, 'id' | 'username'>> {
+  id: string;
 }
 
 export type Response$User = Response$API<Schema$User[]>;
 
 export interface Schema$User {
   id: string;
+  email: string;
   username: string;
-  role?: Role;
+  avatar: string | null;
+  nickname: string;
+  role?: UserRole;
   createdAt: string;
   updatedAt: string;
 }

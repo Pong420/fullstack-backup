@@ -14,7 +14,7 @@ import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService, CreateUserDto } from '../user';
 import { AuthService } from './auth.service';
-import { transformResponse } from '../utils/interceptors';
+import { transformResponse } from '../interceptors';
 import uuidv4 from 'uuid/v4';
 
 const REFRESH_TOKEN = 'refresh_token';

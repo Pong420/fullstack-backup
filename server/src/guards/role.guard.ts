@@ -3,10 +3,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
-import { ValidatePayload } from '../../auth';
-import { Role } from '../../typings';
+import { ValidatePayload } from '../auth';
+import { UserRole } from '../user/model/user.model';
 
-export function RoleGuard(role: Role = Role.ADMIN) {
+export function RoleGuard(role: UserRole = UserRole.ADMIN) {
   class RoleGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext) {
       const canActive = super.canActivate(context);
@@ -20,7 +20,7 @@ export function RoleGuard(role: Role = Role.ADMIN) {
             const user = req.user as ValidatePayload;
 
             if (
-              user.role === Role.ADMIN ||
+              user.role === UserRole.ADMIN ||
               (user.role === role && user.username === req.body.username)
             ) {
               return true;

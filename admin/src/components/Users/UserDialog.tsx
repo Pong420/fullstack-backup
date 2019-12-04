@@ -6,7 +6,7 @@ import { AsyncFnDialog, AsyncFnDialogProps } from '../Dialog';
 import { FormControl } from '../FormControl';
 import { FormBuilder, useForm } from '../../hooks/useForm';
 import {
-  Role,
+  UserRole,
   Param$CreateUser,
   Schema$User,
   Response$API
@@ -15,44 +15,49 @@ import { UserActions } from '../../store';
 import * as validators from '../../utils/validators';
 
 interface Fields extends Param$CreateUser {
-  role?: Role;
+  role?: UserRole;
 }
 
 const defaultValue: Fields = {
+  email: '',
   username: '',
   password: '',
   role: undefined
 };
 
 interface Props extends Omit<AsyncFnDialogProps, 'asyncFn'> {
+  id?: string;
   initialValues?: Partial<Fields>;
   action: (user: Schema$User) => UserActions;
-  apiRequest: (fields: Fields) => AxiosPromise<Response$API<Schema$User>>;
+  apiRequest: (
+    fields: Fields & { id?: string }
+  ) => AxiosPromise<Response$API<Schema$User>>;
 }
 
 export const UserDialog = React.memo(
-  ({ initialValues, action, apiRequest, ...props }: Props) => {
+  ({ id, initialValues, action, apiRequest, ...props }: Props) => {
     const dispatch = useDispatch<Dispatch<UserActions>>();
 
     const form = useMemo(() => {
       const values = { ...defaultValue, ...initialValues };
       return FormBuilder({
+        email: [values.email, validators.required('email cannot be empty')], // TODO: validtion
         username: [
           values.username,
-          validators.required('Product name cannot be empty')
+          validators.required('username cannot be empty')
         ],
         password: [
           values.password,
-          validators.required('Password cannot be empty')
+          validators.required('password cannot be empty')
         ],
-        role: [values.role as Role | undefined]
+        role: [values.role as UserRole | undefined]
       });
     }, [initialValues]);
 
     const { values, errors, handler, isValid, resetForm } = useForm(form);
     const asyncFn = () =>
       isValid()
-        ? apiRequest(values).then(res => res.data.data)
+        ? apiRequest({ id, ...values }).then(res => res.data.data)
         : Promise.reject();
 
     const onSuccess = useCallback(
@@ -68,6 +73,12 @@ export const UserDialog = React.memo(
         onSuccess={onSuccess}
         intent={Intent.PRIMARY}
       >
+        <FormControl label="Email" error={errors.email}>
+          <InputGroup
+            value={values.email}
+            onChange={handler.email.handleChange}
+          />
+        </FormControl>
         <FormControl label="Username" error={errors.username}>
           <InputGroup
             value={values.username}
@@ -80,11 +91,12 @@ export const UserDialog = React.memo(
             onChange={handler.password.handleChange}
           />
         </FormControl>
-        <FormControl label="Role" error={errors.role}>
+        <FormControl label="User Role" error={errors.role}>
           <HTMLSelect value={values.role} onChange={handler.role.handleChange}>
-            <option value="">Select a role &nbsp;</option>
-            <option value={Role.ADMIN}>Admin</option>
-            <option value={Role.GENERAL}>General</option>
+            <option value="">Select user role &nbsp;</option>
+            <option value={UserRole.ADMIN}>Admin</option>
+            <option value={UserRole.GENERAL}>General</option>
+            <option value={UserRole.CLIENT}>Client</option>
           </HTMLSelect>
         </FormControl>
       </AsyncFnDialog>

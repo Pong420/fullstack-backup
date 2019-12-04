@@ -1,12 +1,15 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
 import { UserModel } from './model/user.model';
-import { CreateUserDto, RemoveUserDto, UpdateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UserService {
   async create(createUserDto: CreateUserDto) {
-    const createdUser = new UserModel(createUserDto);
+    const createdUser = new UserModel({
+      nickname: createUserDto.username,
+      ...createUserDto
+    });
 
     try {
       await createdUser.save();
@@ -16,26 +19,27 @@ export class UserService {
     } catch (error) {
       if (error instanceof MongoError) {
         switch (error.code) {
+          // FIXME: duplicate username
           case 11000:
-            throw new BadRequestException('Username have been used');
+            throw new BadRequestException('Email have been registor');
         }
       }
     }
   }
 
-  remove({ username }: RemoveUserDto) {
-    return UserModel.deleteOne({ username });
+  remove(id: string) {
+    return UserModel.deleteOne({ _id: id });
   }
 
-  update({ username, ...changes }: UpdateUserDto) {
-    return UserModel.findOneAndUpdate({ username }, changes, {
+  update({ id, ...changes }: UpdateUserDto) {
+    return UserModel.findOneAndUpdate({ _id: id }, changes, {
       new: true,
       projection: '-password'
     });
   }
 
-  findOne(username: string) {
-    return UserModel.findOne({ username });
+  findOne(id: string) {
+    return UserModel.findOne({ _id: id });
   }
 
   findAll() {
