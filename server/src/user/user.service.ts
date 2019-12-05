@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
-import { UserModel } from './model/user.model';
+import { UserModel, User } from './model/user.model';
 import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
@@ -38,8 +38,8 @@ export class UserService {
     });
   }
 
-  findOne(id: string) {
-    return UserModel.findOne({ _id: id });
+  findOne({ id, ...user }: Partial<User>) {
+    return UserModel.findOne({ _id: id, ...user });
   }
 
   findAll() {
