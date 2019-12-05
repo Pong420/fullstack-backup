@@ -1,4 +1,5 @@
 import { Schema$User } from '../../typings';
+import { useActions } from '../../hooks/useActions';
 
 export enum UserActionTypes {
   ADD = 'ADD_USER',
@@ -14,12 +15,12 @@ export interface AddUser {
 
 export interface RemoveUser {
   type: UserActionTypes.REMOVE;
-  payload: Pick<Schema$User, 'username'>;
+  payload: Pick<Schema$User, 'id'>;
 }
 
 export interface UpdateUser {
   type: UserActionTypes.UPDATE;
-  payload: Partial<Schema$User> & Pick<Schema$User, 'username'>;
+  payload: Partial<Schema$User> & Pick<Schema$User, 'id'>;
 }
 
 export interface ResetUsers {
@@ -54,3 +55,7 @@ export function resetUsers(): ResetUsers {
     type: UserActionTypes.RESET
   };
 }
+
+const actions = { addUser, removeUser, updateUser, resetUsers };
+
+export const useUserActions = () => useActions(actions);

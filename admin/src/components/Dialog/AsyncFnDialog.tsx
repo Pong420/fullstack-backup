@@ -1,5 +1,4 @@
-import React, { ReactNode, useCallback } from 'react';
-import { useRxAsync } from 'use-rx-hooks';
+import React, { ReactNode } from 'react';
 import {
   Dialog,
   IDialogProps,
@@ -14,42 +13,22 @@ export interface AsyncFnDialogProps extends IDialogProps {
   cancelButtonText?: string;
   confirmButtonText?: string;
   intent?: Intent;
-  asyncFn: () => Promise<any>;
+  loading?: boolean;
   onConfirm?: () => void;
-  onSuccess?: (data: any) => void;
 }
 
 export const AsyncFnDialog = React.memo(
   ({
     intent,
     children,
-    onSuccess,
     onClose,
     onConfirm,
-    asyncFn,
+    loading,
     className = '',
     cancelButtonText = 'Cancel',
     confirmButtonText = 'Confirm',
     ...props
   }: AsyncFnDialogProps) => {
-    const onSuccessCallback = useCallback(
-      (data: any) => {
-        onClose && onClose();
-        onSuccess && onSuccess(data);
-      },
-      [onClose, onSuccess]
-    );
-
-    const { run, loading } = useRxAsync(asyncFn, {
-      defer: true,
-      onSuccess: onSuccessCallback
-    });
-
-    const onConfirmCallback = useCallback(() => {
-      onConfirm && onConfirm();
-      run();
-    }, [onConfirm, run]);
-
     return (
       <Dialog
         {...props}
@@ -64,11 +43,7 @@ export const AsyncFnDialog = React.memo(
             <Button disabled={loading} onClick={onClose}>
               {cancelButtonText}
             </Button>
-            <Button
-              intent={intent}
-              loading={loading}
-              onClick={onConfirmCallback}
-            >
+            <Button intent={intent} loading={loading} onClick={onConfirm}>
               {confirmButtonText}
             </Button>
           </div>

@@ -1,4 +1,5 @@
 import { Param$Login } from '../../typings';
+import { useActions } from '../../hooks/useActions';
 
 export enum AuthActionTypes {
   LOGIN = 'LOGIN',
@@ -67,3 +68,11 @@ export function refreshToken(): RefreshToken {
     type: AuthActionTypes.REFRESH_TOKEN
   };
 }
+
+const actions = {
+  login,
+  logout,
+  refreshToken
+};
+
+export const useAuthActions = () => useActions(actions);

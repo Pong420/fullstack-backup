@@ -16,7 +16,9 @@ export interface Param$UpdateUser
   id: string;
 }
 
-export type Response$User = Response$API<Schema$User[]>;
+export type Response$GetUsers = Response$API<Schema$User[]>;
+
+export type Response$CreateUser = Response$API<Schema$User>;
 
 export interface Schema$User {
   id: string;

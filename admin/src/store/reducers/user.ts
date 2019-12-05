@@ -5,7 +5,7 @@ import {
   TransformDataById
 } from '../../utils/transformDatabyId';
 
-interface State extends TransformDataById<Schema$User, 'username'> {
+interface State extends TransformDataById<Schema$User, 'id'> {
   list: Schema$User[];
 }
 
@@ -25,7 +25,7 @@ export default function(state = initialState, action: UserActions): State {
         const payload = Array.isArray(action.payload)
           ? action.payload
           : [action.payload];
-        const { byIds, ids } = transformDatabyId(payload, 'username');
+        const { byIds, ids } = transformDatabyId(payload, 'id');
         return {
           ...state,
           ids: [...state.ids, ...ids],
@@ -36,10 +36,10 @@ export default function(state = initialState, action: UserActions): State {
 
     case UserActionTypes.REMOVE:
       return (() => {
-        const { username } = action.payload;
-        const index = state.ids.indexOf(username);
+        const { id } = action.payload;
+        const index = state.ids.indexOf(id);
 
-        const { [username]: deleted, ...byIds } = state.byIds;
+        const { [id]: deleted, ...byIds } = state.byIds;
         return {
           ...state,
           ids: [...state.ids.slice(0, index), ...state.ids.slice(index - 1)],
@@ -50,13 +50,13 @@ export default function(state = initialState, action: UserActions): State {
 
     case UserActionTypes.UPDATE:
       return (() => {
-        const { username } = action.payload;
+        const { id } = action.payload;
         return {
           ...state,
           byIds: {
             ...state.byIds,
-            [username]: {
-              ...state.byIds[username],
+            [id]: {
+              ...state.byIds[id],
               ...action.payload
             }
           }
