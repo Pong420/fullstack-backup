@@ -38,10 +38,10 @@ export class UserService {
     });
   }
 
-  findOne({ id, ...user }: Partial<User>) {
+  findOne({ id, ...user }: Partial<User>, projection = '-password') {
     return UserModel.findOne(
       JSON.parse(JSON.stringify({ _id: id, ...user })),
-      '-password'
+      projection
     );
   }
 
