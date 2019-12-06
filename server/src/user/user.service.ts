@@ -39,10 +39,11 @@ export class UserService {
   }
 
   findOne({ id, ...user }: Partial<User>) {
-    return UserModel.findOne({ _id: id, ...user });
+    return UserModel.findOne(JSON.parse(JSON.stringify({ _id: id, ...user })));
   }
 
-  findAll() {
-    return UserModel.find({}, '-password');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  findAll(conditions?: any) {
+    return UserModel.find(conditions, '-password');
   }
 }

@@ -31,7 +31,10 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
-    const user = await this.usersService.findOne({ username });
+    const user = await this.usersService.findOne({
+      username
+      // role: UserRole.ADMIN
+    });
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);

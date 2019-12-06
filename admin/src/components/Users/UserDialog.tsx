@@ -80,7 +80,7 @@ export const UserDialog = React.memo(
             <HTMLSelect>
               <option value="">Select user role</option>
               <option value={UserRole.ADMIN}>Admin</option>
-              <option value={UserRole.GENERAL}>General</option>
+              <option value={UserRole.MANAGER}>Manager</option>
               <option value={UserRole.CLIENT}>Client</option>
             </HTMLSelect>
           </FormItem>

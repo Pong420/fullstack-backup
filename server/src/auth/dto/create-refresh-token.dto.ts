@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsEnum } from 'class-validator';
 import { RefreshToken } from '../model/refreshToken.modal';
 import { UserRole } from '../../user';
 
@@ -8,8 +8,7 @@ export class CreateRefreshTokenDto
   username!: string;
 
   @IsEnum(UserRole)
-  @IsOptional()
-  role?: UserRole;
+  role!: UserRole;
 
   @IsString()
   refreshToken!: string;

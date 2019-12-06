@@ -8,8 +8,8 @@ export class RefreshToken implements JWTSignPayload {
   @prop({ required: true })
   username!: string;
 
-  @prop()
-  role?: UserRole;
+  @prop({ required: true })
+  role!: UserRole;
 
   @prop({ required: true })
   refreshToken!: string;

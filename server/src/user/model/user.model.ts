@@ -8,7 +8,7 @@ function hashPassword(pwd: string) {
 
 export enum UserRole {
   ADMIN = 'admin',
-  GENERAL = 'general',
+  MANAGER = 'manager',
   CLIENT = 'client'
 }
 
@@ -16,6 +16,7 @@ export class User {
   id!: string;
 
   @prop({ required: true, unique: true })
+  @IsEmail()
   email!: string;
 
   @prop({ required: true, unique: true })

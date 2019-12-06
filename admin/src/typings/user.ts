@@ -2,7 +2,7 @@ import { Response$API } from '.';
 
 export enum UserRole {
   ADMIN = 'admin',
-  GENERAL = 'general',
+  MANAGER = 'manager',
   CLIENT = 'client'
 }
 

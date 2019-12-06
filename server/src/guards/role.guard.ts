@@ -6,6 +6,12 @@ import { FastifyRequest } from 'fastify';
 import { ValidatePayload } from '../auth';
 import { UserRole } from '../user/model/user.model';
 
+export const UserLevels: UserRole[] = [
+  UserRole.CLIENT,
+  UserRole.MANAGER,
+  UserRole.ADMIN
+];
+
 export function RoleGuard(role: UserRole = UserRole.ADMIN) {
   class RoleGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext) {
@@ -19,10 +25,7 @@ export function RoleGuard(role: UserRole = UserRole.ADMIN) {
             const req = context.switchToHttp().getRequest<FastifyRequest>();
             const user = req.user as ValidatePayload;
 
-            if (
-              user.role === UserRole.ADMIN ||
-              (user.role === role && user.username === req.body.username)
-            ) {
+            if (UserLevels.indexOf(user.role) >= UserLevels.indexOf(role)) {
               return true;
             }
           }

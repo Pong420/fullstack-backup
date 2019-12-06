@@ -2,7 +2,7 @@ import { UserRole } from '../../user';
 
 export interface JWTSignPayload {
   username: string;
-  role?: UserRole;
+  role: UserRole;
 }
 
 export interface ValidatePayload extends JWTSignPayload {
