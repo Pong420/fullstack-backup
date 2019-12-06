@@ -78,7 +78,7 @@ export class UserController {
   }
 
   @Patch('/:id')
-  async update(
+  async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Req() req: FastifyRequest
@@ -119,6 +119,6 @@ export class UserController {
       );
     }
 
-    return this.update(id, { id, password: newPassword }, req);
+    return this.updateUser(id, { id, password: newPassword }, req);
   }
 }

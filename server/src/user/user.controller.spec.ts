@@ -110,7 +110,7 @@ describe('User Controller', () => {
       expect((await controller.getUsers(mockReq())).length).toBe(3);
     });
 
-    it('Manager role should not get ${UserRole.ADMIN} users', async () => {
+    it(`${UserRole.MANAGER} role should not get ${UserRole.ADMIN} users`, async () => {
       expect(
         (await controller.getUsers(mockReq({ role: UserRole.MANAGER }))).every(
           user => user.role !== UserRole.ADMIN
@@ -119,8 +119,8 @@ describe('User Controller', () => {
     });
   });
 
-  describe('edit user', () => {
-    it('User nickname will be changed', async () => {
+  describe('update user', () => {
+    it('user nickname will be changed', async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
       const newUser = await controller.addUser(
         { password: '', ...mockUser },
@@ -129,7 +129,7 @@ describe('User Controller', () => {
       const changes = createMockUser(UserRole.ADMIN);
 
       expect(
-        await controller.update(
+        await controller.updateUser(
           newUser.id,
           { id: newUser.id, ...changes },
           mockReq({ ...mockUser })
@@ -137,7 +137,7 @@ describe('User Controller', () => {
       ).toMatchObject(changes);
     });
 
-    it('User info cannot be changed at the same role', async () => {
+    it('users who have the same role cannot be changed by each other', async () => {
       const role = UserRole.ADMIN;
       const mockUser = createMockUser(role);
       const newAdmin = await controller.addUser(
@@ -146,7 +146,7 @@ describe('User Controller', () => {
       );
 
       try {
-        await controller.update(
+        await controller.updateUser(
           newAdmin.id,
           { id: newAdmin.id, nickname: 'change' },
           mockReq({ ...mock.user[role] })
@@ -158,7 +158,7 @@ describe('User Controller', () => {
   });
 
   describe('remove user', () => {
-    it('User could remove itself', async () => {
+    it('user could remove itself', async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
       const newUser = await controller.addUser(
         { password: '', ...mockUser },
@@ -170,7 +170,7 @@ describe('User Controller', () => {
       ).toMatchObject({});
     });
 
-    it('User cannot be removed by others at the same role', async () => {
+    it('users who have the same role cannot be removed by each other', async () => {
       const role = UserRole.ADMIN;
       const mockUser = createMockUser(role);
       const newAdmin = await controller.addUser(
@@ -230,7 +230,7 @@ describe('User Controller', () => {
         newAdmin,
         ...(await controller.getUsers(req)),
         await controller.getUser(newAdmin.id, req),
-        await controller.update(
+        await controller.updateUser(
           newAdmin.id,
           { id: newAdmin.id, ...createMockUser(UserRole.ADMIN) },
           req
