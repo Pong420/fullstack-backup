@@ -16,6 +16,10 @@ import dayjs from 'dayjs';
 
 const columns: Column<Schema$User>[] = [
   {
+    Header: 'Nickname',
+    accessor: 'nickname'
+  },
+  {
     Header: 'Username',
     accessor: 'username'
   },

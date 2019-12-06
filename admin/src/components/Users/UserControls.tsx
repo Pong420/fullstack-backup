@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { ButtonGroup } from '@blueprintjs/core';
 import { ButtonPopover } from '../ButtonPopover';
-import { UserDialog } from './UserDialog';
+import { UserDialog, Exclude } from './UserDialog';
 import { useUserActions } from '../../store';
 import { Schema$User, Param$UpdateUser } from '../../typings';
 import { updateUser as updateUserAPI } from '../../services';
@@ -10,13 +10,15 @@ import { useBoolean } from '../../hooks/useBoolean';
 
 interface Props extends Schema$User {}
 
+const exclude: Exclude = ['username'];
+
 const EditUser = React.memo(({ id, ...props }: Schema$User) => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { updateUser } = useUserActions();
   const request = useCallback(
     async (param: Omit<Param$UpdateUser, 'id'>) => {
-      await updateUserAPI({ id, ...param });
-      updateUser({ id, ...param });
+      const res = await updateUserAPI({ id, ...param });
+      updateUser(res.data.data);
       off();
     },
     [id, updateUser, off]
@@ -30,6 +32,7 @@ const EditUser = React.memo(({ id, ...props }: Schema$User) => {
       <UserDialog
         icon="edit"
         title="Edit User"
+        exclude={exclude}
         isOpen={dialogOpen}
         initialValues={props}
         loading={loading}
@@ -43,7 +46,6 @@ const EditUser = React.memo(({ id, ...props }: Schema$User) => {
 export function UserControls(props: Props) {
   return (
     <ButtonGroup>
-      <ButtonPopover icon="info-sign" content="More info" />
       <EditUser {...props} />
       <ButtonPopover icon="trash" content="Remove" />
     </ButtonGroup>

@@ -41,6 +41,7 @@ export class UserController {
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     delete updateUserDto.password;
+    delete updateUserDto.id;
     return this.userService.update({ ...updateUserDto, id });
   }
 

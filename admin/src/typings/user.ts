@@ -7,7 +7,7 @@ export enum UserRole {
 }
 
 export interface Param$CreateUser
-  extends Pick<Schema$User, 'email' | 'username' | 'role'> {
+  extends Omit<Schema$User, 'id' | 'createdAt' | 'updatedAt'> {
   password: string;
 }
 
@@ -19,6 +19,8 @@ export interface Param$UpdateUser
 export type Response$GetUsers = Response$API<Schema$User[]>;
 
 export type Response$CreateUser = Response$API<Schema$User>;
+
+export type Response$UpdateUser = Response$API<Schema$User>;
 
 export interface Schema$User {
   id: string;

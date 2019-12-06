@@ -51,15 +51,22 @@ export default function(state = initialState, action: UserActions): State {
     case UserActionTypes.UPDATE:
       return (() => {
         const { id } = action.payload;
+        const index = state.ids.indexOf(id);
+        const newUser = {
+          ...state.byIds[id],
+          ...action.payload
+        };
         return {
           ...state,
           byIds: {
             ...state.byIds,
-            [id]: {
-              ...state.byIds[id],
-              ...action.payload
-            }
-          }
+            [id]: newUser
+          },
+          list: [
+            ...state.list.slice(0, index),
+            newUser,
+            ...state.list.slice(index + 1)
+          ]
         };
       })();
 
