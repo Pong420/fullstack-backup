@@ -1,10 +1,4 @@
-import {
-  IsOptional,
-  IsEnum,
-  IsNotEmpty,
-  IsEmpty,
-  IsString
-} from 'class-validator';
+import { IsOptional, IsEnum, IsNotEmpty, IsEmpty } from 'class-validator';
 import { User, UserRole } from '../model/user.model';
 
 export class UpdateUserDto implements Partial<User> {
@@ -26,6 +20,15 @@ export class UpdateUserDto implements Partial<User> {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
+
+  @IsOptional()
+  nickname?: string;
+
+  @IsEmpty()
+  createdAt?: string;
+
+  @IsEmpty()
+  updatedAt?: string;
 }
 
 export class ModifyUserPasswordDto implements Partial<User> {

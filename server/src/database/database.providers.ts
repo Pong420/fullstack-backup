@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { ConfigService } from '../config';
+import mongoose from 'mongoose';
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -16,11 +16,14 @@ mongoose.set('toJSON', {
 
 export const DATABASE_CONNECTION = 'DATABASE_CONNECTION';
 
+export const mongoConnection = async (url: string) =>
+  await mongoose.connect(url);
+
 export const databaseProviders = [
   {
     provide: DATABASE_CONNECTION,
-    useFactory: async (configService: ConfigService) =>
-      await mongoose.connect(configService.get('MONGODB_URI')),
+    useFactory: (configService: ConfigService) =>
+      mongoConnection(configService.get('MONGODB_URI')),
     inject: [ConfigService]
   }
 ];

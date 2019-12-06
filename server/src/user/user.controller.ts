@@ -80,7 +80,6 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @Req() req: FastifyRequest
   ) {
-    delete updateUserDto.password;
     delete updateUserDto.id;
 
     const targerUser = await this.userService.findOne({ id });
