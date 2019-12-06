@@ -18,7 +18,7 @@ username=admin
 @authToken = {{login.response.body.data.token}}
 
 # @name users
-GET {{baseUrl}}/user HTTP/1.1
+GET {{baseUrl}}/user/list HTTP/1.1
 Authorization: bearer {{authToken}}
 
 ###

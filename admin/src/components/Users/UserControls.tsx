@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { ButtonGroup } from '@blueprintjs/core';
 import { ButtonPopover } from '../ButtonPopover';
-import { UserDialog, Exclude } from './UserDialog';
+import { UserDialog, UserDialogProps } from './UserDialog';
 import { useUserActions } from '../../store';
 import { Schema$User, Param$UpdateUser } from '../../typings';
 import { updateUser as updateUserAPI } from '../../services';
@@ -10,7 +10,7 @@ import { useBoolean } from '../../hooks/useBoolean';
 
 interface Props extends Schema$User {}
 
-const exclude: Exclude = ['username'];
+const exclude: UserDialogProps['exclude'] = ['username'];
 
 const EditUser = React.memo(({ id, ...props }: Schema$User) => {
   const [dialogOpen, { on, off }] = useBoolean();

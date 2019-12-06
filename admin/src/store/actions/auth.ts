@@ -1,4 +1,4 @@
-import { Param$Login } from '../../typings';
+import { Param$Login, Response$Login } from '../../typings';
 import { useActions } from '../../hooks/useActions';
 
 export enum AuthActionTypes {
@@ -18,6 +18,7 @@ export interface Login {
 
 export interface LoginSuccess {
   type: AuthActionTypes.LOGIN_SUCCESS;
+  payload: Response$Login['data'];
 }
 
 export interface LoginFailure {

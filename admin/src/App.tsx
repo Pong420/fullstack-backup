@@ -12,6 +12,7 @@ const App = () => (
     <Switch>
       <PrivateRoute exact path={PATHS.HOME} component={Home} />
       <PrivateRoute exact path={PATHS.USERS} component={Users} />
+      <PrivateRoute exact path={PATHS.USERS} component={Users} />
     </Switch>
   </>
 );

@@ -18,6 +18,8 @@ export interface Param$UpdateUser
 
 export type Response$GetUsers = Response$API<Schema$User[]>;
 
+export type Response$GetUserInfo = Response$API<Schema$User>;
+
 export type Response$CreateUser = Response$API<Schema$User>;
 
 export type Response$UpdateUser = Response$API<Schema$User>;

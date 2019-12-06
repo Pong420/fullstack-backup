@@ -12,9 +12,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { UserService, CreateUserDto } from '../user';
+import { UserService, CreateUserDto, UserRole } from '../user';
 import { AuthService } from './auth.service';
 import { transformResponse } from '../interceptors';
+import { RoleGuard } from '../guards';
+
 import uuidv4 from 'uuid/v4';
 
 const REFRESH_TOKEN = 'refresh_token';
@@ -26,9 +28,15 @@ export class AuthController {
     private readonly authService: AuthService
   ) {}
 
-  @Post('/registor')
-  registor(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Post('/register/admin')
+  @UseGuards(RoleGuard(UserRole.ADMIN))
+  registerAdmin(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
+  }
+
+  @Post('/register')
+  register(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create({ ...createUserDto, role: UserRole.CLIENT });
   }
 
   @UseGuards(AuthGuard('local'))
@@ -47,7 +55,12 @@ export class AuthController {
         this.authService.getTokenCookieOpts()
       )
       .status(HttpStatus.OK)
-      .send(transformResponse(sign, reply));
+      .send(
+        transformResponse(
+          { user, isDefaultAc: !isDocument(req.user), ...sign },
+          reply
+        )
+      );
   }
 
   @Post('/refresh_token')

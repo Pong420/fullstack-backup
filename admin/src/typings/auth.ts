@@ -1,4 +1,5 @@
 import { Response$API } from '.';
+import { Schema$User } from './user';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
@@ -7,7 +8,9 @@ export interface Param$Login {
   password: string;
 }
 
-export type Response$Login = Response$API<Schema$JWT>;
+export type Response$Login = Response$API<
+  Schema$JWT & { user: Schema$User; isDefaultAc: boolean }
+>;
 
 export type Response$RefreshToken = Response$API<Schema$JWT>;
 

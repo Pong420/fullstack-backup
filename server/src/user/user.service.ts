@@ -21,7 +21,7 @@ export class UserService {
         switch (error.code) {
           // FIXME: duplicate username
           case 11000:
-            throw new BadRequestException('Email have been registor');
+            throw new BadRequestException('Email have been register');
         }
       }
     }

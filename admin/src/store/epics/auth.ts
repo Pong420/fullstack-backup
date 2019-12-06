@@ -10,8 +10,9 @@ import {
   Logout
 } from '../actions/auth';
 import { RootState } from '../reducers';
-import { login, refreshToken, logout } from '../../services';
+import { login, refreshToken, logout, getUserInfo } from '../../services';
 import { PATHS } from '../../constants';
+import { Response$Login } from '../../typings';
 import { Toaster } from '../../utils/toaster';
 import { isLocation } from '../../utils/isLocation';
 
@@ -27,11 +28,18 @@ const loginEpic: AuthEpic = (action$, state$) =>
     switchMap(action => {
       const request =
         action.type === AuthActionTypes.LOGIN
-          ? login(action.payload)
-          : refreshToken();
+          ? login(action.payload).then(res => res.data.data)
+          : refreshToken().then<Response$Login['data']>(async res => {
+              const user = (await getUserInfo()).data.data;
+              return {
+                ...res.data.data,
+                isDefaultAc: false,
+                user
+              };
+            });
 
       return from(request).pipe(
-        mergeMap(() => {
+        mergeMap(payload => {
           const { location } = state$.value.router;
           const redirect = isLocation(location.state)
             ? location.state.pathname
@@ -40,8 +48,12 @@ const loginEpic: AuthEpic = (action$, state$) =>
             : undefined;
 
           return merge<Actions>(
-            of({ type: AuthActionTypes.LOGIN_SUCCESS }),
-            redirect ? of<Actions>(replace(redirect, {})) : empty()
+            of({ type: AuthActionTypes.LOGIN_SUCCESS, payload }),
+            payload.isDefaultAc
+              ? of<Actions>(replace(PATHS.LOGIN, { register: true }))
+              : redirect
+              ? of<Actions>(replace(redirect, {}))
+              : empty()
           );
         }),
         catchError(payload => {

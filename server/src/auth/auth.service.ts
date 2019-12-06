@@ -31,13 +31,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
-    const user = await this.usersService.findOne(
-      {
-        username
-        // role: UserRole.ADMIN
-      },
-      ''
-    );
+    const user = await this.usersService.findOne({ username }, '');
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);
@@ -48,13 +42,16 @@ export class AuthService {
 
       throw new BadRequestException('Invalid Password');
     } else {
-      const [defaultUsername, defaultPassword] = this.configService.get([
-        'DEFAULT_USERNAME',
-        'DEFAULT_PASSWORD'
-      ]);
+      const admin = await this.usersService.findAll({ role: UserRole.ADMIN });
+      if (!admin.length) {
+        const [defaultUsername, defaultPassword] = this.configService.get([
+          'DEFAULT_USERNAME',
+          'DEFAULT_PASSWORD'
+        ]);
 
-      if (username === defaultUsername && pass === defaultPassword) {
-        return { username: defaultUsername, role: UserRole.ADMIN };
+        if (username === defaultUsername && pass === defaultPassword) {
+          return { username: defaultUsername, role: UserRole.ADMIN };
+        }
       }
     }
 

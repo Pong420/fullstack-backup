@@ -19,4 +19,11 @@
   .login-card-body {
     @include margin-y(25px 10px);
   }
+
+  .register-form {
+    h5 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  }
 }

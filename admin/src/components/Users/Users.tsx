@@ -41,7 +41,7 @@ const columns: Column<Schema$User>[] = [
     accessor: ({ createdAt }) => dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
   },
   {
-    id: 'constrols',
+    Header: 'Controls',
     Cell: ({ cell }) => <UserControls {...cell.row.original} />
   }
 ];

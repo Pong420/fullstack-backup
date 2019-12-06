@@ -35,7 +35,7 @@ export class UserController {
     throw new BadRequestException('Permission denied');
   }
 
-  @Get('/')
+  @Get('/list')
   getUsers(@Req() req: FastifyRequest) {
     const roles = UserLevels.slice(0, UserLevels.indexOf(req.user.role) + 1);
     return this.userService.findAll({
@@ -43,14 +43,17 @@ export class UserController {
     });
   }
 
+  @Get('/')
   @Get('/:id')
-  async getUser(@Param('id') id: string, @Req() req: FastifyRequest) {
-    const user = await this.userService.findOne({ id });
+  async getUser(@Req() req: FastifyRequest, @Param('id') id?: string) {
+    const user = await this.userService.findOne({
+      id,
+      username: req.user.username
+    });
     if (user) {
       if (this.hasPermission(req, user, true)) {
         return user;
       }
-
       throw new BadRequestException('User not found');
     }
   }
