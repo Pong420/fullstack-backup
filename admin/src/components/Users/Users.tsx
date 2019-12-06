@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { Layout } from '../Layout';
 import { Table } from '../Table';
+import { Avatar } from '../Avatar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
 import { addUser, resetUsers, userListSelector } from '../../store';
@@ -15,6 +16,16 @@ import { Toaster } from '../../utils/toaster';
 import dayjs from 'dayjs';
 
 const columns: Column<Schema$User>[] = [
+  {
+    Header: 'Avatar',
+    Cell: ({
+      cell: {
+        row: {
+          original: { avatar, username }
+        }
+      }
+    }) => <Avatar avatar={avatar} fallback={username} />
+  },
   {
     Header: 'Nickname',
     accessor: 'nickname'
