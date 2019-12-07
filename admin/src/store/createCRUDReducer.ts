@@ -34,11 +34,11 @@ export type CRUDActionsTypes<
   K extends AllowedNames<I, PropertyKey>
 > = {
   RESET: { type: 'RESET' };
-  ADD: { type: 'ADD'; payload: I };
+  CREATE: { type: 'CREATE'; payload: I };
+  DELETE: { type: 'DELETE'; payload: Pick<I, K> };
+  UPDATE: { type: 'UPDATE'; payload: Pick<I, K> & Partial<I> };
   PAGINATE: { type: 'PAGINATE'; payload: PagePayload<I> };
   SET_PAGE: { type: 'SET_PAGE'; payload: number };
-  REMOVE: { type: 'REMOVE'; payload: Pick<I, K> };
-  UPDATE: { type: 'UPDATE'; payload: Pick<I, K> & Partial<I> };
 };
 
 export type CRUDActions<
@@ -83,7 +83,7 @@ export function createCRUDReducer<
       case 'SET_PAGE':
         return { ...state, pageNo: action.payload };
 
-      case 'ADD':
+      case 'CREATE':
         return (() => {
           const id = action.payload[key];
 
@@ -133,7 +133,7 @@ export function createCRUDReducer<
           };
         })();
 
-      case 'REMOVE':
+      case 'DELETE':
         return (() => {
           const { [key]: id } = action.payload;
           const index = state.ids.indexOf(id);

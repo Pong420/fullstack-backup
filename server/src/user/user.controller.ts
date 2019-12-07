@@ -70,18 +70,18 @@ export class UserController {
   }
 
   @Post('/')
-  addUser(@Body() createUserDto: CreateUserDto, @Req() req: FastifyRequest) {
+  createUser(@Body() createUserDto: CreateUserDto, @Req() req: FastifyRequest) {
     if (this.hasPermission(req, createUserDto)) {
       return this.userService.create(createUserDto);
     }
   }
 
   @Delete('/:id')
-  async removeUser(@Param('id') id: string, @Req() req: FastifyRequest) {
+  async deleteUser(@Param('id') id: string, @Req() req: FastifyRequest) {
     const targerUser = await this.userService.findOne({ id });
     if (targerUser) {
       if (this.hasPermission(req, targerUser, true)) {
-        return this.userService.remove(id);
+        return this.userService.delete(id);
       }
 
       throw new BadRequestException('User not found');

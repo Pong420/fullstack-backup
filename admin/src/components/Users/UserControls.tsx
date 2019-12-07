@@ -52,14 +52,14 @@ const EditUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   );
 });
 
-const RemoveUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
+const DeleteUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const [dialogOpen, { on, off }] = useBoolean();
-  const { removeUser } = useUserActions();
+  const { deleteUser } = useUserActions();
   const request = useCallback(async () => {
     await deleteUserAPI({ id });
-    removeUser({ id });
+    deleteUser({ id });
     off();
-  }, [id, off, removeUser]);
+  }, [id, off, deleteUser]);
 
   const { run, loading } = useRxAsync(request, { defer: true });
 
@@ -67,13 +67,13 @@ const RemoveUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
     <>
       <ButtonPopover
         icon="trash"
-        content="Remove"
+        content="Delete"
         onClick={on}
         disabled={id === ''}
       />
       <AsyncFnDialog
         icon="trash"
-        title="Remove User"
+        title="Delete User"
         intent="danger"
         isOpen={dialogOpen}
         loading={loading}
@@ -98,7 +98,7 @@ export function UserControls(props: Props) {
   return (
     <div>
       <EditUser {...props} />
-      <RemoveUser {...props} />
+      <DeleteUser {...props} />
     </div>
   );
 }

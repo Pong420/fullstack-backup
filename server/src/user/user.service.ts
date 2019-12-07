@@ -28,7 +28,7 @@ export class UserService {
     }
   }
 
-  remove(id: string) {
+  delete(id: string) {
     return UserModel.deleteOne({ _id: id });
   }
 

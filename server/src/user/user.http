@@ -38,7 +38,7 @@ email={{email}}
 @id = {{add.response.body.data.id}}
 
 
-# @name remove
+# @name delete
 DELETE  {{baseUrl}}/user/{{id}} HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 Authorization: bearer {{authToken}}

@@ -72,21 +72,21 @@ describe('User Controller', () => {
   describe('create user', () => {
     it(`${UserRole.ADMIN} role could create all users`, async () => {
       expect(
-        await controller.addUser(
+        await controller.createUser(
           { password: UserRole.ADMIN, ...mock.user[UserRole.ADMIN] },
           mockReq({ role: UserRole.ADMIN })
         )
       ).toMatchObject(mock.user[UserRole.ADMIN]);
 
       expect(
-        await controller.addUser(
+        await controller.createUser(
           { password: UserRole.MANAGER, ...mock.user[UserRole.MANAGER] },
           mockReq({ role: UserRole.ADMIN })
         )
       ).toMatchObject(mock.user[UserRole.MANAGER]);
 
       expect(
-        await controller.addUser(
+        await controller.createUser(
           { password: UserRole.CLIENT, ...mock.user[UserRole.CLIENT] },
           mockReq({ role: UserRole.ADMIN })
         )
@@ -95,7 +95,7 @@ describe('User Controller', () => {
 
     it(`${UserRole.MANAGER} role could not create ${UserRole.ADMIN} user`, async () => {
       try {
-        controller.addUser(
+        controller.createUser(
           { password: rid(), ...createMockUser(UserRole.ADMIN) },
           mockReq({ role: UserRole.MANAGER })
         );
@@ -122,7 +122,7 @@ describe('User Controller', () => {
   describe('update user', () => {
     it('user nickname will be changed', async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
-      const newUser = await controller.addUser(
+      const newUser = await controller.createUser(
         { password: '', ...mockUser },
         mockReq()
       );
@@ -140,7 +140,7 @@ describe('User Controller', () => {
     it('users who have the same role cannot be changed by each other', async () => {
       const role = UserRole.ADMIN;
       const mockUser = createMockUser(role);
-      const newAdmin = await controller.addUser(
+      const newAdmin = await controller.createUser(
         { password: '', ...mockUser },
         mockReq()
       );
@@ -157,29 +157,29 @@ describe('User Controller', () => {
     });
   });
 
-  describe('remove user', () => {
-    it('user could remove itself', async () => {
+  describe('delete user', () => {
+    it('user could delete itself', async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
-      const newUser = await controller.addUser(
+      const newUser = await controller.createUser(
         { password: '', ...mockUser },
         mockReq()
       );
 
       expect(
-        await controller.removeUser(newUser.id, mockReq({ ...mockUser }))
+        await controller.deleteUser(newUser.id, mockReq({ ...mockUser }))
       ).toMatchObject({});
     });
 
-    it('users who have the same role cannot be removed by each other', async () => {
+    it('users who have the same role cannot be deleted by each other', async () => {
       const role = UserRole.ADMIN;
       const mockUser = createMockUser(role);
-      const newAdmin = await controller.addUser(
+      const newAdmin = await controller.createUser(
         { password: '', ...mockUser },
         mockReq()
       );
 
       try {
-        await controller.removeUser(
+        await controller.deleteUser(
           newAdmin.id,
           mockReq({ ...mock.user[role] })
         );
@@ -219,7 +219,7 @@ describe('User Controller', () => {
   describe(`password`, () => {
     it(`Password should not be return`, async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
-      const newAdmin = await controller.addUser(
+      const newAdmin = await controller.createUser(
         { password: '12345678', ...mockUser },
         mockReq()
       );

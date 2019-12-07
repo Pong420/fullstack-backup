@@ -19,13 +19,13 @@ const rid = (N = 5) => {
 
 export const CreateUser = React.memo(() => {
   const [dialogOpen, { on, off }] = useBoolean();
-  const { addUser } = useUserActions();
+  const { createUser } = useUserActions();
   const onSuccess = useCallback(
     (user: Schema$User) => {
-      addUser(user);
+      createUser(user);
       off();
     },
-    [addUser, off]
+    [createUser, off]
   );
   const { run, loading } = useRxAsync(createUserAPI, {
     defer: true,

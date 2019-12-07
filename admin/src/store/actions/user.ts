@@ -3,22 +3,32 @@ import { useActions } from '../../hooks/useActions';
 import { CRUDActionsTypes } from '../createCRUDReducer';
 
 export enum UserActionTypes {
-  ADD = 'ADD_USER',
-  PAGINATE = 'PAGINATE_USER',
-  SET_PAGE = 'SET_PAGE_USER',
-  REMOVE = 'REMOVE_USER',
+  CREATE = 'CREATE_USER',
+  DELETE = 'DELETE_USER',
   UPDATE = 'UPDATE_USER',
-  RESET = 'RESET_USERS'
+  RESET = 'RESET_USERS',
+  PAGINATE = 'PAGINATE_USER',
+  SET_PAGE = 'SET_PAGE_USER'
 }
 
 type Actions = CRUDActionsTypes<Schema$User, 'id'>;
 
-export interface AddUser {
-  type: UserActionTypes.ADD;
-  payload: Actions['ADD']['payload'];
+export interface CreateUser {
+  type: UserActionTypes.CREATE;
+  payload: Actions['CREATE']['payload'];
 }
 
-export interface AddUserByPage {
+export interface DeleteUser {
+  type: UserActionTypes.DELETE;
+  payload: Actions['DELETE']['payload'];
+}
+
+export interface UpdateUser {
+  type: UserActionTypes.UPDATE;
+  payload: Actions['UPDATE']['payload'];
+}
+
+export interface PaginateUser {
   type: UserActionTypes.PAGINATE;
   payload: Actions['PAGINATE']['payload'];
 }
@@ -28,36 +38,26 @@ export interface SetPage {
   payload: Actions['SET_PAGE']['payload'];
 }
 
-export interface RemoveUser {
-  type: UserActionTypes.REMOVE;
-  payload: Actions['REMOVE']['payload'];
-}
-
-export interface UpdateUser {
-  type: UserActionTypes.UPDATE;
-  payload: Actions['UPDATE']['payload'];
-}
-
 export interface ResetUsers {
   type: UserActionTypes.RESET;
 }
 
 export type UserActions =
-  | AddUser
-  | AddUserByPage
-  | SetPage
-  | RemoveUser
+  | CreateUser
+  | DeleteUser
   | UpdateUser
+  | PaginateUser
+  | SetPage
   | ResetUsers;
 
-export function addUser(payload: AddUser['payload']): AddUser {
+export function createUser(payload: CreateUser['payload']): CreateUser {
   return {
-    type: UserActionTypes.ADD,
+    type: UserActionTypes.CREATE,
     payload
   };
 }
 
-export function paginateUser(payload: AddUserByPage['payload']): AddUserByPage {
+export function paginateUser(payload: PaginateUser['payload']): PaginateUser {
   return {
     type: UserActionTypes.PAGINATE,
     payload
@@ -71,9 +71,9 @@ export function setPage(payload: SetPage['payload']): SetPage {
   };
 }
 
-export function removeUser(payload: RemoveUser['payload']): RemoveUser {
+export function deleteUser(payload: DeleteUser['payload']): DeleteUser {
   return {
-    type: UserActionTypes.REMOVE,
+    type: UserActionTypes.DELETE,
     payload
   };
 }
@@ -92,12 +92,12 @@ export function resetUsers(): ResetUsers {
 }
 
 const actions = {
-  addUser,
-  paginateUser,
-  setPage,
-  removeUser,
+  createUser,
+  deleteUser,
   updateUser,
-  resetUsers
+  resetUsers,
+  paginateUser,
+  setPage
 };
 
 export const useUserActions = () => useActions(actions);

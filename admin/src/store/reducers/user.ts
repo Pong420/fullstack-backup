@@ -13,8 +13,8 @@ export default function(state = crudInitialState, action: UserActions): State {
     case UserActionTypes.RESET:
       return crudReducer(undefined, { type: 'RESET' });
 
-    case UserActionTypes.ADD:
-      return crudReducer(state, { type: 'ADD', payload: action.payload });
+    case UserActionTypes.CREATE:
+      return crudReducer(state, { type: 'CREATE', payload: action.payload });
 
     case UserActionTypes.PAGINATE:
       return crudReducer(state, {
@@ -28,8 +28,8 @@ export default function(state = crudInitialState, action: UserActions): State {
         payload: action.payload
       });
 
-    case UserActionTypes.REMOVE:
-      return crudReducer(state, { type: 'REMOVE', payload: action.payload });
+    case UserActionTypes.DELETE:
+      return crudReducer(state, { type: 'DELETE', payload: action.payload });
 
     case UserActionTypes.UPDATE:
       return crudReducer(state, { type: 'UPDATE', payload: action.payload });
