@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { OutputParametricSelector, ParametricSelector } from 'reselect';
-import { RootState } from '../store/reducers';
+import { RootState } from './reducers';
 
 export const createMemoSelector = <P, R, C>(
   selector:

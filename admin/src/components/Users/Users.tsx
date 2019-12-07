@@ -1,21 +1,18 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React from 'react';
 import { Card } from '@blueprintjs/core';
-import { Column } from 'react-table';
-import { useSelector } from 'react-redux';
-import { useRxAsync } from 'use-rx-hooks';
 import { Layout } from '../Layout';
-import { Table, PaginationTable } from '../Table';
-import { Pagination } from '../Pagination';
+import { PaginationTable, Column } from '../Table';
 import { Avatar } from '../Avatar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
-import { userListSelector, useUserActions } from '../../store';
 import { Schema$User } from '../../typings';
 import { getUsers as getUsersAPI } from '../../services';
+import { useUserActions, userPaginationSelector } from '../../store';
 import { Toaster } from '../../utils/toaster';
+import { useReduxPagination } from '../../hooks/useReduxPagination';
 import dayjs from 'dayjs';
 
-const columns: Column<Schema$User>[] = [
+const columns: Column<Partial<Schema$User>>[] = [
   {
     Header: 'Avatar',
     Cell: ({
@@ -38,7 +35,8 @@ const columns: Column<Schema$User>[] = [
   { Header: 'Email', accessor: 'email' },
   {
     Header: 'Created At',
-    accessor: ({ createdAt }) => dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+    accessor: ({ createdAt }) =>
+      createdAt && dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     Header: 'Controls',
@@ -52,41 +50,26 @@ const onFailure = (error: any) => Toaster.apiError(error);
 const navbar = <CreateUser />;
 
 export function Users() {
-  const { resetUsers, addUser } = useUserActions();
-  const [pageNo, setPageNo] = useState(1);
-  const [total, setTotal] = useState(0);
-  const users = useSelector(userListSelector);
+  const { paginateUser, setPage } = useUserActions();
 
-  const request = useCallback(
-    () =>
-      getUsersAPI({ pageNo, pageSize }).then(res => {
-        const { docs, totalDocs } = res.data.data;
-        addUser(docs);
-        setTotal(totalDocs);
-        return docs;
-      }),
-    [pageNo, addUser]
-  );
-
-  // TODO: remove ?
-  useEffect(resetUsers, []);
-
-  const { data, loading } = useRxAsync(request, {
-    onFailure
+  const { data, total, pageNo, loading } = useReduxPagination({
+    selector: userPaginationSelector,
+    fn: getUsersAPI,
+    onSuccess: paginateUser,
+    onFailure,
+    pageSize
   });
 
   return (
     <Layout className="users" title="Users" navbar={navbar}>
-      {!!users.length && (
-        <Card>
-          <PaginationTable
-            loading={loading}
-            data={data || []}
-            columns={columns}
-            pagination={{ total, onPageChange: setPageNo }}
-          />
-        </Card>
-      )}
+      <Card>
+        <PaginationTable
+          data={data}
+          loading={loading}
+          columns={columns}
+          pagination={{ total, pageNo, onPageChange: setPage }}
+        />
+      </Card>
     </Layout>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRxAsync } from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
 import { Button, H5 } from '@blueprintjs/core';
 import { UserForm, Exclude } from '../UserForm';
 import { register } from '../../services';

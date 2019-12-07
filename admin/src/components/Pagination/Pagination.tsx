@@ -5,8 +5,8 @@ import { Button, ButtonGroup, Intent, Divider } from '@blueprintjs/core';
 // https://github.com/palantir/blueprint/issues/1029
 
 export interface PaginationProps {
-  initialPage?: number;
-  total: number;
+  pageNo?: number;
+  total?: number;
   size?: number;
   onPageChange: (page: number) => void;
 }
@@ -24,7 +24,7 @@ interface State extends InitialState {
 
 type Actions =
   | { type: 'PAGE_CHANGE'; payload: number }
-  | { type: 'CHANGE'; payload: Partial<InitialState> };
+  | { type: 'INIT'; payload: Partial<InitialState> };
 
 const getState = ({ currentPage, size, total }: InitialState): State => {
   const totalPages = Math.ceil(total / size);
@@ -77,10 +77,11 @@ const reducer: Reducer<State, Actions> = (state, action) => {
         currentPage: action.payload
       });
 
-    case 'CHANGE':
+    case 'INIT':
       return getState({
         ...state,
-        ...action.payload
+        ...action.payload,
+        currentPage: action.payload.currentPage || state.currentPage
       });
 
     default:
@@ -89,10 +90,10 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 };
 
 export const Pagination = React.memo<PaginationProps>(
-  ({ initialPage = 1, total, size = 10, onPageChange }) => {
+  ({ pageNo = 1, total = 0, size = 10, onPageChange }) => {
     const [state, dispatch] = useReducer(
       reducer,
-      { currentPage: initialPage, total, size, totalPages: 0 },
+      { currentPage: pageNo, total, size },
       getState
     );
 
@@ -102,10 +103,13 @@ export const Pagination = React.memo<PaginationProps>(
     };
 
     useEffect(() => {
-      dispatch({ type: 'CHANGE', payload: { total } });
-    }, [dispatch, total]);
+      dispatch({
+        type: 'INIT',
+        payload: { currentPage: pageNo, total }
+      });
+    }, [dispatch, pageNo, total]);
 
-    if (state.totalPages === 1) return null;
+    if (state.totalPages <= 1) return null;
 
     return (
       <div className="pagiation">

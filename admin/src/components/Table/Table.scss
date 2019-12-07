@@ -13,4 +13,13 @@ table {
     opacity: 0.75;
     pointer-events: auto;
   }
+
+  td:empty {
+    &:after {
+      @include dimen(80%, 1.4em);
+      content: '';
+      background-color: $selekon-color;
+      display: block;
+    }
+  }
 }

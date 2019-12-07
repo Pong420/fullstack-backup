@@ -12,11 +12,11 @@ import { useBoolean } from '../../hooks/useBoolean';
 import { useSelector } from 'react-redux';
 import { AsyncFnDialog } from '../Dialog';
 
-interface Props extends Schema$User {}
+interface Props extends Partial<Schema$User> {}
 
 const exclude: UserDialogProps['exclude'] = ['username'];
 
-const EditUser = React.memo(({ id, ...props }: Schema$User) => {
+const EditUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { updateUser } = useUserActions();
   const request = useCallback(
@@ -32,7 +32,12 @@ const EditUser = React.memo(({ id, ...props }: Schema$User) => {
 
   return (
     <>
-      <ButtonPopover icon="edit" content="Edit" onClick={on} />
+      <ButtonPopover
+        icon="edit"
+        content="Edit"
+        onClick={on}
+        disabled={id === ''}
+      />
       <UserDialog
         icon="edit"
         title="Edit User"
@@ -47,7 +52,7 @@ const EditUser = React.memo(({ id, ...props }: Schema$User) => {
   );
 });
 
-const RemoveUser = React.memo(({ id, ...props }: Schema$User) => {
+const RemoveUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { removeUser } = useUserActions();
   const request = useCallback(async () => {
@@ -60,7 +65,12 @@ const RemoveUser = React.memo(({ id, ...props }: Schema$User) => {
 
   return (
     <>
-      <ButtonPopover icon="trash" content="Remove" onClick={on} />
+      <ButtonPopover
+        icon="trash"
+        content="Remove"
+        onClick={on}
+        disabled={id === ''}
+      />
       <AsyncFnDialog
         icon="trash"
         title="Remove User"
@@ -82,7 +92,7 @@ export function UserControls(props: Props) {
   const disabled = user.role === props.role;
 
   if (disabled) {
-    return null;
+    return <div />;
   }
 
   return (

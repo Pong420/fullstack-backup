@@ -17,8 +17,7 @@ export function PaginationTable<T extends object>({
   ...props
 }: Props<T>) {
   const [localData, setLocalData] = useState(data);
-  const { total = 0, onPageChange = () => {}, ...paginateProps } =
-    pagination || {};
+  const { onPageChange = () => {}, ...paginateProps } = pagination || {};
 
   useEffect(() => setLocalData(data), [data]);
 
@@ -32,11 +31,7 @@ export function PaginationTable<T extends object>({
           </div>
         )}
       </div>
-      <Pagination
-        {...paginateProps}
-        total={total}
-        onPageChange={onPageChange}
-      />
+      <Pagination {...paginateProps} onPageChange={onPageChange} />
     </>
   );
 }

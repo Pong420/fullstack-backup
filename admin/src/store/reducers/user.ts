@@ -1,74 +1,38 @@
 import { UserActions, UserActionTypes } from '../actions/user';
+import { createCRUDReducer, CRUDState } from '../createCRUDReducer';
 import { Schema$User } from '../../typings';
-import {
-  transformDatabyId,
-  TransformDataById
-} from '../../utils/transformDatabyId';
 
-interface State extends TransformDataById<Schema$User, 'id'> {
-  list: Schema$User[];
-}
+interface State extends CRUDState<Schema$User, 'id'> {}
 
-const initialState: State = {
-  ids: [],
-  list: [],
-  byIds: {}
-};
+const { crudInitialState, crudReducer } = createCRUDReducer<Schema$User, 'id'>({
+  key: 'id'
+});
 
-export default function(state = initialState, action: UserActions): State {
+export default function(state = crudInitialState, action: UserActions): State {
   switch (action.type) {
     case UserActionTypes.RESET:
-      return initialState;
+      return crudReducer(undefined, { type: 'RESET' });
 
     case UserActionTypes.ADD:
-      return (() => {
-        const payload = Array.isArray(action.payload)
-          ? action.payload
-          : [action.payload];
-        const { byIds, ids } = transformDatabyId(payload, 'id');
-        return {
-          ...state,
-          ids: [...state.ids, ...ids],
-          list: [...state.list, ...payload],
-          byIds: { ...state.byIds, ...byIds }
-        };
-      })();
+      return crudReducer(state, { type: 'ADD', payload: action.payload });
+
+    case UserActionTypes.PAGINATE:
+      return crudReducer(state, {
+        type: 'PAGINATE',
+        payload: action.payload
+      });
+
+    case UserActionTypes.SET_PAGE:
+      return crudReducer(state, {
+        type: 'SET_PAGE',
+        payload: action.payload
+      });
 
     case UserActionTypes.REMOVE:
-      return (() => {
-        const { id } = action.payload;
-        const index = state.ids.indexOf(id);
-
-        const { [id]: deleted, ...byIds } = state.byIds;
-        return {
-          ...state,
-          ids: [...state.ids.slice(0, index), ...state.ids.slice(index + 1)],
-          list: [...state.list.slice(0, index), ...state.list.slice(index + 1)],
-          byIds
-        };
-      })();
+      return crudReducer(state, { type: 'REMOVE', payload: action.payload });
 
     case UserActionTypes.UPDATE:
-      return (() => {
-        const { id } = action.payload;
-        const index = state.ids.indexOf(id);
-        const newUser = {
-          ...state.byIds[id],
-          ...action.payload
-        };
-        return {
-          ...state,
-          byIds: {
-            ...state.byIds,
-            [id]: newUser
-          },
-          list: [
-            ...state.list.slice(0, index),
-            newUser,
-            ...state.list.slice(index + 1)
-          ]
-        };
-      })();
+      return crudReducer(state, { type: 'UPDATE', payload: action.payload });
 
     default:
       return state;

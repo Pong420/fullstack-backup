@@ -2504,6 +2504,11 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
+"@types/qs@^6.9.0":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.0.tgz#2a5fa918786d07d3725726f7f650527e1cfeaffd"
+  integrity sha512-c4zji5CjWv1tJxIZkz1oUtGcdOlsH3aza28Nqmm+uNDWBRHoMsjooBEN4czZp1V3iXPihE/VRUOBqg+4Xq0W4g==
+
 "@types/range-parser@*":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
@@ -12059,6 +12064,11 @@ qs@^6.5.1:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.0.tgz#d1297e2a049c53119cb49cca366adbbacc80b409"
   integrity sha512-27RP4UotQORTpmNQDX8BHPukOnBP3p1uUJY5UnDhaJB+rMt9iMsok724XL+UHU23bEFOHRMQ2ZhI99qOWUMGFA==
 
+qs@^6.9.1:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.1.tgz#20082c65cb78223635ab1a9eaca8875a29bf8ec9"
+  integrity sha512-Cxm7/SS/y/Z3MHWSxXb8lIFqgqBowP5JMlTUFyJN88y0SGQhVmZnqFK/PeuMX9LzUyWsqqhNxIyg0jlzq946yA==
+
 qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
@@ -14607,17 +14617,17 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-rx-async@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/use-rx-async/-/use-rx-async-1.0.1.tgz#59ad1d973e06bdc42181fc863bbfcfa1b1e80916"
-  integrity sha512-n2Mnio8DgeKmYI55RdQZ2mKeGJ2v4+vb031ESqZyLu7BoPmuzTaqe03gQAT0ftdyIlLKsHJJBHoyg5f5bOoZ+Q==
+use-rx-async@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/use-rx-async/-/use-rx-async-1.1.3.tgz#f89be13d361fe788790d2cb012c696641d90d676"
+  integrity sha512-/PrFzGEiLwD6NWZrm9mOaiyupnu7XA5Lzp1ZyOjhK2Y2hM1OPGTkww1vH+SY8roxiyI6HSwf/htQe7AR/R3fUg==
 
-use-rx-hooks@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/use-rx-hooks/-/use-rx-hooks-1.3.3.tgz#9c04610acec1f53e218852cf28d27153a66e1576"
-  integrity sha512-2ICjWeAGDHHo2hXqae0iHzKPE16LtaRu7vaWVYLIXav5MCXnoGRBGPoGCOjdJJEiE19tnSah7TacEOo5SiRoVg==
+use-rx-hooks@^1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/use-rx-hooks/-/use-rx-hooks-1.3.8.tgz#ac786372c04288b0af5226ae8ca9f5e0f530487d"
+  integrity sha512-haPpPADf7w2cDZHRHCsvUUxlf1FNRtAL2QfXdFbENIevhk/WHG5ijW8qrssw9p4u6clC7cJfxW9X7w9iqsgrUw==
   dependencies:
-    use-rx-async "^1.0.1"
+    use-rx-async "^1.1.3"
 
 use@^3.1.0:
   version "3.1.1"

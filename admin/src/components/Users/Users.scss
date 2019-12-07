@@ -8,6 +8,10 @@
     flex: 1 1 auto;
   }
 
+  .avatar:empty {
+    background-color: $selekon-color;
+  }
+
   table {
     tr {
       th,

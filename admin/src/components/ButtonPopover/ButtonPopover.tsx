@@ -16,6 +16,7 @@ export function ButtonPopover({
   popoverProps,
   content,
   position,
+  disabled,
   ...props
 }: ButtonPopoverProps) {
   return (
@@ -26,9 +27,10 @@ export function ButtonPopover({
       hoverCloseDelay={0}
       content={content}
       position={position}
+      disabled={disabled}
       {...popoverProps}
     >
-      <Button {...props} />
+      <Button disabled={disabled} {...props} />
     </Popover>
   );
 }
