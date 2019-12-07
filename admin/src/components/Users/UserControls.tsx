@@ -1,12 +1,16 @@
 import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
-import { ButtonGroup } from '@blueprintjs/core';
 import { ButtonPopover } from '../ButtonPopover';
 import { UserDialog, UserDialogProps } from './UserDialog';
-import { useUserActions } from '../../store';
+import { useUserActions, authUserSelector } from '../../store';
 import { Schema$User, Param$UpdateUser } from '../../typings';
-import { updateUser as updateUserAPI } from '../../services';
+import {
+  updateUser as updateUserAPI,
+  deleteUser as deleteUserAPI
+} from '../../services';
 import { useBoolean } from '../../hooks/useBoolean';
+import { useSelector } from 'react-redux';
+import { AsyncFnDialog } from '../Dialog';
 
 interface Props extends Schema$User {}
 
@@ -43,11 +47,48 @@ const EditUser = React.memo(({ id, ...props }: Schema$User) => {
   );
 });
 
-export function UserControls(props: Props) {
+const RemoveUser = React.memo(({ id, ...props }: Schema$User) => {
+  const [dialogOpen, { on, off }] = useBoolean();
+  const { removeUser } = useUserActions();
+  const request = useCallback(async () => {
+    await deleteUserAPI({ id });
+    removeUser({ id });
+    off();
+  }, [id, off, removeUser]);
+
+  const { run, loading } = useRxAsync(request, { defer: true });
+
   return (
-    <ButtonGroup>
+    <>
+      <ButtonPopover icon="trash" content="Remove" onClick={on} />
+      <AsyncFnDialog
+        icon="trash"
+        title="Remove User"
+        intent="danger"
+        isOpen={dialogOpen}
+        loading={loading}
+        onConfirm={run}
+        onClose={off}
+      >
+        Are you sure to delete <b>{props.nickname}</b>'s account? This action is
+        irreversible
+      </AsyncFnDialog>
+    </>
+  );
+});
+
+export function UserControls(props: Props) {
+  const user = useSelector(authUserSelector)!;
+  const disabled = user.role === props.role;
+
+  if (disabled) {
+    return null;
+  }
+
+  return (
+    <div>
       <EditUser {...props} />
-      <ButtonPopover icon="trash" content="Remove" />
-    </ButtonGroup>
+      <RemoveUser {...props} />
+    </div>
   );
 }

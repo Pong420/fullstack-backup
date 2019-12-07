@@ -10,7 +10,7 @@ import { Schema$User } from '../../typings';
 const createUserAPI = (...params: Parameters<typeof createUser>) =>
   createUser(...params).then(res => res.data.data);
 
-export function CreateUser() {
+export const CreateUser = React.memo(() => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { addUser } = useUserActions();
   const onSuccess = useCallback(
@@ -39,4 +39,4 @@ export function CreateUser() {
       />
     </>
   );
-}
+});

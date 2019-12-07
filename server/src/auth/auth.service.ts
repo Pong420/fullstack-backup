@@ -42,7 +42,7 @@ export class AuthService {
 
       throw new BadRequestException('Invalid Password');
     } else {
-      const admin = await this.usersService.findAll({ role: UserRole.ADMIN });
+      const admin = await this.usersService.find({ role: UserRole.ADMIN });
       if (!admin.length) {
         const [defaultUsername, defaultPassword] = this.configService.get([
           'DEFAULT_USERNAME',

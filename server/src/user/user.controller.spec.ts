@@ -112,9 +112,9 @@ describe('User Controller', () => {
 
     it(`${UserRole.MANAGER} role should not get ${UserRole.ADMIN} users`, async () => {
       expect(
-        (await controller.getUsers(mockReq({ role: UserRole.MANAGER }))).every(
-          user => user.role !== UserRole.ADMIN
-        )
+        (await controller.getUsers(
+          mockReq({ role: UserRole.MANAGER })
+        )).docs.every(user => user.role !== UserRole.ADMIN)
       ).toBe(true);
     });
   });
@@ -191,7 +191,7 @@ describe('User Controller', () => {
 
   describe(`${UserRole.CLIENT} permission`, () => {
     it(`${UserRole.CLIENT} could access its data`, async () => {
-      const client = (await controller.getUsers(mockReq())).find(
+      const client = (await controller.getUsers(mockReq())).docs.find(
         ({ role }) => role === UserRole.CLIENT
       );
 
@@ -228,7 +228,7 @@ describe('User Controller', () => {
 
       const result = [
         newAdmin,
-        ...(await controller.getUsers(req)),
+        ...(await controller.getUsers(req)).docs,
         await controller.getUser(newAdmin.id, req),
         await controller.updateUser(
           newAdmin.id,

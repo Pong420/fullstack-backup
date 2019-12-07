@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
+import { PaginateOptions } from 'mongoose';
 import { UserModel, User } from './model/user.model';
 import { CreateUserDto, UpdateUserDto } from './dto';
 
@@ -45,10 +46,14 @@ export class UserService {
     );
   }
 
-  async findAll(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    conditions?: any
+  find(condition?: object) {
+    return UserModel.find(condition);
+  }
+
+  paginate(
+    condition?: object,
+    { page = 1, limit = 10, ...options }: PaginateOptions = {}
   ) {
-    return await UserModel.find(conditions, '-password');
+    return UserModel.paginate(condition, { page, limit, ...options });
   }
 }

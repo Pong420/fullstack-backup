@@ -1,6 +1,11 @@
 .layout.users {
   .#{$ns}-card {
+    @include flex($flex-direction: column);
     @include sq-dimen(100%);
+  }
+
+  .pagination-table {
+    flex: 1 1 auto;
   }
 
   table {
@@ -19,11 +24,11 @@
         }
       }
     }
-  }
 
-  .bp3-popover-wrapper {
-    + .bp3-popover-wrapper {
-      margin-left: 5px;
+    .bp3-popover-wrapper {
+      + .bp3-popover-wrapper {
+        margin-left: 5px;
+      }
     }
   }
 }

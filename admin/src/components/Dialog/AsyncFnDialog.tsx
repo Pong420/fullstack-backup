@@ -31,11 +31,11 @@ export const AsyncFnDialog = React.memo(
   }: AsyncFnDialogProps) => {
     return (
       <Dialog
-        {...props}
         className={`async-dialog ${className}`.trim()}
         onClose={onClose}
         canEscapeKeyClose={!loading}
         canOutsideClickClose={!loading}
+        {...props}
       >
         <div className={Classes.DIALOG_BODY}>{children}</div>
         <div className={Classes.DIALOG_FOOTER}>

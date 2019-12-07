@@ -1,6 +1,12 @@
 import { IsEmail } from 'class-validator';
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import {
+  prop,
+  plugin,
+  getModelForClass,
+  ReturnPaginateModelType
+} from '@typegoose/typegoose';
 import bcrypt from 'bcrypt';
+import paginate from 'mongoose-paginate-v2';
 
 function hashPassword(pwd: string) {
   return bcrypt.hashSync(pwd, 10);
@@ -12,6 +18,7 @@ export enum UserRole {
   CLIENT = 'client'
 }
 
+@plugin(paginate)
 export class User {
   id!: string;
 
@@ -41,4 +48,4 @@ export class User {
 
 export const UserModel = getModelForClass(User, {
   schemaOptions: { timestamps: true }
-});
+}) as ReturnPaginateModelType<typeof User>;

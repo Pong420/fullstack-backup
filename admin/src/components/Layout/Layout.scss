@@ -1,6 +1,6 @@
 .layout {
   @include flex($flex-direction: column);
-  @include sq-dimen(100%);
+  @include dimen(100%);
   padding: 15px;
 
   .layout-content {

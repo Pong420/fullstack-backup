@@ -1,4 +1,4 @@
-import { Response$API } from '.';
+import { Response$API, Response$PaginationAPI } from '.';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -16,7 +16,7 @@ export interface Param$UpdateUser
   id: string;
 }
 
-export type Response$GetUsers = Response$API<Schema$User[]>;
+export type Response$GetUsers = Response$PaginationAPI<Schema$User>;
 
 export type Response$GetUserInfo = Response$API<Schema$User>;
 

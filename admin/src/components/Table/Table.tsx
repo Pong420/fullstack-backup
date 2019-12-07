@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTable, TableOptions } from 'react-table';
 
-interface Props<T extends object> extends TableOptions<T> {
+export interface TableProps<T extends object> extends TableOptions<T> {
   className?: string;
 }
 
 export function Table<T extends object>({
   className = '',
   ...props
-}: Props<T>) {
+}: TableProps<T>) {
   const {
     getTableProps,
     getTableBodyProps,

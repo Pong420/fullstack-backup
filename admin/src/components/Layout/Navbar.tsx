@@ -13,7 +13,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export function Navbar({ title, children }: Props) {
+export const Navbar = React.memo(({ title, children }: Props) => {
   return (
     <BpNavbar>
       <BpNavbar.Group>
@@ -32,4 +32,4 @@ export function Navbar({ title, children }: Props) {
       </BpNavbar.Group>
     </BpNavbar>
   );
-}
+});

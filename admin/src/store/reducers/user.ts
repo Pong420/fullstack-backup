@@ -42,8 +42,8 @@ export default function(state = initialState, action: UserActions): State {
         const { [id]: deleted, ...byIds } = state.byIds;
         return {
           ...state,
-          ids: [...state.ids.slice(0, index), ...state.ids.slice(index - 1)],
-          list: [...state.list.slice(0, index), ...state.list.slice(index - 1)],
+          ids: [...state.ids.slice(0, index), ...state.ids.slice(index + 1)],
+          list: [...state.list.slice(0, index), ...state.list.slice(index + 1)],
           byIds
         };
       })();

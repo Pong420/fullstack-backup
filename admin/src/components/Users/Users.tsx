@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Card } from '@blueprintjs/core';
 import { Column } from 'react-table';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { Layout } from '../Layout';
-import { Table } from '../Table';
+import { Table, PaginationTable } from '../Table';
+import { Pagination } from '../Pagination';
 import { Avatar } from '../Avatar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
-import { addUser, resetUsers, userListSelector } from '../../store';
+import { userListSelector, useUserActions } from '../../store';
 import { Schema$User } from '../../typings';
 import { getUsers as getUsersAPI } from '../../services';
-import { useActions } from '../../hooks/useActions';
 import { Toaster } from '../../utils/toaster';
 import dayjs from 'dayjs';
 
@@ -46,26 +46,45 @@ const columns: Column<Schema$User>[] = [
   }
 ];
 
-const getUsers_ = () => getUsersAPI().then(res => res.data.data);
+const pageSize = 10;
 const onFailure = (error: any) => Toaster.apiError(error);
-const actions = { resetUsers, addUser };
+
+const navbar = <CreateUser />;
 
 export function Users() {
-  const { resetUsers, addUser } = useActions(actions);
+  const { resetUsers, addUser } = useUserActions();
+  const [pageNo, setPageNo] = useState(1);
+  const [total, setTotal] = useState(0);
   const users = useSelector(userListSelector);
 
+  const request = useCallback(
+    () =>
+      getUsersAPI({ pageNo, pageSize }).then(res => {
+        const { docs, totalDocs } = res.data.data;
+        addUser(docs);
+        setTotal(totalDocs);
+        return docs;
+      }),
+    [pageNo, addUser]
+  );
+
+  // TODO: remove ?
   useEffect(resetUsers, []);
 
-  useRxAsync(getUsers_, {
-    onSuccess: addUser,
+  const { data, loading } = useRxAsync(request, {
     onFailure
   });
 
   return (
-    <Layout className="users" title="Users" navbar={<CreateUser />}>
+    <Layout className="users" title="Users" navbar={navbar}>
       {!!users.length && (
         <Card>
-          <Table data={users} columns={columns} />
+          <PaginationTable
+            loading={loading}
+            data={data || []}
+            columns={columns}
+            pagination={{ total, onPageChange: setPageNo }}
+          />
         </Card>
       )}
     </Layout>

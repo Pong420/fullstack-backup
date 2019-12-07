@@ -1,3 +1,16 @@
 table {
   @include dimen(100%);
 }
+
+.pagination-table {
+  @include relative();
+
+  .loading {
+    @include absolute(0, null, 0);
+    @include flex(center, center);
+    @include sq-dimen(100%);
+    background-color: #fff;
+    opacity: 0.75;
+    pointer-events: auto;
+  }
+}

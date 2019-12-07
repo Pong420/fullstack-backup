@@ -5,12 +5,11 @@ import { logout } from '../../store';
 
 const actions = { logout };
 
-export function UserMenu() {
+export const UserMenu = React.memo(() => {
   const { logout } = useActions(actions);
-
   return (
     <Menu>
       <MenuItem text="Loout" icon="log-out" onClick={logout} />
     </Menu>
   );
-}
+});

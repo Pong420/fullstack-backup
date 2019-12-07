@@ -1,5 +1,6 @@
 import { api } from './api';
 import {
+  Param$Pagination,
   Param$CreateUser,
   Param$UpdateUser,
   Response$GetUsers,
@@ -8,7 +9,8 @@ import {
   Response$UpdateUser
 } from '../typings';
 
-export const getUsers = () => api.get<Response$GetUsers>('/user/list');
+export const getUsers = (params: Param$Pagination = {}) =>
+  api.get<Response$GetUsers>('/user/list', { params });
 
 export const getUserInfo = (id?: string) => {
   return api.get<Response$GetUserInfo>(`/user` + (id ? `?id=${id}` : ''));
@@ -19,4 +21,8 @@ export const createUser = (params: Param$CreateUser) =>
 
 export const updateUser = ({ id, ...params }: Param$UpdateUser) => {
   return api.patch<Response$UpdateUser>(`/user/${id}`, params);
+};
+
+export const deleteUser = ({ id }: { id: string }) => {
+  return api.delete(`/user/${id}`);
 };
