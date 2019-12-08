@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "lerna run dev --stream",
-    "lint": "lerna run lint --stream"
+    "lint": "lerna run lint --stream",
+    "test": "lerna run test --stream"
   },
   "workspaces": ["server", "admin"],
   "devDependencies": {

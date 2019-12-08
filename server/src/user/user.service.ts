@@ -46,14 +46,19 @@ export class UserService {
     );
   }
 
-  find(condition?: object) {
-    return UserModel.find(condition);
+  find(condition?: object, projection = '-password') {
+    return UserModel.find(condition, projection);
   }
 
   paginate(
     condition?: object,
     { page = 1, limit = 10, ...options }: PaginateOptions = {}
   ) {
-    return UserModel.paginate(condition, { page, limit, ...options });
+    return UserModel.paginate(condition, {
+      page,
+      limit,
+      select: '-password',
+      ...options
+    });
   }
 }

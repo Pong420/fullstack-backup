@@ -12,7 +12,7 @@ import bcrypt from 'bcrypt';
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
-    private readonly usersService: UserService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService
   ) {
     const index = 'updatedAt';
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
-    const user = await this.usersService.findOne({ username }, '');
+    const user = await this.userService.findOne({ username }, '');
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);
@@ -42,7 +42,7 @@ export class AuthService {
 
       throw new BadRequestException('Invalid Password');
     } else {
-      const admin = await this.usersService.find({ role: UserRole.ADMIN });
+      const admin = await this.userService.find({ role: UserRole.ADMIN }, '');
       if (!admin.length) {
         const [defaultUsername, defaultPassword] = this.configService.get([
           'DEFAULT_USERNAME',

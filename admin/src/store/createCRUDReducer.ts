@@ -19,8 +19,9 @@ export interface CRUDState<
 > {
   byIds: TransformDataById<I, K, I>['byIds'];
   ids: Array<I[K] | null>;
-  list: Partial<I>[];
+  list: Array<I | Partial<I>>;
   pageNo: number;
+  pageSize: number;
 }
 
 interface PagePayload<T> {
@@ -69,7 +70,8 @@ export function createCRUDReducer<
     ids: [],
     list: [],
     byIds: {} as CRUDState<I, K>['byIds'],
-    pageNo: pageNo ? Number(pageNo) : 1
+    pageNo: pageNo ? Number(pageNo) : 1,
+    pageSize
   };
 
   function crudReducer(
@@ -87,15 +89,12 @@ export function createCRUDReducer<
         return (() => {
           const id = action.payload[key];
 
-          const total = state.list.length + 1;
-          const full = state.list.length % pageSize === 0;
-
           return {
             ...state,
             ids: [...state.ids, id],
             list: [...state.list, action.payload],
             byIds: { ...state.byIds, [id]: action.payload },
-            pageNo: full ? Math.floor(total / pageSize) + 1 : state.pageNo
+            pageNo: Math.floor(state.list.length / pageSize) + 1
           };
         })();
 

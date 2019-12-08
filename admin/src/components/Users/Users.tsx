@@ -44,7 +44,6 @@ const columns: Column<Partial<Schema$User>>[] = [
   }
 ];
 
-const pageSize = 10;
 const onFailure = (error: any) => Toaster.apiError(error);
 
 const navbar = <CreateUser />;
@@ -56,8 +55,7 @@ export function Users() {
     selector: userPaginationSelector,
     fn: getUsersAPI,
     onSuccess: paginateUser,
-    onFailure,
-    pageSize
+    onFailure
   });
 
   return (

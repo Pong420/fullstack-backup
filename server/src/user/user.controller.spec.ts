@@ -107,7 +107,10 @@ describe('User Controller', () => {
 
   describe('get users', () => {
     it(`${UserRole.ADMIN} role should get all users`, async () => {
-      expect((await controller.getUsers(mockReq())).length).toBe(3);
+      expect(
+        (await controller.getUsers(mockReq(), { pageNo: 1, pageSize: 100 }))
+          .docs.length
+      ).toBe(3);
     });
 
     it(`${UserRole.MANAGER} role should not get ${UserRole.ADMIN} users`, async () => {
@@ -190,16 +193,17 @@ describe('User Controller', () => {
   });
 
   describe(`${UserRole.CLIENT} permission`, () => {
-    it(`${UserRole.CLIENT} could access its data`, async () => {
-      const client = (await controller.getUsers(mockReq())).docs.find(
-        ({ role }) => role === UserRole.CLIENT
-      );
+    it(`${UserRole.CLIENT} could access his data`, async () => {
+      const client = (await controller.getUsers(mockReq(), {
+        pageNo: 1,
+        pageSize: 1000
+      })).docs.find(({ role }) => role === UserRole.CLIENT);
 
       if (client) {
         expect(
           await controller.getUser(
-            client.id,
-            mockReq({ ...mock.user[UserRole.CLIENT] })
+            mockReq({ ...mock.user[UserRole.CLIENT] }),
+            client.id
           )
         ).toMatchObject(mock.user[UserRole.CLIENT]);
       }
@@ -229,7 +233,7 @@ describe('User Controller', () => {
       const result = [
         newAdmin,
         ...(await controller.getUsers(req)).docs,
-        await controller.getUser(newAdmin.id, req),
+        await controller.getUser(req, newAdmin.id),
         await controller.updateUser(
           newAdmin.id,
           { id: newAdmin.id, ...createMockUser(UserRole.ADMIN) },
