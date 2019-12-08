@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'rc-field-form';
 import { Intent } from '@blueprintjs/core';
-import { AsyncFnDialog, AsyncFnDialogProps } from '../Dialog';
-import { UserForm, UserFormProps } from '../UserForm';
+import { AsyncFnDialog, AsyncFnDialogProps } from '../../components/Dialog';
+import { UserForm, UserFormProps } from '../../components/UserForm';
 
 export interface UserDialogProps
   extends Omit<AsyncFnDialogProps, 'onConfirm'>,

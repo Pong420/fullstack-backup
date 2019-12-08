@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
-import { ButtonPopover } from '../ButtonPopover';
+import { ButtonPopover } from '../../components/ButtonPopover';
 import { UserDialog, UserDialogProps } from './UserDialog';
+import { AsyncFnDialog } from '../../components/Dialog';
 import { useUserActions, authUserSelector } from '../../store';
 import { Schema$User, Param$UpdateUser } from '../../typings';
 import {
@@ -9,8 +11,6 @@ import {
   deleteUser as deleteUserAPI
 } from '../../services';
 import { useBoolean } from '../../hooks/useBoolean';
-import { useSelector } from 'react-redux';
-import { AsyncFnDialog } from '../Dialog';
 
 interface Props extends Partial<Schema$User> {}
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Icon } from '@blueprintjs/core';
-import { Layout } from '../Layout';
-import { PaginationTable, Column } from '../Table';
-import { Avatar } from '../Avatar';
+import { Card } from '@blueprintjs/core';
+import { Layout } from '../../components/Layout';
+import { PaginationTable, Column } from '../../components/Table';
+import { Avatar } from '../../components/Avatar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
 import { Schema$User } from '../../typings';

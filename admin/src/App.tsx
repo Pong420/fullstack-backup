@@ -2,8 +2,8 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Sidebar } from './components/Sidebar';
-import { Home } from './components/Home';
-import { Users } from './components/Users';
+import { Home } from './pages/Home';
+import { Users } from './pages/Users';
 import { PATHS } from './constants';
 
 const App = () => (
