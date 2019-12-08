@@ -24,7 +24,7 @@ const SidebarItem = React.memo<SidebarItemProps>(
   )
 );
 
-export const Sidebar = () => {
+export const Sidebar = React.memo(() => {
   return (
     <div className="sidebar">
       <div className="sidebar-inner">
@@ -52,4 +52,4 @@ export const Sidebar = () => {
       </div>
     </div>
   );
-};
+});

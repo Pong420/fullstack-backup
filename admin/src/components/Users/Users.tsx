@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@blueprintjs/core';
+import { Card, Icon } from '@blueprintjs/core';
 import { Layout } from '../Layout';
 import { PaginationTable, Column } from '../Table';
 import { Avatar } from '../Avatar';
@@ -21,14 +21,18 @@ const columns: Column<Partial<Schema$User>>[] = [
     }) => <Avatar avatar={avatar} fallback={username} />
   },
   {
-    Header: 'Nickname',
-    accessor: 'nickname'
-  },
-  {
     Header: 'Username',
     accessor: 'username'
   },
-  { Header: 'Role', accessor: 'role' },
+  {
+    Header: 'Role',
+    accessor: ({ role }) =>
+      role && role.slice(0, 1).toUpperCase() + role.slice(1, role.length)
+  },
+  {
+    Header: 'Nickname',
+    accessor: 'nickname'
+  },
   { Header: 'Email', accessor: 'email' },
   {
     Header: 'Created At',
@@ -55,7 +59,7 @@ export function Users() {
   });
 
   return (
-    <Layout className="users" title="Users" navbar={navbar}>
+    <Layout className="users" icon="user" title="Users" navbar={navbar}>
       <Card>
         <PaginationTable
           data={data}

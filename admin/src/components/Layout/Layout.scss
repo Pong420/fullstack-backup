@@ -13,7 +13,16 @@
     top: 15px;
 
     .#{$ns}-navbar-heading {
+      @include flex(center);
       font-weight: bold;
+
+      .bp3-icon {
+        margin-right: 10px;
+
+        svg {
+          @include sq-dimen(24px);
+        }
+      }
     }
   }
 }

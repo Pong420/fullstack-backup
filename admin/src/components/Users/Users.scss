@@ -22,10 +22,6 @@
         &:nth-last-child(2) {
           @include dimen(1000px);
         }
-
-        &:last-child {
-          text-align: right;
-        }
       }
     }
 
