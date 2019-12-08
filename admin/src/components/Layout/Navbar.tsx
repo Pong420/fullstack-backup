@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Navbar as BpNavbar,
   Button,
@@ -7,6 +8,7 @@ import {
   Position
 } from '@blueprintjs/core';
 import { UserMenu } from './UserMenu';
+import { authUserSelector } from '../../store';
 
 interface Props {
   title?: ReactNode;
@@ -14,6 +16,8 @@ interface Props {
 }
 
 export const Navbar = React.memo(({ title, children }: Props) => {
+  const { nickname } = useSelector(authUserSelector) || {};
+
   return (
     <BpNavbar>
       <BpNavbar.Group>
@@ -27,7 +31,9 @@ export const Navbar = React.memo(({ title, children }: Props) => {
         <Button minimal icon="notifications" />
 
         <Popover content={<UserMenu />} position={Position.BOTTOM_RIGHT}>
-          <Button minimal icon="user" />
+          <Button minimal icon="user">
+            <b>{nickname}</b>
+          </Button>
         </Popover>
       </BpNavbar.Group>
     </BpNavbar>

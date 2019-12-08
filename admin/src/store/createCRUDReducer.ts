@@ -3,7 +3,6 @@ import {
   transformDatabyId
 } from '../utils/transformDatabyId';
 import { AllowedNames, ValueOf } from '../typings';
-import qs from 'qs';
 
 interface Props<
   I extends Record<PropertyKey, any>,
@@ -30,9 +29,9 @@ interface PagePayload<T> {
   pageNo: number;
 }
 
-export type CRUDActionsTypes<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
+export type CRUDActionsMap<
+  I extends Record<PropertyKey, any> = any,
+  K extends AllowedNames<I, PropertyKey> = any
 > = {
   RESET: { type: 'RESET' };
   CREATE: { type: 'CREATE'; payload: I };
@@ -42,10 +41,12 @@ export type CRUDActionsTypes<
   SET_PAGE: { type: 'SET_PAGE'; payload: number };
 };
 
+export type CRUDActionsTypes = keyof CRUDActionsMap<any, any>;
+
 export type CRUDActions<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
-> = ValueOf<CRUDActionsTypes<I, K>>;
+> = ValueOf<CRUDActionsMap<I, K>>;
 
 export function isPagePayload<T>(obj: any): obj is PagePayload<T> {
   return !!(
@@ -64,13 +65,15 @@ export function createCRUDReducer<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
 >({ key, pageSize = 10 }: Props<I, K>) {
-  const { pageNo } = qs.parse(window.location.search.slice(1));
+  const match = window.location.search.match(/(?<=pageNo=)(.*)(?=(&))/g);
+  let pageNo = Number(match ? match[0] : 1);
+  pageNo = isNaN(pageNo) ? 1 : pageNo;
 
   const crudInitialState: CRUDState<I, K> = {
     ids: [],
     list: [],
     byIds: {} as CRUDState<I, K>['byIds'],
-    pageNo: pageNo ? Number(pageNo) : 1,
+    pageNo,
     pageSize
   };
 

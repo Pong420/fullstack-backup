@@ -50,7 +50,7 @@ const columns: Column<Partial<Schema$User>>[] = [
 const navbar = <CreateUser />;
 
 export function Users() {
-  const { paginateUser, setPage } = useUserActions();
+  const { paginateUser, setPageUser } = useUserActions();
 
   const { data, total, pageNo, loading } = useReduxPagination({
     selector: userPaginationSelector,
@@ -65,7 +65,7 @@ export function Users() {
           data={data}
           loading={loading}
           columns={columns}
-          pagination={{ total, pageNo, onPageChange: setPage }}
+          pagination={{ total, pageNo, onPageChange: setPageUser }}
         />
       </Card>
     </Layout>

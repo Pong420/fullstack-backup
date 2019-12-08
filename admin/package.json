@@ -27,7 +27,7 @@
     "react-app-rewired": "^2.1.4",
     "sass": "^1.23.0",
     "source-map-explorer": "^2.1.0",
-    "typescript": "3.6.4"
+    "typescript": "^3.7.3"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.19.1",
