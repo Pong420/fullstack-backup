@@ -1,4 +1,4 @@
-import { Param$Login, Response$Login } from '../../typings';
+import { Param$Login, Response$Login, Schema$User } from '../../typings';
 import { useActions } from '../../hooks/useActions';
 
 export enum AuthActionTypes {
@@ -8,7 +8,8 @@ export enum AuthActionTypes {
   LOGOUT = 'LOGOUT',
   LOGOUT_SUCCESS = 'LOGOUT_SUCCESS',
   LOGOUT_FAILURE = 'LOGOUT_FAILURE',
-  REFRESH_TOKEN = 'REFRESH_TOKEN'
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
+  UPDATE_AUTH_USER = 'UPDATE_AUTH_USER'
 }
 
 export interface Login {
@@ -42,6 +43,11 @@ export interface RefreshToken {
   type: AuthActionTypes.REFRESH_TOKEN;
 }
 
+export interface UpdateAuthUser {
+  type: AuthActionTypes.UPDATE_AUTH_USER;
+  payload: Partial<Schema$User>;
+}
+
 export type AuthActions =
   | Login
   | LoginSuccess
@@ -49,7 +55,8 @@ export type AuthActions =
   | Logout
   | LogoutSuccess
   | LogoutFailure
-  | RefreshToken;
+  | RefreshToken
+  | UpdateAuthUser;
 
 export function login(payload: Login['payload']): Login {
   return {
@@ -70,10 +77,20 @@ export function refreshToken(): RefreshToken {
   };
 }
 
+export function updateAuthUser(
+  payload: UpdateAuthUser['payload']
+): UpdateAuthUser {
+  return {
+    type: AuthActionTypes.UPDATE_AUTH_USER,
+    payload
+  };
+}
+
 const actions = {
   login,
   logout,
-  refreshToken
+  refreshToken,
+  updateAuthUser
 };
 
 export const useAuthActions = () => useActions(actions);

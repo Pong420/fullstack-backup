@@ -46,6 +46,15 @@ export default function(
         user: null
       };
 
+    case AuthActionTypes.UPDATE_AUTH_USER:
+      return {
+        ...(state as LoggedIn),
+        user: {
+          ...state.user!,
+          ...action.payload
+        }
+      };
+
     default:
       return state;
   }

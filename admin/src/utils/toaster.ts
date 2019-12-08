@@ -13,7 +13,7 @@ const props: IToasterProps = {
   position: Position.TOP_RIGHT
 };
 
-const options: Omit<IToastOptions, 'message'> = {
+const defaultOptions: Omit<IToastOptions, 'message'> = {
   timeout: 4000
 };
 
@@ -27,11 +27,25 @@ const apiError = BpToaster.create(
   container
 );
 
+const success = BpToaster.create(props, container);
+
 export const Toaster = {
-  apiError<T extends APIError>(error: T, prefix?: string) {
-    console.log(error.response);
-    apiError.show({
+  success(options: IToastOptions) {
+    success.show({
       ...options,
+      icon: 'tick-circle',
+      intent: Intent.SUCCESS,
+      message: createElement(
+        Fragment,
+        null,
+        createElement('div', null, 'Success'),
+        createElement('div', null, options.message)
+      )
+    });
+  },
+  apiError<T extends APIError>(error: T, prefix?: string) {
+    apiError.show({
+      ...defaultOptions,
       icon: 'error',
       intent: Intent.DANGER,
       message: createElement(

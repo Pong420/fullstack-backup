@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import jdenticon from 'jdenticon';
 
 interface Props {
   avatar?: string | null;
   fallback?: string;
   size?: number;
+  children?: ReactNode;
 }
 
-export function Avatar({ size = 40, avatar, fallback }: Props) {
+export function Avatar({ size = 40, avatar, fallback, children }: Props) {
   const dimen = { width: size, height: size };
   let content = avatar ? (
     <div
@@ -29,6 +30,7 @@ export function Avatar({ size = 40, avatar, fallback }: Props) {
   return (
     <div className="avatar" style={dimen}>
       {content}
+      {children}
     </div>
   );
 }

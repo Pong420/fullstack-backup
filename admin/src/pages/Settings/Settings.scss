@@ -1,0 +1,38 @@
+.settings {
+  .section {
+    + .section {
+      margin-top: 30px;
+    }
+
+    .#{$ns}-divider {
+      @include margin-x(0);
+    }
+
+    .section-content {
+      margin-top: 20px;
+    }
+
+    .section-group {
+      @include flex();
+
+      .section-group-left {
+        flex: 1 1 auto;
+        margin-right: 50px;
+      }
+    }
+
+    .rc-form-item-label {
+      font-weight: bold;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      text-align: right;
+      button {
+        + button {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
