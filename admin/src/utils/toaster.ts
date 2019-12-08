@@ -1,5 +1,4 @@
 import { createElement, Fragment } from 'react';
-import { AxiosError } from 'axios';
 import {
   Position,
   Intent,
@@ -7,6 +6,8 @@ import {
   IToastOptions,
   Toaster as BpToaster
 } from '@blueprintjs/core';
+import { APIError } from '../typings';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 const props: IToasterProps = {
   position: Position.TOP_RIGHT
@@ -27,22 +28,22 @@ const apiError = BpToaster.create(
 );
 
 export const Toaster = {
-  apiError<T extends AxiosError<{ message: string }>>(
-    error: T,
-    prefix?: string
-  ) {
+  apiError<T extends APIError>(error: T, prefix?: string) {
+    console.log(error.response);
     apiError.show({
       ...options,
       icon: 'error',
-      message: createElement(Fragment, null, [
-        createElement('div', { key: 1 }, prefix),
+      intent: Intent.DANGER,
+      message: createElement(
+        Fragment,
+        null,
         createElement(
           'div',
-          { key: 2 },
-          error.response ? error.response.data.message : error.message
-        )
-      ]),
-      intent: Intent.DANGER
+          null,
+          prefix || (error.response && error.response.data.error) || 'Error'
+        ),
+        createElement('div', null, getErrorMessage(error))
+      )
     });
 
     return apiError;

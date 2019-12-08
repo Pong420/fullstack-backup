@@ -7,7 +7,8 @@ import {
   UseGuards,
   HttpStatus,
   Get,
-  InternalServerErrorException
+  InternalServerErrorException,
+  BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { isDocument } from '@typegoose/typegoose';
@@ -87,13 +88,14 @@ export class AuthController {
           .send(transformResponse(payload, reply));
       }
 
-      return reply.status(HttpStatus.BAD_REQUEST).send('Invalid refresh token');
+      return reply
+        .status(HttpStatus.BAD_REQUEST)
+        .send(new BadRequestException('Invalid refresh token'));
     }
 
-    // TODO: map response
     return reply
       .status(HttpStatus.UNAUTHORIZED)
-      .send('Refresh token not found');
+      .send(new BadRequestException('Refresh token not found'));
   }
 
   @Get('/refresh_token')

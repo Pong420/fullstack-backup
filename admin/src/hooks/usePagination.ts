@@ -22,8 +22,8 @@ export interface UsePaginationOptions<T>
   onSuccess?: (payload: PaginationPayload<T>) => void;
 }
 
-const useQueryTransform = ({ pageNo }: Record<string, string>) => ({
-  pageNo: Number(pageNo)
+const useQueryTransform = ({ pageNo }: Record<string, string | undefined>) => ({
+  pageNo: pageNo ? Number(pageNo) : undefined
 });
 
 export function usePagination<T>({
@@ -41,6 +41,7 @@ export function usePagination<T>({
       fn({ pageNo, pageSize }).then<PaginationPayload<T>>(res => {
         const { docs, totalDocs } = res.data.data;
         setTotal(totalDocs);
+
         return {
           pageNo:
             typeof controledPageNo !== 'undefined' ? controledPageNo : pageNo,

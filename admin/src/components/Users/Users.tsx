@@ -8,7 +8,6 @@ import { UserControls } from './UserControls';
 import { Schema$User } from '../../typings';
 import { getUsers as getUsersAPI } from '../../services';
 import { useUserActions, userPaginationSelector } from '../../store';
-import { Toaster } from '../../utils/toaster';
 import { useReduxPagination } from '../../hooks/useReduxPagination';
 import dayjs from 'dayjs';
 
@@ -44,8 +43,6 @@ const columns: Column<Partial<Schema$User>>[] = [
   }
 ];
 
-const onFailure = (error: any) => Toaster.apiError(error);
-
 const navbar = <CreateUser />;
 
 export function Users() {
@@ -54,8 +51,7 @@ export function Users() {
   const { data, total, pageNo, loading } = useReduxPagination({
     selector: userPaginationSelector,
     fn: getUsersAPI,
-    onSuccess: paginateUser,
-    onFailure
+    onSuccess: paginateUser
   });
 
   return (

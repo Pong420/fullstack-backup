@@ -18,4 +18,10 @@ export const register = (params: Param$CreateUser) =>
 export const logout = () => api.post('/auth/logout');
 
 export const refreshToken = () =>
-  api.post<Response$RefreshToken>(REFERTSH_TOKEN_PATH);
+  api.post<Response$RefreshToken>(
+    REFERTSH_TOKEN_PATH,
+    {},
+    {
+      errorHandle: false
+    }
+  );

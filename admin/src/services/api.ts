@@ -1,8 +1,15 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { from } from 'rxjs';
 import { retry } from 'rxjs/operators';
 import { refreshToken, REFERTSH_TOKEN_PATH } from './auth';
 import { Schema$JWT, Response$API } from '../typings';
+import { Toaster } from '../utils/toaster';
+
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    errorHandle?: boolean;
+  }
+}
 
 let jwtToken: Schema$JWT | null = null;
 
@@ -32,12 +39,22 @@ api.interceptors.request.use(async config => {
   return config;
 });
 
-api.interceptors.response.use((response: AxiosResponse<Response$API<any>>) => {
-  const data = response.data.data;
+api.interceptors.response.use(
+  (response: AxiosResponse<Response$API<any>>) => {
+    const data = response.data.data;
 
-  if (isJWT(data)) {
-    jwtToken = { token: data.token, expiry: data.expiry };
+    if (isJWT(data)) {
+      jwtToken = { token: data.token, expiry: data.expiry };
+    }
+
+    return response;
+  },
+  (error: AxiosError) => {
+    console.log(error.config);
+    if (error.config.errorHandle !== false) {
+      Toaster.apiError(error);
+    }
+
+    return Promise.reject(error);
   }
-
-  return response;
-});
+);

@@ -13,7 +13,6 @@ import { RootState } from '../reducers';
 import { login, refreshToken, logout, getUserInfo } from '../../services';
 import { PATHS } from '../../constants';
 import { Response$Login } from '../../typings';
-import { Toaster } from '../../utils/toaster';
 import { isLocation } from '../../utils/isLocation';
 
 type Actions = AuthActions | RouterAction;
@@ -56,10 +55,9 @@ const loginEpic: AuthEpic = (action$, state$) =>
               : empty()
           );
         }),
-        catchError(payload => {
-          action.type === AuthActionTypes.LOGIN && Toaster.apiError(payload);
-          return of<Actions>({ type: AuthActionTypes.LOGIN_FAILURE, payload });
-        })
+        catchError(payload =>
+          of<Actions>({ type: AuthActionTypes.LOGIN_FAILURE, payload })
+        )
       );
     })
   );
