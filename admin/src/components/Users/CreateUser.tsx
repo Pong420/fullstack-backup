@@ -10,13 +10,6 @@ import { Schema$User } from '../../typings';
 const createUserAPI = (...params: Parameters<typeof createUser>) =>
   createUser(...params).then(res => res.data.data);
 
-const rid = (N = 5) => {
-  const s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.apply(null, Array(N))
-    .map(() => s.charAt(Math.floor(Math.random() * s.length)))
-    .join('');
-};
-
 export const CreateUser = React.memo(() => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { createUser } = useUserActions();
@@ -43,12 +36,6 @@ export const CreateUser = React.memo(() => {
         loading={loading}
         onSubmit={run}
         onClose={off}
-        initialValues={{
-          username: rid(8),
-          password: rid(8),
-          email: `${rid(8)}@gmail.com`,
-          nickname: rid(5).toUpperCase()
-        }}
       />
     </>
   );

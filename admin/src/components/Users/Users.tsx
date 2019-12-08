@@ -16,10 +16,8 @@ const columns: Column<Partial<Schema$User>>[] = [
   {
     Header: 'Avatar',
     Cell: ({
-      cell: {
-        row: {
-          original: { avatar, username }
-        }
+      row: {
+        original: { avatar, username }
       }
     }) => <Avatar avatar={avatar} fallback={username} />
   },
@@ -40,7 +38,9 @@ const columns: Column<Partial<Schema$User>>[] = [
   },
   {
     Header: 'Controls',
-    Cell: ({ cell }) => <UserControls {...cell.row.original} />
+    Cell: ({ row }) => {
+      return <UserControls {...row.original} />;
+    }
   }
 ];
 
