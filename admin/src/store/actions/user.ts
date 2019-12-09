@@ -18,12 +18,12 @@ const crudActionsCreator = getCRUDActionCreator<
 >();
 
 export const userActions = {
-  createUser: crudActionsCreator<'CREATE'>(UserActionTypes.CREATE),
-  deleteUser: crudActionsCreator<'DELETE'>(UserActionTypes.DELETE),
-  updateUser: crudActionsCreator<'UPDATE'>(UserActionTypes.UPDATE),
-  resetUsers: crudActionsCreator<'RESET'>(UserActionTypes.RESET),
-  paginateUser: crudActionsCreator<'PAGINATE'>(UserActionTypes.PAGINATE),
-  setPageUser: crudActionsCreator<'SET_PAGE'>(UserActionTypes.SET_PAGE)
+  createUser: crudActionsCreator['CREATE'](UserActionTypes.CREATE),
+  deleteUser: crudActionsCreator['DELETE'](UserActionTypes.DELETE),
+  updateUser: crudActionsCreator['UPDATE'](UserActionTypes.UPDATE),
+  resetUsers: crudActionsCreator['RESET'](UserActionTypes.RESET),
+  paginateUser: crudActionsCreator['PAGINATE'](UserActionTypes.PAGINATE),
+  setPageUser: crudActionsCreator['SET_PAGE'](UserActionTypes.SET_PAGE)
 };
 
 export type UserActions = UnionCRUDActions<typeof userActions>;

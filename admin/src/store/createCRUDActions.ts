@@ -12,20 +12,36 @@ export function getCRUDActionCreator<
   Actions extends CRUDActionsMap<I, K> = CRUDActionsMap<I, K>
 >() {
   type Action<Key extends keyof Actions> = Actions[Key] extends {
-    type: string;
     payload: any;
   }
     ? (
         payload: Actions[Key]['payload']
       ) => {
         type: Types[Key];
+        sub: Key;
         payload: Actions[Key]['payload'];
       }
-    : (payload?: undefined) => { type: Types[Key] };
+    : (payload?: undefined) => { type: Types[Key]; sub: Key };
 
-  return function<Key extends keyof Actions>(
-    type: Types[keyof Types]
-  ): Action<Key> {
-    return ((payload?: any) => ({ type, payload })) as any;
-  };
+  const keys: Array<keyof CRUDActionsMap<I, K>> = [
+    'CREATE',
+    'DELETE',
+    'UPDATE',
+    'PAGINATE',
+    'SET_PAGE',
+    'RESET'
+  ];
+
+  return keys.reduce(
+    (acc, key) => {
+      acc[key] = (type: Types[keyof Types]) =>
+        ((payload?: any) => ({ type, payload, sub: key })) as any;
+      return acc;
+    },
+    {} as {
+      [Key in keyof CRUDActionsMap<I, K>]: (
+        type: Types[keyof Types]
+      ) => Action<Key>;
+    }
+  );
 }

@@ -4,14 +4,6 @@ import {
 } from '../utils/transformDatabyId';
 import { AllowedNames, ValueOf } from '../typings';
 
-interface Props<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
-> {
-  key: I[K];
-  pageSize?: number;
-}
-
 export interface CRUDState<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
@@ -33,12 +25,12 @@ export type CRUDActionsMap<
   I extends Record<PropertyKey, any> = any,
   K extends AllowedNames<I, PropertyKey> = any
 > = {
-  RESET: { type: 'RESET' };
-  CREATE: { type: 'CREATE'; payload: I };
-  DELETE: { type: 'DELETE'; payload: Pick<I, K> };
-  UPDATE: { type: 'UPDATE'; payload: Pick<I, K> & Partial<I> };
-  PAGINATE: { type: 'PAGINATE'; payload: PagePayload<I> };
-  SET_PAGE: { type: 'SET_PAGE'; payload: number };
+  RESET: { type: string; sub: 'RESET' };
+  CREATE: { type: string; sub: 'CREATE'; payload: I };
+  DELETE: { type: string; sub: 'DELETE'; payload: Pick<I, K> };
+  UPDATE: { type: string; sub: 'UPDATE'; payload: Pick<I, K> & Partial<I> };
+  PAGINATE: { type: string; sub: 'PAGINATE'; payload: PagePayload<I> };
+  SET_PAGE: { type: string; sub: 'SET_PAGE'; payload: number };
 };
 
 export type CRUDActionsTypes = keyof CRUDActionsMap<any, any>;
@@ -47,6 +39,13 @@ export type CRUDActions<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
 > = ValueOf<CRUDActionsMap<I, K>>;
+
+interface Props<
+  I extends Record<PropertyKey, any>,
+  K extends AllowedNames<I, PropertyKey>
+> extends Partial<CRUDState<I, K>> {
+  key: I[K];
+}
 
 export function isPagePayload<T>(obj: any): obj is PagePayload<T> {
   return !!(
@@ -64,7 +63,7 @@ function removeFromArray<T>(arr: T[], index: number) {
 export function createCRUDReducer<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
->({ key, pageSize = 10 }: Props<I, K>) {
+>({ key, pageSize = 10, ...initialState }: Props<I, K>) {
   const match = window.location.search.match(/(?<=pageNo=)(.*)(?=(&))/g);
   let pageNo = Number(match ? match[0] : 1);
   pageNo = isNaN(pageNo) ? 1 : pageNo;
@@ -74,14 +73,15 @@ export function createCRUDReducer<
     list: [],
     byIds: {} as CRUDState<I, K>['byIds'],
     pageNo,
-    pageSize
+    pageSize,
+    ...initialState
   };
 
   function crudReducer(
     state = crudInitialState,
     action: CRUDActions<I, K>
   ): CRUDState<I, K> {
-    switch (action.type) {
+    switch (action.sub) {
       case 'RESET':
         return { ...crudInitialState, pageNo: 1 };
 
