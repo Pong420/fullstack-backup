@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  IsEmail,
-  IsLowercase
-} from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsEmail } from 'class-validator';
 import { User, UserRole } from '../model/user.model';
 
 export class CreateUserDto implements Partial<User> {
@@ -16,6 +10,9 @@ export class CreateUserDto implements Partial<User> {
 
   @IsString()
   password!: string;
+
+  @IsOptional()
+  nickname?: string;
 
   @IsOptional()
   @IsEnum(UserRole)

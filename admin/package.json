@@ -1,14 +1,15 @@
 {
-  "name": "create-react-app",
+  "name": "full-stack-admin",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "react-app-rewired start --scripts-version pong-react-scripts",
-    "build": "react-app-rewired build --scripts-version pong-react-scripts",
+    "build": "react-app-rewired build --scripts-version pong-react-scripts && yarn move",
+    "move": "rimraf ../dist/admin && mv build ../dist/admin || move build ../dist/admin",
     "test": "react-app-rewired test --scripts-version pong-react-scripts",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.ts?(x)'",
-    "analyze": "source-map-explorer 'build/static/**/*.{js,css}'",
+    "analyze": "source-map-explorer '../dist/admin/static/**/*.{js,css}'",
     "component": "node scripts/component.js",
     "redux": "node scripts/redux.js",
     "get": "node scripts/type.js"
@@ -25,6 +26,7 @@
     "pong-react-scripts": "^3.1.2",
     "prettier": "^1.18.2",
     "react-app-rewired": "^2.1.4",
+    "rimraf": "^3.0.0",
     "sass": "^1.23.0",
     "source-map-explorer": "^2.1.0",
     "typescript": "^3.7.3"
