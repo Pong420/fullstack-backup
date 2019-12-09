@@ -21,6 +21,32 @@
       }
     }
 
+    .avatar {
+      @include relative();
+      box-shadow: $pt-dark-elevation-shadow-1;
+
+      .#{$ns}-popover-wrapper {
+        @include absolute(null, 5px, null, 5px);
+
+        button {
+          background-color: $dark-gray4;
+
+          &,
+          svg {
+            color: #fff;
+          }
+
+          .bp3-icon {
+            margin-right: 3px;
+          }
+
+          svg {
+            @include sq-dimen(13px);
+          }
+        }
+      }
+    }
+
     .rc-form-item-label {
       font-weight: bold;
     }
@@ -34,5 +60,12 @@
         }
       }
     }
+  }
+}
+
+.edit-avatar-popover {
+  .#{$ns}-menu {
+    padding-right: 10px;
+    min-width: 0;
   }
 }

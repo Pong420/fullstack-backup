@@ -7,12 +7,12 @@ export enum UserRole {
 }
 
 export interface Param$CreateUser
-  extends Omit<Schema$User, 'id' | 'createdAt' | 'updatedAt'> {
+  extends Omit<Schema$User, 'id' | 'createdAt' | 'updatedAt' | 'avatar'> {
   password: string;
+  avatar?: File | null;
 }
 
-export interface Param$UpdateUser
-  extends Partial<Omit<Schema$User, 'id' | 'username'>> {
+export interface Param$UpdateUser extends Partial<Param$CreateUser> {
   id: string;
 }
 

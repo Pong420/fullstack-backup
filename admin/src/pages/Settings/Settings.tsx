@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'rc-field-form';
 import { useRxAsync } from 'use-rx-hooks';
 import { Card, InputGroup, H4, Divider, Button } from '@blueprintjs/core';
 import { Layout } from '../../components/Layout';
 import { Avatar } from '../../components/Avatar';
-import { createForm } from '../../utils/form';
+import { EditAvatar, OnAvatarChange } from './EditAvatar';
 import { Param$UpdateUser, Schema$User } from '../../typings';
 import { authUserSelector, useAuthActions } from '../../store';
 import { updateUser } from '../../services';
+import { createForm } from '../../utils/form';
 import { Toaster } from '../../utils/toaster';
 
 const { Form, FormItem } = createForm<Param$UpdateUser>();
@@ -23,9 +24,12 @@ const SectionTitle = React.memo(({ children }) => (
 export function Settings() {
   const [form] = useForm();
 
+  const { setFieldsValue } = form;
   const { id, nickname, email, username, avatar } = useSelector(
     authUserSelector
   )!;
+
+  const [localAvatar, setLocalAvatar] = useState(avatar);
 
   const request = useCallback(
     (params: Partial<Param$UpdateUser>) =>
@@ -34,6 +38,21 @@ export function Settings() {
   );
 
   const { updateAuthUser } = useAuthActions();
+
+  const onAvatarChange = useCallback<OnAvatarChange>(
+    changes => {
+      console.log(avatar, changes);
+      setFieldsValue({
+        avatar: changes
+          ? changes.file
+          : avatar === changes
+          ? undefined
+          : changes
+      });
+      setLocalAvatar(changes && changes.url);
+    },
+    [avatar, setFieldsValue]
+  );
 
   const onSuccess = useCallback(
     (user: Partial<Schema$User>) => {
@@ -56,8 +75,14 @@ export function Settings() {
           <Form
             className="section-content"
             form={form}
-            onFinish={run}
-            initialValues={{ id, nickname, email, avatar }}
+            onReset={() => updateAuthUser({ avatar: null })}
+            onFinish={({ avatar, ...store }) =>
+              run({
+                ...(typeof avatar !== 'undefined' ? { avatar } : {}),
+                ...store
+              })
+            }
+            initialValues={{ id, nickname, email, avatar: undefined }}
           >
             <div className="section-group">
               <div className="section-group-left">
@@ -69,16 +94,25 @@ export function Settings() {
                 </FormItem>
               </div>
               <div className="section-group-right">
-                <Avatar size={150} avatar={avatar} fallback={username}>
-                  <Button small icon="edit" minimal>
-                    Edit
-                  </Button>
-                </Avatar>
+                <FormItem name="avatar" noStyle>
+                  <Avatar size={150} avatar={localAvatar} fallback={username}>
+                    <EditAvatar
+                      avatar={localAvatar}
+                      onChange={onAvatarChange}
+                    />
+                  </Avatar>
+                </FormItem>
               </div>
             </div>
             <Divider />
             <div className="buttons">
-              <Button onClick={() => form.resetFields()} disabled={loading}>
+              <Button
+                disabled={loading}
+                onClick={() => {
+                  form.resetFields();
+                  setLocalAvatar(avatar);
+                }}
+              >
                 Reset
               </Button>
               <Button type="submit" loading={loading}>

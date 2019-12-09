@@ -16,41 +16,43 @@ interface Props extends Partial<Schema$User> {}
 
 const exclude: UserDialogProps['exclude'] = ['username'];
 
-const EditUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
-  const [dialogOpen, { on, off }] = useBoolean();
-  const { updateUser } = useUserActions();
-  const request = useCallback(
-    async (param: Omit<Param$UpdateUser, 'id'>) => {
-      const res = await updateUserAPI({ id, ...param });
-      updateUser(res.data.data);
-      off();
-    },
-    [id, updateUser, off]
-  );
+const EditUser = React.memo(
+  ({ id = '', avatar, ...props }: Partial<Schema$User>) => {
+    const [dialogOpen, { on, off }] = useBoolean();
+    const { updateUser } = useUserActions();
+    const request = useCallback(
+      async (param: Omit<Param$UpdateUser, 'id'>) => {
+        const res = await updateUserAPI({ id, ...param });
+        updateUser(res.data.data);
+        off();
+      },
+      [id, updateUser, off]
+    );
 
-  const { run, loading } = useRxAsync(request, { defer: true });
+    const { run, loading } = useRxAsync(request, { defer: true });
 
-  return (
-    <>
-      <ButtonPopover
-        icon="edit"
-        content="Edit"
-        onClick={on}
-        disabled={id === ''}
-      />
-      <UserDialog
-        icon="edit"
-        title="Edit User"
-        exclude={exclude}
-        isOpen={dialogOpen}
-        initialValues={props}
-        loading={loading}
-        onSubmit={run}
-        onClose={off}
-      />
-    </>
-  );
-});
+    return (
+      <>
+        <ButtonPopover
+          icon="edit"
+          content="Edit"
+          onClick={on}
+          disabled={id === ''}
+        />
+        <UserDialog
+          icon="edit"
+          title="Edit User"
+          exclude={exclude}
+          isOpen={dialogOpen}
+          initialValues={props}
+          loading={loading}
+          onSubmit={run}
+          onClose={off}
+        />
+      </>
+    );
+  }
+);
 
 const DeleteUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const [dialogOpen, { on, off }] = useBoolean();
