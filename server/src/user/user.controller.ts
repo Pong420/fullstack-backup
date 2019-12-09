@@ -9,7 +9,8 @@ import {
   UseGuards,
   Param,
   Req,
-  Query // eslint-disable-line
+  Query, // eslint-disable-line
+  UseInterceptors
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
@@ -17,6 +18,7 @@ import { CreateUserDto, UpdateUserDto, ModifyUserPasswordDto } from './dto';
 import { RoleGuard, UserLevels } from '../guards';
 import { UserRole, User } from './model/user.model';
 import { PaginationDto } from '../dto/pagination.dto';
+import { MultiPartInterceptor } from '../interceptors';
 
 @UseGuards(RoleGuard(UserRole.MANAGER))
 @Controller('user')
@@ -89,6 +91,7 @@ export class UserController {
   }
 
   @Patch('/:id')
+  @UseInterceptors(MultiPartInterceptor())
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,

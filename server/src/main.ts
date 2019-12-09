@@ -7,6 +7,7 @@ import {
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './interceptors';
 import cookieParser from 'fastify-cookie';
+import multipart from 'fastify-multipart';
 
 const PORT = process.env.PORT || 5000;
 
@@ -16,6 +17,7 @@ async function bootstrap(): Promise<void> {
     new FastifyAdapter()
   );
 
+  app.register(multipart);
   app.register(cookieParser);
 
   app.setGlobalPrefix('api');

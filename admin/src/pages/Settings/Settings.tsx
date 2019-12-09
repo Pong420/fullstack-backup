@@ -41,7 +41,6 @@ export function Settings() {
 
   const onAvatarChange = useCallback<OnAvatarChange>(
     changes => {
-      console.log(avatar, changes);
       setFieldsValue({
         avatar: changes
           ? changes.file

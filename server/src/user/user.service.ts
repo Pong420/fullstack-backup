@@ -3,12 +3,29 @@ import { MongoError } from 'mongodb';
 import { PaginateOptions } from 'mongoose';
 import { UserModel, User } from './model/user.model';
 import { CreateUserDto, UpdateUserDto } from './dto';
+import { UploadService, UploadFile, isUploadFile } from '../upload';
 
 @Injectable()
 export class UserService {
-  async create(createUserDto: CreateUserDto) {
+  constructor(private readonly uploadService: UploadService) {}
+
+  // TODO: crop image
+  async handleAvatar(newAvatar?: UploadFile | null, oldAvatar?: string | null) {
+    // ignore the remove old avatar process
+    oldAvatar && this.uploadService.removeImage(oldAvatar);
+
+    const result = isUploadFile(newAvatar)
+      ? (await this.uploadService.uploadImage(newAvatar))[0]
+      : undefined;
+
+    return result ? { avatar: result.secure_url } : { avatar: null };
+  }
+
+  async create({ avatar, ...createUserDto }: CreateUserDto) {
+    avatar && (await this.uploadService.uploadImage(avatar));
     const createdUser = new UserModel({
       nickname: createUserDto.username,
+      ...(await this.handleAvatar(avatar)),
       ...createUserDto
     });
 
@@ -32,11 +49,16 @@ export class UserService {
     return UserModel.deleteOne({ _id: id });
   }
 
-  update({ id, ...changes }: UpdateUserDto) {
-    return UserModel.findOneAndUpdate({ _id: id }, changes, {
-      new: true,
-      projection: '-password'
-    });
+  async update({ id, avatar, ...changes }: UpdateUserDto) {
+    const { avatar: oldAvatar } = (await UserModel.findById(id)) || {};
+    return UserModel.findOneAndUpdate(
+      { _id: id },
+      { ...changes, ...(await this.handleAvatar(avatar, oldAvatar)) },
+      {
+        new: true,
+        projection: '-password'
+      }
+    );
   }
 
   findOne({ id, ...user }: Partial<User>, projection = '-password') {

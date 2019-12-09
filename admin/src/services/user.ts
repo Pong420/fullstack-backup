@@ -8,6 +8,7 @@ import {
   Response$CreateUser,
   Response$UpdateUser
 } from '../typings';
+import { createFormData } from './createFormData';
 
 export const getUsers = (params: Param$Pagination = {}) =>
   api.get<Response$GetUsers>('/user/list', { params });
@@ -17,10 +18,10 @@ export const getUserInfo = (id?: string) => {
 };
 
 export const createUser = (params: Param$CreateUser) =>
-  api.post<Response$CreateUser>('/user', params);
+  api.post<Response$CreateUser>('/user', createFormData(params));
 
 export const updateUser = ({ id, ...params }: Param$UpdateUser) => {
-  return api.patch<Response$UpdateUser>(`/user/${id}`, params);
+  return api.patch<Response$UpdateUser>(`/user/${id}`, createFormData(params));
 };
 
 export const deleteUser = ({ id }: { id: string }) => {

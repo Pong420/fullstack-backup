@@ -50,7 +50,6 @@ api.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    console.log(error.config);
     if (error.config.errorHandle !== false) {
       Toaster.apiError(error);
     }
