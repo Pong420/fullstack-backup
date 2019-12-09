@@ -52,10 +52,10 @@ const navbar = <CreateUser />;
 export function Users() {
   const { paginateUser, setPageUser } = useUserActions();
 
-  const { data, total, pageNo, loading } = useReduxPagination({
-    selector: userPaginationSelector,
+  const { data, total, pageNo, pageSize, loading } = useReduxPagination({
     fn: getUsersAPI,
-    onSuccess: paginateUser
+    onSuccess: paginateUser,
+    selector: userPaginationSelector
   });
 
   return (
@@ -65,7 +65,12 @@ export function Users() {
           data={data}
           loading={loading}
           columns={columns}
-          pagination={{ total, pageNo, onPageChange: setPageUser }}
+          pagination={{
+            total,
+            pageNo,
+            size: pageSize,
+            onPageChange: setPageUser
+          }}
         />
       </Card>
     </Layout>

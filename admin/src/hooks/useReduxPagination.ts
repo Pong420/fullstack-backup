@@ -20,5 +20,5 @@ export function useReduxPagination<T>({
     pageNo
   });
 
-  return { data, total, pageNo, loading };
+  return { data, total, pageNo, pageSize, loading };
 }
