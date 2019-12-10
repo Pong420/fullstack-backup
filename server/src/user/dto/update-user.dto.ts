@@ -1,4 +1,10 @@
-import { IsOptional, IsEnum, IsNotEmpty, IsEmpty } from 'class-validator';
+import {
+  IsOptional,
+  IsEnum,
+  IsNotEmpty,
+  IsEmpty,
+  ValidateIf
+} from 'class-validator';
 import { User, UserRole } from '../model/user.model';
 import { UploadFile } from '../../upload';
 
@@ -17,6 +23,10 @@ export class UpdateUserDto implements Partial<Omit<User, 'avatar'>> {
 
   @IsOptional()
   avatar?: UploadFile | null;
+
+  @ValidateIf(o => !!o.avatar)
+  @IsNotEmpty()
+  oldAvatar?: string;
 
   @IsEnum(UserRole)
   @IsOptional()

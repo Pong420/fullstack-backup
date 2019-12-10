@@ -1,4 +1,3 @@
-import { from, of } from 'rxjs';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '../config/config.service';
 import { Cloudinary$Image, UploadFile } from './upload.interfaces';
@@ -20,13 +19,21 @@ export class UploadService {
     cloudinary.v2.config({ api_key, api_secret, cloud_name });
   }
 
-  uploadImage(payload: UploadFile | UploadFile[]) {
+  getImageUrl(...args: Parameters<typeof cloudinary.v2.url>) {
+    return cloudinary.v2.url(...args);
+  }
+
+  uploadImage(
+    payload: UploadFile | UploadFile[],
+    options?: cloudinary.UploadApiOptions
+  ) {
     return Promise.all(
       (Array.isArray(payload) ? payload : [payload]).map(
         image =>
           new Promise<Cloudinary$Image>((resolve, reject) => {
             cloudinary.v2.uploader.upload(
               image.path,
+              options,
               (error: Error, result: Cloudinary$Image) => {
                 if (error) {
                   reject(error);

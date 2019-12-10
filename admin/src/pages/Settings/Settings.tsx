@@ -1,18 +1,22 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'rc-field-form';
-import { useRxAsync } from 'use-rx-hooks';
+import { useRxAsync, RxFileToImageState } from 'use-rx-hooks';
 import { Card, InputGroup, H4, Divider, Button } from '@blueprintjs/core';
 import { Layout } from '../../components/Layout';
 import { Avatar } from '../../components/Avatar';
-import { EditAvatar, OnAvatarChange } from './EditAvatar';
+import { EditAvatar } from './EditAvatar';
 import { Param$UpdateUser, Schema$User } from '../../typings';
 import { authUserSelector, useAuthActions } from '../../store';
 import { updateUser } from '../../services';
 import { createForm } from '../../utils/form';
 import { Toaster } from '../../utils/toaster';
 
-const { Form, FormItem } = createForm<Param$UpdateUser>();
+interface Field extends Omit<Param$UpdateUser, 'avatar'> {
+  avatar?: RxFileToImageState | string | null;
+}
+
+const { Form, FormItem } = createForm<Field>();
 
 const SectionTitle = React.memo(({ children }) => (
   <>
@@ -23,13 +27,11 @@ const SectionTitle = React.memo(({ children }) => (
 
 export function Settings() {
   const [form] = useForm();
+  const { resetFields } = form;
 
-  const { setFieldsValue } = form;
-  const { id, nickname, email, username, avatar } = useSelector(
+  const { id, nickname, email, username, avatar: oldAvatar } = useSelector(
     authUserSelector
   )!;
-
-  const [localAvatar, setLocalAvatar] = useState(avatar);
 
   const request = useCallback(
     (params: Partial<Param$UpdateUser>) =>
@@ -39,26 +41,13 @@ export function Settings() {
 
   const { updateAuthUser } = useAuthActions();
 
-  const onAvatarChange = useCallback<OnAvatarChange>(
-    changes => {
-      setFieldsValue({
-        avatar: changes
-          ? changes.file
-          : avatar === changes
-          ? undefined
-          : changes
-      });
-      setLocalAvatar(changes && changes.url);
-    },
-    [avatar, setFieldsValue]
-  );
-
   const onSuccess = useCallback(
     (user: Partial<Schema$User>) => {
       Toaster.success({ message: 'Profile Updated' });
       updateAuthUser(user);
+      resetFields(); // mainly for update avatar value
     },
-    [updateAuthUser]
+    [updateAuthUser, resetFields]
   );
 
   const { loading, run } = useRxAsync(request, {
@@ -74,14 +63,17 @@ export function Settings() {
           <Form
             className="section-content"
             form={form}
-            onReset={() => updateAuthUser({ avatar: null })}
-            onFinish={({ avatar, ...store }) =>
+            initialValues={{ id, nickname, email, avatar: oldAvatar }}
+            onFinish={({ avatar, ...store }) => {
               run({
-                ...(typeof avatar !== 'undefined' ? { avatar } : {}),
+                ...(oldAvatar !== avatar && {
+                  oldAvatar,
+                  avatar:
+                    typeof avatar === 'object' ? avatar && avatar.file : null
+                }),
                 ...store
-              })
-            }
-            initialValues={{ id, nickname, email, avatar: undefined }}
+              });
+            }}
           >
             <div className="section-group">
               <div className="section-group-left">
@@ -93,25 +85,27 @@ export function Settings() {
                 </FormItem>
               </div>
               <div className="section-group-right">
-                <FormItem name="avatar" noStyle>
-                  <Avatar size={150} avatar={localAvatar} fallback={username}>
-                    <EditAvatar
-                      avatar={localAvatar}
-                      onChange={onAvatarChange}
-                    />
-                  </Avatar>
+                <FormItem deps={['avatar']} noStyle>
+                  {({ avatar }) => (
+                    <FormItem name="avatar" valuePropName="value" noStyle>
+                      <EditAvatar>
+                        <Avatar
+                          size={150}
+                          avatar={
+                            avatar &&
+                            (typeof avatar === 'string' ? avatar : avatar.url)
+                          }
+                          fallback={username}
+                        />
+                      </EditAvatar>
+                    </FormItem>
+                  )}
                 </FormItem>
               </div>
             </div>
             <Divider />
             <div className="buttons">
-              <Button
-                disabled={loading}
-                onClick={() => {
-                  form.resetFields();
-                  setLocalAvatar(avatar);
-                }}
-              >
+              <Button disabled={loading} onClick={() => resetFields()}>
                 Reset
               </Button>
               <Button type="submit" loading={loading}>

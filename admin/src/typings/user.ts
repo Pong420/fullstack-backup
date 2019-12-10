@@ -14,6 +14,7 @@ export interface Param$CreateUser
 
 export interface Param$UpdateUser extends Partial<Param$CreateUser> {
   id: string;
+  oldAvatar?: string | null;
 }
 
 export type Response$GetUsers = Response$PaginationAPI<Schema$User>;

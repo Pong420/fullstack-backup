@@ -1,5 +1,5 @@
 export interface Cloudinary$Image {
-  publicid: string;
+  public_id: string;
   version: number;
   signature: string;
   width: number;
@@ -14,7 +14,6 @@ export interface Cloudinary$Image {
   placeholder: boolean;
   url: string;
   secure_url: string;
-  requester_ip: string;
   original_filename: string;
 }
 

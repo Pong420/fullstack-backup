@@ -9,16 +9,29 @@ import { UploadService, UploadFile, isUploadFile } from '../upload';
 export class UserService {
   constructor(private readonly uploadService: UploadService) {}
 
-  // TODO: crop image
   async handleAvatar(newAvatar?: UploadFile | null, oldAvatar?: string | null) {
-    // ignore the remove old avatar process
-    oldAvatar && this.uploadService.removeImage(oldAvatar);
+    if (newAvatar !== undefined && oldAvatar !== undefined) {
+      // ignore the remove old avatar process
+      oldAvatar && this.uploadService.removeImage(oldAvatar);
 
-    const result = isUploadFile(newAvatar)
-      ? (await this.uploadService.uploadImage(newAvatar))[0]
-      : undefined;
+      const result = isUploadFile(newAvatar)
+        ? (await this.uploadService.uploadImage(newAvatar, {}))[0]
+        : undefined;
 
-    return result ? { avatar: result.secure_url } : { avatar: null };
+      return result
+        ? {
+            avatar: this.uploadService.getImageUrl(
+              `${result.public_id}.${result.format}`,
+              {
+                secure: true,
+                transformation: [{ width: 200, height: 200, crop: 'limit' }]
+              }
+            )
+          }
+        : { avatar: null };
+    }
+
+    return {};
   }
 
   async create({ avatar, ...createUserDto }: CreateUserDto) {
@@ -49,8 +62,7 @@ export class UserService {
     return UserModel.deleteOne({ _id: id });
   }
 
-  async update({ id, avatar, ...changes }: UpdateUserDto) {
-    const { avatar: oldAvatar } = (await UserModel.findById(id)) || {};
+  async update({ id, avatar, oldAvatar, ...changes }: UpdateUserDto) {
     return UserModel.findOneAndUpdate(
       { _id: id },
       { ...changes, ...(await this.handleAvatar(avatar, oldAvatar)) },
