@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
 
@@ -17,21 +17,26 @@ export function useQuery<T extends {}>(
 ): [Partial<T>, SetQuery<T>];
 
 export function useQuery<T extends {}>(
-  transform?: UseQueryTransform<T>
+  transform: UseQueryTransform<T> = (v: any) => v
 ): [Record<string, string> | Partial<T>, SetQuery<T>] {
   const history = useHistory();
-  const { search } = useLocation();
+  const search = useLocation().search.slice(1);
+  const [state, setState] = useState<Partial<T>>({
+    ...qs.parse(search),
+    ...transform(qs.parse(search))
+  });
+  const [mounted, setMounted] = useState(false);
 
-  // FIXME: duplicated replace event
-  const values = useMemo(() => {
-    const values: Record<string, string> = qs.parse(search.slice(1)) || {};
-    return transform ? { ...values, ...transform(values) } : values;
-  }, [search, transform]);
-
-  const setQuery = useCallback<SetQuery<T>>(
-    query => history.replace({ search: qs.stringify({ ...values, ...query }) }),
-    [history, values]
+  const setQuery = useCallback(
+    (query: T) => setState(curr => ({ ...curr, ...transform(query) })),
+    [transform]
   );
 
-  return [values, setQuery];
+  useEffect(() => setMounted(true), []);
+
+  useLayoutEffect(() => {
+    mounted && history.replace({ search: qs.stringify(state) });
+  }, [history, state, mounted]);
+
+  return [state, setQuery];
 }
