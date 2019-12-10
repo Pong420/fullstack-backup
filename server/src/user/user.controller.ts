@@ -72,6 +72,7 @@ export class UserController {
   }
 
   @Post('/')
+  @UseInterceptors(MultiPartInterceptor())
   createUser(@Body() createUserDto: CreateUserDto, @Req() req: FastifyRequest) {
     if (this.hasPermission(req, createUserDto)) {
       return this.userService.create(createUserDto);

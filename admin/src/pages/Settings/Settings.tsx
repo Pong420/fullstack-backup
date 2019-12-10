@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { useForm } from 'rc-field-form';
 import { useRxAsync, RxFileToImageState } from 'use-rx-hooks';
 import { Card, InputGroup, H4, Divider, Button } from '@blueprintjs/core';
 import { Layout } from '../../components/Layout';
@@ -16,7 +15,7 @@ interface Field extends Omit<Param$UpdateUser, 'avatar'> {
   avatar?: RxFileToImageState | string | null;
 }
 
-const { Form, FormItem } = createForm<Field>();
+const { Form, FormItem, useForm } = createForm<Field>();
 
 const SectionTitle = React.memo(({ children }) => (
   <>
@@ -85,20 +84,23 @@ export function Settings() {
                 </FormItem>
               </div>
               <div className="section-group-right">
-                <FormItem deps={['avatar']} noStyle>
+                <FormItem
+                  noStyle
+                  name="avatar"
+                  deps={['avatar']}
+                  valuePropName="value"
+                >
                   {({ avatar }) => (
-                    <FormItem name="avatar" valuePropName="value" noStyle>
-                      <EditAvatar>
-                        <Avatar
-                          size={150}
-                          avatar={
-                            avatar &&
-                            (typeof avatar === 'string' ? avatar : avatar.url)
-                          }
-                          fallback={username}
-                        />
-                      </EditAvatar>
-                    </FormItem>
+                    <EditAvatar>
+                      <Avatar
+                        size={150}
+                        avatar={
+                          avatar &&
+                          (typeof avatar === 'string' ? avatar : avatar.url)
+                        }
+                        fallback={username}
+                      />
+                    </EditAvatar>
                   )}
                 </FormItem>
               </div>

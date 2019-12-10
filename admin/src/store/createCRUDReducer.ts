@@ -64,7 +64,7 @@ export function createCRUDReducer<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
 >({ key, pageSize = 10, ...initialState }: Props<I, K>) {
-  const match = window.location.search.match(/(?<=pageNo=)(.*)(?=(&))/g);
+  const match = window.location.search.match(/(?<=pageNo=)(.*)(?=(&?))/g);
   let pageNo = Number(match ? match[0] : 1);
   pageNo = isNaN(pageNo) ? 1 : pageNo;
 

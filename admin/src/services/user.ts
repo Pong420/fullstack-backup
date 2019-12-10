@@ -20,8 +20,11 @@ export const getUserInfo = (id?: string) => {
 export const createUser = (params: Param$CreateUser) =>
   api.post<Response$CreateUser>('/user', createFormData(params));
 
-export const updateUser = ({ id, ...params }: Param$UpdateUser) => {
-  return api.patch<Response$UpdateUser>(`/user/${id}`, createFormData(params));
+export const updateUser = ({ id, password, ...params }: Param$UpdateUser) => {
+  return api.patch<Response$UpdateUser>(
+    `/user/${id}`,
+    createFormData({ ...(password && { password }), ...params })
+  );
 };
 
 export const deleteUser = ({ id }: { id: string }) => {

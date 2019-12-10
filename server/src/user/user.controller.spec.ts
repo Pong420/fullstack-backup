@@ -5,6 +5,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { User, UserRole } from './model/user.model';
 import { mongoConnection } from '../database';
+import { UploadModule } from '../upload';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockReq = (data: Partial<Pick<User, 'username' | 'role'>> = {}): any => ({
@@ -45,6 +46,7 @@ describe('User Controller', () => {
   let controller: UserController;
   let userService: UserService;
   let mongoServer: MongoMemoryServer;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mongoose: any;
 
@@ -56,6 +58,7 @@ describe('User Controller', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [UploadModule],
       controllers: [UserController],
       providers: [UserService]
     }).compile();

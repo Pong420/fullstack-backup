@@ -1,8 +1,12 @@
 import React, { useCallback, ReactNode } from 'react';
-import { useForm, FormInstance } from 'rc-field-form';
 import { InputGroup, HTMLSelect } from '@blueprintjs/core';
 import { Param$CreateUser, UserRole } from '../typings';
-import { createForm, validators, FormItemProps } from '../utils/form';
+import {
+  createForm,
+  validators,
+  FormItemProps,
+  FormInstance
+} from '../utils/form';
 
 type Fields = Required<Param$CreateUser>;
 
@@ -17,10 +21,12 @@ const defaultValue: Fields = {
   role: UserRole.CLIENT
 };
 
-const { Form, FormItem: BaseFormItem } = createForm<Fields>();
+const { Form, FormItem: BaseFormItem, useForm } = createForm<Fields>();
+
+export const useUserForm = useForm;
 
 export interface UserFormProps {
-  form?: FormInstance;
+  form?: FormInstance<Fields>;
   initialValues?: Partial<Fields>;
   onSubmit: (values: Fields) => void;
   exclude?: Exclude;
