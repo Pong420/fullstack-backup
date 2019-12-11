@@ -4,9 +4,10 @@ import {
   Res,
   Post,
   Body,
+  Patch,
+  Delete,
   UseGuards,
   HttpStatus,
-  Patch,
   InternalServerErrorException,
   BadRequestException,
   UnauthorizedException
@@ -18,7 +19,7 @@ import { UserService, CreateUserDto, UserRole } from '../user';
 import { transformResponse } from '../interceptors';
 import { RoleGuard } from '../guards';
 import { AuthService } from './auth.service';
-import { ModifyUserPasswordDto } from './dto';
+import { ModifyUserPasswordDto, DeleteAccountDto } from './dto';
 
 import uuidv4 from 'uuid/v4';
 
@@ -133,5 +134,23 @@ export class AuthController {
     }
 
     return this.userService.update({ id, password: newPassword });
+  }
+
+  @Delete('/delete-account')
+  @UseGuards(AuthGuard('jwt'))
+  async deleteAccount(
+    @Body() deleteAccountDto: DeleteAccountDto,
+    @Req() req: FastifyRequest
+  ) {
+    const { id, password } = deleteAccountDto;
+    const username = req.user.username;
+
+    const valid = await this.authService.validateUser(username, password);
+
+    if (!valid) {
+      throw new UnauthorizedException();
+    }
+
+    return this.userService.delete(id);
   }
 }

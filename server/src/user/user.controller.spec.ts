@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { UserController } from './user.controller';
@@ -103,7 +103,7 @@ describe('User Controller', () => {
           mockReq({ role: UserRole.MANAGER })
         );
       } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error).toBeInstanceOf(HttpException);
       }
     });
   });
@@ -158,22 +158,26 @@ describe('User Controller', () => {
           mockReq({ ...mock.user[role] })
         );
       } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error).toBeInstanceOf(HttpException);
       }
     });
   });
 
   describe('delete user', () => {
-    it('user could delete itself', async () => {
+    it('user could not delete itself', async () => {
       const mockUser = createMockUser(UserRole.ADMIN);
       const newUser = await controller.createUser(
         { password: '', ...mockUser },
         mockReq()
       );
 
-      expect(
-        await controller.deleteUser(newUser.id, mockReq({ ...mockUser }))
-      ).toMatchObject({});
+      try {
+        expect(
+          await controller.deleteUser(newUser.id, mockReq({ ...mockUser }))
+        ).toMatchObject({});
+      } catch (error) {
+        expect(error).toBeInstanceOf(HttpException);
+      }
     });
 
     it('users who have the same role cannot be deleted by each other', async () => {
@@ -190,7 +194,7 @@ describe('User Controller', () => {
           mockReq({ ...mock.user[role] })
         );
       } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error).toBeInstanceOf(HttpException);
       }
     });
   });

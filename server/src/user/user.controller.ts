@@ -28,10 +28,10 @@ export class UserController {
   hasPermission(
     req: FastifyRequest,
     user: Pick<User, 'username' | 'role'>,
-    equal = false
+    self = false
   ) {
     if (
-      (equal && req.user.username === user.username) ||
+      (self && req.user.username === user.username) ||
       UserLevels.indexOf(req.user.role) >= UserLevels.indexOf(user.role)
     ) {
       return true;
@@ -102,7 +102,7 @@ export class UserController {
 
     const targerUser = await this.userService.findOne({ id });
     if (targerUser) {
-      if (this.hasPermission(req, targerUser, true)) {
+      if (this.hasPermission(req, targerUser, false)) {
         return this.userService.update({ ...updateUserDto, id });
       }
     }
