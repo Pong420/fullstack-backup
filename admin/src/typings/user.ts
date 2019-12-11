@@ -17,13 +17,14 @@ export interface Param$UpdateUser extends Partial<Param$CreateUser> {
   oldAvatar?: string | null;
 }
 
+export interface Param$UpdateUser extends Partial<Param$CreateUser> {
+  id: string;
+  oldAvatar?: string | null;
+}
+
+export type Response$User = Response$API<Schema$User>;
+
 export type Response$GetUsers = Response$PaginationAPI<Schema$User>;
-
-export type Response$GetUserInfo = Response$API<Schema$User>;
-
-export type Response$CreateUser = Response$API<Schema$User>;
-
-export type Response$UpdateUser = Response$API<Schema$User>;
 
 export interface Schema$User {
   id: string;

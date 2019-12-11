@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Card, Button, InputGroup } from '@blueprintjs/core';
 import { RegisterForm } from './RegisterForm';
+import { Password } from '../../components/Password';
 import { Param$Login } from '../../typings';
 import { loginStatusSelector, useAuthActions } from '../../store';
 import { createForm, validators } from '../../utils/form';
@@ -44,7 +45,7 @@ export const Login = ({ location }: RouteComponentProps) => {
                 label="Password"
                 validators={[validators.required('Please input password')]}
               >
-                <InputGroup type="password" />
+                <Password />
               </FormItem>
 
               <Button

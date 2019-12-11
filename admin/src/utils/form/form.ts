@@ -10,6 +10,8 @@ import {
   Store
 } from 'rc-field-form/lib/interface';
 
+export type ValueOf<T> = T[keyof T];
+
 type NamePath<K extends PropertyKey> = K | K[];
 
 export type FormInstance<T extends {} = {}, K extends keyof T = keyof T> = {
@@ -44,33 +46,39 @@ type OmititedRcFieldProps = Omit<
   'name' | 'dependencies' | 'children'
 >;
 
-interface BaseFieldProps<T extends {}, K extends keyof T = keyof T>
+interface BasicFormItemProps<T extends {}, K extends keyof T = keyof T>
   extends OmititedRcFieldProps {
   name?: K | K[];
+  children?: ReactElement | ((value: T) => ReactElement);
   validators?:
     | Array<Validator | null>
     | ((value: T) => Array<Validator | null>);
   validateTrigger?: string | string[];
   onReset?(): void;
+  label?: string;
+  noStyle?: boolean;
 }
 
-type FieldProps<T extends {}, K extends keyof T = keyof T> = BaseFieldProps<
-  T,
-  K
-> &
-  (
-    | {
-        deps?: K[];
-        children: ReactElement;
-      }
-    | {
-        deps: K[];
-        children: (value: T) => ReactElement;
-      });
+type FormItemPropsDeps<T extends {}, K extends keyof T = keyof T> = {
+  basic: {
+    deps?: K[];
+    children?: ReactElement;
+    validators?: Array<Validator | null>;
+  };
+  case1: {
+    deps: K[];
+    validators: (value: T) => Array<Validator | null>;
+  };
+  case2: {
+    deps: K[];
+    children: (value: T) => ReactElement;
+  };
+};
 
-export type FormItemProps<T extends Record<string | number, any>> = FieldProps<
-  T
-> & { label?: string; noStyle?: boolean };
+export type FormItemProps<
+  T extends {},
+  K extends keyof T = keyof T
+> = BasicFormItemProps<T, K> & (ValueOf<FormItemPropsDeps<T, K>>);
 
 export interface FormItemClassName {
   item?: string;

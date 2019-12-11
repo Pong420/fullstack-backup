@@ -8,6 +8,17 @@ export interface Param$Login {
   password: string;
 }
 
+export interface Param$ModifyPassword {
+  id: string;
+  password: string;
+  newPassword: string;
+}
+
+export interface Param$DeleteAccount {
+  id: string;
+  password: string;
+}
+
 export type Response$Login = Response$API<
   Schema$JWT & { user: Schema$User; isDefaultAc: boolean }
 >;

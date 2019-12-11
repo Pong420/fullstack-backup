@@ -1,38 +1,70 @@
 .settings {
-  .section {
-    + .section {
-      margin-top: 30px;
+  .settings-section {
+    + .settings-section {
+      margin-top: 100px;
     }
 
     .#{$ns}-divider {
       @include margin-x(0);
     }
 
-    .section-content {
+    .settings-section-content {
       margin-top: 20px;
-    }
-
-    .section-group {
-      @include flex();
-
-      .section-group-left {
-        flex: 1 1 auto;
-        margin-right: 50px;
-      }
     }
 
     .rc-form-item-label {
       font-weight: bold;
     }
+  }
+}
 
-    .buttons {
-      margin-top: 20px;
-      text-align: right;
-      button {
-        + button {
-          margin-left: 10px;
-        }
+.settings-profile {
+  .group {
+    @include flex();
+
+    .group-left {
+      flex: 1 1 auto;
+      margin-right: 50px;
+    }
+  }
+  .buttons {
+    margin-top: 20px;
+    text-align: right;
+    button {
+      + button {
+        margin-left: 10px;
       }
+    }
+  }
+}
+
+.settings-danger-zone {
+  .settings-danger-zone-content {
+    border: 1px solid $red3;
+    border-radius: 3px;
+    padding: 20px;
+
+    > div {
+      @include flex(flex-start, space-between);
+
+      > div:nth-child(1) {
+        max-width: 600px;
+        margin-right: 15px;
+      }
+
+      b {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      button {
+        white-space: nowrap;
+        color: $red3;
+      }
+    }
+
+    .#{$ns}-divider {
+      @include margin-y(20px);
     }
   }
 }

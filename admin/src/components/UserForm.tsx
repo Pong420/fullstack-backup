@@ -1,5 +1,6 @@
 import React, { useCallback, ReactNode } from 'react';
 import { InputGroup, HTMLSelect } from '@blueprintjs/core';
+import { Password } from './Password';
 import { Param$CreateUser, UserRole } from '../typings';
 import {
   createForm,
@@ -8,7 +9,7 @@ import {
   FormInstance
 } from '../utils/form';
 
-type Fields = Required<Param$CreateUser>;
+type Fields = Required<Param$CreateUser & { confirmPassword: string }>;
 
 export type Exclude = Array<keyof Fields>;
 
@@ -16,6 +17,7 @@ const defaultValue: Fields = {
   email: '',
   username: '',
   password: '',
+  confirmPassword: '',
   nickname: '',
   avatar: null,
   role: UserRole.CLIENT
@@ -31,10 +33,18 @@ export interface UserFormProps {
   onSubmit: (values: Fields) => void;
   exclude?: Exclude;
   children?: ReactNode;
+  passwordValidators?: any;
 }
 
 export const UserForm = React.memo<UserFormProps>(
-  ({ form: _form, exclude = [], onSubmit, initialValues, children }) => {
+  ({
+    form: _form,
+    exclude = ['confirmPassword'],
+    onSubmit,
+    initialValues,
+    children,
+    passwordValidators
+  }) => {
     const [form] = useForm(_form);
 
     const FormItem = useCallback(
@@ -53,19 +63,39 @@ export const UserForm = React.memo<UserFormProps>(
         onFinish={onSubmit}
         initialValues={{ ...defaultValue, ...initialValues }}
       >
-        <FormItem name="username" label="Username">
+        <FormItem
+          name="username"
+          label="Username"
+          validators={[validators.required('Please input username')]}
+        >
           <InputGroup />
         </FormItem>
 
-        <FormItem name="password" label="Password">
-          <InputGroup />
+        <FormItem
+          name="password"
+          label="Password"
+          validators={passwordValidators}
+        >
+          <Password />
+        </FormItem>
+
+        <FormItem
+          name="confirmPassword"
+          label="Confirm Password"
+          deps={['password']}
+          validators={({ password }) => [
+            validators.required('Plase input confirm password'),
+            validators.shouldBeEqual(password, 'Not the same as above password')
+          ]}
+        >
+          <Password />
         </FormItem>
 
         <FormItem
           name="email"
           label="Email"
           validators={[
-            validators.required('Please input email'),
+            validators.required('Please input an email'),
             validators.isEmail
           ]}
         >

@@ -1,3 +1,7 @@
+.#{$ns}-toast {
+  max-width: 320px;
+}
+
 .#{$ns}-toast-message {
   div:nth-child(1) {
     font-weight: bold;

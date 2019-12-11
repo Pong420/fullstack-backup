@@ -4,9 +4,7 @@ import {
   Param$CreateUser,
   Param$UpdateUser,
   Response$GetUsers,
-  Response$GetUserInfo,
-  Response$CreateUser,
-  Response$UpdateUser
+  Response$User
 } from '../typings';
 import { createFormData } from './createFormData';
 
@@ -14,14 +12,14 @@ export const getUsers = (params: Param$Pagination = {}) =>
   api.get<Response$GetUsers>('/user/list', { params });
 
 export const getUserInfo = (id?: string) => {
-  return api.get<Response$GetUserInfo>(`/user` + (id ? `?id=${id}` : ''));
+  return api.get<Response$User>(`/user` + (id ? `?id=${id}` : ''));
 };
 
 export const createUser = (params: Param$CreateUser) =>
-  api.post<Response$CreateUser>('/user', createFormData(params));
+  api.post<Response$User>('/user', createFormData(params));
 
 export const updateUser = ({ id, password, ...params }: Param$UpdateUser) => {
-  return api.patch<Response$UpdateUser>(
+  return api.patch<Response$User>(
     `/user/${id}`,
     createFormData({ ...(password && { password }), ...params })
   );

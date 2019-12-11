@@ -15,6 +15,7 @@ export interface AsyncFnDialogProps extends IDialogProps {
   intent?: Intent;
   loading?: boolean;
   onConfirm?: () => void;
+  disabled?: boolean;
 }
 
 export const AsyncFnDialog = React.memo(
@@ -24,6 +25,7 @@ export const AsyncFnDialog = React.memo(
     onClose,
     onConfirm,
     loading,
+    disabled,
     className = '',
     cancelButtonText = 'Cancel',
     confirmButtonText = 'Confirm',
@@ -43,7 +45,12 @@ export const AsyncFnDialog = React.memo(
             <Button disabled={loading} onClick={onClose}>
               {cancelButtonText}
             </Button>
-            <Button intent={intent} loading={loading} onClick={onConfirm}>
+            <Button
+              intent={intent}
+              loading={loading}
+              disabled={disabled}
+              onClick={onConfirm}
+            >
               {confirmButtonText}
             </Button>
           </div>

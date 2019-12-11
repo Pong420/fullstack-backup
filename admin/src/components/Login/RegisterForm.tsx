@@ -2,12 +2,16 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRxAsync } from 'use-rx-hooks';
 import { Button, H5 } from '@blueprintjs/core';
-import { UserForm, Exclude } from '../UserForm';
+import { UserForm, UserFormProps } from '../UserForm';
 import { register } from '../../services';
 import { UserRole } from '../../typings';
 import { PATHS } from '../../constants';
+import { validators } from '../../utils/form';
 
-const exclude: Exclude = ['role'];
+const exclude: UserFormProps['exclude'] = ['role'];
+const passwordValidators: UserFormProps['passwordValidators'] = [
+  validators.password()
+];
 
 export function RegisterForm() {
   const history = useHistory();
@@ -23,7 +27,11 @@ export function RegisterForm() {
   return (
     <div className="register-form">
       <H5>Regiser Admin Account</H5>
-      <UserForm onSubmit={onSubmit} exclude={exclude}>
+      <UserForm
+        onSubmit={onSubmit}
+        exclude={exclude}
+        passwordValidators={passwordValidators}
+      >
         <Button fill type="submit" intent="primary" loading={loading}>
           Register
         </Button>

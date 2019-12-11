@@ -14,7 +14,14 @@ export interface UserDialogProps
 }
 
 export const UserDialog = React.memo(
-  ({ id, initialValues, onSubmit, exclude, ...props }: UserDialogProps) => {
+  ({
+    id,
+    initialValues,
+    onSubmit,
+    exclude,
+    passwordValidators,
+    ...props
+  }: UserDialogProps) => {
     const [form] = useUserForm();
 
     return (
@@ -29,6 +36,7 @@ export const UserDialog = React.memo(
           exclude={exclude}
           onSubmit={onSubmit}
           initialValues={initialValues}
+          passwordValidators={passwordValidators}
         />
       </AsyncFnDialog>
     );

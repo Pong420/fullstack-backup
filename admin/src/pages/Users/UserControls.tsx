@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { ButtonPopover } from '../../components/ButtonPopover';
-import { UserDialog, UserDialogProps } from './UserDialog';
 import { AsyncFnDialog } from '../../components/Dialog';
+import { UserDialog, UserDialogProps } from './UserDialog';
 import { useUserActions, authUserSelector } from '../../store';
 import { Schema$User, Param$UpdateUser } from '../../typings';
 import {
@@ -11,10 +11,17 @@ import {
   deleteUser as deleteUserAPI
 } from '../../services';
 import { useBoolean } from '../../hooks/useBoolean';
+import { validators } from '../../utils/form';
 
 interface Props extends Partial<Schema$User> {}
 
-const exclude: UserDialogProps['exclude'] = ['username'];
+const exclude: UserDialogProps['exclude'] = ['username', 'confirmPassword'];
+const passwordValidators: UserDialogProps['passwordValidators'] = [
+  (rule: any, value: string) =>
+    !value.trim()
+      ? Promise.resolve()
+      : validators.password({ required: false })(rule, value)
+];
 
 const EditUser = React.memo(
   ({ id = '', avatar, ...props }: Partial<Schema$User>) => {
@@ -48,6 +55,7 @@ const EditUser = React.memo(
           loading={loading}
           onSubmit={run}
           onClose={off}
+          passwordValidators={passwordValidators}
         />
       </>
     );
