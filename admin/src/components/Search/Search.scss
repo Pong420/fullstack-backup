@@ -1,0 +1,22 @@
+.search-overlay {
+  .search-overlay-content {
+    .#{$ns}-input-group {
+      @include fixed(30%, null, 50%, 0);
+      @include dimen(400px);
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.search-tooltips {
+  @include flex(center);
+  span {
+    display: block;
+    margin-bottom: -1px;
+    text-transform: uppercase;
+  }
+  svg {
+    @include sq-dimen(1.1em);
+    margin-right: -1px;
+  }
+}

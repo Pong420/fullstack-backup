@@ -6,6 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { FocusStyleManager } from '@blueprintjs/core';
 import { PATHS } from './constants';
 import { PrivateRoute } from './components/PrivateRoute';
+import { QueryProvider } from './hooks/useQuery';
 import configureStore, { history, logout } from './store';
 import * as serviceWorker from './serviceWorker';
 
@@ -31,14 +32,14 @@ function render() {
   return ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <>
+        <QueryProvider>
           <Suspense fallback={null}>
             <Switch>
               <Route path={PATHS.LOGIN} component={Login} />
               <PrivateRoute path="" component={App} />
             </Switch>
           </Suspense>
-        </>
+        </QueryProvider>
       </ConnectedRouter>
     </Provider>,
     document.getElementById('root')

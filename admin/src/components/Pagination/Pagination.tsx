@@ -80,8 +80,7 @@ const reducer: Reducer<State, Actions> = (state, action) => {
     case 'INIT':
       return getState({
         ...state,
-        ...action.payload,
-        currentPage: action.payload.currentPage || state.currentPage
+        ...action.payload
       });
 
     default:
@@ -97,17 +96,14 @@ export const Pagination = React.memo<PaginationProps>(
       getState
     );
 
+    useEffect(() => {
+      dispatch({ type: 'INIT', payload: { currentPage: pageNo, total, size } });
+    }, [dispatch, pageNo, total, size]);
+
     const changePage = (page: number) => {
       dispatch({ type: 'PAGE_CHANGE', payload: page });
       onPageChange(page);
     };
-
-    useEffect(() => {
-      dispatch({
-        type: 'INIT',
-        payload: { currentPage: pageNo, total }
-      });
-    }, [dispatch, pageNo, total]);
 
     if (state.totalPages <= 1) return null;
 

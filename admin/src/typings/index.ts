@@ -27,6 +27,10 @@ export interface Param$Pagination {
   pageSize?: number;
 }
 
+export interface Param$Search {
+  search?: string;
+}
+
 export interface Response$API<T> {
   statusCode: number;
   data: T;

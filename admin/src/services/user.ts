@@ -1,6 +1,6 @@
 import { api } from './api';
 import {
-  Param$Pagination,
+  Param$GetUsers,
   Param$CreateUser,
   Param$UpdateUser,
   Response$GetUsers,
@@ -8,7 +8,7 @@ import {
 } from '../typings';
 import { createFormData } from './createFormData';
 
-export const getUsers = (params: Param$Pagination = {}) =>
+export const getUsers = (params: Param$GetUsers = {}) =>
   api.get<Response$GetUsers>('/user/list', { params });
 
 export const getUserInfo = (id?: string) => {

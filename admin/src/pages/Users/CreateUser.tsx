@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
-import { Button } from '@blueprintjs/core';
+import { ButtonPopover } from '../../components/ButtonPopover';
 import { UserDialog, UserDialogProps } from './UserDialog';
 import { createUser } from '../../services';
 import { useUserActions } from '../../store';
@@ -14,6 +14,7 @@ const createUserAPI = (...params: Parameters<typeof createUser>) =>
 const passwordValidators: UserDialogProps['passwordValidators'] = [
   validators.password()
 ];
+const title = 'Create User';
 
 export const CreateUser = React.memo(() => {
   const [dialogOpen, { on, off }] = useBoolean();
@@ -32,11 +33,11 @@ export const CreateUser = React.memo(() => {
 
   return (
     <>
-      <Button minimal icon="new-person" onClick={on} />
+      <ButtonPopover minimal icon="new-person" content={title} onClick={on} />
       <UserDialog
         icon="new-person"
-        title="Create User"
         className="create-user-dialog"
+        title={title}
         isOpen={dialogOpen}
         loading={loading}
         onSubmit={run}

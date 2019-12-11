@@ -41,7 +41,7 @@ const loginEpic: AuthEpic = (action$, state$) =>
         mergeMap(payload => {
           const { location } = state$.value.router;
           const redirect = isLocation(location.state)
-            ? location.state.pathname
+            ? location.state.pathname + location.state.search
             : location.pathname === PATHS.LOGIN
             ? PATHS.HOME
             : undefined;

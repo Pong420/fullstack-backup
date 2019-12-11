@@ -1,10 +1,17 @@
-import { Response$API, Response$PaginationAPI } from '.';
+import {
+  Param$Search,
+  Param$Pagination,
+  Response$API,
+  Response$PaginationAPI
+} from '.';
 
 export enum UserRole {
   ADMIN = 'admin',
   MANAGER = 'manager',
   CLIENT = 'client'
 }
+
+export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 
 export interface Param$CreateUser
   extends Omit<Schema$User, 'id' | 'createdAt' | 'updatedAt' | 'avatar'> {

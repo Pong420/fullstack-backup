@@ -1,7 +1,7 @@
-import { createCRUDReducer } from '../createCRUDReducer';
+import { createCRUDReducerEx } from '../redux-crud-ex';
 import { Schema$User } from '../../typings';
 
-const { crudReducer } = createCRUDReducer<Schema$User, 'id'>({
+const { crudReducerEx } = createCRUDReducerEx<Schema$User, 'id'>({
   key: 'id',
   pageSize: Math.max(
     10,
@@ -14,4 +14,4 @@ const { crudReducer } = createCRUDReducer<Schema$User, 'id'>({
   )
 });
 
-export default crudReducer;
+export default crudReducerEx;

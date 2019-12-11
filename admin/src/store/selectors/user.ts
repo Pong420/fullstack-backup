@@ -1,5 +1,5 @@
 import { RootState } from '../reducers';
-import { paginationSelector } from './shared';
+import { paginationAndSearchSelector } from '../redux-crud-ex';
 
 export const userPaginationSelector = (state: RootState) =>
-  paginationSelector(state.user);
+  paginationAndSearchSelector(state.user);

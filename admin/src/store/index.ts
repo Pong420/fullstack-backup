@@ -45,5 +45,4 @@ export * from './actions';
 export * from './reducers';
 export * from './epics';
 export * from './selectors';
-export * from './createCRUDReducer';
-export * from './createMemoSelector';
+export * from './redux-crud-ex';
