@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
-import { PaginateOptions } from 'mongoose';
+import { PaginateOptions, QueryFindOneAndUpdateOptions } from 'mongoose';
 import { UserModel, User } from './model/user.model';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UploadService, UploadFile, isUploadFile } from '../upload';
@@ -62,13 +62,17 @@ export class UserService {
     return UserModel.deleteOne({ _id: id });
   }
 
-  async update({ id, avatar, oldAvatar, ...changes }: UpdateUserDto) {
+  async update(
+    { id, avatar, oldAvatar, ...changes }: UpdateUserDto,
+    options?: QueryFindOneAndUpdateOptions
+  ) {
     return UserModel.findOneAndUpdate(
       { _id: id },
       { ...changes, ...(await this.handleAvatar(avatar, oldAvatar)) },
       {
         new: true,
-        projection: '-password'
+        projection: '-password',
+        ...options
       }
     );
   }

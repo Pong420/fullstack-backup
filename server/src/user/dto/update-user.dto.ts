@@ -41,17 +41,3 @@ export class UpdateUserDto implements Partial<Omit<User, 'avatar'>> {
   @IsEmpty()
   updatedAt?: string;
 }
-
-export class ModifyUserPasswordDto implements Partial<User> {
-  @IsNotEmpty()
-  id!: string;
-
-  @IsNotEmpty()
-  password!: string;
-
-  @IsNotEmpty()
-  newPassword!: string;
-
-  @IsNotEmpty()
-  confirmNewPassword!: string;
-}

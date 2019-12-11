@@ -6,17 +6,19 @@ import {
   Body,
   UseGuards,
   HttpStatus,
-  Get,
+  Patch,
   InternalServerErrorException,
-  BadRequestException
+  BadRequestException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService, CreateUserDto, UserRole } from '../user';
-import { AuthService } from './auth.service';
 import { transformResponse } from '../interceptors';
 import { RoleGuard } from '../guards';
+import { AuthService } from './auth.service';
+import { ModifyUserPasswordDto } from './dto';
 
 import uuidv4 from 'uuid/v4';
 
@@ -98,11 +100,6 @@ export class AuthController {
       .send(new BadRequestException('Refresh token not found'));
   }
 
-  @Get('/refresh_token')
-  async findAllToken() {
-    return this.authService.findAllToken();
-  }
-
   @Post('logout')
   async logout(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
@@ -118,5 +115,23 @@ export class AuthController {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  @Patch('/modify-password')
+  @UseGuards(AuthGuard('jwt'))
+  async modifyPassword(
+    @Body() modifyPasswordUserDto: ModifyUserPasswordDto,
+    @Req() req: FastifyRequest
+  ) {
+    const { id, password, newPassword } = modifyPasswordUserDto;
+    const username = req.user.username;
+
+    const valid = await this.authService.validateUser(username, password);
+
+    if (!valid) {
+      throw new UnauthorizedException();
+    }
+
+    return this.userService.update({ id, password: newPassword });
   }
 }

@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, ModifyUserPasswordDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import { RoleGuard, UserLevels } from '../guards';
 import { UserRole, User } from './model/user.model';
 import { PaginationDto } from '../dto/pagination.dto';
@@ -108,32 +108,5 @@ export class UserController {
     }
 
     throw new BadRequestException('User not found');
-  }
-
-  @Patch('/modify-password')
-  modifyPassword(
-    @Body() modifyPasswordUserDto: ModifyUserPasswordDto,
-    @Req() req: FastifyRequest
-  ) {
-    const {
-      id,
-      password,
-      newPassword,
-      confirmNewPassword
-    } = modifyPasswordUserDto;
-
-    if (password === newPassword) {
-      throw new BadRequestException(
-        'The new password you entered is the same as your old password'
-      );
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      throw new BadRequestException(
-        'The new passwords you entered is not same'
-      );
-    }
-
-    return this.updateUser(id, { id, password: newPassword }, req);
   }
 }
