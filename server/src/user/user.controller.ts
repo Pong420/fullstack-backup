@@ -14,11 +14,12 @@ import {
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, SearchUserDto } from './dto';
 import { RoleGuard, UserLevels } from '../guards';
 import { UserRole, User } from './model/user.model';
 import { PaginationDto } from '../dto/pagination.dto';
 import { MultiPartInterceptor } from '../interceptors';
+import { formatSearchQuery } from '../utils';
 
 @UseGuards(RoleGuard(UserRole.MANAGER))
 @Controller('user')
@@ -42,17 +43,29 @@ export class UserController {
   @Get('/list')
   async getUsers(
     @Req() req: FastifyRequest,
-    @Query() { pageNo, pageSize }: PaginationDto = {}
+    @Query()
+    { pageNo, pageSize, search }: PaginationDto & SearchUserDto = {}
   ) {
     const roles = UserLevels.slice(0, UserLevels.indexOf(req.user.role) + 1);
+    const searchKeys: Array<keyof User> = [
+      'username',
+      'email',
+      'nickname',
+      'role'
+    ];
     return this.userService.paginate(
       {
         $and: [
+          formatSearchQuery(searchKeys, search),
           { $or: roles.length ? roles.map(role => ({ role })) : undefined },
           { $nor: [{ username: req.user.username }] } // Exclude self
         ]
       },
-      { sort: { createdAtquery: 1 }, page: pageNo, limit: pageSize }
+      {
+        sort: { createdAt: 1 },
+        page: pageNo,
+        limit: pageSize
+      }
     );
   }
 

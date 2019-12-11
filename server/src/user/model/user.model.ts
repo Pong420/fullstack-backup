@@ -35,7 +35,7 @@ export class User {
   @prop({ enum: UserRole, default: UserRole.CLIENT })
   role!: UserRole;
 
-  @prop()
+  @prop({ text: true })
   nickname!: string;
 
   @prop({ default: null })
