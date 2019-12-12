@@ -11,8 +11,8 @@ interface SidebarItemProps {
   children?: ReactNode;
 }
 
-const SidebarItem = React.memo<SidebarItemProps>(
-  ({ to, icon, children, iconSize = 16 }) => (
+function SidebarItem({ to, icon, children, iconSize = 16 }: SidebarItemProps) {
+  return (
     <NavLink to={to} exact className="sidebar-item">
       <div className="sidebar-item-body">
         <div className="icon">
@@ -21,8 +21,8 @@ const SidebarItem = React.memo<SidebarItemProps>(
         <span className="label">{children}</span>
       </div>
     </NavLink>
-  )
-);
+  );
+}
 
 export const Sidebar = React.memo(() => {
   return (

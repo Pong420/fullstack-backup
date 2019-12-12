@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card } from '@blueprintjs/core';
 import { Layout } from '../../components/Layout';
 import { PaginationTable, Column } from '../../components/Table';
@@ -48,7 +48,7 @@ const columns: Column<Partial<Schema$User>>[] = [
   }
 ];
 
-export function Users() {
+export const Users = () => {
   const { paginateUser, setPageUser, searchUser } = useUserActions();
 
   const [{ data, search, loading }, paginationtProps] = useReduxPagination({
@@ -57,23 +57,24 @@ export function Users() {
     selector: userPaginationSelector
   });
 
+  const navbar = useMemo(
+    () => (
+      <>
+        <CreateUser />
+        <Search suffix="User" value={search} onChange={searchUser} />
+      </>
+    ),
+    [search, searchUser]
+  );
+
   return (
-    <Layout
-      className="users"
-      icon="user"
-      title="Users"
-      navbar={
-        <>
-          <CreateUser />
-          <Search suffix="User" value={search} onChange={searchUser} />
-        </>
-      }
-    >
+    <Layout className="users" icon="user" title="Users" navbar={navbar}>
       <Card>
         <PaginationTable
           data={data}
           loading={loading}
           columns={columns}
+          onClear={search ? () => searchUser('') : undefined}
           pagination={{
             ...paginationtProps,
             onPageChange: setPageUser
@@ -82,4 +83,4 @@ export function Users() {
       </Card>
     </Layout>
   );
-}
+};

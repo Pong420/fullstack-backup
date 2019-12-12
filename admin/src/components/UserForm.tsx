@@ -34,6 +34,7 @@ export interface UserFormProps {
   exclude?: Exclude;
   children?: ReactNode;
   passwordValidators?: any;
+  autoComplete?: string;
 }
 
 export const UserForm = React.memo<UserFormProps>(
@@ -43,7 +44,8 @@ export const UserForm = React.memo<UserFormProps>(
     onSubmit,
     initialValues,
     children,
-    passwordValidators
+    passwordValidators,
+    autoComplete = 'off'
   }) => {
     const [form] = useForm(_form);
 
@@ -76,7 +78,7 @@ export const UserForm = React.memo<UserFormProps>(
           label="Password"
           validators={passwordValidators}
         >
-          <Password />
+          <Password autoComplete={autoComplete} />
         </FormItem>
 
         <FormItem
@@ -88,7 +90,7 @@ export const UserForm = React.memo<UserFormProps>(
             validators.shouldBeEqual(password, 'Not the same as above password')
           ]}
         >
-          <Password />
+          <Password autoComplete={autoComplete} />
         </FormItem>
 
         <FormItem
@@ -99,7 +101,7 @@ export const UserForm = React.memo<UserFormProps>(
             validators.isEmail
           ]}
         >
-          <InputGroup />
+          <InputGroup autoComplete={autoComplete} />
         </FormItem>
 
         <FormItem name="nickname" label="Nickname">

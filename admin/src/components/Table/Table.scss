@@ -3,6 +3,7 @@ table {
 }
 
 .pagination-table {
+  @include flex($flex-direction: column);
   @include relative();
 
   .loading {

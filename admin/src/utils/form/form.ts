@@ -189,7 +189,7 @@ export function createForm<T extends {}>({
           },
           React.createElement('label', { className: ClassName.label }, label),
           field,
-          React.createElement('div', { className: ClassName.help }, errors)
+          React.createElement('div', { className: ClassName.help }, errors[0])
         );
       }
     );

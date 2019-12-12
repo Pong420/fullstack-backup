@@ -1,12 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Navbar as BpNavbar,
-  Button,
-  Alignment,
-  Popover,
-  Position
-} from '@blueprintjs/core';
+import { Button, Popover, Classes } from '@blueprintjs/core';
 import { UserMenu } from './UserMenu';
 import { authUserSelector } from '../../store';
 
@@ -15,27 +9,34 @@ interface Props {
   children?: ReactNode;
 }
 
+const UserPopover = React.memo<{ nickname?: string }>(({ nickname }) => (
+  <Popover content={<UserMenu />} position="bottom-right">
+    <Button minimal icon="user">
+      <b>{nickname}</b>
+    </Button>
+  </Popover>
+));
+
 export const Navbar = React.memo(({ title, children }: Props) => {
   const { nickname } = useSelector(authUserSelector) || {};
 
   return (
-    <BpNavbar>
-      <BpNavbar.Group>
-        <BpNavbar.Heading className="nav-bar-title">{title}</BpNavbar.Heading>
-      </BpNavbar.Group>
+    <div className={Classes.NAVBAR}>
+      <div className={[Classes.NAVBAR_GROUP, Classes.ALIGN_LEFT].join(' ')}>
+        <div className={['nav-bar-title', Classes.NAVBAR_HEADING].join(' ')}>
+          {title}
+        </div>
+      </div>
 
-      <BpNavbar.Group align={Alignment.RIGHT}>
+      <div className={[Classes.NAVBAR_GROUP, Classes.ALIGN_RIGHT].join(' ')}>
         {children}
-        <BpNavbar.Divider />
+
+        <div className={Classes.NAVBAR_DIVIDER} />
 
         <Button minimal icon="notifications" />
 
-        <Popover content={<UserMenu />} position={Position.BOTTOM_RIGHT}>
-          <Button minimal icon="user">
-            <b>{nickname}</b>
-          </Button>
-        </Popover>
-      </BpNavbar.Group>
-    </BpNavbar>
+        <UserPopover nickname={nickname} />
+      </div>
+    </div>
   );
 });

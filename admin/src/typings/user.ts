@@ -39,7 +39,7 @@ export interface Schema$User {
   username: string;
   avatar: string | null;
   nickname: string;
-  role?: UserRole;
+  role: UserRole;
   createdAt: string;
   updatedAt: string;
 }

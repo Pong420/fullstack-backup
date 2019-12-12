@@ -1,4 +1,4 @@
-import { createElement, Fragment } from 'react';
+import { createElement, Fragment, ReactNode } from 'react';
 import {
   Position,
   Intent,
@@ -17,49 +17,46 @@ const defaultOptions: Omit<IToastOptions, 'message'> = {
   timeout: 4000
 };
 
-const container = document.body;
+const toaseter = BpToaster.create(props, document.body);
 
-const apiError = BpToaster.create(
-  {
-    ...props,
-    className: 'api-error-toaster'
-  },
-  container
-);
-
-const success = BpToaster.create(props, container);
+function renderMessage(titile = '', message: ReactNode = '') {
+  return createElement(
+    Fragment,
+    null,
+    createElement('div', null, titile),
+    createElement('div', null, message)
+  );
+}
 
 export const Toaster = {
   success(options: IToastOptions) {
-    success.show({
+    toaseter.show({
+      ...defaultOptions,
       ...options,
       icon: 'tick-circle',
       intent: Intent.SUCCESS,
-      message: createElement(
-        Fragment,
-        null,
-        createElement('div', null, 'Success'),
-        createElement('div', null, options.message)
-      )
+      message: renderMessage('Success', options.message)
+    });
+  },
+  failure(options: IToastOptions) {
+    toaseter.show({
+      ...defaultOptions,
+      ...options,
+      icon: 'error',
+      intent: Intent.DANGER,
+      message: renderMessage('Error', options.message)
     });
   },
   apiError<T extends APIError>(error: T, prefix?: string) {
-    apiError.show({
+    toaseter.show({
       ...defaultOptions,
+      className: 'api-error-toaster',
       icon: 'error',
       intent: Intent.DANGER,
-      message: createElement(
-        Fragment,
-        null,
-        createElement(
-          'div',
-          null,
-          prefix || (error.response && error.response.data.error) || 'Error'
-        ),
-        createElement('div', null, getErrorMessage(error))
+      message: renderMessage(
+        prefix || (error.response && error.response.data.error) || 'Error',
+        getErrorMessage(error)
       )
     });
-
-    return apiError;
   }
 };

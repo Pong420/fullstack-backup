@@ -18,6 +18,8 @@ const crudActionsCreator = getCRUDActionCreatorEx<
   'id'
 >();
 
+const searchUser = crudActionsCreator['SEARCH'](UserActionTypes.SEARCH);
+
 export const userActions = {
   createUser: crudActionsCreator['CREATE'](UserActionTypes.CREATE),
   deleteUser: crudActionsCreator['DELETE'](UserActionTypes.DELETE),
@@ -25,7 +27,8 @@ export const userActions = {
   resetUsers: crudActionsCreator['RESET'](UserActionTypes.RESET),
   paginateUser: crudActionsCreator['PAGINATE'](UserActionTypes.PAGINATE),
   setPageUser: crudActionsCreator['SET_PAGE'](UserActionTypes.SET_PAGE),
-  searchUser: crudActionsCreator['SEARCH'](UserActionTypes.SEARCH)
+  searchUser,
+  clearSearchUser: () => searchUser('')
 };
 
 export type UserActions = UnionCRUDActions<typeof userActions>;

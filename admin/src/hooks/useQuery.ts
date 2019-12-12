@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useEffect,
   useState,
   createContext,
@@ -10,16 +9,16 @@ import React, {
 import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'qs';
 
-// TODO: better typing
-
 interface QueryContextValue {
   query: Record<string, string>;
   setQuery: (query: Record<string, string>) => void;
+  removeQuery: (keys_?: string | string[]) => void;
 }
 
 export const QueryContext = createContext<QueryContextValue>({
   query: {},
-  setQuery: () => {}
+  setQuery: () => {},
+  removeQuery: () => {}
 });
 
 export function QueryProvider({ children }: { children: ReactNode }) {
@@ -29,8 +28,8 @@ export function QueryProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<Record<string, string>>(qs.parse(search));
   const [mounted, setMounted] = useState(false);
 
-  const setQuery = useCallback(
-    (query: Record<string, string>) =>
+  const actions = useMemo(() => {
+    const setQuery: QueryContextValue['setQuery'] = query =>
       setState(curr => {
         const state = { ...curr, ...query };
         for (const key in state) {
@@ -39,9 +38,26 @@ export function QueryProvider({ children }: { children: ReactNode }) {
           }
         }
         return state;
-      }),
-    []
-  );
+      });
+
+    const removeQuery: QueryContextValue['removeQuery'] = keys_ => {
+      setState(curr => {
+        if (keys_) {
+          const keys = Array.isArray(keys_) ? keys_ : [keys_];
+          return keys.reduce(
+            (acc, key) => {
+              delete acc[key];
+              return acc;
+            },
+            { ...curr }
+          );
+        }
+        return {};
+      });
+    };
+
+    return { setQuery, removeQuery };
+  }, []);
 
   useEffect(() => setMounted(true), []);
 
@@ -51,7 +67,7 @@ export function QueryProvider({ children }: { children: ReactNode }) {
 
   return React.createElement(
     QueryContext.Provider,
-    { value: { query: state, setQuery } },
+    { value: { query: state, ...actions } },
     children
   );
 }
