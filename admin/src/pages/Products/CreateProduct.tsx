@@ -11,7 +11,7 @@ import { useBoolean } from '../../hooks/useBoolean';
 const title = 'Create Product';
 
 export function CreateProduct() {
-  const [isOpen, { on, off }] = useBoolean(true);
+  const [isOpen, { on, off }] = useBoolean();
 
   const { createProduct } = useProductActions();
 

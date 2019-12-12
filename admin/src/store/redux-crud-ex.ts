@@ -36,8 +36,9 @@ export type CRUDActionsEx<
 > = CRUDActions<I, K> | Search;
 
 export type PaginationAndSearchReturnType<
-  I extends Record<PropertyKey, any>
-> = PaginationSelectorReturnType<I> & { search?: string };
+  I extends Record<PropertyKey, any>,
+  K extends AllowedNames<I, PropertyKey>
+> = PaginationSelectorReturnType<I, K> & { search?: string };
 
 export function getCRUDActionCreatorEx<
   Types extends Record<keyof Actions, string>,
@@ -88,7 +89,10 @@ export function createCRUDReducerEx<
 export function paginationAndSearchSelector<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
->({ search, ...reset }: CRUDStateEx<I, K>): PaginationAndSearchReturnType<I> {
+>({
+  search,
+  ...reset
+}: CRUDStateEx<I, K>): PaginationAndSearchReturnType<I, K> {
   return {
     search,
     ...paginationSelector(reset)

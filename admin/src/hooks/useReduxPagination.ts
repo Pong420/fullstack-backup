@@ -6,7 +6,8 @@ import { useQuery } from './useQuery';
 import {
   Param$Search,
   Param$Pagination,
-  Response$PaginationAPI
+  Response$PaginationAPI,
+  AllowedNames
 } from '../typings';
 import { RootState, PaginationAndSearchReturnType } from '../store';
 
@@ -21,10 +22,13 @@ interface PaginationPayload<T> {
   total: number;
 }
 
-export interface ReduxPaginationProps<T> {
-  fn: AsyncFn<T>;
-  onSuccess?: (payload: PaginationPayload<T>) => void;
-  selector: (state: RootState) => PaginationAndSearchReturnType<T>;
+export interface ReduxPaginationProps<
+  I extends Record<PropertyKey, any>,
+  K extends AllowedNames<I, PropertyKey>
+> {
+  fn: AsyncFn<I>;
+  onSuccess?: (payload: PaginationPayload<I>) => void;
+  selector: (state: RootState) => PaginationAndSearchReturnType<I, K>;
 }
 
 const useQueryTransform = ({
@@ -35,12 +39,11 @@ const useQueryTransform = ({
   search
 });
 
-export function useReduxPagination<T>({
-  fn,
-  selector,
-  onSuccess
-}: ReduxPaginationProps<T>) {
-  const { data, total, pageNo, defer, pageSize, search } = useSelector(
+export function useReduxPagination<
+  I extends Record<PropertyKey, any>,
+  K extends AllowedNames<I, PropertyKey>
+>({ fn, selector, onSuccess }: ReduxPaginationProps<I, K>) {
+  const { data, ids, total, pageNo, defer, pageSize, search } = useSelector(
     selector
   );
 
@@ -68,7 +71,7 @@ export function useReduxPagination<T>({
   }, [pageNo, search, setQuery]);
 
   return [
-    { data, search, loading },
+    { ids, data, search, loading },
     {
       total,
       pageNo,
