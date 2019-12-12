@@ -58,8 +58,11 @@ export class UserService {
     }
   }
 
-  delete(id: string) {
-    return UserModel.deleteOne({ _id: id });
+  async delete(id: string) {
+    const user = await UserModel.findOneAndDelete({ _id: id });
+    if (user && user.avatar) {
+      this.uploadService.removeImage(user.avatar);
+    }
   }
 
   async update(
