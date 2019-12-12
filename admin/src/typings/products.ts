@@ -9,7 +9,7 @@ export interface Param$GetProducts extends Param$Pagination {}
 
 export interface Param$CreateProduct
   extends Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp> {
-  images: File[];
+  images: Array<File | string>;
 }
 
 export interface Param$UpdateProduct

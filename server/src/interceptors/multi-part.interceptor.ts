@@ -61,13 +61,9 @@ export function MultiPartInterceptor(
                 path: dest
               };
 
-              // if there are multiple files uploaded return array else return single file
-              if (body[fieldName]) {
-                if (Array.isArray(body[fieldName])) {
-                  body[fieldName].push(result);
-                } else {
-                  body[fieldName] = [body[fieldName], result];
-                }
+              if (isArrayFormData(field)) {
+                body[fieldName] = body[fieldName] || [];
+                body[fieldName].push(result);
               } else {
                 body[fieldName] = result;
               }
@@ -81,13 +77,13 @@ export function MultiPartInterceptor(
             }
           );
 
-          mp.on('field', (key: string, value: unknown) => {
-            if (isArrayFormData(key)) {
-              const newKey = key.replace(isArrayFormDataRegex, '');
+          mp.on('field', (field: string, value: unknown) => {
+            if (isArrayFormData(field)) {
+              const newKey = field.replace(isArrayFormDataRegex, '');
               body[newKey] = body[newKey] || [];
               body[newKey].push(value);
             } else {
-              body[key] = value;
+              body[field] = value;
             }
           });
 

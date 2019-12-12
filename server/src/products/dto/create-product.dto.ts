@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsArray, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 import { UploadFile } from '../../upload';
 import { Product } from '../model';
 
@@ -20,7 +20,6 @@ export class CreateProductDto implements Omit<Partial<Product>, 'images'> {
   type!: string;
 
   @IsOptional()
-  @IsArray()
   images?: UploadFile[];
 
   @IsOptional()

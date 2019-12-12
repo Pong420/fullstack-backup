@@ -1,16 +1,19 @@
 import React, { ReactNode } from 'react';
+import { RxFileToImageState } from 'use-rx-hooks';
 import { InputGroup, TagInput, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { Param$CreateProduct } from '../../typings';
 import { createForm, FormInstance } from '../../utils/form';
 
-type Fields = Param$CreateProduct;
+type Fields = Omit<Param$CreateProduct, 'images'> & {
+  images: Array<RxFileToImageState | string>;
+};
 
 export interface ProductFormProps {
   form?: FormInstance<Fields>;
   initialValues?: Partial<Fields>;
-  onSubmit: (values: Fields) => void;
+  onSubmit: (values: Param$CreateProduct) => void;
   children?: ReactNode;
 }
 
@@ -42,7 +45,14 @@ export function ProductForm({
       className="product-form"
       form={form}
       initialValues={{ ...defaultValues, ...initialValues }}
-      onFinish={onSubmit}
+      onFinish={({ images, ...store }) => {
+        onSubmit({
+          ...store,
+          images: images.map(payload =>
+            typeof payload === 'string' ? payload : payload.file
+          )
+        });
+      }}
     >
       <FormItem
         name="name"

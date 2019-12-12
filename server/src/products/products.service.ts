@@ -30,8 +30,11 @@ export class ProductsService {
     );
   }
 
-  async create(createProductDto: CreateProductDto) {
-    const createdProduct = new ProductModel(createProductDto);
+  async create({ images, ...createProductDto }: CreateProductDto) {
+    const createdProduct = new ProductModel({
+      ...createProductDto,
+      images: await this.handleImages(images, [])
+    });
 
     try {
       return await createdProduct.save();
