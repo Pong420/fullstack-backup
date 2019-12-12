@@ -2105,10 +2105,10 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@pong420/redux-crud@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.0.1.tgz#7f1ad511bf2267124742c0d0382aa08449a6a4b8"
-  integrity sha512-uFjI9qyhbuQBQeQm4cxVpoAFQL3lTKi76qughExWBXXFg1oDn7Ev6ZTsWxSUDw2/zwCG1xyD3/Qi//HdcuOF6Q==
+"@pong420/redux-crud@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.0.2.tgz#0f6d10b78657bbd036bee352c62bf311f29ffe7c"
+  integrity sha512-GQsle/Y/VldS6BAlVHU5RWAmfV4np7Zz/BoQfOIBdKbJFb9zBPMWwiWEEn8rXiVEx2At/uE5NEudiGYZJNbSpg==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"

@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.2",
-    "@pong420/redux-crud": "^1.0.1",
+    "@pong420/redux-crud": "^1.0.2",
     "axios": "0.18.1",
     "connected-react-router": "^6.5.2",
     "dayjs": "^1.8.16",
