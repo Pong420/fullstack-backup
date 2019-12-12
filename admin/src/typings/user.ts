@@ -2,7 +2,8 @@ import {
   Param$Search,
   Param$Pagination,
   Response$API,
-  Response$PaginationAPI
+  Response$PaginationAPI,
+  Schema$Timestamp
 } from '.';
 
 export enum UserRole {
@@ -15,7 +16,7 @@ export enum UserRole {
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 
 export interface Param$CreateUser
-  extends Omit<Schema$User, 'id' | 'createdAt' | 'updatedAt' | 'avatar'> {
+  extends Omit<Schema$User, 'id' | 'avatar' | keyof Schema$Timestamp> {
   password: string;
   avatar?: File | null;
 }
@@ -34,13 +35,11 @@ export type Response$User = Response$API<Schema$User>;
 
 export type Response$GetUsers = Response$PaginationAPI<Schema$User>;
 
-export interface Schema$User {
+export interface Schema$User extends Schema$Timestamp {
   id: string;
   email: string;
   username: string;
   avatar: string | null;
   nickname: string;
   role: UserRole;
-  createdAt: string;
-  updatedAt: string;
 }

@@ -30,7 +30,7 @@ export const UploadImage = React.memo(
       useImperativeHandle(ref, () => fileInputRef.current);
 
       return (
-        <div {...props} className={`uload ${className}`.trim()}>
+        <div {...props} className={`upload ${className}`.trim()}>
           {children}
           <input type="file" hidden ref={fileInputRef} {...inputProps} />
         </div>

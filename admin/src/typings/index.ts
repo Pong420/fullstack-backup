@@ -2,6 +2,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 export * from './auth';
 export * from './user';
+export * from './products';
 export * from './utils';
 
 export interface APIError extends Omit<AxiosError, 'response'> {
@@ -50,4 +51,9 @@ export interface Response$PaginationAPI<T> {
     prevPage: null;
     nextPage: number;
   };
+}
+
+export interface Schema$Timestamp {
+  createdAt: string;
+  updatedAt: string;
 }

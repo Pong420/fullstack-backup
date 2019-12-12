@@ -1,0 +1,72 @@
+.image-upload-grid {
+  @include flex($wrap: wrap);
+
+  > * {
+    $width: 32%;
+    $margin: (100% - $width * 3)/ 2;
+    width: $width;
+    margin-bottom: $margin;
+
+    &:nth-child(3n + 2) {
+      @include margin-x($margin);
+    }
+  }
+
+  .grid,
+  .upload-grid {
+    @include relative();
+
+    &:before {
+      @include dimen(100%, 0);
+      content: '';
+      display: block;
+      padding-bottom: 56.25%;
+    }
+
+    .grid-content {
+      @include absolute(0, null, 0);
+      @include sq-dimen(100%);
+    }
+  }
+
+  .grid {
+    .grid-content {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      box-shadow: $pt-elevation-shadow-0;
+      background-color: #fff;
+    }
+
+    &:not(:hover) {
+      .grid-backdrop {
+        opacity: 0;
+      }
+    }
+
+    .grid-backdrop {
+      @include absolute(0, null, 0);
+      @include animate(opacity);
+      @include flex(center, center);
+      @include sq-dimen(100%);
+      background-color: rgba(#000, 0.4);
+      opacity: 1;
+
+      svg {
+        color: #fff;
+      }
+    }
+  }
+
+  .upload-grid {
+    border: 1px dashed;
+  }
+}
+
+.preview-image-dialog {
+  @include dimen(auto);
+  border-radius: 0;
+  padding-bottom: 0;
+  // TODO: handle transparent background
+  background-color: transparent;
+}
