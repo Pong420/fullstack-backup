@@ -34,8 +34,13 @@ export class AuthController {
 
   @Post('/register/admin')
   @UseGuards(RoleGuard(UserRole.ADMIN))
-  registerAdmin(@Body() createUserDto: CreateUserDto) {
+  adminRegistration(@Body() createUserDto: CreateUserDto) {
     return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
+  }
+
+  @Post('/register/guest')
+  guestRegistration(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
   }
 
   @Post('/register')

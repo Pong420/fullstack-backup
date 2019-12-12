@@ -8,6 +8,7 @@ import { UserRole } from '../user/model/user.model';
 
 export const UserLevels: UserRole[] = [
   UserRole.CLIENT,
+  UserRole.GUEST,
   UserRole.MANAGER,
   UserRole.ADMIN
 ];

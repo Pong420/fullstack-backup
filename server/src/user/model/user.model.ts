@@ -15,7 +15,8 @@ function hashPassword(pwd: string) {
 export enum UserRole {
   ADMIN = 'admin',
   MANAGER = 'manager',
-  CLIENT = 'client'
+  CLIENT = 'client',
+  GUEST = 'guest'
 }
 
 @plugin(paginate)

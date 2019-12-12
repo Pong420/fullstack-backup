@@ -21,7 +21,7 @@ import { PaginationDto } from '../dto/pagination.dto';
 import { MultiPartInterceptor } from '../interceptors';
 import { formatSearchQuery } from '../utils';
 
-@UseGuards(RoleGuard(UserRole.MANAGER))
+@UseGuards(RoleGuard(UserRole.GUEST))
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
