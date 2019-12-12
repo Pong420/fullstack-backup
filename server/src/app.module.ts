@@ -5,6 +5,7 @@ import { DatabaseModule } from './database';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
+import { ProductsModule } from './products/products.module';
 import path from 'path';
 
 @Module({
@@ -16,7 +17,8 @@ import path from 'path';
     UploadModule,
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, 'admin')
-    })
+    }),
+    ProductsModule
   ]
 })
 export class AppModule {}

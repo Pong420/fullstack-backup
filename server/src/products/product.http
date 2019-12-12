@@ -1,0 +1,95 @@
+
+@email = youremail@gmail.com
+@username = foo
+@password = bar
+@newPassword = foo
+
+@nickname = Pong
+
+
+# @name login
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username=admin
+&password=admin
+
+###
+
+@authToken = {{login.response.body.data.token}}
+
+
+# @name products
+GET {{baseUrl}}/products HTTP/1.1
+Authorization: bearer {{authToken}}
+
+###
+
+@id = {{products.response.body.data.docs[0].id}}
+
+# @name create
+POST {{baseUrl}}/products HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+1000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="amount"
+
+1000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+clothes
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+
+< end
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+
+
+# @name delete
+DELETE  {{baseUrl}}/products/{{id}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: bearer {{authToken}}
+
+###
+
+
+# @name update
+PATCH   {{baseUrl}}/products/{{id}} HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="id"
+
+{{id}}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+new-products
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="price"
+
+100
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="amount"
+
+999
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+Clothes
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+
+< end
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
