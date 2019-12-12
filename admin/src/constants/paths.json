@@ -4,5 +4,7 @@
   "PRODUCTS": "/products",
   "USERS": "/users",
   "SETTINGS": "/settings",
-  "LOGIN": "/login"
+  "LOGIN": "/login",
+  "GUEST_REGISTRATION": "/guest-registration",
+  "ADMIN_REGISTRATION": "/admin-registration"
 }

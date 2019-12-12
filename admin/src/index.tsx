@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { FocusStyleManager } from '@blueprintjs/core';
 import { PATHS } from './constants';
-import { PrivateRoute } from './components/PrivateRoute';
 import { QueryProvider } from './hooks/useQuery';
 import configureStore, { history, logout } from './store';
 import * as serviceWorker from './serviceWorker';
@@ -26,7 +25,13 @@ window.addEventListener('storage', event => {
 });
 
 function render() {
-  const Login = React.lazy(() => import('./components/Login'));
+  const Login = React.lazy(() => import('./pages/Login'));
+  const GuestRegistration = React.lazy(() =>
+    import('./pages/GuestRegistration')
+  );
+  const AdminRegistration = React.lazy(() =>
+    import('./pages/AdminRegistration')
+  );
   const App = React.lazy(() => import('./App'));
 
   return ReactDOM.render(
@@ -36,7 +41,15 @@ function render() {
           <Suspense fallback={null}>
             <Switch>
               <Route path={PATHS.LOGIN} component={Login} />
-              <PrivateRoute path="" component={App} />
+              <Route
+                path={PATHS.GUEST_REGISTRATION}
+                component={GuestRegistration}
+              />
+              <Route
+                path={PATHS.ADMIN_REGISTRATION}
+                component={AdminRegistration}
+              />
+              <Route path="" component={App} />
             </Switch>
           </Suspense>
         </QueryProvider>

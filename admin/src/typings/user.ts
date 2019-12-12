@@ -8,7 +8,8 @@ import {
 export enum UserRole {
   ADMIN = 'admin',
   MANAGER = 'manager',
-  CLIENT = 'client'
+  CLIENT = 'client',
+  GUEST = 'guest'
 }
 
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}

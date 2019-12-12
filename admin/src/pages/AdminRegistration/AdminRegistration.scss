@@ -1,0 +1,32 @@
+.admin-registration {
+  @include sq-dimen(100%);
+  @include flex(center, center);
+  align-self: center;
+
+  .admin-registration-card {
+    @include dimen(100%);
+    max-width: 360px;
+    margin-bottom: 50px;
+  }
+
+  .admin-registration-card-header {
+    text-align: center;
+    svg {
+      font-size: 100px;
+    }
+
+    h5 {
+      margin-top: 10px;
+      text-transform: capitalize;
+    }
+  }
+
+  .admin-registration-card-body {
+    @include margin-y(25px 10px);
+  }
+
+  .already-have-account {
+    margin-top: 15px;
+    text-decoration: underline;
+  }
+}

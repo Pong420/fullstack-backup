@@ -14,8 +14,11 @@ export const REFERTSH_TOKEN_PATH = '/auth/refresh_token';
 export const login = (params: Param$Login) =>
   api.post<Response$Login>('/auth/login', params);
 
-export const register = (params: Param$CreateUser) =>
+export const adminRegistration = (params: Param$CreateUser) =>
   api.post<Response$User>('/auth/register/admin', params);
+
+export const guestRegistration = (params: Param$CreateUser) =>
+  api.post<Response$User>('/auth/register/guest', params);
 
 export const logout = () => api.post('/auth/logout');
 

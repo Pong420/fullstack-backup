@@ -1,19 +1,15 @@
 import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { ButtonPopover } from '../../components/ButtonPopover';
-import { UserDialog, UserDialogProps } from './UserDialog';
+import { UserDialog } from './UserDialog';
 import { createUser } from '../../services';
 import { useUserActions } from '../../store';
 import { Schema$User } from '../../typings';
 import { useBoolean } from '../../hooks/useBoolean';
-import { validators } from '../../utils/form';
 
 const createUserAPI = (...params: Parameters<typeof createUser>) =>
   createUser(...params).then(res => res.data.data);
 
-const passwordValidators: UserDialogProps['passwordValidators'] = [
-  validators.password()
-];
 const title = 'Create User';
 
 export const CreateUser = React.memo(() => {
@@ -42,7 +38,6 @@ export const CreateUser = React.memo(() => {
         loading={loading}
         onSubmit={run}
         onClose={off}
-        passwordValidators={passwordValidators}
       />
     </>
   );

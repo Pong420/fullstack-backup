@@ -49,7 +49,9 @@ const loginEpic: AuthEpic = (action$, state$) =>
           return merge<Actions>(
             of({ type: AuthActionTypes.LOGIN_SUCCESS, payload }),
             payload.isDefaultAc
-              ? of<Actions>(replace(PATHS.LOGIN, { register: true }))
+              ? of<Actions>(
+                  replace(PATHS.ADMIN_REGISTRATION, { register: true })
+                )
               : redirect
               ? of<Actions>(replace(redirect, {}))
               : empty()

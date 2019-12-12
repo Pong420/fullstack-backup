@@ -8,6 +8,7 @@ import {
   FormItemProps,
   FormInstance
 } from '../utils/form';
+import { Validator } from '../utils/form/validators';
 
 type Fields = Required<Param$CreateUser & { confirmPassword: string }>;
 
@@ -33,9 +34,13 @@ export interface UserFormProps {
   onSubmit: (values: Fields) => void;
   exclude?: Exclude;
   children?: ReactNode;
-  passwordValidators?: any;
+  passwordValidators?: Validator[];
   autoComplete?: string;
 }
+
+const defaultPasswordValidation: UserFormProps['passwordValidators'] = [
+  validators.password()
+];
 
 export const UserForm = React.memo<UserFormProps>(
   ({
@@ -44,7 +49,7 @@ export const UserForm = React.memo<UserFormProps>(
     onSubmit,
     initialValues,
     children,
-    passwordValidators,
+    passwordValidators = defaultPasswordValidation,
     autoComplete = 'off'
   }) => {
     const [form] = useForm(_form);
