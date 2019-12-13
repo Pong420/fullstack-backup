@@ -32,7 +32,13 @@ export const UploadImage = React.memo(
       return (
         <div {...props} className={`upload ${className}`.trim()}>
           {children}
-          <input type="file" hidden ref={fileInputRef} {...inputProps} />
+          <input
+            type="file"
+            accept="images/*"
+            hidden
+            ref={fileInputRef}
+            {...inputProps}
+          />
         </div>
       );
     }

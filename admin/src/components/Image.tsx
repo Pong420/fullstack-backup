@@ -12,7 +12,7 @@ export const Image = React.memo<Props>(
       <div
         className="image"
         style={{
-          backgroundColor: url ? 'transparent' : '#eee',
+          backgroundColor: '#eee',
           backgroundImage: `url(${url})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: size,

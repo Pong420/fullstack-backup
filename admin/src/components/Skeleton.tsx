@@ -13,16 +13,15 @@ export const Skeleton = React.memo<Props>(
         <div
           {...props}
           className={[
-            'skeleton',
             className,
-            show && animate ? Classes.SKELETON : ''
+            show ? (animate ? Classes.SKELETON : 'skeleton') : ''
           ]
             .join(' ')
             .trim()}
           ref={ref}
           style={{
             ...style,
-            backgroundColor: show ? '#e7e7e7' : undefined
+            backgroundColor: show && !animate ? '#e7e7e7' : undefined
           }}
         >
           {children}

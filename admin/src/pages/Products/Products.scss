@@ -6,6 +6,10 @@
 
 .products {
   .layout-content {
+    @include flex(normal, space-between, column);
+  }
+
+  .products-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     grid-gap: 20px;
@@ -52,7 +56,7 @@
 
         &.skeleton {
           &.product-name {
-            max-width: 40%;
+            max-width: 50%;
           }
 
           &.product-type {

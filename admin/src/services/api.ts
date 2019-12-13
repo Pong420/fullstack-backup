@@ -21,6 +21,22 @@ function isJWT(data: any): data is Schema$JWT {
   return !!(data && data.expiry && data.token);
 }
 
+// // delay api response, for testing only
+// if (process.env.NODE_ENV === 'development') {
+//   const delay = (ms: number) => new Promise(_ => setTimeout(_, ms));
+//   api.interceptors.request.use(async config => {
+//     console.log(config.url);
+//     if (
+//       config.url &&
+//       config.url !== REFERTSH_TOKEN_PATH &&
+//       config.url !== '/user'
+//     ) {
+//       await delay(2000);
+//     }
+//     return Promise.resolve(config);
+//   });
+// }
+
 api.interceptors.request.use(async config => {
   if (jwtToken) {
     if ((+new Date(jwtToken.expiry) - +new Date()) / (60 * 1000) <= 1) {
