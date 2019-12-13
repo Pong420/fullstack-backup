@@ -57,3 +57,10 @@ export interface Schema$Timestamp {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Schema$ResponsiveImage {
+  small: string;
+  medium: string;
+  large: string;
+  origin: string;
+}

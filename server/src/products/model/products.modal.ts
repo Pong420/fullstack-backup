@@ -4,6 +4,7 @@ import {
   getModelForClass,
   ReturnPaginateModelType
 } from '@typegoose/typegoose';
+import { ResponsiveImage } from '../../upload';
 import paginate from 'mongoose-paginate-v2';
 
 @plugin(paginate)
@@ -24,7 +25,7 @@ export class Product {
   type!: string;
 
   @prop({ default: [] })
-  images!: string[];
+  images!: ResponsiveImage[];
 
   @prop({ default: [] })
   tags!: string[];

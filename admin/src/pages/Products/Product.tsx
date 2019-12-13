@@ -23,7 +23,7 @@ export const Product = ({ id }: Props) => {
   );
   return (
     <div className="product">
-      <Image url={images[0]} />
+      <Image url={(images[0] || {}).small} />
       <Divider />
       <div className="caption">
         <div className="row">
