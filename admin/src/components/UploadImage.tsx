@@ -8,24 +8,25 @@ import React, {
 import { useRxUploadImage, RxFileToImageState } from 'use-rx-hooks';
 
 export interface UploadImageProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'onUpload'> {
   className?: string;
   children?: ReactNode;
-  onChange?: (image: RxFileToImageState | null) => void;
+  onUpload?: (image: RxFileToImageState | null) => void;
+  multiple?: boolean;
 }
 
 const nil = () => {};
 
 export const UploadImage = React.memo(
   React.forwardRef<HTMLInputElement | null, UploadImageProps>(
-    ({ onChange = nil, children, className = '', ...props }, ref) => {
+    ({ onUpload = nil, children, multiple, className = '', ...props }, ref) => {
       const fileInputRef = useRef<HTMLInputElement>(null);
       const [localState, inputProps] = useRxUploadImage();
 
       useEffect(() => {
-        localState && onChange(localState);
+        localState && onUpload(localState);
         fileInputRef.current!.value = '';
-      }, [localState, onChange]);
+      }, [localState, onUpload]);
 
       useImperativeHandle(ref, () => fileInputRef.current);
 
@@ -36,6 +37,7 @@ export const UploadImage = React.memo(
             type="file"
             accept="images/*"
             hidden
+            multiple={multiple}
             ref={fileInputRef}
             {...inputProps}
           />

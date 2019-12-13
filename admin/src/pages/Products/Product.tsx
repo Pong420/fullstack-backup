@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Divider, Tag, Intent } from '@blueprintjs/core';
-import { Image } from '../../components/Image';
+import { CloudinaryImage } from '../../components/CloudinaryImage';
 import { Skeleton } from '../../components/Skeleton';
 import { EditProduct } from './EditProduct';
 import { productSelector } from '../../store';
@@ -24,7 +24,7 @@ export const Product = ({ id }: Props) => {
 
   return (
     <div className="product">
-      <Image url={(images[0] || {}).small} />
+      <CloudinaryImage url={images[0]} width={400} />
       <Divider />
       <div className="caption">
         <div className="row">

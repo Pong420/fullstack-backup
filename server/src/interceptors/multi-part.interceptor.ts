@@ -23,7 +23,7 @@ if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR);
 }
 
-const isArrayFormDataRegex = /\[\]$/;
+const isArrayFormDataRegex = /\[.*\]/;
 const isArrayFormData = (key: string) => isArrayFormDataRegex.test(key);
 
 export function MultiPartInterceptor(
@@ -79,9 +79,24 @@ export function MultiPartInterceptor(
 
           mp.on('field', (field: string, value: unknown) => {
             if (isArrayFormData(field)) {
-              const newKey = field.replace(isArrayFormDataRegex, '');
-              body[newKey] = body[newKey] || [];
-              body[newKey].push(value);
+              const fieldName: string = field.replace(isArrayFormDataRegex, '');
+              const matches = field.match(/(?<=\[).*?(?=\])/g) || [];
+
+              body[fieldName] = body[fieldName] || [];
+
+              matches.reduce((acc, idx, index) => {
+                if (matches.length === index + 1) {
+                  acc[idx] = value;
+                } else {
+                  acc[idx] =
+                    typeof acc[idx] === 'undefined'
+                      ? isNaN(Number(next))
+                        ? {}
+                        : []
+                      : acc[idx];
+                }
+                return acc[idx];
+              }, body[fieldName]);
             } else {
               body[field] = value;
             }

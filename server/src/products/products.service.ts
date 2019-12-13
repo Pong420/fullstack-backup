@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MongoError } from 'mongodb';
 import { PaginateOptions, QueryFindOneAndUpdateOptions } from 'mongoose';
-import {
-  UploadService,
-  UploadFile,
-  isUploadFile,
-  ResponsiveImage
-} from '../upload';
+import { UploadService, UploadFile, isUploadFile } from '../upload';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { ProductModel } from './model';
 
@@ -14,30 +10,36 @@ import { ProductModel } from './model';
 export class ProductsService {
   constructor(private readonly uploadService: UploadService) {}
 
-  handleImages(
-    newImage: Array<UploadFile | ResponsiveImage> = [],
+  async handleNewImages(
+    newImage: Array<UploadFile | string> = [],
     oldImages: string[] = []
   ) {
-    oldImages.forEach(this.uploadService.removeImage.bind(this.uploadService));
+    oldImages.forEach(public_id => {
+      if (!newImage.includes(public_id)) {
+        !newImage.includes(public_id) &&
+          this.uploadService.removeImage({ public_id });
+      }
+    });
+
     return Promise.all(
       newImage.map(item =>
         isUploadFile(item)
           ? this.uploadService
               .uploadImage(item)
-              .then(result =>
-                this.uploadService.getResponsiveImage(result[0].public_id, {})
-              )
+              .then(result => result[0].public_id)
           : Promise.resolve(item)
       )
     );
   }
 
-  handleRemoveImage(images: ResponsiveImage[]) {
-    return images.map(({ origin }) => this.uploadService.removeImage(origin));
+  removeImagesAfterExpection(images: string[]) {
+    return images.map(public_id =>
+      this.uploadService.removeImage({ public_id })
+    );
   }
 
   async create({ images, ...createProductDto }: CreateProductDto) {
-    const newImages = await this.handleImages(images, []);
+    const newImages = await this.handleNewImages(images);
 
     const createdProduct = new ProductModel({
       ...createProductDto,
@@ -47,7 +49,7 @@ export class ProductsService {
     try {
       return await createdProduct.save();
     } catch (error) {
-      this.handleRemoveImage(newImages);
+      this.removeImagesAfterExpection(newImages);
 
       if (error instanceof MongoError) {
         switch (error.code) {
@@ -60,32 +62,32 @@ export class ProductsService {
 
   async delete(id: string) {
     const product = await ProductModel.findOneAndDelete({ _id: id });
-    if (product) {
-      product.images.forEach(image => {
-        this.uploadService.removeImage(image.origin);
-      });
-    }
+    product && this.removeImagesAfterExpection(product.images);
   }
 
   async update(
-    { id, images, ...changes }: UpdateProductDto,
-    options?: QueryFindOneAndUpdateOptions
+    { id, images = [], ...changes }: UpdateProductDto,
+    options: QueryFindOneAndUpdateOptions = {}
   ) {
-    const newImages = await this.handleImages(images, []);
-    try {
-      ProductModel.findOneAndUpdate(
-        { _id: id },
-        // TODO: remove old images
-        { ...changes, images: newImages },
-        {
-          new: true,
-          ...options
-        }
-      );
-    } catch (error) {
-      this.handleRemoveImage(newImages);
-      return Promise.reject(error);
+    const product = await ProductModel.findById(id);
+
+    if (product) {
+      const newImages = await this.handleNewImages(images, product.images);
+
+      try {
+        return ProductModel.findByIdAndUpdate(
+          { _id: id },
+          { ...changes, images: newImages },
+          { ...options, new: true }
+        );
+      } catch (error) {
+        this.removeImagesAfterExpection(newImages);
+
+        return Promise.reject(error);
+      }
     }
+
+    throw new BadRequestException('Product not found');
   }
 
   find(condition?: object, projection = '') {

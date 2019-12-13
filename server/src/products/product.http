@@ -20,7 +20,7 @@ username=admin
 
 
 # @name products
-GET {{baseUrl}}/products HTTP/1.1
+GET {{baseUrl}}/products?pageSize=1000 HTTP/1.1
 Authorization: bearer {{authToken}}
 
 ###

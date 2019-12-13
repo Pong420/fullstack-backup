@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
-import { UploadFile, ResponsiveImage } from '../../upload';
+import { UploadFile } from '../../upload';
 import { Product } from '../model';
 
 export class UpdateProductDto implements Omit<Partial<Product>, 'images'> {
@@ -27,7 +27,7 @@ export class UpdateProductDto implements Omit<Partial<Product>, 'images'> {
   type?: string;
 
   @IsOptional()
-  images?: Array<UploadFile | ResponsiveImage>;
+  images?: Array<UploadFile | string>;
 
   @IsOptional()
   @IsString({ each: true })

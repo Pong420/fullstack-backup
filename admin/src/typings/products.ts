@@ -2,15 +2,14 @@ import {
   Param$Pagination,
   Response$API,
   Response$PaginationAPI,
-  Schema$Timestamp,
-  Schema$ResponsiveImage
+  Schema$Timestamp
 } from '.';
 
 export interface Param$GetProducts extends Param$Pagination {}
 
 export interface Param$CreateProduct
   extends Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp> {
-  images: Array<File | Schema$ResponsiveImage>;
+  images: Array<File | string>;
 }
 
 export interface Param$UpdateProduct
@@ -29,7 +28,7 @@ export interface Schema$Product extends Schema$Timestamp {
   price: number;
   amount: number;
   type: string;
-  images: Schema$ResponsiveImage[];
+  images: string[];
   tags: string[];
   hidden: boolean;
 }

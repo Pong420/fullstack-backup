@@ -1,79 +1,98 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
 import { Button, Dialog } from '@blueprintjs/core';
 import { UploadImage } from '../UploadImage';
-import { Image } from '../Image';
-import { Schema$ResponsiveImage, isResponsesiveImage } from '../../typings';
+import { CloudinaryImage } from '../CloudinaryImage';
 import { useBoolean } from '../../hooks/useBoolean';
 
 interface Props {
-  value?: Array<RxFileToImageState | Schema$ResponsiveImage>;
-  onChange?: (
-    payload: Array<RxFileToImageState | Schema$ResponsiveImage>
-  ) => void;
+  value?: (RxFileToImageState | string)[];
+  onChange?: (payload: Array<RxFileToImageState | string>) => void;
 }
 
 interface GridProps {
-  payload: Schema$ResponsiveImage | string;
-  onRemove: () => void;
+  payload: RxFileToImageState | string;
+  index: number;
+  onRemove: (index: number) => void;
 }
 
 const nil = () => {};
 
 // TODO: drag to upload, paste ?
 
-const Grid = React.memo<GridProps>(({ payload, onRemove }) => {
+const Grid = React.memo<GridProps>(({ index, payload, onRemove }) => {
   const [dialogOpen, setDialogOpen] = useBoolean();
-  const [small, large] =
-    typeof payload === 'string'
-      ? [payload, payload]
-      : [payload.small, payload.large];
+
+  const url = typeof payload === 'string' ? payload : payload.url;
 
   return (
     <div className="grid">
-      <Image className="grid-content" url={small} />
+      <CloudinaryImage className="grid-content" url={url} width={150} />
       <div className="grid-backdrop">
         <Button minimal icon="eye-open" onClick={setDialogOpen.on} />
-        <Button minimal icon="cross" onClick={onRemove} />
+        <Button minimal icon="cross" onClick={() => onRemove(index)} />
       </div>
       <Dialog
         className="preview-image-dialog"
         isOpen={dialogOpen}
         onClose={setDialogOpen.off}
       >
-        <img src={large} alt="" />
+        <CloudinaryImage img url={url} width={1200} />
       </Dialog>
     </div>
   );
 });
 
+// `onChange` passing from `FormItem` will always trigger, so cannot use as deps
 export const ImageUploadGrid = React.memo<Props>(
-  ({ value = [], onChange = nil }) => {
+  ({ value: initialValues = [], onChange = nil }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [values, setValues] = useState<(RxFileToImageState | string)[]>(
+      initialValues
+    );
+
+    const [onUpload, onRemove] = useMemo(
+      () => [
+        (image: RxFileToImageState | null) => {
+          image && setValues(curr => [...curr, image]);
+        },
+        (index: number) => {
+          setValues(curr => [
+            ...curr.slice(0, index),
+            ...curr.slice(index + 1)
+          ]);
+        }
+      ],
+      []
+    );
+
+    useEffect(() => {
+      onChange(values);
+    }, [values]); // eslint-disable-line
 
     return (
       <div className="image-upload-grid">
-        {value.map((payload, index) => {
-          const _payload = isResponsesiveImage(payload) ? payload : payload.url;
+        {values.map((payload, index) => {
+          const _payload = typeof payload === 'string' ? payload : payload.url;
           return (
             <Grid
+              index={index}
+              key={_payload}
               payload={_payload}
-              key={index}
-              onRemove={() =>
-                onChange([...value.slice(0, index), ...value.slice(index + 1)])
-              }
+              onRemove={onRemove}
             />
           );
         })}
         <UploadImage
+          multiple
           className="upload-grid"
           ref={fileInputRef}
-          onChange={image => image && onChange([...value, image])}
+          onUpload={onUpload}
         >
           <Button
             minimal
-            className="grid-content"
             icon="plus"
+            className="grid-content"
             onClick={() => fileInputRef.current!.click()}
           />
         </UploadImage>

@@ -65,6 +65,7 @@
 
 .preview-image-dialog {
   @include dimen(auto);
+  @include padding-x(15px);
   background-color: transparent;
   border-radius: 0;
   padding-bottom: 0;

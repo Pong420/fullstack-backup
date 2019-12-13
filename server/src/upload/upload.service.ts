@@ -9,24 +9,6 @@ import cloudinary, {
 
 type RemoveImagePayload = string | { public_id: string };
 
-export interface ResponsiveImage {
-  small: string;
-  medium: string;
-  large: string;
-  origin: string;
-}
-
-export type ResponsiveImageDimen = Record<
-  Exclude<keyof ResponsiveImage, 'origin'>,
-  number
->;
-
-const defaultImageDimension: ResponsiveImageDimen = {
-  small: 400,
-  medium: 768,
-  large: 1200
-};
-
 @Injectable()
 export class UploadService {
   constructor(private readonly configService: ConfigService) {
@@ -44,30 +26,6 @@ export class UploadService {
     options: TransformationOptions | ConfigAndUrlOptions = {}
   ) {
     return cloudinary.v2.url(public_id, options);
-  }
-
-  getResponsiveImage(
-    public_id: string,
-    {
-      dimen,
-      ...options
-    }: Omit<TransformationOptions | ConfigAndUrlOptions, 'width' | 'height'> & {
-      dimen?: Partial<ResponsiveImageDimen>;
-    } = {}
-  ): ResponsiveImage {
-    const _dimen = { ...defaultImageDimension, ...dimen };
-    const _options = { crop: 'limit', ...options };
-    const entries = Object.entries(_dimen) as [keyof ResponsiveImage, number][];
-    return {
-      origin: this.getImageUrl(public_id, _options),
-      ...entries.reduce(
-        (acc, [key, width]) => {
-          acc[key] = this.getImageUrl(public_id, { ..._options, width });
-          return acc;
-        },
-        {} as ResponsiveImage
-      )
-    };
   }
 
   uploadImage(
@@ -100,7 +58,7 @@ export class UploadService {
         const public_id =
           typeof payload === 'string'
             ? /res.cloudinary.com/.test(payload)
-              ? (payload.match(/[^/\\&\?]+(?=(.\w{3,4}$))/g) || [])[0]
+              ? (payload.match(/[^/\\&\?]+(?=(.\.\w{3,4})$|$)/g) || [])[0]
               : undefined
             : payload.public_id;
 

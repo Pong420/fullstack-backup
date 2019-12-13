@@ -4,8 +4,9 @@ import { IPopoverProps, Menu } from '@blueprintjs/core';
 import { UploadImage, UploadImageProps } from '../../components/UploadImage';
 import { ButtonPopover } from '../../components/ButtonPopover';
 
-interface Props extends UploadImageProps {
+interface Props extends Omit<UploadImageProps, 'onChange'> {
   value?: RxFileToImageState;
+  onChange?: UploadImageProps['onUpload'];
 }
 
 export type OnAvatarChange = (image: RxFileToImageState | null) => void;
@@ -24,7 +25,7 @@ export const EditAvatar = React.memo<Props>(
       <UploadImage
         {...props}
         ref={fileInputRef}
-        onChange={onChange}
+        onUpload={onChange}
         className="edit-avatar"
       >
         {children}
