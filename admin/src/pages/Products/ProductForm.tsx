@@ -3,11 +3,15 @@ import { RxFileToImageState } from 'use-rx-hooks';
 import { InputGroup, TagInput, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
-import { Param$CreateProduct } from '../../typings';
+import {
+  Param$CreateProduct,
+  Schema$ResponsiveImage,
+  isResponsesiveImage
+} from '../../typings';
 import { createForm, FormInstance } from '../../utils/form';
 
 type Fields = Omit<Param$CreateProduct, 'images'> & {
-  images: Array<RxFileToImageState | string>;
+  images: Array<RxFileToImageState | Schema$ResponsiveImage>;
 };
 
 export interface ProductFormProps {
@@ -49,7 +53,7 @@ export function ProductForm({
         onSubmit({
           ...store,
           images: images.map(payload =>
-            typeof payload === 'string' ? payload : payload.file
+            isResponsesiveImage(payload) ? payload : payload.file
           )
         });
       }}

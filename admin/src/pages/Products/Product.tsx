@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Divider, Tag, Intent } from '@blueprintjs/core';
 import { Image } from '../../components/Image';
 import { Skeleton } from '../../components/Skeleton';
+import { EditProduct } from './EditProduct';
 import { productSelector } from '../../store';
 
 interface Props {
@@ -18,9 +19,9 @@ const INTENTS = [
 ];
 
 export const Product = ({ id }: Props) => {
-  const { name, price, type, amount, tags = [], images = [] } = useSelector(
-    productSelector(id || '')
-  );
+  const product = useSelector(productSelector(id || ''));
+  const { name, price, type, amount, tags = [], images = [] } = product;
+
   return (
     <div className="product">
       <Image url={(images[0] || {}).small} />
@@ -50,9 +51,9 @@ export const Product = ({ id }: Props) => {
               </Tag>
             ))}
           </div>
-          {/* <div>
-            <ProductControls id={id} />
-          </div> */}
+          <div>
+            <EditProduct {...product} />
+          </div>
         </div>
       </div>
     </div>

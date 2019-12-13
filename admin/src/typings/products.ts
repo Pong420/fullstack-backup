@@ -10,13 +10,12 @@ export interface Param$GetProducts extends Param$Pagination {}
 
 export interface Param$CreateProduct
   extends Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp> {
-  images: Array<File | string>;
+  images: Array<File | Schema$ResponsiveImage>;
 }
 
 export interface Param$UpdateProduct
   extends Partial<Omit<Param$CreateProduct, 'images'>> {
   id: string;
-  images: Array<File | string>;
 }
 
 export type Response$Product = Response$API<Schema$Product>;

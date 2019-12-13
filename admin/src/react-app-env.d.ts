@@ -1,6 +1,7 @@
 /// <reference types="pong-react-scripts" />
 
 declare module 'validator/*';
+declare module '*.scss';
 
 declare interface Window {
   __REDUX_DEVTOOLS_EXTENSION__: any;

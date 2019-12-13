@@ -20,7 +20,7 @@
       @include dimen(100%, 0);
       content: '';
       display: block;
-      padding-bottom: 56.25%;
+      padding-bottom: $ratio * 100%;
     }
 
     .grid-content {
@@ -65,8 +65,19 @@
 
 .preview-image-dialog {
   @include dimen(auto);
+  background-color: transparent;
   border-radius: 0;
   padding-bottom: 0;
-  // TODO: handle transparent background
-  background-color: transparent;
+  max-width: 1200px;
+
+  img {
+    $color: #eee;
+    @include dimen(100%);
+    background-size: 40px 40px;
+    // prettier-ignore
+    background-image: 
+      linear-gradient(to right, $color 1px, transparent 1px),
+      linear-gradient(to bottom, $color 1px, transparent 1px);
+    background-position: center center;
+  }
 }

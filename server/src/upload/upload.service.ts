@@ -24,7 +24,7 @@ export type ResponsiveImageDimen = Record<
 const defaultImageDimension: ResponsiveImageDimen = {
   small: 400,
   medium: 768,
-  large: 1000
+  large: 1200
 };
 
 @Injectable()

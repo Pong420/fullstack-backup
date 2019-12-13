@@ -1,16 +1,18 @@
 import React, { CSSProperties } from 'react';
+import { ratio as DefaultRatio } from '../scss/_variables.scss';
 
 interface Props {
   url?: string;
   ratio?: number;
   size?: CSSProperties['backgroundSize'];
+  className?: string;
 }
 
 export const Image = React.memo<Props>(
-  ({ url, ratio = 617 / 925, size = 'cover' }) => {
+  ({ url, ratio = DefaultRatio, className = '', size = 'cover' }) => {
     return (
       <div
-        className="image"
+        className={`large ${className}`.trim()}
         style={{
           backgroundColor: '#eee',
           backgroundImage: `url(${url})`,

@@ -4,6 +4,7 @@ export * from './auth';
 export * from './user';
 export * from './products';
 export * from './utils';
+export * from './guard';
 
 export interface APIError extends Omit<AxiosError, 'response'> {
   response?: AxiosResponse<{
