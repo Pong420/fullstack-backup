@@ -1,22 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, Tag, Intent } from '@blueprintjs/core';
+import { Divider, Tag } from '@blueprintjs/core';
 import { CloudinaryImage } from '../../components/CloudinaryImage';
 import { Skeleton } from '../../components/Skeleton';
 import { EditProduct } from './EditProduct';
 import { productSelector } from '../../store';
+import { getTagProps } from '../../utils/getTagProps';
 
 interface Props {
   id: string | null;
 }
-
-const INTENTS = [
-  Intent.NONE,
-  Intent.PRIMARY,
-  Intent.SUCCESS,
-  Intent.DANGER,
-  Intent.WARNING
-];
 
 export const Product = ({ id }: Props) => {
   const product = useSelector(productSelector(id || ''));
@@ -41,11 +34,10 @@ export const Product = ({ id }: Props) => {
           <div className="tags">
             {tags.map((tag, index) => (
               <Tag
-                minimal
+                {...getTagProps(tag, index)}
                 interactive
                 key={index}
                 icon="tag"
-                intent={INTENTS[index % INTENTS.length]}
               >
                 {tag}
               </Tag>

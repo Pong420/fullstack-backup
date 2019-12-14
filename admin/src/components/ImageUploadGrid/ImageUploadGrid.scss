@@ -1,14 +1,19 @@
 .image-upload-grid {
-  @include flex($wrap: wrap);
+  .image-grid-container {
+    @include flex($wrap: wrap);
 
-  > * {
-    $width: 32%;
-    $margin: (100% - $width * 3)/ 2;
-    width: $width;
-    margin-bottom: $margin;
+    > * {
+      $width: 32%;
+      $margin: (100% - $width * 3)/ 2;
+      width: $width;
 
-    &:nth-child(3n + 2) {
-      @include margin-x($margin);
+      &:nth-child(3n + 2) {
+        @include margin-x($margin);
+      }
+
+      &:nth-child(n + 4) {
+        margin-top: $margin;
+      }
     }
   }
 

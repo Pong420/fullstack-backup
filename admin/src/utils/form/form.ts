@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
@@ -55,7 +55,7 @@ interface BasicFormItemProps<T extends {}, K extends keyof T = keyof T>
     | ((value: T) => Array<Validator | null>);
   validateTrigger?: string | string[];
   onReset?(): void;
-  label?: string;
+  label?: ReactNode;
   noStyle?: boolean;
 }
 

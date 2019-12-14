@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, KeyboardEvent } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
 import { InputGroup, TagInput, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { Param$CreateProduct } from '../../typings';
+import { getTagProps } from '../../utils/getTagProps';
 import { createForm, FormInstance } from '../../utils/form';
 
 type Fields = Omit<Param$CreateProduct, 'images'> & {
@@ -31,6 +32,9 @@ const defaultValues: Fields = {
   description: '',
   hidden: false
 };
+
+const preventTriggerSubmit = (event: KeyboardEvent) =>
+  event.keyCode === 13 && event.preventDefault();
 
 export function ProductForm({
   form: _form,
@@ -79,7 +83,7 @@ export function ProductForm({
       </FormItem>
 
       <FormItem name="tags" label="Tags" valuePropName="values">
-        <TagInput />
+        <TagInput onKeyDown={preventTriggerSubmit} tagProps={getTagProps} />
       </FormItem>
 
       <FormItem name="description" label="Description">
@@ -90,10 +94,7 @@ export function ProductForm({
         <Checkbox>Hidden</Checkbox>
       </FormItem>
 
-      {/* TODO: TBC */}
-      {/* Do not use input or button element with type `submit` */}
-      {/* Because this may trigger submit while adding tags */}
-      {/* <button type="submit" hidden></button> */}
+      <button type="submit" hidden></button>
 
       {children}
     </Form>
