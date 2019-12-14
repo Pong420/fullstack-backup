@@ -5,7 +5,7 @@ import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { Param$CreateProduct } from '../../typings';
 import { getTagProps } from '../../utils/getTagProps';
-import { createForm, FormInstance } from '../../utils/form';
+import { createForm, FormInstance, validators } from '../../utils/form';
 
 type Fields = Omit<Param$CreateProduct, 'images'> & {
   images: Array<RxFileToImageState | string>;
@@ -61,20 +61,32 @@ export function ProductForm({
       <FormItem
         name="name"
         label="Product Name"
-        // validators={[validators.required('Please input product name')]}
+        validators={[validators.required('Product name cannot be empty')]}
       >
         <InputGroup />
       </FormItem>
 
-      <FormItem name="price" label="Price">
-        <NumericInput fill min={0} leftIcon="dollar" />
-      </FormItem>
-
-      <FormItem name="amount" label="Amount">
+      <FormItem
+        name="price"
+        label="Price"
+        validators={[validators.min(1, 'Pice cannot smaller then 1', true)]}
+      >
         <NumericInput fill min={0} />
       </FormItem>
 
-      <FormItem name="type" label="Type">
+      <FormItem
+        name="amount"
+        label="Amount"
+        validators={[validators.min(1, 'Amount cannot smaller then 1', true)]}
+      >
+        <NumericInput fill min={0} />
+      </FormItem>
+
+      <FormItem
+        name="type"
+        label="Type"
+        validators={[validators.required('Product name cannot be empty')]}
+      >
         <InputGroup />
       </FormItem>
 
@@ -90,8 +102,8 @@ export function ProductForm({
         <TextArea fill rows={4} />
       </FormItem>
 
-      <FormItem name="hidden" valuePropName="checked">
-        <Checkbox>Hidden</Checkbox>
+      <FormItem className="hidden" name="hidden" valuePropName="checked">
+        <Checkbox alignIndicator="right" children="Hidden" />
       </FormItem>
 
       <button type="submit" hidden></button>

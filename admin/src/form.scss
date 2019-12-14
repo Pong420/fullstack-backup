@@ -19,12 +19,14 @@ $help-line-height: 1em;
   }
 }
 
+@function border-shadow($alpha, $color: $black, $size: 1px) {
+  @return 0 0 0 $size rgba($color, $alpha);
+}
+
 .rc-form-item {
   &.rc-form-item-error {
     .#{$ns}-input {
-      box-shadow: 0 0 0 0 rgba(219, 55, 55, 0), 0 0 0 0 rgba(219, 55, 55, 0),
-        inset 0 0 0 1px #db3737, inset 0 0 0 1px rgba(16, 22, 26, 0.15),
-        inset 0 1px 1px rgba(16, 22, 26, 0.2) !important;
+      @include pt-input-intent($pt-intent-danger);
     }
   }
 }

@@ -1,6 +1,13 @@
 .product-form {
-  .rc-form-item-label {
+  .rc-form-item-label,
+  .#{$ns}-checkbox {
     font-weight: bold;
+  }
+
+  .rc-form-item {
+    &.hidden {
+      flex-direction: row;
+    }
   }
 }
 

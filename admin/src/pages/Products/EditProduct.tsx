@@ -7,6 +7,9 @@ import { useProductActions } from '../../store';
 import { updateProduct as updateProductAPI } from '../../services';
 import { useBoolean } from '../../hooks/useBoolean';
 
+const title = 'Edit Product';
+const icon = 'edit';
+
 export function EditProduct({ id, ...product }: Partial<Schema$Product>) {
   const [isOpen, { on, off }] = useBoolean();
   const { updateProduct } = useProductActions();
@@ -24,8 +27,10 @@ export function EditProduct({ id, ...product }: Partial<Schema$Product>) {
 
   return (
     <>
-      <ButtonPopover minimal icon="edit" content="Edit Product" onClick={on} />
+      <ButtonPopover minimal icon={icon} content={title} onClick={on} />
       <ProductDialog
+        icon={icon}
+        title={title}
         isOpen={isOpen}
         onClose={off}
         onSubmit={run}

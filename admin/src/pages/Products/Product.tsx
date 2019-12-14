@@ -35,12 +35,7 @@ export const Product = ({ id }: Props) => {
         <div className="row">
           <div className="tags">
             {tags.map((tag, index) => (
-              <Tag
-                {...getTagProps(tag, index)}
-                interactive
-                key={index}
-                icon="tag"
-              >
+              <Tag {...getTagProps(tag, index)} interactive key={index}>
                 {tag}
               </Tag>
             ))}

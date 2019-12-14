@@ -57,6 +57,7 @@ interface BasicFormItemProps<T extends {}, K extends keyof T = keyof T>
   onReset?(): void;
   label?: ReactNode;
   noStyle?: boolean;
+  className?: string;
 }
 
 type FormItemPropsDeps<T extends {}, K extends keyof T = keyof T> = {
@@ -126,6 +127,7 @@ export function createForm<T extends {}>({
       noStyle,
       label,
       deps = [],
+      className = '',
       ...props
     } = {
       ...defaultProps,
@@ -178,6 +180,7 @@ export function createForm<T extends {}>({
           'div',
           {
             className: [
+              className,
               ClassName.item,
               errors && !!errors.length && ClassName.error,
               touched && ClassName.touched,
