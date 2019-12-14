@@ -5,11 +5,10 @@ import React, {
   DragEvent,
   ChangeEvent,
   ReactNode,
-  HTMLAttributes,
-  useState
+  HTMLAttributes
 } from 'react';
 import { fromEvent, merge, Subject } from 'rxjs';
-import { tap, map, delay, startWith } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import {
   fromDropImageEvent,
   fromChangeEvent,

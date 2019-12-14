@@ -4,6 +4,8 @@ import { Divider, Tag } from '@blueprintjs/core';
 import { CloudinaryImage } from '../../components/CloudinaryImage';
 import { Skeleton } from '../../components/Skeleton';
 import { EditProduct } from './EditProduct';
+import { DeleteProduct } from './DeleteProduct';
+import { HideProduct } from './HideProduct';
 import { productSelector } from '../../store';
 import { getTagProps } from '../../utils/getTagProps';
 
@@ -45,6 +47,8 @@ export const Product = ({ id }: Props) => {
           </div>
           <div>
             <EditProduct {...product} />
+            <DeleteProduct id={id || undefined} name={name} />
+            <HideProduct id={id || undefined} hidden={product.hidden} />
           </div>
         </div>
       </div>

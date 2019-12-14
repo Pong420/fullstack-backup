@@ -66,13 +66,15 @@ export class ProductsService {
   }
 
   async update(
-    { id, images = [], ...changes }: UpdateProductDto,
+    { id, images, ...changes }: UpdateProductDto,
     options: QueryFindOneAndUpdateOptions = {}
   ) {
     const product = await ProductModel.findById(id);
 
     if (product) {
-      const newImages = await this.handleNewImages(images, product.images);
+      const newImages = images
+        ? await this.handleNewImages(images, product.images)
+        : product.images;
 
       try {
         return ProductModel.findByIdAndUpdate(

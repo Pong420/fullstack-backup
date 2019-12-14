@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  DragEvent,
-  ChangeEvent
-} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
 import { Button, Dialog } from '@blueprintjs/core';
 import { UploadImage } from '../UploadImage';
