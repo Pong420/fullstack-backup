@@ -11,6 +11,6 @@ export const productSelector = (id: string) => (
   return id ? state.products.byIds[id] : {};
 };
 
-export const productTypesSelector = (state: RootState) => state.products.types;
-
-export const productTagsSelector = (state: RootState) => state.products.tags;
+export const productSuggestSelector = (type: 'types' | 'tags') => (
+  state: RootState
+) => state.products[type];

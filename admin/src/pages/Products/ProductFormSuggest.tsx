@@ -1,5 +1,6 @@
-import React, { useMemo, KeyboardEvent, useCallback } from 'react';
+import React, { useCallback, KeyboardEvent } from 'react';
 import { useSelector } from 'react-redux';
+import { useRxAsync } from 'use-rx-async';
 import {
   Suggest,
   MultiSelect,
@@ -10,14 +11,12 @@ import {
 } from '@blueprintjs/select';
 import { MenuItem, IPopoverProps } from '@blueprintjs/core';
 import {
-  productTypesSelector,
-  productTagsSelector,
+  productSuggestSelector,
   useUpdateProductSuggestion
 } from '../../store';
 import { getSuggestion } from '../../services';
 import { escapeRegex } from '../../utils/escapeRegex';
 import { getTagProps } from '../../utils/getTagProps';
-import useRxAsync from 'use-rx-async';
 
 const ProductTypesSuggest = Suggest.ofType<string>();
 const ProductTagsSuggest = MultiSelect.ofType<string>();
@@ -89,33 +88,34 @@ const tagProps: Omit<
   tagRenderer: t => t
 };
 
+function useSuggestion(type: 'types' | 'tags') {
+  const { values, loaded } = useSelector(productSuggestSelector(type));
+  const { updateSuggestion } = useUpdateProductSuggestion();
+
+  const getTypes = useCallback(
+    () =>
+      getSuggestion(type).then(res =>
+        updateSuggestion({ type, values: res.data.data })
+      ),
+    [type, updateSuggestion]
+  );
+
+  useRxAsync(getTypes, { defer: loaded });
+
+  return { values, loaded };
+}
+
 export function ProductTypesInput({
   value: type,
   onChange = nil
 }: ProductTypesSuggestProps) {
-  const { values, loaded } = useSelector(productTypesSelector);
-  const { updateSuggestion } = useUpdateProductSuggestion();
-
-  const items = useMemo(
-    () => (!type || values.includes(type) ? values : [type, ...values]),
-    [type, values]
-  );
-
-  const getTypes = useCallback(
-    () =>
-      getSuggestion('types').then(res =>
-        updateSuggestion({ type: 'types', values: res.data.data })
-      ),
-    [updateSuggestion]
-  );
-
-  useRxAsync(getTypes, { defer: loaded });
+  const { values, loaded } = useSuggestion('types');
 
   return (
     <ProductTypesSuggest
       {...typesProps}
       className="product-types-input"
-      items={items}
+      items={values}
       key={String(loaded)}
       defaultSelectedItem={type}
       onItemSelect={onChange}
@@ -128,17 +128,7 @@ export function ProductTagsInput({
   value: selectedTags,
   onChange = nil
 }: ProductTagsSuggestProps) {
-  const { values, loaded } = useSelector(productTagsSelector);
-  const { updateSuggestion } = useUpdateProductSuggestion();
-  const getTags = useCallback(
-    () =>
-      getSuggestion('tags').then(res =>
-        updateSuggestion({ type: 'tags', values: res.data.data })
-      ),
-    [updateSuggestion]
-  );
-
-  useRxAsync(getTags, { defer: loaded });
+  const { values, loaded } = useSuggestion('tags');
 
   return (
     <ProductTagsSuggest
