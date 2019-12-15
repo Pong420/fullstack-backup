@@ -8,7 +8,7 @@ import { getProducts } from '../../services';
 import { useReduxPagination } from '../../hooks/useReduxPagination';
 
 export function Products() {
-  const { paginateProduct, setPageProduct } = useProductActions();
+  const { paginateProduct } = useProductActions();
 
   const [{ ids }, paginationProps] = useReduxPagination({
     fn: getProducts,
@@ -32,7 +32,7 @@ export function Products() {
           <Product id={id} key={id || Math.random()}></Product>
         ))}
       </div>
-      <Pagination {...paginationProps} onPageChange={setPageProduct} />
+      <Pagination {...paginationProps} />
     </Layout>
   );
 }

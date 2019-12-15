@@ -6,8 +6,9 @@ import { Skeleton } from '../../components/Skeleton';
 import { EditProduct } from './EditProduct';
 import { DeleteProduct } from './DeleteProduct';
 import { HideProduct } from './HideProduct';
-import { productSelector, useSearchProduct } from '../../store';
+import { productSelector } from '../../store';
 import { getTagProps } from '../../utils/getTagProps';
+import { useQuery } from '../../hooks/useQuery';
 
 interface Props {
   id: string | null;
@@ -16,7 +17,7 @@ interface Props {
 export const Product = React.memo<Props>(({ id }) => {
   const product = useSelector(productSelector(id || ''));
   const { name, price, type, amount, tags = [], images = [] } = product;
-  const { search } = useSearchProduct();
+  const [, setQuery] = useQuery();
 
   return (
     <div className="product">
@@ -32,7 +33,9 @@ export const Product = React.memo<Props>(({ id }) => {
             {type && (
               <span
                 className="searchable"
-                onClick={() => search(`type:${type}`)}
+                onClick={() =>
+                  setQuery({ pageNo: undefined, search: `type:${type}` })
+                }
               >
                 {type}
               </span>
@@ -54,7 +57,9 @@ export const Product = React.memo<Props>(({ id }) => {
                 {...getTagProps(tag, index)}
                 interactive
                 key={index}
-                onClick={() => search(`tag:${tag}`)}
+                onClick={() =>
+                  setQuery({ pageNo: undefined, search: `tag:${tag}` })
+                }
               >
                 {tag}
               </Tag>

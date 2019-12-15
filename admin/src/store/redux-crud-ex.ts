@@ -9,7 +9,7 @@ import {
   paginationSelector,
   PaginationSelectorReturnType
 } from '@pong420/redux-crud';
-import { matchPath } from 'react-router-dom';
+import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router';
 import { AllowedNames } from '../typings';
 import qs from 'qs';
 
@@ -20,7 +20,7 @@ export interface CRUDStateEx<
   search?: string;
 }
 
-interface Search {
+export interface Search {
   type: string;
   sub: 'SEARCH';
   payload: string;
@@ -42,7 +42,6 @@ export interface CreateCRUDReducerOptionsEx<
 export type PaginationAndSearchReturnType<
   S extends CRUDStateEx<any, any>
 > = PaginationSelectorReturnType<S> & { search?: string };
-
 export function getCRUDActionCreatorEx<
   Types extends Record<keyof Actions, string>,
   I extends Record<PropertyKey, any>,
@@ -61,6 +60,11 @@ export function getCRUDActionCreatorEx<
   };
 }
 
+function parsePageNo(payload: any) {
+  const pageNo = Number(payload);
+  return isNaN(pageNo) ? 1 : pageNo;
+}
+
 export function createCRUDReducerEx<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>,
@@ -68,31 +72,48 @@ export function createCRUDReducerEx<
 >({ path, ...props }: CreateCRUDReducerOptionsEx<I, K, A>) {
   const { crudInitialState, crudReducer } = createCRUDReducer<I, K, A>(props);
 
-  const match = !!matchPath(window.location.pathname, { path, exact: true });
-  const params: Record<string, string | undefined> = match
-    ? qs.parse(window.location.search.slice(1))
-    : {};
-
-  let pageNo = Number(params.pageNo);
-  pageNo = isNaN(pageNo) ? 1 : pageNo;
-
   const crudInitialStateEx: CRUDStateEx<I, K> = {
-    ...crudInitialState,
-    pageNo,
-    search: params.search
+    ...crudInitialState
   };
+
+  function isLocationChangeAction(action: any): action is LocationChangeAction {
+    return action.type === LOCATION_CHANGE;
+  }
 
   function crudReducerEx(
     state = crudInitialStateEx,
-    action: CRUDActionsEx<I, K>
+    action: CRUDActionsEx<I, K> | LocationChangeAction
   ): CRUDStateEx<I, K> {
+    // TODO: handle by selector
+    if (isLocationChangeAction(action)) {
+      return (() => {
+        const { location } = action.payload;
+        const params = qs.parse(location.search.slice(1));
+        const leave = location.pathname !== path;
+        const searchChanged = params.search !== state.search;
+        return {
+          ...state,
+          ...(leave || searchChanged
+            ? {
+                ...crudInitialStateEx,
+                pageNo: 1,
+                search: leave ? undefined : params.search
+              }
+            : {
+                pageNo: parsePageNo(params.pageNo),
+                search: params.search
+              })
+        };
+      })();
+    }
+
     if (props.actions && props.actions[action.sub] !== action.type) {
       return state;
     }
 
     switch (action.sub) {
       case 'SEARCH':
-        return { ...crudInitialState, pageNo: 1, search: action.payload };
+        return { ...crudInitialStateEx, pageNo: 1, search: action.payload };
       default:
         return crudReducer(state, action);
     }
@@ -109,5 +130,4 @@ export function paginationAndSearchSelector<
     ...paginationSelector<S>(reset as any)
   };
 }
-
 export * from '@pong420/redux-crud';

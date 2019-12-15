@@ -17,11 +17,13 @@ export const NotFound = React.memo<NotFoundProps>(({ onClear }) => {
         </>
       }
       action={
-        onClear && (
-          <Button intent="primary" onClick={onClear}>
-            Clear Search
-          </Button>
-        )
+        <Button
+          intent="primary"
+          onClick={onClear}
+          style={{ visibility: onClear ? 'visible' : 'hidden' }}
+        >
+          Clear Search
+        </Button>
       }
     />
   );

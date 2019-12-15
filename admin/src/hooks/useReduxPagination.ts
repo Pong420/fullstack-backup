@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { AxiosPromise } from 'axios';
@@ -14,6 +14,7 @@ import {
   PaginationAndSearchReturnType,
   CRUDStateEx
 } from '../store';
+import { PaginationProps } from '../components/Pagination';
 
 export type AsyncFn<T> = (
   params: Param$Pagination & Param$Search
@@ -55,6 +56,11 @@ export function useReduxPagination<
 
   const [, setQuery] = useQuery(useQueryTransform);
 
+  const clearSearch = useCallback(
+    () => setQuery({ pageNo: undefined, search: undefined }),
+    [setQuery]
+  );
+
   const request = useCallback(
     () =>
       fn({ pageNo, pageSize, search }).then(res => {
@@ -72,16 +78,15 @@ export function useReduxPagination<
 
   const { loading } = useRxAsync(request, { defer });
 
-  useEffect(() => {
-    setQuery({ pageNo, search });
-  }, [pageNo, search, setQuery]);
+  const paginationProps: PaginationProps = {
+    total,
+    pageNo,
+    size: pageSize,
+    onPageChange: pageNo => setQuery({ pageNo })
+  };
 
   return [
-    { ids, data, search, loading },
-    {
-      total,
-      pageNo,
-      size: pageSize
-    }
+    { ids, data, search, loading, clearSearch },
+    paginationProps
   ] as const;
 }
