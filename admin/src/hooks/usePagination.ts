@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { AxiosPromise } from 'axios';
 import { useRxAsync, RxAsyncOptions } from 'use-rx-hooks';
-import { useQuery } from './useQuery';
+import { useSearchParam } from './useSearchParam';
 import { Param$Pagination, Response$PaginationAPI } from '../typings';
 
 export type AsyncFn<T> = (
@@ -22,7 +22,9 @@ export interface UsePaginationOptions<T>
   onSuccess?: (payload: PaginationPayload<T>) => void;
 }
 
-const useQueryTransform = ({ pageNo }: Record<string, string | undefined>) => ({
+const useSearchParamTransform = ({
+  pageNo
+}: Record<string, string | undefined>) => ({
   pageNo: pageNo ? Number(pageNo) : undefined
 });
 
@@ -33,7 +35,9 @@ export function usePagination<T>({
   onSuccess,
   ...options
 }: UsePaginationOptions<T>) {
-  const [{ pageNo = 1 }, setQuery] = useQuery(useQueryTransform);
+  const [{ pageNo = 1 }, setSearchParam] = useSearchParam(
+    useSearchParamTransform
+  );
   const [total, setTotal] = useState(0);
 
   const request = useCallback(
@@ -57,16 +61,17 @@ export function usePagination<T>({
     ...options
   });
 
-  const onPageChange = useCallback((pageNo: number) => setQuery({ pageNo }), [
-    setQuery
-  ]);
+  const onPageChange = useCallback(
+    (pageNo: number) => setSearchParam({ pageNo }),
+    [setSearchParam]
+  );
 
   useEffect(() => {
-    controledPageNo && setQuery({ pageNo: controledPageNo });
-  }, [setQuery, controledPageNo]);
+    controledPageNo && setSearchParam({ pageNo: controledPageNo });
+  }, [setSearchParam, controledPageNo]);
 
   return [
-    { ...state, setQuery },
+    { ...state, setSearchParam },
     {
       total,
       pageNo,

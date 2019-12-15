@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { AxiosPromise } from 'axios';
-import { useQuery } from './useQuery';
+import { useSearchParam } from './useSearchParam';
 import {
   Param$Search,
   Param$Pagination,
@@ -37,7 +37,7 @@ export interface ReduxPaginationProps<
   selector: (state: RootState) => PaginationAndSearchReturnType<S>;
 }
 
-const useQueryTransform = ({
+const useSearchParamTransform = ({
   pageNo,
   search
 }: Record<string, string | undefined>) => ({
@@ -54,11 +54,11 @@ export function useReduxPagination<
     selector
   );
 
-  const [, setQuery] = useQuery(useQueryTransform);
+  const [, setSearchParam] = useSearchParam(useSearchParamTransform);
 
   const clearSearch = useCallback(
-    () => setQuery({ pageNo: undefined, search: undefined }),
-    [setQuery]
+    () => setSearchParam({ pageNo: undefined, search: undefined }),
+    [setSearchParam]
   );
 
   const request = useCallback(
@@ -82,7 +82,7 @@ export function useReduxPagination<
     total,
     pageNo,
     size: pageSize,
-    onPageChange: pageNo => setQuery({ pageNo })
+    onPageChange: pageNo => setSearchParam({ pageNo })
   };
 
   return [

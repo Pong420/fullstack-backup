@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { FocusStyleManager } from '@blueprintjs/core';
 import { PATHS } from './constants';
-import { QueryProvider } from './hooks/useQuery';
+import { SearchParamProvider } from './hooks/useSearchParam';
 import configureStore, { history, logout } from './store';
 import * as serviceWorker from './serviceWorker';
 
@@ -37,7 +37,7 @@ function render() {
   return ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <QueryProvider>
+        <SearchParamProvider>
           <Suspense fallback={null}>
             <Switch>
               <Route path={PATHS.LOGIN} component={Login} />
@@ -52,7 +52,7 @@ function render() {
               <Route path="" component={App} />
             </Switch>
           </Suspense>
-        </QueryProvider>
+        </SearchParamProvider>
       </ConnectedRouter>
     </Provider>,
     document.getElementById('root')

@@ -8,7 +8,7 @@ import { DeleteProduct } from './DeleteProduct';
 import { HideProduct } from './HideProduct';
 import { productSelector } from '../../store';
 import { getTagProps } from '../../utils/getTagProps';
-import { useQuery } from '../../hooks/useQuery';
+import { useSearchParam } from '../../hooks/useSearchParam';
 
 interface Props {
   id: string | null;
@@ -17,7 +17,7 @@ interface Props {
 export const Product = React.memo<Props>(({ id }) => {
   const product = useSelector(productSelector(id || ''));
   const { name, price, type, amount, tags = [], images = [] } = product;
-  const [, setQuery] = useQuery();
+  const [, setSearchParam] = useSearchParam();
 
   return (
     <div className="product">
@@ -34,7 +34,7 @@ export const Product = React.memo<Props>(({ id }) => {
               <span
                 className="searchable"
                 onClick={() =>
-                  setQuery({ pageNo: undefined, search: `type:${type}` })
+                  setSearchParam({ pageNo: undefined, search: `type:${type}` })
                 }
               >
                 {type}
@@ -58,7 +58,7 @@ export const Product = React.memo<Props>(({ id }) => {
                 interactive
                 key={index}
                 onClick={() =>
-                  setQuery({ pageNo: undefined, search: `tag:${tag}` })
+                  setSearchParam({ pageNo: undefined, search: `tag:${tag}` })
                 }
               >
                 {tag}

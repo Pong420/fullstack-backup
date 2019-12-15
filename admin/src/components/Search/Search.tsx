@@ -3,7 +3,7 @@ import { Overlay, Icon, Classes } from '@blueprintjs/core';
 import { ButtonPopover } from '../ButtonPopover';
 import { useBoolean } from '../../hooks/useBoolean';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
-import { useQuery } from '../../hooks/useQuery';
+import { useSearchParam } from '../../hooks/useSearchParam';
 
 export interface SearchProps {
   suffix?: string;
@@ -14,18 +14,18 @@ const hotKey = 'p';
 export const Search = React.memo(({ suffix = '' }: SearchProps) => {
   const [isOpen, { on, off }] = useBoolean();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [{ search }, setQuery] = useQuery();
+  const [{ search }, setSearchParam] = useSearchParam();
 
-  const callSearch = useCallback(() => {
+  const setSearch = useCallback(() => {
     off();
-    setQuery({ pageNo: undefined, search: inputRef.current!.value });
-  }, [off, setQuery]);
+    setSearchParam({ pageNo: undefined, search: inputRef.current!.value });
+  }, [off, setSearchParam]);
 
   const open = useCallback(() => {
     !document.body.classList.contains(Classes.OVERLAY_OPEN) && on();
   }, [on]);
 
-  useMouseTrap(isOpen ? 'enter' : '', callSearch);
+  useMouseTrap(isOpen ? 'enter' : '', setSearch);
   useMouseTrap(isOpen ? '' : `shift+${hotKey}`, open);
 
   return (
@@ -47,7 +47,7 @@ export const Search = React.memo(({ suffix = '' }: SearchProps) => {
           minimal
           icon="delete"
           content="Clear Search"
-          onClick={() => setQuery({ search: '' })}
+          onClick={() => setSearchParam({ search: '' })}
         />
       )}
       <Overlay

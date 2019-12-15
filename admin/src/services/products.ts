@@ -9,14 +9,14 @@ import {
 } from '../typings';
 import { createFormData } from './createFormData';
 
-function handleSpecialSearch(query: string, reg: RegExp, key: string) {
-  return reg.test(query) ? { [key]: query.replace(reg, '') } : undefined;
+function handleSpecificSearch(search: string, reg: RegExp, key: string) {
+  return reg.test(search) ? { [key]: search.replace(reg, '') } : undefined;
 }
 
 export const getProducts = ({ search, ...params }: Param$GetProducts = {}) => {
   let searchParams = search
-    ? handleSpecialSearch(search, /^tag:/, 'tag') ||
-      handleSpecialSearch(search, /^type:/, 'type') || { search }
+    ? handleSpecificSearch(search, /^tag:/, 'tag') ||
+      handleSpecificSearch(search, /^type:/, 'type') || { search }
     : {};
 
   return api.get<Response$GetProducts>('/products', {
