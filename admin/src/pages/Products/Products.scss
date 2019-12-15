@@ -11,6 +11,12 @@
   }
 }
 
+.product-suggest-popover {
+  .#{$ns}-menu {
+    width: 460px;
+  }
+}
+
 .products {
   .layout-content {
     @include flex(normal, space-between, column);
@@ -81,8 +87,13 @@
       }
     }
 
+    .product-controls {
+      float: right;
+    }
+
     .tags {
-      @include flex($wrap: wrap);
+      // @include flex($wrap: wrap);
+      display: inline;
       padding-top: 5px;
 
       .#{$ns}-tag {

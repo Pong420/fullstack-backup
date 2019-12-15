@@ -10,3 +10,7 @@ export const productSelector = (id: string) => (
 ): Partial<Schema$Product> => {
   return id ? state.products.byIds[id] : {};
 };
+
+export const productTypesSelector = (state: RootState) => state.products.types;
+
+export const productTagsSelector = (state: RootState) => state.products.tags;

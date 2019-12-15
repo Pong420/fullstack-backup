@@ -4,7 +4,8 @@ import {
   Param$CreateProduct,
   Param$UpdateProduct,
   Response$GetProducts,
-  Response$Product
+  Response$Product,
+  Response$GetSuggestion
 } from '../typings';
 import { createFormData } from './createFormData';
 
@@ -24,3 +25,6 @@ export const updateProduct = (params: Param$UpdateProduct) => {
 export const deleteProduct = ({ id }: { id: string }) => {
   return api.delete(`/products/${id}`);
 };
+
+export const getSuggestion = (type?: 'types' | 'tags') =>
+  api.get<Response$GetSuggestion>(`/products/${type}`);

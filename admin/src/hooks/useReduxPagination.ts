@@ -9,7 +9,11 @@ import {
   Response$PaginationAPI,
   AllowedNames
 } from '../typings';
-import { RootState, PaginationAndSearchReturnType } from '../store';
+import {
+  RootState,
+  PaginationAndSearchReturnType,
+  CRUDStateEx
+} from '../store';
 
 export type AsyncFn<T> = (
   params: Param$Pagination & Param$Search
@@ -24,11 +28,12 @@ interface PaginationPayload<T> {
 
 export interface ReduxPaginationProps<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
+  K extends AllowedNames<I, PropertyKey>,
+  S extends CRUDStateEx<I, K>
 > {
   fn: AsyncFn<I>;
   onSuccess?: (payload: PaginationPayload<I>) => void;
-  selector: (state: RootState) => PaginationAndSearchReturnType<I, K>;
+  selector: (state: RootState) => PaginationAndSearchReturnType<S>;
 }
 
 const useQueryTransform = ({
@@ -41,8 +46,9 @@ const useQueryTransform = ({
 
 export function useReduxPagination<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
->({ fn, selector, onSuccess }: ReduxPaginationProps<I, K>) {
+  K extends AllowedNames<I, PropertyKey>,
+  S extends CRUDStateEx<I, K>
+>({ fn, selector, onSuccess }: ReduxPaginationProps<I, K, S>) {
   const { data, ids, total, pageNo, defer, pageSize, search } = useSelector(
     selector
   );

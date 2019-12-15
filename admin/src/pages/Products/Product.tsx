@@ -32,18 +32,18 @@ export const Product = ({ id }: Props) => {
             {amount && `Amount: ${amount}`}
           </Skeleton>
         </div>
-        <div className="row">
+        <div>
+          <div className="product-controls">
+            <EditProduct {...product} />
+            <DeleteProduct id={id || undefined} name={name} />
+            <HideProduct id={id || undefined} hidden={product.hidden} />
+          </div>
           <div className="tags">
             {tags.map((tag, index) => (
               <Tag {...getTagProps(tag, index)} interactive key={index}>
                 {tag}
               </Tag>
             ))}
-          </div>
-          <div>
-            <EditProduct {...product} />
-            <DeleteProduct id={id || undefined} name={name} />
-            <HideProduct id={id || undefined} hidden={product.hidden} />
           </div>
         </div>
       </div>

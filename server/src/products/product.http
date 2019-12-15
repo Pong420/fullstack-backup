@@ -93,3 +93,15 @@ Clothes
 < end
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ###
+
+# @name types
+GET {{baseUrl}}/products/types HTTP/1.1
+Authorization: bearer {{authToken}}
+
+###
+
+# @name tags
+GET {{baseUrl}}/products/tags HTTP/1.1
+Authorization: bearer {{authToken}}
+
+###

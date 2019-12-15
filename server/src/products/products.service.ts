@@ -106,4 +106,27 @@ export class ProductsService {
       ...options
     });
   }
+
+  types() {
+    return ProductModel.aggregate()
+      .allowDiskUse(true)
+      .group({ _id: '$type', total: { $sum: 1 } })
+      .project({
+        _id: 0,
+        value: '$_id',
+        total: 1
+      });
+  }
+
+  tags() {
+    return ProductModel.aggregate()
+      .allowDiskUse(true)
+      .unwind('$tags')
+      .group({ _id: '$tags', total: { $sum: 1 } })
+      .project({
+        _id: 0,
+        value: '$_id',
+        total: 1
+      });
+  }
 }

@@ -53,4 +53,14 @@ export class ProductsController {
   ) {
     return this.productsService.update({ ...updateProductDto, id });
   }
+
+  @Get('/types')
+  async getTypes() {
+    return this.productsService.types();
+  }
+
+  @Get('/tags')
+  async getTags() {
+    return this.productsService.tags();
+  }
 }

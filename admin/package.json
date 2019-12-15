@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.2",
-    "@pong420/redux-crud": "^1.0.7",
+    "@blueprintjs/select": "^3.11.2",
+    "@pong420/redux-crud": "^1.0.9",
     "axios": "0.18.1",
     "cloudinary-core": "^2.8.0",
     "connected-react-router": "^6.5.2",

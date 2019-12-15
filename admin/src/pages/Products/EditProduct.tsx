@@ -14,9 +14,9 @@ export function EditProduct({ id, ...product }: Partial<Schema$Product>) {
   const [isOpen, { on, off }] = useBoolean();
   const { updateProduct } = useProductActions();
   const request = useCallback(
-    async (param: Omit<Param$UpdateProduct, 'id'>) => {
+    async (params: Omit<Param$UpdateProduct, 'id'>) => {
       if (id) {
-        const res = await updateProductAPI({ id, ...param });
+        const res = await updateProductAPI({ id, ...params });
         updateProduct(res.data.data);
         off();
       }

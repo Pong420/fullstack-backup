@@ -1,6 +1,7 @@
 import {
   getCRUDActionCreator,
   createCRUDReducer,
+  CRUDActionsTypes,
   CRUDActionsMap,
   CRUDState,
   CRUDActions,
@@ -30,9 +31,8 @@ export type CRUDActionsEx<
 > = CRUDActions<I, K> | Search;
 
 export type PaginationAndSearchReturnType<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
-> = PaginationSelectorReturnType<I, K> & { search?: string };
+  S extends CRUDStateEx<any, any>
+> = PaginationSelectorReturnType<S> & { search?: string };
 
 export function getCRUDActionCreatorEx<
   Types extends Record<keyof Actions, string>,
@@ -54,15 +54,10 @@ export function getCRUDActionCreatorEx<
 
 export function createCRUDReducerEx<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
->(
-  props: CreateCRUDReducerOptions<
-    I,
-    K,
-    CRUDActionsMap<I, K> & { SEARCH: Search }
-  >
-) {
-  const { crudInitialState, crudReducer } = createCRUDReducer(props);
+  K extends AllowedNames<I, PropertyKey>,
+  A extends Record<CRUDActionsTypes | string, string> = any
+>(props: CreateCRUDReducerOptions<I, K, A>) {
+  const { crudInitialState, crudReducer } = createCRUDReducer<I, K, A>(props);
 
   const { search } = qs.parse(window.location.search.slice(0));
 
@@ -91,15 +86,11 @@ export function createCRUDReducerEx<
 }
 
 export function paginationAndSearchSelector<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
->({
-  search,
-  ...reset
-}: CRUDStateEx<I, K>): PaginationAndSearchReturnType<I, K> {
+  S extends CRUDStateEx<any, any> = CRUDStateEx<any, any>
+>({ search, ...reset }: S): PaginationAndSearchReturnType<S> {
   return {
     search,
-    ...paginationSelector(reset)
+    ...paginationSelector<S>(reset as any)
   };
 }
 

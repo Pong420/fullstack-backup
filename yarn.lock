@@ -948,7 +948,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@blueprintjs/core@^3.22.2":
+"@blueprintjs/core@^3.20.0", "@blueprintjs/core@^3.22.2":
   version "3.22.2"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.22.2.tgz#235bc4f5c469c9040398b2325c80e5882b90a916"
   integrity sha512-gROggPOtatxEP/l8Bw4WewEy21qbk66W+zEtVELEt4NtpD/3RntwVkdFfKJWb/bCA7+j29iQcOaBKkClwf7MuQ==
@@ -970,6 +970,15 @@
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.12.0.tgz#cea6a6434d9d469e26d87b055e6b6aa5768135b3"
   integrity sha512-ERIODstzjBzRIHNqAqyXu4gVsdLyvxAZ0Cp7Dr4+d5BdgDbZYzMYf9ll05daQPOBWaFjLh3lhCRhbfk6MXdD7A==
   dependencies:
+    classnames "^2.2"
+    tslib "~1.9.0"
+
+"@blueprintjs/select@^3.11.2":
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/select/-/select-3.11.2.tgz#3324db0de44a9f386b957aac1ba3ec774b3eb1e7"
+  integrity sha512-fU0Km6QI/ayWhzYeu9N1gTj0+L0XUO4KB3u2LfJXgj648UGY8F4HX2ETdJ+XPdtsu6TesrIL7ghMQhtLcvafBg==
+  dependencies:
+    "@blueprintjs/core" "^3.20.0"
     classnames "^2.2"
     tslib "~1.9.0"
 
@@ -2105,10 +2114,10 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@pong420/redux-crud@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.0.7.tgz#ea939276ae17eaf6cc3be5d5b9bbceebb66125e5"
-  integrity sha512-D14yzPnzczvXSHJltx7WeJIOJlojQTknVw/ivoYj7gYeCKqaCbENw5trDEzUbex15Catp2gTImgWBZNJI2mfwA==
+"@pong420/redux-crud@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.0.9.tgz#4396a06494b2486dc7a91c5f083efa1947612431"
+  integrity sha512-CP6xpheSP6RMQfAF3+b3HHsSI8WgjLEigICHMrafioSBs+F7c2OsbnHOwAG1qyJ79oxt/wwCf6K/QvecEIzKQg==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"

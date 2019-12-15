@@ -25,7 +25,6 @@ function isJWT(data: any): data is Schema$JWT {
 // if (process.env.NODE_ENV === 'development') {
 //   const delay = (ms: number) => new Promise(_ => setTimeout(_, ms));
 //   api.interceptors.request.use(async config => {
-//     console.log(config.url);
 //     if (
 //       config.url &&
 //       config.url !== REFERTSH_TOKEN_PATH &&

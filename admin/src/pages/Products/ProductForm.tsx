@@ -1,10 +1,10 @@
-import React, { ReactNode, KeyboardEvent } from 'react';
+import React, { ReactNode } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
-import { InputGroup, TagInput, TextArea, Checkbox } from '@blueprintjs/core';
+import { InputGroup, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
+import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
 import { Param$CreateProduct } from '../../typings';
-import { getTagProps } from '../../utils/getTagProps';
 import { createForm, FormInstance, validators } from '../../utils/form';
 
 type Fields = Omit<Param$CreateProduct, 'images'> & {
@@ -32,9 +32,6 @@ const defaultValues: Fields = {
   description: '',
   hidden: false
 };
-
-const preventTriggerSubmit = (event: KeyboardEvent) =>
-  event.keyCode === 13 && event.preventDefault();
 
 export function ProductForm({
   form: _form,
@@ -69,7 +66,7 @@ export function ProductForm({
       <FormItem
         name="price"
         label="Price"
-        validators={[validators.min(1, 'Pice cannot smaller then 1', true)]}
+        validators={[validators.min(1, 'Pice cannot less then 1', true)]}
       >
         <NumericInput fill min={0} />
       </FormItem>
@@ -77,7 +74,7 @@ export function ProductForm({
       <FormItem
         name="amount"
         label="Amount"
-        validators={[validators.min(1, 'Amount cannot smaller then 1', true)]}
+        validators={[validators.min(1, 'Amount cannot less then 1', true)]}
       >
         <NumericInput fill min={0} />
       </FormItem>
@@ -85,17 +82,18 @@ export function ProductForm({
       <FormItem
         name="type"
         label="Type"
+        valuePropName="value"
         validators={[validators.required('Product name cannot be empty')]}
       >
-        <InputGroup />
+        <ProductTypesInput />
       </FormItem>
 
       <FormItem name="images" label="Images">
         <ImageUploadGrid />
       </FormItem>
 
-      <FormItem name="tags" label="Tags" valuePropName="values">
-        <TagInput onKeyDown={preventTriggerSubmit} tagProps={getTagProps} />
+      <FormItem name="tags" label="Tags">
+        <ProductTagsInput />
       </FormItem>
 
       <FormItem name="description" label="Description">

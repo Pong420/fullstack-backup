@@ -21,6 +21,10 @@ export type Response$Product = Response$API<Schema$Product>;
 
 export type Response$GetProducts = Response$PaginationAPI<Schema$Product>;
 
+export type Response$GetSuggestion = Response$API<
+  Array<{ total: number; value: string }>
+>;
+
 export interface Schema$Product extends Schema$Timestamp {
   id: string;
   name: string;

@@ -1,5 +1,5 @@
-import { getCRUDActionCreatorEx, UnionCRUDActions } from '../redux-crud-ex';
-import { Schema$Product } from '../../typings';
+import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
+import { Schema$Product, Response$GetSuggestion } from '../../typings';
 import { useActions } from '../../hooks/useActions';
 
 export enum ProductActionTypes {
@@ -9,16 +9,32 @@ export enum ProductActionTypes {
   RESET = 'RESET_PRODUCTS',
   PAGINATE = 'PAGINATE_PRODUCT',
   SET_PAGE = 'SET_PAGE_PRODUCT',
-  SEARCH = 'SEARCH_PRODUCT'
+  SEARCH = 'SEARCH_PRODUCT',
+  UPDATE_SUGGESSTION = 'UPDATE_SUGGESSTION'
 }
 
-const crudActionsCreator = getCRUDActionCreatorEx<
+export interface UpdateSuggestion {
+  type: ProductActionTypes.UPDATE_SUGGESSTION;
+  payload: {
+    type: 'types' | 'tags';
+    values: Response$GetSuggestion['data'];
+  };
+}
+
+const crudActionsCreator = getCRUDActionCreator<
   typeof ProductActionTypes,
   Schema$Product,
   'id'
 >();
 
-const searchProduct = crudActionsCreator['SEARCH'](ProductActionTypes.SEARCH);
+export const updateProductSuggestion = {
+  updateSuggestion: (
+    payload: UpdateSuggestion['payload']
+  ): UpdateSuggestion => ({
+    type: ProductActionTypes.UPDATE_SUGGESSTION,
+    payload
+  })
+};
 
 export const productActions = {
   createProduct: crudActionsCreator['CREATE'](ProductActionTypes.CREATE),
@@ -26,11 +42,13 @@ export const productActions = {
   updateProduct: crudActionsCreator['UPDATE'](ProductActionTypes.UPDATE),
   resetProducts: crudActionsCreator['RESET'](ProductActionTypes.RESET),
   paginateProduct: crudActionsCreator['PAGINATE'](ProductActionTypes.PAGINATE),
-  setPageProduct: crudActionsCreator['SET_PAGE'](ProductActionTypes.SET_PAGE),
-  searchProduct,
-  clearSearchProduct: () => searchProduct('')
+  setPageProduct: crudActionsCreator['SET_PAGE'](ProductActionTypes.SET_PAGE)
 };
 
-export type ProductActions = UnionCRUDActions<typeof productActions>;
+export type ProductActions =
+  | UnionCRUDActions<typeof productActions>
+  | UpdateSuggestion;
 
 export const useProductActions = () => useActions(productActions);
+export const useUpdateProductSuggestion = () =>
+  useActions(updateProductSuggestion);
