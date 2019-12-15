@@ -67,6 +67,18 @@
           text-transform: capitalize;
         }
 
+        .searchable {
+          cursor: pointer;
+        }
+
+        &:not(.skeleton) {
+          .searchable {
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
         &.skeleton {
           &.product-name {
             max-width: 50%;
@@ -92,9 +104,9 @@
     }
 
     .tags {
-      // @include flex($wrap: wrap);
       display: inline;
-      padding-top: 5px;
+      position: relative;
+      top: 5px;
 
       .#{$ns}-tag {
         @include padding-y(3px);

@@ -1,11 +1,12 @@
 import {
+  Param$Search,
   Param$Pagination,
   Response$API,
   Response$PaginationAPI,
   Schema$Timestamp
 } from '.';
 
-export interface Param$GetProducts extends Param$Pagination {}
+export interface Param$GetProducts extends Param$Pagination, Param$Search {}
 
 export interface Param$CreateProduct
   extends Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp> {

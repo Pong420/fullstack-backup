@@ -9,8 +9,20 @@ import {
 } from '../typings';
 import { createFormData } from './createFormData';
 
-export const getProducts = (params: Param$GetProducts = {}) =>
-  api.get<Response$GetProducts>('/products', { params });
+function handleSpecialSearch(query: string, reg: RegExp, key: string) {
+  return reg.test(query) ? { [key]: query.replace(reg, '') } : undefined;
+}
+
+export const getProducts = ({ search, ...params }: Param$GetProducts = {}) => {
+  let searchParams = search
+    ? handleSpecialSearch(search, /^tag:/, 'tag') ||
+      handleSpecialSearch(search, /^type:/, 'type') || { search }
+    : {};
+
+  return api.get<Response$GetProducts>('/products', {
+    params: { ...searchParams, ...params }
+  });
+};
 
 export const createProduct = (params: Param$CreateProduct) =>
   api.post<Response$Product>('/products', createFormData(params));

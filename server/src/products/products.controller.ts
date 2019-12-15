@@ -13,9 +13,10 @@ import {
 import { RoleGuard } from '../guards';
 import { UserRole } from '../user';
 import { MultiPartInterceptor } from '../interceptors';
-import { PaginationDto } from '../dto';
+import { PaginationDto, SearchDto } from '../dto';
+import { CreateProductDto, UpdateProductDto, GetProductsDto } from './dto';
+import { formatSearchQuery } from '../utils';
 import { ProductsService } from './products.service';
-import { CreateProductDto, UpdateProductDto } from './dto';
 
 @UseGuards(RoleGuard(UserRole.GUEST))
 @Controller('products')
@@ -23,9 +24,24 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get('/')
-  async getProducts(@Query() { pageNo, pageSize }: PaginationDto = {}) {
+  async getProducts(@Query()
+  {
+    pageNo,
+    pageSize,
+    tag,
+    type,
+    search
+  }: PaginationDto & SearchDto & GetProductsDto = {}) {
     return this.productsService.paginate(
-      {},
+      {
+        ...(tag
+          ? { tags: { $in: [tag] } }
+          : type
+          ? { type }
+          : search
+          ? formatSearchQuery(['name'], search)
+          : {})
+      },
       {
         sort: { createdAt: 1 },
         page: pageNo,

@@ -10,7 +10,7 @@ import { useBoolean } from '../../hooks/useBoolean';
 
 const title = 'Create Product';
 
-export function CreateProduct() {
+export const CreateProduct = React.memo(() => {
   const [isOpen, { on, off }] = useBoolean();
 
   const { createProduct } = useProductActions();
@@ -42,4 +42,4 @@ export function CreateProduct() {
       />
     </>
   );
-}
+});
