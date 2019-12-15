@@ -9,6 +9,7 @@ import {
   paginationSelector,
   PaginationSelectorReturnType
 } from '@pong420/redux-crud';
+import { matchPath } from 'react-router-dom';
 import { AllowedNames } from '../typings';
 import qs from 'qs';
 
@@ -29,6 +30,14 @@ export type CRUDActionsEx<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>
 > = CRUDActions<I, K> | Search;
+
+export interface CreateCRUDReducerOptionsEx<
+  I extends Record<PropertyKey, any>,
+  K extends AllowedNames<I, PropertyKey>,
+  A extends Record<CRUDActionsTypes | string, string>
+> extends CreateCRUDReducerOptions<I, K, A> {
+  path: string;
+}
 
 export type PaginationAndSearchReturnType<
   S extends CRUDStateEx<any, any>
@@ -56,14 +65,21 @@ export function createCRUDReducerEx<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>,
   A extends Record<CRUDActionsTypes | string, string> = any
->(props: CreateCRUDReducerOptions<I, K, A>) {
+>({ path, ...props }: CreateCRUDReducerOptionsEx<I, K, A>) {
   const { crudInitialState, crudReducer } = createCRUDReducer<I, K, A>(props);
 
-  const { search } = qs.parse(window.location.search.slice(0));
+  const match = !!matchPath(window.location.pathname, { path, exact: true });
+  const params: Record<string, string | undefined> = match
+    ? qs.parse(window.location.search.slice(1))
+    : {};
+
+  let pageNo = Number(params.pageNo);
+  pageNo = isNaN(pageNo) ? 1 : pageNo;
 
   const crudInitialStateEx: CRUDStateEx<I, K> = {
     ...crudInitialState,
-    search
+    pageNo,
+    search: params.search
   };
 
   function crudReducerEx(

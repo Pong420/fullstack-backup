@@ -1,6 +1,7 @@
 import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
 import { ProductActionTypes, ProductActions } from '../actions';
 import { Schema$Product } from '../../typings';
+import { PATHS } from '../../constants';
 
 const pageSize = 12;
 
@@ -21,6 +22,7 @@ const { crudInitialStateEx, crudReducerEx } = createCRUDReducerEx<
 >({
   key: 'id',
   actions: ProductActionTypes,
+  path: PATHS.PRODUCTS,
   pageSize
 });
 
