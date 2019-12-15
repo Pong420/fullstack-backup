@@ -17,7 +17,7 @@ export const Image = React.memo<ImageProps>(
     size = 'cover',
     img = false
   }) => {
-    if (img) {
+    if (img && url) {
       return <img src={url} alt={url} />;
     }
 
@@ -26,7 +26,7 @@ export const Image = React.memo<ImageProps>(
         className={`image ${className}`.trim()}
         style={{
           backgroundColor: '#eee',
-          backgroundImage: `url(${url})`,
+          backgroundImage: url && `url(${url})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: size,
           paddingBottom: `${ratio * 100}%`
