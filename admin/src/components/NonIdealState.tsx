@@ -1,11 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { NonIdealState, Button } from '@blueprintjs/core';
+import { searchParamSelector } from '../store';
+import { useSearchParam } from '../hooks/useSearchParam';
 
-export interface NotFoundProps {
-  onClear?: () => void;
-}
+export interface NotFoundProps {}
 
-export const NotFound = React.memo<NotFoundProps>(({ onClear }) => {
+export const NotFound = React.memo<NotFoundProps>(() => {
+  const { search } = useSelector(searchParamSelector);
+  const { setSearchParam } = useSearchParam();
+
   return (
     <NonIdealState
       icon="search"
@@ -19,8 +23,8 @@ export const NotFound = React.memo<NotFoundProps>(({ onClear }) => {
       action={
         <Button
           intent="primary"
-          onClick={onClear}
-          style={{ visibility: onClear ? 'visible' : 'hidden' }}
+          onClick={() => setSearchParam({ search: undefined })}
+          style={{ visibility: search ? 'visible' : 'hidden' }}
         >
           Clear Search
         </Button>

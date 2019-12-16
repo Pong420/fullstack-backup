@@ -58,10 +58,7 @@ const navbar = (
 export const Users = () => {
   const { paginateUser, resetUsers } = useUserActions();
 
-  const [
-    { data, loading, search, clearSearch },
-    paginationtProps
-  ] = useReduxPagination({
+  const [{ data, loading }, paginationtProps] = useReduxPagination({
     fn: getUsersAPI,
     onSuccess: paginateUser,
     onReset: resetUsers,
@@ -75,7 +72,6 @@ export const Users = () => {
           data={data}
           loading={loading}
           columns={columns}
-          onClear={search ? clearSearch : undefined}
           pagination={paginationtProps}
         />
       </Card>

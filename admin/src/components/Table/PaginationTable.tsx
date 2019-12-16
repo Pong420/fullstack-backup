@@ -13,7 +13,6 @@ export function PaginationTable<T extends object>({
   pagination,
   loading,
   data,
-  onClear,
   ...props
 }: Props<T>) {
   const [localData, setLocalData] = useState(data);
@@ -25,7 +24,7 @@ export function PaginationTable<T extends object>({
     <>
       <div className="pagination-table">
         <Table data={localData} {...props} />
-        {!loading && data.length === 0 && <NotFound onClear={onClear} />}
+        {!loading && data.length === 0 && <NotFound />}
         {loading && (
           <div className="loading">
             <Spinner size={40} />

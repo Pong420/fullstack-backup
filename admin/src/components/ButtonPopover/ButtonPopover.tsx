@@ -30,7 +30,7 @@ export function ButtonPopover({
       disabled={disabled}
       {...popoverProps}
     >
-      <Button disabled={disabled} {...props} />
+      <Button small disabled={disabled} {...props} />
     </Popover>
   );
 }
