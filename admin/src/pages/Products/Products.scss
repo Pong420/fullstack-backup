@@ -13,7 +13,8 @@
 
 .product-suggest-popover {
   .#{$ns}-menu {
-    width: 460px;
+    max-width: none;
+    width: 450px;
   }
 }
 

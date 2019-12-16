@@ -5,18 +5,21 @@ import {
   Suggest,
   MultiSelect,
   IListItemsProps,
-  IItemRendererProps,
   ISuggestProps,
   IMultiSelectProps
 } from '@blueprintjs/select';
-import { MenuItem, IPopoverProps } from '@blueprintjs/core';
+import { IPopoverProps } from '@blueprintjs/core';
 import {
   productSuggestSelector,
   useUpdateProductSuggestion
 } from '../../store';
 import { getSuggestion } from '../../services';
-import { escapeRegex } from '../../utils/escapeRegex';
 import { getTagProps } from '../../utils/getTagProps';
+import {
+  itemPredicate,
+  getItemRenderer,
+  transform
+} from '../../utils/blueprint-select';
 
 const ProductTypesSuggest = Suggest.ofType<string>();
 const ProductTagsSuggest = MultiSelect.ofType<string>();
@@ -36,30 +39,12 @@ const nil = () => {};
 const preventDefaultSubmit = (event: KeyboardEvent<any>) =>
   event.keyCode === 13 && event.preventDefault();
 
-const getItemRenderer = (exclude: string[] = []) => {
-  return (value: string, { handleClick, modifiers }: IItemRendererProps) => {
-    if (!modifiers.matchesPredicate || exclude.includes(value)) {
-      return null;
-    }
-    return (
-      <MenuItem
-        key={value}
-        text={value}
-        active={modifiers.active}
-        disabled={modifiers.disabled}
-        onClick={handleClick}
-      />
-    );
-  };
-};
-
 const defaultProps: Omit<
   IListItemsProps<string>,
   'items' | 'onItemSelect' | 'itemRenderer'
 > & { popoverProps: IPopoverProps } = {
   resetOnQuery: true,
-  itemPredicate: (query, value, _index, exactMatch) =>
-    exactMatch || new RegExp(escapeRegex(query), 'gi').test(value),
+  itemPredicate,
   popoverProps: {
     fill: true,
     minimal: true,
@@ -74,7 +59,7 @@ const typesProps: Omit<ISuggestProps<string>, 'items' | 'onItemSelect'> = {
     placeholder: '',
     onKeyDown: preventDefaultSubmit
   },
-  inputValueRenderer: v => v,
+  inputValueRenderer: transform,
   itemRenderer: getItemRenderer()
 };
 
@@ -84,8 +69,8 @@ const tagProps: Omit<
 > = {
   ...defaultProps,
   placeholder: '',
-  createNewItemFromQuery: t => t,
-  tagRenderer: t => t
+  createNewItemFromQuery: transform,
+  tagRenderer: transform
 };
 
 function useSuggestion(type: 'types' | 'tags') {

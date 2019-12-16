@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from '../../components/Layout';
 import { Pagination } from '../../components/Pagination';
 import { NotFound } from '../../components/NonIdealState';
+import { Omnibar } from '../../components/Omnibar';
 import { CreateProduct } from './CreateProduct';
 import { Product } from './Product';
 import { useProductActions, productPaginationSelector } from '../../store';
@@ -26,6 +27,7 @@ export function Products() {
       navbar={
         <>
           <CreateProduct />
+          <Omnibar suffix="Products" />
         </>
       }
     >

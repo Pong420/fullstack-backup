@@ -22,24 +22,35 @@ $radius: 5px;
   padding-right: $sidebar-padding-x;
 }
 
+$logo-size: 80px;
+$icon-size: 28px;
+
 .sidebar-header {
   @include flex(center);
-  font-size: 24px;
   font-weight: 600;
 
   svg {
     color: $dark-gray5;
-    font-size: 2.5em;
-    margin-right: 15px;
+    font-size: $logo-size;
+    margin-right: 10px;
   }
 
-  span {
-    font-size: 1em;
+  .title {
+    font-size: 20px;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
-}
 
-.sidebar-body {
-  margin-top: 20px;
+  a {
+    color: $pt-text-color-muted;
+    font-size: 12px;
+    margin-left: 2.5px;
+  }
+
+  + .#{$ns}-divider {
+    @include margin-y(15px 10px);
+    @include margin-x(-$sidebar-padding-x);
+  }
 }
 
 .sidebar-item {
@@ -48,7 +59,7 @@ $radius: 5px;
   display: block;
   font-weight: 600;
   font-size: 16px;
-  padding-left: $sidebar-padding-x + 3.5px;
+  padding-left: $sidebar-padding-x;
 
   .sidebar-item-body {
     @include dimen(100%, 50px);
@@ -57,10 +68,11 @@ $radius: 5px;
   }
 
   .icon {
-    @include sq-dimen(28px);
+    @include sq-dimen($icon-size);
     @include flex(center, center);
     margin-right: 10px;
     border-radius: 9px;
+    margin-left: (($logo-size * 0.65) - $icon-size) / 2 - 1px;
   }
 
   &:hover {

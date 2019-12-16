@@ -1,0 +1,8 @@
+.#{$ns}-select-popover {
+  .#{$ns}-popover-content {
+    padding: 0;
+    > div:not(:empty) {
+      padding: 5px;
+    }
+  }
+}

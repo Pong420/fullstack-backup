@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
-import { Icon, IconName } from '@blueprintjs/core';
+import { Icon, IconName, Divider } from '@blueprintjs/core';
 import { PATHS } from '../../constants';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 
@@ -26,30 +26,42 @@ function SidebarItem({ to, icon, children, iconSize = 16 }: SidebarItemProps) {
 
 export const Sidebar = React.memo(() => {
   return (
-    <div className="sidebar">
-      <div className="sidebar-inner">
-        <div className="sidebar-header">
-          <Logo />
-          <span>Blueprint</span>
-        </div>
-        <div className="sidebar-body">
-          <SidebarItem to={PATHS.HOME} icon="home">
-            Home
-          </SidebarItem>
-          <SidebarItem to={PATHS.ORDERS} icon="inbox">
-            Orders
-          </SidebarItem>
-          <SidebarItem to={PATHS.PRODUCTS} icon="box">
-            Products
-          </SidebarItem>
-          <SidebarItem to={PATHS.USERS} icon="user">
-            Users
-          </SidebarItem>
-          <SidebarItem to={PATHS.SETTINGS} icon="cog">
-            Settings
-          </SidebarItem>
+    <>
+      <div className="sidebar">
+        <div className="sidebar-inner">
+          <div className="sidebar-header">
+            <Logo />
+            <div>
+              <div className="title">CMS</div>
+              <a
+                href="https://github.com/Pong420/fullstack"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                View on GitHub
+              </a>
+            </div>
+          </div>
+          <Divider />
+          <div className="sidebar-body">
+            <SidebarItem to={PATHS.HOME} icon="home">
+              Home
+            </SidebarItem>
+            <SidebarItem to={PATHS.ORDERS} icon="inbox">
+              Orders
+            </SidebarItem>
+            <SidebarItem to={PATHS.PRODUCTS} icon="box">
+              Products
+            </SidebarItem>
+            <SidebarItem to={PATHS.USERS} icon="user">
+              Users
+            </SidebarItem>
+            <SidebarItem to={PATHS.SETTINGS} icon="cog">
+              Settings
+            </SidebarItem>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 });

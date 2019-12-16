@@ -3,7 +3,7 @@ import { Card } from '@blueprintjs/core';
 import { Layout } from '../../components/Layout';
 import { PaginationTable, Column } from '../../components/Table';
 import { Avatar } from '../../components/Avatar';
-import { Search } from '../../components/Search';
+import { Omnibar } from '../../components/Omnibar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
 import { Schema$User } from '../../typings';
@@ -48,13 +48,6 @@ const columns: Column<Partial<Schema$User>>[] = [
   }
 ];
 
-const navbar = (
-  <>
-    <CreateUser />
-    <Search suffix="User" />
-  </>
-);
-
 export const Users = () => {
   const { paginateUser, resetUsers } = useUserActions();
 
@@ -66,7 +59,17 @@ export const Users = () => {
   });
 
   return (
-    <Layout className="users" icon="user" title="Users" navbar={navbar}>
+    <Layout
+      className="users"
+      icon="user"
+      title="Users"
+      navbar={
+        <>
+          <CreateUser />
+          <Omnibar suffix="User" />
+        </>
+      }
+    >
       <Card>
         <PaginationTable
           data={data}
