@@ -57,6 +57,8 @@ export class AuthController {
 
     await this.authService.createRefreshToken({ ...user, refreshToken });
 
+    delete user.password;
+
     return reply
       .setCookie(
         REFRESH_TOKEN,

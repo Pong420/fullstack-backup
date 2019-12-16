@@ -74,20 +74,19 @@ export class UserService {
       { ...changes, ...(await this.handleAvatar(avatar, oldAvatar)) },
       {
         new: true,
-        projection: '-password',
         ...options
       }
     );
   }
 
-  findOne({ id, ...user }: Partial<User>, projection = '-password') {
+  findOne({ id, ...user }: Partial<User>, projection = '') {
     return UserModel.findOne(
       JSON.parse(JSON.stringify({ _id: id, ...user })),
       projection
     );
   }
 
-  find(condition?: object, projection = '-password') {
+  find(condition?: object, projection = '') {
     return UserModel.find(condition, projection);
   }
 
@@ -98,7 +97,6 @@ export class UserService {
     return UserModel.paginate(condition, {
       page,
       limit,
-      select: '-password',
       ...options
     });
   }

@@ -1,6 +1,7 @@
 import { UserRole } from '../../user';
 
 export interface JWTSignPayload {
+  id: string;
   username: string;
   role: UserRole;
 }

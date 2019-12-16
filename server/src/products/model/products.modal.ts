@@ -2,7 +2,8 @@ import {
   prop,
   plugin,
   getModelForClass,
-  ReturnPaginateModelType
+  ReturnPaginateModelType,
+  arrayProp
 } from '@typegoose/typegoose';
 import paginate from 'mongoose-paginate-v2';
 
@@ -20,13 +21,13 @@ export class Product {
   @prop({ required: true })
   amount!: number;
 
-  @prop({ required: true })
+  @prop({ required: true, type: String, lowercase: true })
   type!: string;
 
-  @prop({ default: [] })
+  @arrayProp({ type: String })
   images!: string[];
 
-  @prop({ default: [] })
+  @arrayProp({ type: String, lowercase: true })
   tags!: string[];
 
   @prop({ default: false })

@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
-    const user = await this.userService.findOne({ username }, '');
+    const user = await this.userService.findOne({ username }, '+password');
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);
@@ -50,7 +50,11 @@ export class AuthService {
         ]);
 
         if (username === defaultUsername && pass === defaultPassword) {
-          return { username: defaultUsername, role: UserRole.ADMIN };
+          return {
+            id: defaultUsername,
+            username: defaultUsername,
+            role: UserRole.ADMIN
+          };
         }
       }
     }
@@ -58,12 +62,12 @@ export class AuthService {
     throw new BadRequestException('User Not Found');
   }
 
-  signJwt({ username, role }: JWTSignPayload) {
+  signJwt({ id, username, role }: JWTSignPayload) {
     const now = +new Date();
+    const payload: JWTSignPayload = { id, role, username };
     return {
       token: this.jwtService.sign({
-        role,
-        username,
+        ...payload,
         iat: now
       }),
       expiry: new Date(

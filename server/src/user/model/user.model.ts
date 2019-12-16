@@ -30,7 +30,7 @@ export class User {
   @prop({ required: true, unique: true })
   username!: string;
 
-  @prop({ required: true, set: hashPassword, get: pwd => pwd })
+  @prop({ required: true, set: hashPassword, get: pwd => pwd, select: false })
   password!: string;
 
   @prop({ enum: UserRole, default: UserRole.CLIENT })

@@ -1,15 +1,14 @@
 // eslint-disable-next-line
 import * as fastify from 'fastify';
-import typegoose, { DocumentType } from '@typegoose/typegoose';
+import { DocumentType } from '@typegoose/typegoose';
 import { PaginateModel } from 'mongoose';
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
-
-// mongoose.Pag
+import { JWTSignPayload } from './auth';
 
 declare module 'fastify' {
   interface FastifyRequest {
     // eslint-disable-next-line
-    user: any;
+    user: JWTSignPayload;
   }
 
   // eslint-disable-next-line
@@ -19,7 +18,7 @@ declare module 'fastify' {
 declare module '@typegoose/typegoose' {
   export type ReturnPaginateModelType<
     U extends AnyParamConstructor<T>,
-    T = any
+    T = any // eslint-disable-line
   > = PaginateModelType<InstanceType<U>> & U;
   export type PaginateModelType<T> = PaginateModel<DocumentType<T>> & T;
 }
