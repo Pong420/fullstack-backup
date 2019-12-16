@@ -50,11 +50,6 @@ export function useReduxPagination<
 
   const { setSearchParam } = useSearchParam();
 
-  const clearSearch = useCallback(
-    () => setSearchParam({ pageNo: undefined, search: undefined }),
-    [setSearchParam]
-  );
-
   const request = useCallback(
     () =>
       fn({ pageNo, pageSize, search }).then(res => {
@@ -75,15 +70,12 @@ export function useReduxPagination<
     total,
     pageNo,
     size: pageSize,
-    onPageChange: pageNo => setSearchParam({ pageNo })
+    onPageChange: pageNo => setSearchParam(params => ({ ...params, pageNo }))
   };
 
   useEffect(() => {
     onReset();
   }, [search, onReset]);
 
-  return [
-    { ids, data, search, loading, clearSearch },
-    paginationProps
-  ] as const;
+  return [{ ids, data, search, loading }, paginationProps] as const;
 }

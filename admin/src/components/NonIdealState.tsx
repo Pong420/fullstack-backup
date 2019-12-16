@@ -23,7 +23,7 @@ export const NotFound = React.memo<NotFoundProps>(() => {
       action={
         <Button
           intent="primary"
-          onClick={() => setSearchParam({ search: undefined })}
+          onClick={() => setSearchParam({})}
           style={{ visibility: search ? 'visible' : 'hidden' }}
         >
           Clear Search

@@ -33,9 +33,7 @@ export const Product = React.memo<Props>(({ id }) => {
             {type && (
               <span
                 className="searchable"
-                onClick={() =>
-                  setSearchParam({ pageNo: undefined, search: `type:${type}` })
-                }
+                onClick={() => setSearchParam({ search: `type:${type}` })}
               >
                 {type}
               </span>
@@ -57,9 +55,7 @@ export const Product = React.memo<Props>(({ id }) => {
                 {...getTagProps(tag, index)}
                 interactive
                 key={index}
-                onClick={() =>
-                  setSearchParam({ pageNo: undefined, search: `tag:${tag}` })
-                }
+                onClick={() => setSearchParam({ search: `tag:${tag}` })}
               >
                 {tag}
               </Tag>

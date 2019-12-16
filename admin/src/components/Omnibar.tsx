@@ -42,7 +42,7 @@ export const Omnibar = React.memo<OmnibarProps>(
       (search?: string) => {
         if (isOpen) {
           // check `isOpen` prevent double key down on `Enter`
-          setSearchParam({ pageNo: undefined, search });
+          setSearchParam({ search });
           off();
         }
       },
