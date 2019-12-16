@@ -17,7 +17,7 @@ interface Props {
 export const Product = React.memo<Props>(({ id }) => {
   const product = useSelector(productSelector(id || ''));
   const { name, price, type, amount, tags = [], images = [] } = product;
-  const [, setSearchParam] = useSearchParam();
+  const { setSearchParam } = useSearchParam();
 
   return (
     <div className="product">

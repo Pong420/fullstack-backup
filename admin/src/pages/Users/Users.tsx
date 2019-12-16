@@ -56,7 +56,7 @@ const navbar = (
 );
 
 export const Users = () => {
-  const { paginateUser } = useUserActions();
+  const { paginateUser, resetUsers } = useUserActions();
 
   const [
     { data, loading, search, clearSearch },
@@ -64,6 +64,7 @@ export const Users = () => {
   ] = useReduxPagination({
     fn: getUsersAPI,
     onSuccess: paginateUser,
+    onReset: resetUsers,
     selector: userPaginationSelector
   });
 

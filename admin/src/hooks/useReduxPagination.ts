@@ -1,19 +1,17 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { AxiosPromise } from 'axios';
+import { CRUDState, PaginationSelectorReturnType } from '@pong420/redux-crud';
 import { useSearchParam } from './useSearchParam';
+import { usePrevious } from './usePrevious';
 import {
   Param$Search,
   Param$Pagination,
   Response$PaginationAPI,
   AllowedNames
 } from '../typings';
-import {
-  RootState,
-  PaginationAndSearchReturnType,
-  CRUDStateEx
-} from '../store';
+import { RootState, searchParamSelector } from '../store';
 import { PaginationProps } from '../components/Pagination';
 
 export type AsyncFn<T> = (
@@ -30,31 +28,37 @@ interface PaginationPayload<T> {
 export interface ReduxPaginationProps<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>,
-  S extends CRUDStateEx<I, K>
+  S extends CRUDState<I, K>
 > {
   fn: AsyncFn<I>;
   onSuccess?: (payload: PaginationPayload<I>) => void;
-  selector: (state: RootState) => PaginationAndSearchReturnType<S>;
+  onReset?: () => void;
+  selector: (props: {
+    pageNo?: number;
+  }) => (state: RootState) => PaginationSelectorReturnType<S>;
 }
 
-const useSearchParamTransform = ({
-  pageNo,
-  search
-}: Record<string, string | undefined>) => ({
-  pageNo: pageNo ? Number(pageNo) : undefined,
-  search
-});
+const nil = () => {};
 
 export function useReduxPagination<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey>,
-  S extends CRUDStateEx<I, K>
->({ fn, selector, onSuccess }: ReduxPaginationProps<I, K, S>) {
-  const { data, ids, total, pageNo, defer, pageSize, search } = useSelector(
-    selector
+  S extends CRUDState<I, K>
+>({
+  fn,
+  selector,
+  onSuccess = nil,
+  onReset = nil
+}: ReduxPaginationProps<I, K, S>) {
+  const { pageNo, search } = useSelector(searchParamSelector);
+
+  const { data, ids, total, pageSize, defer } = useSelector(
+    selector({ pageNo: pageNo || 1 })
   );
 
-  const [, setSearchParam] = useSearchParam(useSearchParamTransform);
+  const prevSearch = usePrevious(search);
+
+  const { setSearchParam } = useSearchParam();
 
   const clearSearch = useCallback(
     () => setSearchParam({ pageNo: undefined, search: undefined }),
@@ -65,18 +69,19 @@ export function useReduxPagination<
     () =>
       fn({ pageNo, pageSize, search }).then(res => {
         const { docs, totalDocs } = res.data.data;
-        onSuccess &&
-          onSuccess({
-            pageNo,
-            search,
-            data: docs,
-            total: totalDocs
-          });
+        onSuccess({
+          pageNo,
+          search,
+          data: docs,
+          total: totalDocs
+        });
       }),
     [fn, pageNo, pageSize, search, onSuccess]
   );
 
-  const { loading } = useRxAsync(request, { defer });
+  const { loading } = useRxAsync(request, {
+    defer: prevSearch === search && defer
+  });
 
   const paginationProps: PaginationProps = {
     total,
@@ -84,6 +89,10 @@ export function useReduxPagination<
     size: pageSize,
     onPageChange: pageNo => setSearchParam({ pageNo })
   };
+
+  useEffect(() => {
+    onReset();
+  }, [search, onReset]);
 
   return [
     { ids, data, search, loading, clearSearch },

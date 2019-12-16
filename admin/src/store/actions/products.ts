@@ -1,4 +1,4 @@
-import { getCRUDActionCreatorEx, UnionCRUDActions } from '../redux-crud-ex';
+import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$Product, Response$GetSuggestion } from '../../typings';
 import { useActions } from '../../hooks/useActions';
 
@@ -21,7 +21,7 @@ export interface UpdateSuggestion {
   };
 }
 
-const crudActionsCreator = getCRUDActionCreatorEx<
+const crudActionsCreator = getCRUDActionCreator<
   typeof ProductActionTypes,
   Schema$Product,
   'id'
@@ -45,12 +45,6 @@ export const productActions = {
   setPageProduct: crudActionsCreator['SET_PAGE'](ProductActionTypes.SET_PAGE)
 };
 
-const search = crudActionsCreator['SEARCH'](ProductActionTypes.SEARCH);
-export const searchProductActions = {
-  search,
-  clear: () => search('')
-};
-
 export type ProductActions =
   | UnionCRUDActions<typeof productActions>
   | UpdateSuggestion;
@@ -59,5 +53,3 @@ export const useProductActions = () => useActions(productActions);
 
 export const useUpdateProductSuggestion = () =>
   useActions(updateProductSuggestion);
-
-export const useSearchProduct = () => useActions(searchProductActions);

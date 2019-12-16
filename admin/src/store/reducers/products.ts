@@ -1,7 +1,6 @@
-import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
+import { createCRUDReducer, CRUDState } from '@pong420/redux-crud';
 import { ProductActionTypes, ProductActions } from '../actions';
 import { Schema$Product } from '../../typings';
-import { PATHS } from '../../constants';
 
 const pageSize = 12;
 
@@ -11,25 +10,24 @@ interface Suggestion {
   loaded: boolean;
 }
 
-interface State extends CRUDStateEx<Schema$Product, 'id'> {
+interface State extends CRUDState<Schema$Product, 'id'> {
   types: Suggestion;
   tags: Suggestion;
 }
 
-const { crudInitialStateEx, crudReducerEx } = createCRUDReducerEx<
+const { crudInitialState, crudReducer } = createCRUDReducer<
   Schema$Product,
   'id'
 >({
   key: 'id',
-  actions: ProductActionTypes,
-  path: PATHS.PRODUCTS,
-  pageSize
+  pageSize,
+  actions: ProductActionTypes
 });
 
-const fill = crudInitialStateEx.pageNo * pageSize;
+const fill = crudInitialState.pageNo * pageSize;
 
 const initialState: State = {
-  ...crudInitialStateEx,
+  ...crudInitialState,
   ids: new Array(fill).fill(null),
   list: new Array(fill).fill({}),
   types: {
@@ -105,7 +103,7 @@ export default function(state = initialState, action: ProductActions): State {
     case ProductActionTypes.DELETE:
       return {
         ...state,
-        ...crudReducerEx(state, action),
+        ...crudReducer(state, action),
         tags: handleDeleteSuggestion(
           handleAddSuggestion(state.tags, tags),
           state.byIds[action.payload.id].tags
@@ -115,7 +113,10 @@ export default function(state = initialState, action: ProductActions): State {
         ])
       };
 
+    case ProductActionTypes.RESET:
+      return { ...initialState };
+
     default:
-      return { ...state, ...crudReducerEx(state, action) };
+      return { ...state, ...crudReducer(state, action) };
   }
 }

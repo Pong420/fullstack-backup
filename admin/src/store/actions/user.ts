@@ -1,4 +1,4 @@
-import { getCRUDActionCreatorEx, UnionCRUDActions } from '../redux-crud-ex';
+import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$User } from '../../typings';
 import { useActions } from '../../hooks/useActions';
 
@@ -12,13 +12,11 @@ export enum UserActionTypes {
   SEARCH = 'SEARCH_USER'
 }
 
-const crudActionsCreator = getCRUDActionCreatorEx<
+const crudActionsCreator = getCRUDActionCreator<
   typeof UserActionTypes,
   Schema$User,
   'id'
 >();
-
-const searchUser = crudActionsCreator['SEARCH'](UserActionTypes.SEARCH);
 
 export const userActions = {
   createUser: crudActionsCreator['CREATE'](UserActionTypes.CREATE),
@@ -26,9 +24,7 @@ export const userActions = {
   updateUser: crudActionsCreator['UPDATE'](UserActionTypes.UPDATE),
   resetUsers: crudActionsCreator['RESET'](UserActionTypes.RESET),
   paginateUser: crudActionsCreator['PAGINATE'](UserActionTypes.PAGINATE),
-  setPageUser: crudActionsCreator['SET_PAGE'](UserActionTypes.SET_PAGE),
-  searchUser,
-  clearSearchUser: () => searchUser('')
+  setPageUser: crudActionsCreator['SET_PAGE'](UserActionTypes.SET_PAGE)
 };
 
 export type UserActions = UnionCRUDActions<typeof userActions>;

@@ -1,5 +1,7 @@
 import React, { useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Overlay, Icon, Classes } from '@blueprintjs/core';
+import { searchParamSelector } from '../../store';
 import { ButtonPopover } from '../ButtonPopover';
 import { useBoolean } from '../../hooks/useBoolean';
 import { useMouseTrap } from '../../hooks/useMouseTrap';
@@ -14,7 +16,8 @@ const hotKey = 'p';
 export const Search = React.memo(({ suffix = '' }: SearchProps) => {
   const [isOpen, { on, off }] = useBoolean();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [{ search }, setSearchParam] = useSearchParam();
+  const { search } = useSelector(searchParamSelector);
+  const { setSearchParam } = useSearchParam();
 
   const setSearch = useCallback(() => {
     off();
