@@ -1,8 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { AxiosPromise } from 'axios';
-import { CRUDState, PaginationSelectorReturnType } from '@pong420/redux-crud';
 import { useSearchParam } from './useSearchParam';
 import {
   Param$Search,
@@ -10,7 +9,7 @@ import {
   Response$PaginationAPI,
   AllowedNames
 } from '../typings';
-import { RootState, searchParamSelector } from '../store';
+import { PaginationSelectorReturnTypeEx, RootState } from '../store';
 import { PaginationProps } from '../components/Pagination';
 
 export type AsyncFn<T> = (
@@ -26,26 +25,19 @@ interface PaginationPayload<T> {
 
 export interface ReduxPaginationProps<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>,
-  S extends CRUDState<I, K>
+  K extends AllowedNames<I, PropertyKey>
 > {
   fn: AsyncFn<I>;
   onSuccess: (payload: PaginationPayload<I>) => void;
-  onReset: () => void;
-  selector: (props: {
-    pageNo?: number;
-  }) => (state: RootState) => PaginationSelectorReturnType<S>;
+  selector: (state: RootState) => PaginationSelectorReturnTypeEx<I, K>;
 }
 
 export function useReduxPagination<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>,
-  S extends CRUDState<I, K>
->({ fn, selector, onSuccess, onReset }: ReduxPaginationProps<I, K, S>) {
-  const { pageNo, search } = useSelector(searchParamSelector);
-
-  const { data, ids, total, pageSize, defer } = useSelector(
-    selector({ pageNo: pageNo || 1 })
+  K extends AllowedNames<I, PropertyKey>
+>({ fn, selector, onSuccess }: ReduxPaginationProps<I, K>) {
+  const { data, ids, total, pageSize, defer, pageNo, search } = useSelector(
+    selector
   );
 
   const { setSearchParam } = useSearchParam();
@@ -72,10 +64,6 @@ export function useReduxPagination<
     size: pageSize,
     onPageChange: pageNo => setSearchParam(params => ({ ...params, pageNo }))
   };
-
-  useEffect(() => {
-    onReset();
-  }, [search, onReset]);
 
   return [{ ids, data, search, loading }, paginationProps] as const;
 }

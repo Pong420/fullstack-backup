@@ -49,12 +49,11 @@ const columns: Column<Partial<Schema$User>>[] = [
 ];
 
 export const Users = () => {
-  const { paginateUser, resetUsers } = useUserActions();
+  const { paginateUser } = useUserActions();
 
   const [{ data, loading }, paginationtProps] = useReduxPagination({
     fn: getUsersAPI,
     onSuccess: paginateUser,
-    onReset: resetUsers,
     selector: userPaginationSelector
   });
 

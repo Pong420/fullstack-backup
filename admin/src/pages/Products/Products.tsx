@@ -10,12 +10,11 @@ import { getProducts } from '../../services';
 import { useReduxPagination } from '../../hooks/useReduxPagination';
 
 export function Products() {
-  const { paginateProduct, resetProducts } = useProductActions();
+  const { paginateProduct } = useProductActions();
 
   const [{ ids, search }, paginationProps] = useReduxPagination({
     fn: getProducts,
     onSuccess: paginateProduct,
-    onReset: resetProducts,
     selector: productPaginationSelector
   });
 

@@ -1,6 +1,6 @@
-import { createCRUDReducer, CRUDState } from '@pong420/redux-crud';
 import { ProductActionTypes, ProductActions } from '../actions';
 import { Schema$Product } from '../../typings';
+import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
 
 const pageSize = 12;
 
@@ -10,12 +10,12 @@ interface Suggestion {
   loaded: boolean;
 }
 
-interface State extends CRUDState<Schema$Product, 'id'> {
+interface State extends CRUDStateEx<Schema$Product, 'id'> {
   types: Suggestion;
   tags: Suggestion;
 }
 
-const { crudInitialState, crudReducer } = createCRUDReducer<
+const [crudInitialState, crudReducer] = createCRUDReducerEx<
   Schema$Product,
   'id'
 >({

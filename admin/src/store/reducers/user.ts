@@ -1,8 +1,8 @@
-import { createCRUDReducer } from '@pong420/redux-crud';
 import { Schema$User } from '../../typings';
 import { UserActionTypes } from '../actions';
+import { createCRUDReducerEx } from '../redux-crud-ex';
 
-const { crudReducer } = createCRUDReducer<Schema$User, 'id'>({
+const [, reudcer] = createCRUDReducerEx<Schema$User, 'id'>({
   key: 'id',
   actions: UserActionTypes,
   pageSize: Math.max(
@@ -16,4 +16,4 @@ const { crudReducer } = createCRUDReducer<Schema$User, 'id'>({
   )
 });
 
-export default crudReducer;
+export default reudcer;
