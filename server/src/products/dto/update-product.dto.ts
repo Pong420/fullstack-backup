@@ -31,6 +31,12 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
   @Transform(Number)
   amount?: number;
 
+  @IsEmpty()
+  freeze?: number;
+
+  @IsEmpty()
+  remain?: number;
+
   @IsString()
   @IsOptional()
   type?: string;

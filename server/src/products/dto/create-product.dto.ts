@@ -29,6 +29,12 @@ export class CreateProduct extends Base
   @IsEmpty()
   id?: string;
 
+  @IsEmpty()
+  freeze!: number;
+
+  @IsEmpty()
+  remain!: number;
+
   @IsString()
   type!: string;
 

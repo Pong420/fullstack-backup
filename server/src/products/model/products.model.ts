@@ -11,7 +11,7 @@ import { ProductStatus, Schema$Product } from 'utils';
 export { ProductStatus } from 'utils';
 
 @plugin(paginate)
-export class Product implements Schema$Product {
+export class Product implements Required<Schema$Product> {
   id!: string;
 
   @prop({ required: true, unique: true, index: true })
@@ -25,6 +25,13 @@ export class Product implements Schema$Product {
 
   @prop({ required: true })
   amount!: number;
+
+  @prop({ default: 0 })
+  freeze!: number;
+
+  get remain() {
+    return this.amount - this.freeze;
+  }
 
   @prop({ required: true, type: String, lowercase: true })
   type!: string;
