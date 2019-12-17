@@ -21,6 +21,8 @@ import { PaginationDto, SearchDto } from '../dto';
 import { MultiPartInterceptor } from '../interceptors';
 import { formatSearchQuery } from '../utils';
 
+type Type = 'higher' | 'equal' | 'self';
+
 @UseGuards(RoleGuard(UserRole.GUEST))
 @Controller('user')
 export class UserController {
@@ -29,14 +31,28 @@ export class UserController {
   hasPermission(
     req: FastifyRequest,
     user: Pick<User, 'username' | 'role'>,
-    self = false
+    check: Type[] = ['higher', 'equal']
   ) {
-    if (
-      (self && req.user.username === user.username) ||
-      UserLevels.indexOf(req.user.role) >= UserLevels.indexOf(user.role)
-    ) {
+    const a = UserLevels.indexOf(req.user.role);
+    const b = UserLevels.indexOf(user.role);
+
+    const valid = check
+      .map(type => {
+        switch (type) {
+          case 'higher':
+            return a > b;
+          case 'equal':
+            return a === b;
+          case 'self':
+            return req.user.username === user.username;
+        }
+      })
+      .some(Boolean);
+
+    if (valid) {
       return true;
     }
+
     throw new BadRequestException('Permission denied');
   }
 
@@ -77,7 +93,7 @@ export class UserController {
       username: req.user.username
     });
     if (user) {
-      if (this.hasPermission(req, user, true)) {
+      if (this.hasPermission(req, user, ['higher', 'self'])) {
         return user;
       }
       throw new BadRequestException('User not found');
@@ -95,8 +111,9 @@ export class UserController {
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @Req() req: FastifyRequest) {
     const targerUser = await this.userService.findOne({ id });
+
     if (targerUser) {
-      if (this.hasPermission(req, targerUser, true)) {
+      if (this.hasPermission(req, targerUser, ['higher'])) {
         return this.userService.delete(id);
       }
 
@@ -113,7 +130,7 @@ export class UserController {
   ) {
     const targerUser = await this.userService.findOne({ id });
     if (targerUser) {
-      if (this.hasPermission(req, targerUser, false)) {
+      if (this.hasPermission(req, targerUser, ['higher', 'self'])) {
         return this.userService.update(id, { ...updateUserDto });
       }
     }

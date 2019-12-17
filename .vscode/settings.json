@@ -1,7 +1,9 @@
 {
   "rest-client.environmentVariables": {
     "$shared": {
-      "baseUrl": "http://localhost:5000/api"
+      "baseUrl": "http://localhost:5000/api",
+      "admin_username": "admin",
+      "admin_password": "admin"
     }
   },
   "typescript.tsdk": "node_modules/typescript/lib"
