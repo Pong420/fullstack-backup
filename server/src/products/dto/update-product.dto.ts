@@ -1,8 +1,15 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEmpty,
+  IsEnum,
+  IsNumber
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 import { UploadFile } from '../../upload';
-import { Product } from '../model';
+import { Required$UpdateProduct, Schema$Product, ProductStatus } from 'utils';
 
-export class UpdateProductDto implements Omit<Partial<Product>, 'images'> {
+export class UpdateProduct implements Partial<Required$UpdateProduct> {
   @IsString()
   id!: string;
 
@@ -14,12 +21,14 @@ export class UpdateProductDto implements Omit<Partial<Product>, 'images'> {
   @IsOptional()
   description?: string;
 
-  @IsNotEmpty()
+  @IsNumber()
   @IsOptional()
+  @Transform(Number)
   price?: number;
 
-  @IsNotEmpty()
+  @IsNumber()
   @IsOptional()
+  @Transform(Number)
   amount?: number;
 
   @IsString()
@@ -32,4 +41,21 @@ export class UpdateProductDto implements Omit<Partial<Product>, 'images'> {
   @IsOptional()
   @IsString({ each: true })
   tags?: string[];
+
+  @IsOptional()
+  @IsEnum(ProductStatus)
+  @Transform(Number)
+  status?: ProductStatus;
+
+  @IsEmpty()
+  createdAt?: string;
+
+  @IsEmpty()
+  updatedAt?: string;
 }
+
+export class UpdateProductDto extends UpdateProduct
+  implements
+    Required<
+      Omit<Schema$Product & Required$UpdateProduct, keyof UpdateProduct>
+    > {}

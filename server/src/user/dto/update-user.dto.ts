@@ -5,12 +5,12 @@ import {
   IsEmpty,
   ValidateIf
 } from 'class-validator';
-import { User, UserRole } from '../model/user.model';
+import { Required$UpdateUser, UserRole } from 'utils';
 import { UploadFile } from '../../upload';
 
-export class UpdateUserDto implements Partial<Omit<User, 'avatar'>> {
+export class UpdateUser implements Partial<Required$UpdateUser> {
   @IsEmpty()
-  id!: string;
+  id?: string;
 
   @IsOptional()
   email?: string;
@@ -26,7 +26,7 @@ export class UpdateUserDto implements Partial<Omit<User, 'avatar'>> {
 
   @ValidateIf(o => !!o.avatar)
   @IsNotEmpty()
-  oldAvatar?: string;
+  oldAvatar?: string | null;
 
   @IsEnum(UserRole)
   @IsOptional()
@@ -41,3 +41,6 @@ export class UpdateUserDto implements Partial<Omit<User, 'avatar'>> {
   @IsEmpty()
   updatedAt?: string;
 }
+
+export class UpdateUserDto extends UpdateUser
+  implements Required<Omit<Required$UpdateUser, keyof UpdateUser>> {}

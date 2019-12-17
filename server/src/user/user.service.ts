@@ -66,7 +66,8 @@ export class UserService {
   }
 
   async update(
-    { id, avatar, oldAvatar, ...changes }: UpdateUserDto,
+    id: string,
+    { avatar, oldAvatar, ...changes }: UpdateUserDto,
     options?: QueryFindOneAndUpdateOptions
   ) {
     return UserModel.findOneAndUpdate(

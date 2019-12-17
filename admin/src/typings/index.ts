@@ -5,7 +5,7 @@ export * from './user';
 export * from './products';
 export * from './utils';
 
-export * from 'utils/dist/typings';
+export * from 'utils';
 
 export interface APIError extends Omit<AxiosError, 'response'> {
   response?: AxiosResponse<{
@@ -53,9 +53,4 @@ export interface Response$PaginationAPI<T> {
     prevPage: null;
     nextPage: number;
   };
-}
-
-export interface Schema$Timestamp {
-  createdAt: string;
-  updatedAt: string;
 }

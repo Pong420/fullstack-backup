@@ -101,15 +101,17 @@ export default function(state = initialState, action: ProductActions): State {
 
     // eslint-disable: eslint(no-fallthrough)
     case ProductActionTypes.DELETE:
+      const product = state.byIds[action.payload.id];
+
       return {
         ...state,
         ...crudReducer(state, action),
         tags: handleDeleteSuggestion(
           handleAddSuggestion(state.tags, tags),
-          state.byIds[action.payload.id].tags
+          product ? product.tags : []
         ),
         types: handleDeleteSuggestion(handleAddSuggestion(state.types, types), [
-          state.byIds[action.payload.id].type
+          product ? product.type : ''
         ])
       };
 

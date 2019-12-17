@@ -1,8 +1,14 @@
-import { IsString, IsOptional, IsEnum, IsEmail } from 'class-validator';
-import { User, UserRole } from '../model/user.model';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsEmail,
+  IsEmpty
+} from 'class-validator';
+import { Required$CreateUser, Schema$User, UserRole } from 'utils';
 import { UploadFile } from '../../upload';
 
-export class CreateUserDto implements Partial<Omit<User, 'avatar'>> {
+class Base implements Required$CreateUser {
   @IsString()
   username!: string;
 
@@ -12,12 +18,29 @@ export class CreateUserDto implements Partial<Omit<User, 'avatar'>> {
   @IsEmail()
   email!: string;
 
-  @IsOptional()
-  nickname?: string;
-
   @IsEnum(UserRole)
   role!: UserRole;
+}
+
+class CreateUser extends Base
+  implements Partial<Omit<Schema$User | Required$CreateUser, keyof Base>> {
+  @IsEmpty()
+  id?: string;
+
+  @IsOptional()
+  @IsString()
+  nickname?: string;
 
   @IsOptional()
   avatar?: UploadFile;
+
+  @IsEmpty()
+  createdAt?: string;
+
+  @IsEmpty()
+  updatedAt?: string;
 }
+
+export class CreateUserDto extends CreateUser
+  implements
+    Required<Omit<Schema$User & Required$CreateUser, keyof CreateUser>> {}

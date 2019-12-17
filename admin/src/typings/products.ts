@@ -1,21 +1,22 @@
 import {
   Param$Search,
   Param$Pagination,
-  Schema$Product,
   Response$API,
-  Response$PaginationAPI,
-  Schema$Timestamp
+  Response$PaginationAPI
 } from '.';
+import {
+  Schema$Product,
+  Required$CreateProduct,
+  Required$UpdateProduct
+} from 'utils';
 
 export interface Param$GetProducts extends Param$Pagination, Param$Search {}
 
-export interface Param$CreateProduct
-  extends Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp> {
+export interface Param$CreateProduct extends Required$CreateProduct {
   images: Array<File | string>;
 }
 
-export interface Param$UpdateProduct
-  extends Partial<Omit<Param$CreateProduct, 'images'>> {
+export interface Param$UpdateProduct extends Required$UpdateProduct {
   id: string;
 }
 

@@ -4,17 +4,24 @@ import { InputGroup, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
-import { Param$CreateProduct, ProductStatus } from '../../typings';
+import {
+  Required$UpdateProduct,
+  Param$UpdateProduct,
+  Param$CreateProduct,
+  ProductStatus
+} from '../../typings';
 import { createForm, FormInstance, validators } from '../../utils/form';
 
-type Fields = Omit<Param$CreateProduct, 'images'> & {
+interface Fields extends Required<Required$UpdateProduct> {
   images: Array<RxFileToImageState | string>;
-};
+}
 
 export interface ProductFormProps {
   form?: FormInstance<Fields>;
   initialValues?: Partial<Fields>;
-  onSubmit: (values: Param$CreateProduct) => void;
+  onSubmit: (
+    values: Param$CreateProduct & Omit<Param$UpdateProduct, 'id'>
+  ) => void;
   children?: ReactNode;
 }
 

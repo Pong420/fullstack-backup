@@ -37,6 +37,10 @@ export class Product implements Schema$Product {
 
   @prop({ default: ProductStatus.VISIBLE, type: Number })
   status!: ProductStatus;
+
+  createdAt!: string;
+
+  updatedAt!: string;
 }
 
 export const ProductModel = getModelForClass(Product, {

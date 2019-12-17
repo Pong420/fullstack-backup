@@ -1,3 +1,5 @@
+import { Schema$Timestamp } from './index';
+
 export enum UserRole {
   ADMIN = 'admin',
   MANAGER = 'manager',
@@ -5,7 +7,7 @@ export enum UserRole {
   GUEST = 'guest'
 }
 
-export interface Schema$User {
+export interface Schema$User extends Schema$Timestamp {
   id: string;
 
   email: string;
@@ -19,8 +21,21 @@ export interface Schema$User {
   nickname: string;
 
   avatar: string | null;
+}
 
-  createdAt: string;
+export interface Required$CreateUser
+  extends Pick<Schema$User, 'email' | 'username' | 'password' | 'role'> {
+  nickname?: string;
+}
 
-  updatedAt: string;
+export interface Required$UpdateUser
+  extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Schema$Timestamp>> {
+  avatar?: unknown | null;
+  oldAvatar?: string | null;
+}
+
+export interface Required$GetProducts {
+  tag?: string;
+
+  type?: string;
 }

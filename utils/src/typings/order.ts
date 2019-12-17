@@ -18,3 +18,10 @@ export interface Schema$Order {
 
   status: OrderStatus;
 }
+
+export interface Required$CreateOrder extends Pick<Schema$Order, 'amount'> {
+  product: string;
+}
+
+export interface Required$UpdateOrder
+  extends Pick<Schema$Order, 'amount' | 'status'> {}

@@ -1,28 +1,20 @@
 import {
-  Schema$User,
   Param$Search,
   Param$Pagination,
   Response$API,
-  Response$PaginationAPI,
-  Schema$Timestamp
+  Response$PaginationAPI
 } from '.';
+import { Schema$User, Required$CreateUser, Required$UpdateUser } from 'utils';
 
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 
-export interface Param$CreateUser
-  extends Omit<Schema$User, 'id' | 'avatar' | keyof Schema$Timestamp> {
-  password: string;
+export interface Param$CreateUser extends Required$CreateUser {
   avatar?: File | null;
 }
 
-export interface Param$UpdateUser extends Partial<Param$CreateUser> {
+export interface Param$UpdateUser extends Required$UpdateUser {
   id: string;
-  oldAvatar?: string | null;
-}
-
-export interface Param$UpdateUser extends Partial<Param$CreateUser> {
-  id: string;
-  oldAvatar?: string | null;
+  avatar?: File | null;
 }
 
 export type Response$User = Response$API<Schema$User>;

@@ -14,10 +14,10 @@ import {
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, SearchUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import { RoleGuard, UserLevels } from '../guards';
 import { UserRole, User } from './model/user.model';
-import { PaginationDto } from '../dto/pagination.dto';
+import { PaginationDto, SearchDto } from '../dto';
 import { MultiPartInterceptor } from '../interceptors';
 import { formatSearchQuery } from '../utils';
 
@@ -44,7 +44,7 @@ export class UserController {
   async getUsers(
     @Req() req: FastifyRequest,
     @Query()
-    { pageNo, pageSize, search }: PaginationDto & SearchUserDto = {}
+    { pageNo, pageSize, search }: PaginationDto & SearchDto = {}
   ) {
     const roles = UserLevels.slice(0, UserLevels.indexOf(req.user.role) + 1);
     const searchKeys: Array<keyof User> = [
@@ -111,12 +111,10 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @Req() req: FastifyRequest
   ) {
-    delete updateUserDto.id;
-
     const targerUser = await this.userService.findOne({ id });
     if (targerUser) {
       if (this.hasPermission(req, targerUser, false)) {
-        return this.userService.update({ ...updateUserDto, id });
+        return this.userService.update(id, { ...updateUserDto });
       }
     }
 

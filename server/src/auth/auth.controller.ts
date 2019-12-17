@@ -140,7 +140,7 @@ export class AuthController {
       throw new UnauthorizedException();
     }
 
-    return this.userService.update({ id, password: newPassword });
+    return this.userService.update(id, { password: newPassword });
   }
 
   @Delete('/delete-account')
