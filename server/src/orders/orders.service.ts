@@ -15,7 +15,7 @@ export class OrdersService {
     }
   }
 
-  paginate(
+  async paginate(
     condition?: object,
     { page = 1, limit = 10, ...options }: PaginateOptions = {}
   ) {

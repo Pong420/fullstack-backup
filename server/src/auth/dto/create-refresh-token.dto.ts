@@ -1,5 +1,5 @@
 import { IsString, IsEnum } from 'class-validator';
-import { RefreshToken } from '../model/refreshToken.modal';
+import { RefreshToken } from '../model/refreshToken.model';
 import { UserRole } from '../../user';
 
 export class CreateRefreshTokenDto

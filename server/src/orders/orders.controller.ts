@@ -8,12 +8,13 @@ import {
   UseGuards,
   Req
 } from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
+import { Schema$Order } from 'utils';
 import { CreateOrderDto } from './dto';
 import { RoleGuard } from '../guards';
-import { Product, ProductModel } from '../products/model';
+import { ProductModel } from '../products/model';
+import { UserRole, UserModel } from '../user';
 import { OrdersService } from './orders.service';
-import { UserRole, UserModel, User } from '../user';
-import { FastifyRequest } from 'fastify';
 
 @Controller('orders')
 @UseGuards(RoleGuard(UserRole.GUEST))
@@ -22,18 +23,19 @@ export class OrdersController {
 
   @Get('/')
   getOrders() {
-    const selectProduct: Array<keyof Product> = [
+    const selectProduct: Array<keyof Schema$Order['product']> = [
       'name',
       'images',
       'description',
       'price'
     ];
-    const selectUser: Array<keyof User> = [
+    const selectUser: Array<keyof Schema$Order['user']> = [
       'id',
       'nickname',
       'username',
       'email'
     ];
+
     return this.orderService.paginate(
       {},
       {

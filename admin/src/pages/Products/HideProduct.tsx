@@ -2,7 +2,7 @@ import React, { useCallback, useRef, MouseEvent, useEffect } from 'react';
 import { useRxAsync } from 'use-rx-async';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { updateProduct as updateProductAPI } from '../../services';
-import { Schema$Product } from '../../typings';
+import { Schema$Product, ProductStatus } from '../../typings';
 import { useProductActions } from '../../store';
 import { Subject } from 'rxjs';
 import { tap, debounceTime } from 'rxjs/operators';
@@ -10,13 +10,13 @@ import { useBoolean } from '../../hooks/useBoolean';
 
 export function HideProduct({
   id,
-  hidden
-}: Pick<Partial<Schema$Product>, 'id' | 'hidden'>) {
+  status
+}: Pick<Partial<Schema$Product>, 'id' | 'status'>) {
   const subject = useRef(new Subject<MouseEvent>());
 
   const { updateProduct } = useProductActions();
 
-  const [isHidden, { toggle }] = useBoolean(hidden);
+  const [isHidden, { toggle }] = useBoolean(status === ProductStatus.HIDDEN);
 
   const request = useCallback(async () => {
     if (id) {

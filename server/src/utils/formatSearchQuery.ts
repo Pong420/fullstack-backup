@@ -1,4 +1,4 @@
-import { escapeRegex } from './escapeRegex';
+import { escapeRegex } from 'utils';
 
 export function formatSearchQuery(keys: string[], search?: string) {
   const $regex = search && new RegExp(escapeRegex(search), 'gi');

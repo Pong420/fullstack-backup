@@ -4,7 +4,7 @@ import { FastifyCookieOptions } from 'fastify-cookie';
 import { ConfigService } from '../config';
 import { UserService, UserRole } from '../user';
 import { JWTSignPayload } from './interfaces/jwt.interfaces';
-import { RefreshTokenModel } from './model/refreshToken.modal';
+import { RefreshTokenModel } from './model/refreshToken.model';
 import { CreateRefreshTokenDto, UpdateRefreshTokenDto } from './dto';
 import bcrypt from 'bcrypt';
 

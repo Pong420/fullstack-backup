@@ -7,20 +7,16 @@ import {
 } from '@typegoose/typegoose';
 import bcrypt from 'bcrypt';
 import paginate from 'mongoose-paginate-v2';
+import { UserRole, Schema$User } from 'utils';
+
+export { UserRole } from 'utils';
 
 function hashPassword(pwd: string) {
   return bcrypt.hashSync(pwd, 10);
 }
 
-export enum UserRole {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  CLIENT = 'client',
-  GUEST = 'guest'
-}
-
 @plugin(paginate)
-export class User {
+export class User implements Schema$User {
   id!: string;
 
   @prop({ required: true, unique: true })
@@ -33,7 +29,7 @@ export class User {
   @prop({ required: true, set: hashPassword, get: pwd => pwd, select: false })
   password!: string;
 
-  @prop({ enum: UserRole, default: UserRole.CLIENT })
+  @prop({ enum: UserRole, default: UserRole.CLIENT, type: String })
   role!: UserRole;
 
   @prop({ text: true })

@@ -1,5 +1,5 @@
 import { Response$API } from '.';
-import { Schema$User } from './user';
+import { Schema$User } from '.';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 

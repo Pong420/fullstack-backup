@@ -6,9 +6,14 @@ import {
   arrayProp
 } from '@typegoose/typegoose';
 import paginate from 'mongoose-paginate-v2';
+import { ProductStatus, Schema$Product } from 'utils';
+
+export { ProductStatus } from 'utils';
 
 @plugin(paginate)
-export class Product {
+export class Product implements Schema$Product {
+  id!: string;
+
   @prop({ required: true, unique: true, index: true })
   name!: string;
 
@@ -30,8 +35,8 @@ export class Product {
   @arrayProp({ type: String, lowercase: true })
   tags!: string[];
 
-  @prop({ default: false })
-  hidden!: boolean;
+  @prop({ default: ProductStatus.VISIBLE, type: Number })
+  status!: ProductStatus;
 }
 
 export const ProductModel = getModelForClass(Product, {

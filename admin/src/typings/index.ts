@@ -5,6 +5,8 @@ export * from './user';
 export * from './products';
 export * from './utils';
 
+export * from 'utils/dist/typings';
+
 export interface APIError extends Omit<AxiosError, 'response'> {
   response?: AxiosResponse<{
     statusCode: number;

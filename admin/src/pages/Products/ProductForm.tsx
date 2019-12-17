@@ -4,7 +4,7 @@ import { InputGroup, TextArea, Checkbox } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
-import { Param$CreateProduct } from '../../typings';
+import { Param$CreateProduct, ProductStatus } from '../../typings';
 import { createForm, FormInstance, validators } from '../../utils/form';
 
 type Fields = Omit<Param$CreateProduct, 'images'> & {
@@ -30,7 +30,7 @@ const defaultValues: Fields = {
   images: [],
   tags: [],
   description: '',
-  hidden: false
+  status: ProductStatus.VISIBLE
 };
 
 export function ProductForm({
@@ -100,7 +100,14 @@ export function ProductForm({
         <TextArea fill rows={4} />
       </FormItem>
 
-      <FormItem className="hidden" name="hidden" valuePropName="checked">
+      <FormItem
+        className="hidden"
+        name="status"
+        valuePropName="checked"
+        normalize={checked =>
+          checked ? ProductStatus.HIDDEN : ProductStatus.VISIBLE
+        }
+      >
         <Checkbox alignIndicator="right" children="Hidden" />
       </FormItem>
 

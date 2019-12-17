@@ -1,5 +1,5 @@
 {
-  "name": "full-stack-admin",
+  "name": "fullstack-admin",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -30,7 +30,8 @@
     "rimraf": "^3.0.0",
     "sass": "^1.23.0",
     "source-map-explorer": "^2.1.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "utils": "1.0.0"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.2",

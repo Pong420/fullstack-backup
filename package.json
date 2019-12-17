@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./dist/main.js",
-    "dev": "lerna run dev --stream",
+    "dev": "lerna run dev --stream --parallel",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
     "heroku-postbuild": "yarn build"
   },
-  "workspaces": ["admin", "server"],
+  "workspaces": ["server", "admin", "utils"],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",

@@ -47,7 +47,7 @@ export const Product = React.memo<Props>(({ id }) => {
           <div className="product-controls">
             <EditProduct {...product} />
             <DeleteProduct id={id || undefined} name={name} />
-            <HideProduct id={id || undefined} hidden={product.hidden} />
+            <HideProduct id={id || undefined} status={product.status} />
           </div>
           <div className="tags">
             {tags.map((tag, index) => (

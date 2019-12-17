@@ -5,7 +5,7 @@ import {
   IItemRendererProps,
   ItemPredicate
 } from '@blueprintjs/select';
-import { escapeRegex } from './escapeRegex';
+import { escapeRegex } from 'utils';
 
 export const getItemRenderer = (exclude: string[] = []) => {
   return (value: string, { handleClick, modifiers }: IItemRendererProps) => {
