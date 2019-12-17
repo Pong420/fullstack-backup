@@ -6,9 +6,9 @@ import {
   arrayProp
 } from '@typegoose/typegoose';
 import paginate from 'mongoose-paginate-v2';
-import { ProductStatus, Schema$Product } from 'utils';
+import { ProductStatus, Schema$Product } from '@fullstack/typings';
 
-export { ProductStatus } from 'utils';
+export { ProductStatus } from '@fullstack/typings';
 
 @plugin(paginate)
 export class Product implements Required<Schema$Product> {

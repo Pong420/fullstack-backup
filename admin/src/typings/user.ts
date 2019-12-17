@@ -4,7 +4,11 @@ import {
   Response$API,
   Response$PaginationAPI
 } from '.';
-import { Schema$User, Required$CreateUser, Required$UpdateUser } from 'utils';
+import {
+  Schema$User,
+  Required$CreateUser,
+  Required$UpdateUser
+} from '@fullstack/typings';
 
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 

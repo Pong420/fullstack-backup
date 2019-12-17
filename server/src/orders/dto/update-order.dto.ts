@@ -1,6 +1,10 @@
 import { IsNumber, IsEmpty, IsEnum } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { Required$UpdateOrder, Schema$Order, OrderStatus } from 'utils';
+import {
+  Required$UpdateOrder,
+  Schema$Order,
+  OrderStatus
+} from '@fullstack/typings';
 
 class Base implements Required$UpdateOrder {
   @IsNumber()

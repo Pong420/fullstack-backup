@@ -8,7 +8,11 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UploadFile } from '../../upload';
-import { Required$CreateProduct, Schema$Product, ProductStatus } from 'utils';
+import {
+  Required$CreateProduct,
+  Schema$Product,
+  ProductStatus
+} from '@fullstack/typings';
 
 export class Base implements Required<Required$CreateProduct> {
   @IsString()

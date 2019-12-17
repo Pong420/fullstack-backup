@@ -8,7 +8,7 @@ import {
   Schema$Product,
   Required$CreateProduct,
   Required$UpdateProduct
-} from 'utils';
+} from '@fullstack/typings';
 
 export interface Param$GetProducts extends Param$Pagination, Param$Search {}
 

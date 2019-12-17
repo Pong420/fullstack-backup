@@ -7,7 +7,11 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UploadFile } from '../../upload';
-import { Required$UpdateProduct, Schema$Product, ProductStatus } from 'utils';
+import {
+  Required$UpdateProduct,
+  Schema$Product,
+  ProductStatus
+} from '@fullstack/typings';
 
 export class UpdateProduct implements Partial<Required$UpdateProduct> {
   @IsString()

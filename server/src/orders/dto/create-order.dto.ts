@@ -1,6 +1,10 @@
 import { IsString, IsNumber, IsEmpty } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { Required$CreateOrder, Schema$Order, OrderStatus } from 'utils';
+import {
+  Required$CreateOrder,
+  Schema$Order,
+  OrderStatus
+} from '@fullstack/typings';
 
 class Base implements Required$CreateOrder {
   @IsString()

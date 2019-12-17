@@ -9,7 +9,7 @@ import {
   Req
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
-import { Schema$Order } from 'utils';
+import { Schema$Order } from '@fullstack/typings';
 import { CreateOrderDto } from './dto';
 import { RoleGuard } from '../guards';
 import { ProductModel } from '../products/model';
