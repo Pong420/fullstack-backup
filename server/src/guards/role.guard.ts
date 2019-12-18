@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
-import { ValidatePayload } from '../auth';
+import { Schema$User } from '@fullstack/typings';
 import { UserRole } from '../user/model/user.model';
 
 export const UserLevels: UserRole[] = [
@@ -13,7 +13,35 @@ export const UserLevels: UserRole[] = [
   UserRole.ADMIN
 ];
 
-export function RoleGuard(role: UserRole = UserRole.ADMIN) {
+type Allow = 'higher' | 'equal' | 'self' | 'everyone';
+
+export function hasPermission(
+  user: Pick<Schema$User, 'username' | 'role'>,
+  target: Pick<Schema$User, 'username' | 'role'> | undefined,
+  allow: Allow[] = ['higher', 'equal']
+) {
+  const a = UserLevels.indexOf(user.role);
+  const b = target ? UserLevels.indexOf(target.role) : -1;
+
+  return (
+    allow.includes('everyone') ||
+    allow.some(type => {
+      switch (type) {
+        case 'higher':
+          return a > b;
+        case 'equal':
+          return a === b;
+        case 'self':
+          return target ? user.username === target.username : false;
+      }
+    })
+  );
+}
+
+export function RoleGuard(
+  role: UserRole = UserRole.ADMIN,
+  allow: Allow[] = ['higher', 'equal']
+) {
   class RoleGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext) {
       const canActive = super.canActivate(context);
@@ -24,9 +52,8 @@ export function RoleGuard(role: UserRole = UserRole.ADMIN) {
         map(active => {
           if (active) {
             const req = context.switchToHttp().getRequest<FastifyRequest>();
-            const user = req.user as ValidatePayload;
 
-            if (UserLevels.indexOf(user.role) >= UserLevels.indexOf(role)) {
+            if (hasPermission(req.user, { username: '', role }, allow)) {
               return true;
             }
           }

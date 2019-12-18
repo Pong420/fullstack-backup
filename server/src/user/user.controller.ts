@@ -15,41 +15,19 @@ import {
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { RoleGuard, UserLevels } from '../guards';
+import { RoleGuard, UserLevels, hasPermission } from '../guards';
 import { UserRole, User } from './model/user.model';
 import { PaginationDto, SearchDto } from '../dto';
 import { MultiPartInterceptor } from '../interceptors';
 import { formatSearchQuery } from '../utils';
-
-type Type = 'higher' | 'equal' | 'self';
 
 @UseGuards(RoleGuard(UserRole.GUEST))
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  hasPermission(
-    req: FastifyRequest,
-    user: Pick<User, 'username' | 'role'>,
-    check: Type[] = ['higher', 'equal']
-  ) {
-    const a = UserLevels.indexOf(req.user.role);
-    const b = UserLevels.indexOf(user.role);
-
-    const valid = check
-      .map(type => {
-        switch (type) {
-          case 'higher':
-            return a > b;
-          case 'equal':
-            return a === b;
-          case 'self':
-            return req.user.username === user.username;
-        }
-      })
-      .some(Boolean);
-
-    if (valid) {
+  hasPermission(...args: Parameters<typeof hasPermission>) {
+    if (hasPermission(...args)) {
       return true;
     }
 
@@ -88,22 +66,24 @@ export class UserController {
   @Get('/')
   @Get('/:id')
   async getUser(@Req() req: FastifyRequest, @Param('id') id?: string) {
-    const user = await this.userService.findOne({
+    const targerUser = await this.userService.findOne({
       id,
       username: req.user.username
     });
-    if (user) {
-      if (this.hasPermission(req, user, ['higher', 'self'])) {
-        return user;
+
+    if (targerUser) {
+      if (this.hasPermission(req.user, targerUser, ['higher', 'self'])) {
+        return targerUser;
       }
-      throw new BadRequestException('User not found');
     }
+
+    throw new BadRequestException('User not found');
   }
 
   @Post('/')
   @UseInterceptors(MultiPartInterceptor())
   createUser(@Body() createUserDto: CreateUserDto, @Req() req: FastifyRequest) {
-    if (this.hasPermission(req, createUserDto)) {
+    if (this.hasPermission(req.user, createUserDto)) {
       return this.userService.create(createUserDto);
     }
   }
@@ -113,7 +93,7 @@ export class UserController {
     const targerUser = await this.userService.findOne({ id });
 
     if (targerUser) {
-      if (this.hasPermission(req, targerUser, ['higher'])) {
+      if (this.hasPermission(req.user, targerUser, ['higher'])) {
         return this.userService.delete(id);
       }
 
@@ -130,7 +110,7 @@ export class UserController {
   ) {
     const targerUser = await this.userService.findOne({ id });
     if (targerUser) {
-      if (this.hasPermission(req, targerUser, ['higher', 'self'])) {
+      if (this.hasPermission(req.user, targerUser, ['higher', 'self'])) {
         return this.userService.update(id, { ...updateUserDto });
       }
     }
