@@ -10,20 +10,22 @@ import { useBoolean } from '../../hooks/useBoolean';
 const title = 'Edit Product';
 const icon = 'edit';
 
-export function EditProduct({ id, ...product }: Partial<Schema$Product>) {
+export function EditProduct({ id = '', ...product }: Partial<Schema$Product>) {
   const [isOpen, { on, off }] = useBoolean();
   const { updateProduct } = useProductActions();
+
   const request = useCallback(
-    async (params: Omit<Param$UpdateProduct, 'id'>) => {
-      if (id) {
-        const res = await updateProductAPI({ id, ...params });
-        updateProduct(res.data.data);
-        off();
-      }
-    },
-    [id, updateProduct, off]
+    (params: Omit<Param$UpdateProduct, 'id'>) =>
+      updateProductAPI({ id, ...params }),
+    [id]
   );
-  const { run, loading } = useRxAsync(request, { defer: true });
+
+  const onSuccess = useCallback(() => {
+    updateProduct({ id });
+    off();
+  }, [id, updateProduct, off]);
+
+  const { run, loading } = useRxAsync(request, { defer: true, onSuccess });
 
   return (
     <>

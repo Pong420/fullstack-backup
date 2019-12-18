@@ -10,20 +10,20 @@ import { useBoolean } from '../../hooks/useBoolean';
 const title = 'Delete Product';
 
 export function DeleteProduct({
-  id,
+  id = '',
   name
 }: Pick<Partial<Schema$Product>, 'id' | 'name'>) {
   const [isOpen, { on, off }] = useBoolean();
   const { deleteProduct } = useProductActions();
-  const request = useCallback(async () => {
-    if (id) {
-      await deleteProductAPI({ id });
-      deleteProduct({ id });
-      off();
-    }
+
+  const request = useCallback(() => deleteProductAPI({ id }), [id]);
+
+  const onSuccess = useCallback(() => {
+    deleteProduct({ id });
+    off();
   }, [id, deleteProduct, off]);
 
-  const { run, loading } = useRxAsync(request, { defer: true });
+  const { run, loading } = useRxAsync(request, { defer: true, onSuccess });
 
   return (
     <>

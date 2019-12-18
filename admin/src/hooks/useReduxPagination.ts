@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
-import { AxiosPromise } from 'axios';
+import { AxiosPromise, AxiosResponse } from 'axios';
 import { useSearchParam } from './useSearchParam';
 import {
   Param$Search,
@@ -18,7 +18,6 @@ export type AsyncFn<T> = (
 
 interface PaginationPayload<T> {
   data: T[];
-  search?: string;
   pageNo: number;
   total: number;
 }
@@ -42,21 +41,22 @@ export function useReduxPagination<
 
   const { setSearchParam } = useSearchParam();
 
-  const request = useCallback(
-    () =>
-      fn({ pageNo, pageSize, search }).then(res => {
-        const { docs, totalDocs } = res.data.data;
-        onSuccess({
-          pageNo,
-          search,
-          data: docs,
-          total: totalDocs
-        });
-      }),
-    [fn, pageNo, pageSize, search, onSuccess]
+  const _onSuccess = useCallback(
+    (res: AxiosResponse<Response$PaginationAPI<I>>) => {
+      const { docs, totalDocs, page } = res.data.data;
+      onSuccess({
+        pageNo: page,
+        data: docs,
+        total: totalDocs
+      });
+    },
+    [onSuccess]
   );
 
-  const { loading } = useRxAsync(request, { defer });
+  const { loading, run } = useRxAsync(fn, {
+    defer: true,
+    onSuccess: _onSuccess
+  });
 
   const paginationProps: PaginationProps = {
     total,
@@ -64,6 +64,10 @@ export function useReduxPagination<
     size: pageSize,
     onPageChange: pageNo => setSearchParam(params => ({ ...params, pageNo }))
   };
+
+  useEffect(() => {
+    !defer && run({ pageNo, pageSize, search });
+  }, [defer, run, pageNo, pageSize, search]);
 
   return [{ ids, data, search, loading }, paginationProps] as const;
 }

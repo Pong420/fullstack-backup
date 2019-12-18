@@ -45,15 +45,15 @@ function DeleteAccount() {
   const { id } = useSelector(authUserSelector)!;
   const { logout } = useAuthActions();
 
-  const request = useCallback(
-    async (password: string) => {
-      await deleteAcctount({ id, password });
-      logout();
-    },
-    [id, logout]
-  );
+  const request = useCallback(() => deleteAcctount({ id, password }), [
+    id,
+    password
+  ]);
 
-  const { run, loading } = useRxAsync(request, { defer: true });
+  const { run, loading } = useRxAsync(request, {
+    defer: true,
+    onSuccess: logout
+  });
 
   return (
     <>
@@ -66,7 +66,7 @@ function DeleteAccount() {
         onClose={setIsOpen.off}
         loading={loading}
         disabled={!password}
-        onConfirm={() => run(password)}
+        onConfirm={run}
       >
         <div style={{ marginBottom: 5 }}>Enter your password:</div>
         <Password {...inputProps} />

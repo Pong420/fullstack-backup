@@ -5,19 +5,21 @@ import { ButtonPopover } from '../../components/ButtonPopover';
 import { ProductDialog } from './ProductDialog';
 import { createProduct as createProductAPI } from '../../services';
 import { useProductActions } from '../../store';
-import { Param$CreateProduct } from '../../typings';
+import { Schema$Product } from '../../typings';
 import { useBoolean } from '../../hooks/useBoolean';
 
 const title = 'Create Product';
+
+const request = (...args: Parameters<typeof createProductAPI>) =>
+  createProductAPI(...args).then(res => res.data.data);
 
 export const CreateProduct = React.memo(() => {
   const [isOpen, { on, off }] = useBoolean();
 
   const { createProduct } = useProductActions();
 
-  const request = useCallback(
-    async (params: Param$CreateProduct) => {
-      const product = await createProductAPI(params).then(res => res.data.data);
+  const onSuccess = useCallback(
+    (product: Schema$Product) => {
       createProduct(product);
       off();
     },
@@ -25,7 +27,8 @@ export const CreateProduct = React.memo(() => {
   );
 
   const { run, loading } = useRxAsync(request, {
-    defer: true
+    defer: true,
+    onSuccess
   });
 
   return (

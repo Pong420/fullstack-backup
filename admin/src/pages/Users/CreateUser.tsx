@@ -15,6 +15,7 @@ const title = 'Create User';
 export const CreateUser = React.memo(() => {
   const [dialogOpen, { on, off }] = useBoolean();
   const { createUser } = useUserActions();
+
   const onSuccess = useCallback(
     (user: Schema$User) => {
       createUser(user);
@@ -22,6 +23,7 @@ export const CreateUser = React.memo(() => {
     },
     [createUser, off]
   );
+
   const { run, loading } = useRxAsync(createUserAPI, {
     defer: true,
     onSuccess

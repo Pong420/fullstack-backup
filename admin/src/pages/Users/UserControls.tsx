@@ -26,17 +26,24 @@ const passwordValidators: UserDialogProps['passwordValidators'] = [
 const EditUser = React.memo(
   ({ id = '', avatar, ...props }: Partial<Schema$User>) => {
     const [dialogOpen, { on, off }] = useBoolean();
+
     const { updateUser } = useUserActions();
+
     const request = useCallback(
-      async (param: Omit<Param$UpdateUser, 'id'>) => {
-        const res = await updateUserAPI({ id, ...param });
-        updateUser(res.data.data);
-        off();
-      },
-      [id, updateUser, off]
+      (params: Omit<Param$UpdateUser, 'id'>) =>
+        updateUserAPI({ id, ...params }).then(res => res.data.data),
+      [id]
     );
 
-    const { run, loading } = useRxAsync(request, { defer: true });
+    const onSuccess = useCallback(
+      (payload: Schema$User) => {
+        updateUser(payload);
+        off();
+      },
+      [off, updateUser]
+    );
+
+    const { run, loading } = useRxAsync(request, { defer: true, onSuccess });
 
     return (
       <>
@@ -64,14 +71,20 @@ const EditUser = React.memo(
 
 const DeleteUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const [dialogOpen, { on, off }] = useBoolean();
+
   const { deleteUser } = useUserActions();
-  const request = useCallback(async () => {
-    await deleteUserAPI({ id });
+
+  const request = useCallback(() => deleteUserAPI({ id }), [id]);
+
+  const onSuccess = useCallback(() => {
     deleteUser({ id });
     off();
-  }, [id, off, deleteUser]);
+  }, [off, deleteUser, id]);
 
-  const { run, loading } = useRxAsync(request, { defer: true });
+  const { run, loading } = useRxAsync(request, {
+    defer: true,
+    onSuccess
+  });
 
   return (
     <>

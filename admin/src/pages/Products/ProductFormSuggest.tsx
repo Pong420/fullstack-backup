@@ -78,14 +78,11 @@ function useSuggestion(type: 'types' | 'tags') {
   const { updateSuggestion } = useUpdateProductSuggestion();
 
   const getTypes = useCallback(
-    () =>
-      getSuggestion(type).then(res =>
-        updateSuggestion({ type, values: res.data.data })
-      ),
-    [type, updateSuggestion]
+    () => getSuggestion(type).then(res => ({ type, values: res.data.data })),
+    [type]
   );
 
-  useRxAsync(getTypes, { defer: loaded });
+  useRxAsync(getTypes, { defer: loaded, onSuccess: updateSuggestion });
 
   return { values, loaded };
 }
