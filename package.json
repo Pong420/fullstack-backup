@@ -11,7 +11,7 @@
     "heroku-postbuild": "yarn build",
     "postinstall": "lerna run --scope @fullstack/typings build"
   },
-  "workspaces": ["server", "admin", "utils", "typings"],
+  "workspaces": ["server", "admin", "app", "utils", "typings"],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
