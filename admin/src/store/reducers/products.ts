@@ -1,6 +1,7 @@
 import { ProductActionTypes, ProductActions } from '../actions';
 import { Schema$Product } from '../../typings';
 import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
+import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
 
 const pageSize = 12;
 
@@ -26,10 +27,14 @@ const [crudInitialState, crudReducer] = createCRUDReducerEx<
 
 const fill = crudInitialState.pageNo * pageSize;
 
+const placesholders = {
+  ids: new Array(fill).fill(null),
+  list: new Array(fill).fill({})
+};
+
 const initialState: State = {
   ...crudInitialState,
-  ids: new Array(fill).fill(null),
-  list: new Array(fill).fill({}),
+  ...placesholders,
   types: {
     values: [],
     count: {},
@@ -66,7 +71,10 @@ function handleDeleteSuggestion(target: Suggestion, values: string[]) {
   return clone;
 }
 
-export default function(state = initialState, action: ProductActions): State {
+export default function(
+  state = initialState,
+  action: ProductActions | LocationChangeAction
+): State {
   let tags: string[] = [];
   let types: string[] = [];
 
@@ -117,6 +125,13 @@ export default function(state = initialState, action: ProductActions): State {
 
     case ProductActionTypes.RESET:
       return { ...initialState };
+
+    case LOCATION_CHANGE:
+      return {
+        ...state,
+        ...crudReducer(state, action),
+        ...placesholders
+      };
 
     default:
       return { ...state, ...crudReducer(state, action) };
