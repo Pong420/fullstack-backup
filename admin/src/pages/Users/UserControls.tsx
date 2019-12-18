@@ -37,8 +37,8 @@ const EditUser = React.memo(
 
     const onSuccess = useCallback(
       (payload: Schema$User) => {
-        updateUser(payload);
         off();
+        updateUser(payload);
       },
       [off, updateUser]
     );
@@ -77,8 +77,8 @@ const DeleteUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
   const request = useCallback(() => deleteUserAPI({ id }), [id]);
 
   const onSuccess = useCallback(() => {
-    deleteUser({ id });
     off();
+    deleteUser({ id });
   }, [off, deleteUser, id]);
 
   const { run, loading } = useRxAsync(request, {

@@ -19,8 +19,8 @@ export function DeleteProduct({
   const request = useCallback(() => deleteProductAPI({ id }), [id]);
 
   const onSuccess = useCallback(() => {
-    deleteProduct({ id });
     off();
+    deleteProduct({ id });
   }, [id, deleteProduct, off]);
 
   const { run, loading } = useRxAsync(request, { defer: true, onSuccess });

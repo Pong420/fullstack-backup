@@ -21,8 +21,8 @@ export function EditProduct({ id = '', ...product }: Partial<Schema$Product>) {
   );
 
   const onSuccess = useCallback(() => {
-    updateProduct({ id });
     off();
+    updateProduct({ id });
   }, [id, updateProduct, off]);
 
   const { run, loading } = useRxAsync(request, { defer: true, onSuccess });

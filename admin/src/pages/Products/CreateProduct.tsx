@@ -20,8 +20,8 @@ export const CreateProduct = React.memo(() => {
 
   const onSuccess = useCallback(
     (product: Schema$Product) => {
-      createProduct(product);
       off();
+      createProduct(product);
     },
     [off, createProduct]
   );

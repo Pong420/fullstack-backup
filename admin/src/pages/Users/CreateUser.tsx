@@ -18,8 +18,8 @@ export const CreateUser = React.memo(() => {
 
   const onSuccess = useCallback(
     (user: Schema$User) => {
-      createUser(user);
       off();
+      createUser(user);
     },
     [createUser, off]
   );
