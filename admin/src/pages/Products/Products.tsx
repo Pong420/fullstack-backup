@@ -6,7 +6,7 @@ import { Omnibar } from '../../components/Omnibar';
 import { CreateProduct } from './CreateProduct';
 import { Product } from './Product';
 import { useProductActions, productPaginationSelector } from '../../store';
-import { getProducts } from '../../services';
+import { getProducts } from '../../service';
 import { useReduxPagination } from '../../hooks/useReduxPagination';
 
 export function Products() {

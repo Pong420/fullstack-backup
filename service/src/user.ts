@@ -5,26 +5,25 @@ import {
   Param$UpdateUser,
   Response$GetUsers,
   Response$User
-} from '../typings';
-import { createFormData } from './createFormData';
+} from './typings';
+import { createFormData, generatePath, PATHS } from './utils';
 
 export const getUsers = (params: Param$GetUsers = {}) =>
-  api.get<Response$GetUsers>('/user/list', { params });
+  api.get<Response$GetUsers>(PATHS.GET_USERS, { params });
 
-export const getUserInfo = (id?: string) => {
-  return api.get<Response$User>(`/user` + (id ? `?id=${id}` : ''));
-};
+export const getUserInfo = (id?: string) =>
+  api.get<Response$User>(generatePath(PATHS.GET_USER, { id }));
 
 export const createUser = (params: Param$CreateUser) =>
-  api.post<Response$User>('/user', createFormData(params));
+  api.post<Response$User>(PATHS.CREATE_USER, createFormData(params));
 
 export const updateUser = ({ id, password, ...params }: Param$UpdateUser) => {
   return api.patch<Response$User>(
-    `/user/${id}`,
+    generatePath(PATHS.UPDATE_USER, { id }),
     createFormData({ ...(password && { password }), ...params })
   );
 };
 
 export const deleteUser = ({ id }: { id: string }) => {
-  return api.delete(`/user/${id}`);
+  return api.delete(generatePath(PATHS.DELETE_USER, { id }));
 };

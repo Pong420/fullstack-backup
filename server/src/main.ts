@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
+import { SERVICE_PATHS } from '@fullstack/service';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './interceptors';
 import cookieParser from 'fastify-cookie';
@@ -20,7 +21,7 @@ async function bootstrap(): Promise<void> {
   app.register(multipart);
   app.register(cookieParser);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(SERVICE_PATHS.BASE_URL);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 

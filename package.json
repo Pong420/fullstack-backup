@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./dist/main.js",
-    "dev": "lerna run dev --stream --parallel",
+    "dev": "lerna run dev --stream --parallel --ignore @fullstack/app",
+    "dev:admin": "lerna run dev --stream --parallel --ignore @fullstack/app",
+    "dev:app": "lerna run dev --stream --parallel --ignore @fullstack/admin",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",

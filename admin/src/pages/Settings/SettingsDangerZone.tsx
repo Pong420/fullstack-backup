@@ -6,7 +6,7 @@ import { SettingsSection } from './SettingsSection';
 import { AsyncFnDialog } from '../../components/Dialog';
 import { Password } from '../../components/Password';
 import { ModifyPasswordDialog } from '../../components/ModifyPasswordDialog';
-import { deleteAcctount } from '../../services';
+import { deleteAcctount } from '../../service';
 import { authUserSelector, useAuthActions } from '../../store';
 import { useBoolean } from '../../hooks/useBoolean';
 

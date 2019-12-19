@@ -3,7 +3,7 @@ import { useRxAsync } from 'use-rx-async';
 import { Classes } from '@blueprintjs/core';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { ProductDialog } from './ProductDialog';
-import { createProduct as createProductAPI } from '../../services';
+import { createProduct as createProductAPI } from '../../service';
 import { useProductActions } from '../../store';
 import { Schema$Product } from '../../typings';
 import { useBoolean } from '../../hooks/useBoolean';

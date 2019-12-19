@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { UserDialog } from './UserDialog';
-import { createUser } from '../../services';
+import { createUser } from '../../service';
 import { useUserActions } from '../../store';
 import { Schema$User } from '../../typings';
 import { useBoolean } from '../../hooks/useBoolean';

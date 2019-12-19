@@ -7,7 +7,7 @@ import { Omnibar } from '../../components/Omnibar';
 import { CreateUser } from './CreateUser';
 import { UserControls } from './UserControls';
 import { Schema$User } from '../../typings';
-import { getUsers as getUsersAPI } from '../../services';
+import { getUsers as getUsersAPI } from '../../service';
 import { useUserActions, userPaginationSelector } from '../../store';
 import { useReduxPagination } from '../../hooks/useReduxPagination';
 import dayjs from 'dayjs';

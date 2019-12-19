@@ -7,24 +7,23 @@ import {
   Response$Login,
   Response$RefreshToken,
   Response$User
-} from '../typings';
-
-export const REFERTSH_TOKEN_PATH = '/auth/refresh_token';
+} from './typings';
+import { PATHS } from './utils/paths';
 
 export const login = (params: Param$Login) =>
-  api.post<Response$Login>('/auth/login', params);
+  api.post<Response$Login>(PATHS.LOGIN, params);
 
 export const adminRegistration = (params: Param$CreateUser) =>
-  api.post<Response$User>('/auth/register/admin', params);
+  api.post<Response$User>(PATHS.ADMIN_REGISTRATION, params);
 
 export const guestRegistration = (params: Param$CreateUser) =>
-  api.post<Response$User>('/auth/register/guest', params);
+  api.post<Response$User>(PATHS.GUEST_REGISTRATION, params);
 
-export const logout = () => api.post('/auth/logout');
+export const logout = () => api.post(PATHS.LOOUT);
 
 export const refreshToken = () =>
   api.post<Response$RefreshToken>(
-    REFERTSH_TOKEN_PATH,
+    PATHS.REFERTSH_TOKEN,
     {},
     {
       errorHandle: false
@@ -32,7 +31,7 @@ export const refreshToken = () =>
   );
 
 export const modifyPassword = (params: Param$ModifyPassword) =>
-  api.patch<Response$User>('/auth/modify-password', params);
+  api.patch<Response$User>(PATHS.MODIFY_PASSWORD, params);
 
 export const deleteAcctount = (data: Param$DeleteAccount) =>
-  api.delete('/auth/delete-account', { data });
+  api.delete(PATHS.DELETE_ACCOUNT, { data });

@@ -4,7 +4,7 @@ import { ButtonPopover } from '../../components/ButtonPopover';
 import { ProductDialog } from './ProductDialog';
 import { Schema$Product, Param$UpdateProduct } from '../../typings';
 import { useProductActions } from '../../store';
-import { updateProduct as updateProductAPI } from '../../services';
+import { updateProduct as updateProductAPI } from '../../service';
 import { useBoolean } from '../../hooks/useBoolean';
 
 const title = 'Edit Product';

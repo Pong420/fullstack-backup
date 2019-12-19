@@ -4,7 +4,7 @@ import { useRxAsync } from 'use-rx-hooks';
 import { Button, Card, H5 } from '@blueprintjs/core';
 import { UserForm, UserFormProps } from '../../components/UserForm';
 import { loginStatusSelector } from '../../store';
-import { adminRegistration } from '../../services';
+import { adminRegistration } from '../../service';
 import { UserRole } from '../../typings';
 import { PATHS } from '../../constants';
 import { ReactComponent as Logo } from '../../assets/logo.svg';

@@ -1,4 +1,10 @@
-import { Schema$Timestamp } from './index';
+import {
+  Schema$Timestamp,
+  Param$Search,
+  Param$Pagination,
+  Response$API,
+  Response$PaginationAPI
+} from './index';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -36,6 +42,20 @@ export interface Required$UpdateUser
 
 export interface Required$GetProducts {
   tag?: string;
-
   type?: string;
 }
+
+export interface Param$GetUsers extends Param$Search, Param$Pagination {}
+
+export interface Param$CreateUser extends Required$CreateUser {
+  avatar?: File | null;
+}
+
+export interface Param$UpdateUser extends Required$UpdateUser {
+  id: string;
+  avatar?: File | null;
+}
+
+export type Response$User = Response$API<Schema$User>;
+
+export type Response$GetUsers = Response$PaginationAPI<Schema$User>;

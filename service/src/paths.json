@@ -1,0 +1,30 @@
+{
+  "BASE_URL": "/api",
+  "AUTH": {
+    "PREFIX": "/auth",
+    "LOGIN": "/login",
+    "LOOUT": "/logout",
+    "ADMIN_REGISTRATION": "/register/admin",
+    "GUEST_REGISTRATION": "/register/guest",
+    "REFERTSH_TOKEN": "/refresh_token",
+    "MODIFY_PASSWORD": "/modify-password",
+    "DELETE_ACCOUNT": "/delete-account"
+  },
+  "USER": {
+    "PREFIX": "/user",
+    "GET_USERS": "/list",
+    "GET_USER": "/:id?",
+    "CREATE_USER": "",
+    "UPDATE_USER": "/:id",
+    "DELETE_USER": "/:id"
+  },
+  "PRODUCTS": {
+    "PREFIX": "/products",
+    "GET_PRODUCTS": "",
+    "CREATE_PRODUCT": "/",
+    "UPDATE_PRODUCT": "/:id",
+    "DELETE_PRODUCT": "/:id",
+    "GET_SUGGESTION_TYPE": "/types",
+    "GET_SUGGESTION_TAGS": "/tags"
+  }
+}

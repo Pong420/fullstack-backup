@@ -9,7 +9,7 @@ import { Schema$User, Param$UpdateUser } from '../../typings';
 import {
   updateUser as updateUserAPI,
   deleteUser as deleteUserAPI
-} from '../../services';
+} from '../../service';
 import { useBoolean } from '../../hooks/useBoolean';
 import { validators } from '../../utils/form';
 

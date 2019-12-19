@@ -5,7 +5,7 @@ import { Password } from './Password';
 import { AsyncFnDialog, AsyncFnDialogProps } from './Dialog';
 import { Param$ModifyPassword } from '../typings';
 import { authUserSelector, useAuthActions } from '../store';
-import { modifyPassword } from '../services';
+import { modifyPassword } from '../service';
 import { createForm, validators } from '../utils/form';
 import { Toaster } from '../utils/toaster';
 

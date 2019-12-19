@@ -10,7 +10,7 @@ import {
   Logout
 } from '../actions/auth';
 import { RootState } from '../reducers';
-import { login, refreshToken, logout, getUserInfo } from '../../services';
+import { login, refreshToken, logout, getUserInfo } from '../../service';
 import { PATHS } from '../../constants';
 import { Response$Login } from '../../typings';
 import { isLocation } from '../../utils/isLocation';
@@ -29,12 +29,16 @@ const loginEpic: AuthEpic = (action$, state$) =>
         action.type === AuthActionTypes.LOGIN
           ? login(action.payload).then(res => res.data.data)
           : refreshToken().then<Response$Login['data']>(async res => {
-              const user = (await getUserInfo()).data.data;
-              return {
-                ...res.data.data,
-                isDefaultAc: false,
-                user
-              };
+              try {
+                const user = (await getUserInfo()).data.data;
+                return {
+                  ...res.data.data,
+                  isDefaultAc: false,
+                  user
+                };
+              } catch (error) {
+                return Promise.reject(error);
+              }
             });
 
       return from(request).pipe(

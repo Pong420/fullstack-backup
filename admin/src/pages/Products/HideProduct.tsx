@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Subject, from } from 'rxjs';
 import { tap, debounceTime, filter, map, mergeMap } from 'rxjs/operators';
 import { ButtonPopover } from '../../components/ButtonPopover';
-import { updateProduct as updateProductAPI } from '../../services';
+import { updateProduct as updateProductAPI } from '../../service';
 import { Schema$Product, ProductStatus } from '../../typings';
 import { useProductActions } from '../../store';
 import { useBoolean } from '../../hooks/useBoolean';

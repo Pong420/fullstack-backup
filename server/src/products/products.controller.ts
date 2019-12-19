@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
+import { SERVICE_PATHS } from '@fullstack/service';
 import { RoleGuard } from '../guards';
 import { UserRole } from '../user';
 import { MultiPartInterceptor } from '../interceptors';
@@ -19,11 +20,11 @@ import { formatSearchQuery } from '../utils';
 import { ProductsService } from './products.service';
 
 @UseGuards(RoleGuard(UserRole.GUEST))
-@Controller('products')
+@Controller(SERVICE_PATHS.PRODUCTS.PREFIX)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get('/')
+  @Get(SERVICE_PATHS.PRODUCTS.GET_PRODUCTS)
   async getProducts(@Query()
   {
     pageNo,
@@ -50,18 +51,18 @@ export class ProductsController {
     );
   }
 
-  @Post('/')
+  @Post(SERVICE_PATHS.PRODUCTS.CREATE_PRODUCT)
   @UseInterceptors(MultiPartInterceptor())
   createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
-  @Delete('/:id')
+  @Delete(SERVICE_PATHS.PRODUCTS.DELETE_PRODUCT)
   async deleteUser(@Param('id') id: string) {
     return this.productsService.delete(id);
   }
 
-  @Patch('/:id')
+  @Patch(SERVICE_PATHS.PRODUCTS.UPDATE_PRODUCT)
   @UseInterceptors(MultiPartInterceptor())
   async updateUser(
     @Param('id') id: string,
@@ -70,12 +71,12 @@ export class ProductsController {
     return this.productsService.update({ ...updateProductDto, id });
   }
 
-  @Get('/types')
+  @Get(SERVICE_PATHS.PRODUCTS.GET_SUGGESTION_TYPE)
   async getTypes() {
     return this.productsService.types();
   }
 
-  @Get('/tags')
+  @Get(SERVICE_PATHS.PRODUCTS.GET_SUGGESTION_TAGS)
   async getTags() {
     return this.productsService.tags();
   }

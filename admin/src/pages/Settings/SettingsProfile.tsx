@@ -7,7 +7,7 @@ import { SettingsSection } from './SettingsSection';
 import { EditAvatar } from './EditAvatar';
 import { Param$UpdateUser, Schema$User } from '../../typings';
 import { authUserSelector, useAuthActions } from '../../store';
-import { updateUser } from '../../services';
+import { updateUser } from '../../service';
 import { createForm, validators } from '../../utils/form';
 import { Toaster } from '../../utils/toaster';
 

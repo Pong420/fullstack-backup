@@ -1,10 +1,7 @@
 import { AxiosResponse, AxiosError } from 'axios';
 
 export * from './auth';
-export * from './user';
-export * from './products';
 export * from './utils';
-
 export * from '@fullstack/service';
 
 export interface APIError extends Omit<AxiosError, 'response'> {

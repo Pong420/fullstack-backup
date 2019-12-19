@@ -13,6 +13,7 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { SERVICE_PATHS } from '@fullstack/service';
 import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService, CreateUserDto, UserRole } from '../user';
@@ -25,20 +26,20 @@ import uuidv4 from 'uuid/v4';
 
 const REFRESH_TOKEN = 'refresh_token';
 
-@Controller('auth')
+@Controller(SERVICE_PATHS.AUTH.PREFIX)
 export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService
   ) {}
 
-  @Post('/register/admin')
+  @Post(SERVICE_PATHS.AUTH.ADMIN_REGISTRATION)
   @UseGuards(RoleGuard(UserRole.ADMIN))
   adminRegistration(@Body() createUserDto: CreateUserDto) {
     return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
   }
 
-  @Post('/register/guest')
+  @Post(SERVICE_PATHS.AUTH.GUEST_REGISTRATION)
   guestRegistration(@Body() createUserDto: CreateUserDto) {
     return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
   }
@@ -49,7 +50,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('local'))
-  @Post('/login')
+  @Post(SERVICE_PATHS.AUTH.LOGIN)
   async login(@Req() req: FastifyRequest, @Res() reply: FastifyReply) {
     const user = isDocument(req.user) ? req.user.toJSON() : req.user;
     const sign = await this.authService.signJwt(user);
@@ -74,7 +75,7 @@ export class AuthController {
       );
   }
 
-  @Post('/refresh_token')
+  @Post(SERVICE_PATHS.AUTH.REFERTSH_TOKEN)
   async refreshToken(@Req() req: FastifyRequest, @Res() reply: FastifyReply) {
     const tokenFromCookies = req.cookies[REFRESH_TOKEN];
 
@@ -108,7 +109,7 @@ export class AuthController {
       .send(new BadRequestException('Refresh token not found'));
   }
 
-  @Post('logout')
+  @Post(SERVICE_PATHS.AUTH.LOOUT)
   async logout(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       await this.authService.logout(req.cookies[REFRESH_TOKEN]);
@@ -125,7 +126,7 @@ export class AuthController {
     }
   }
 
-  @Patch('/modify-password')
+  @Patch(SERVICE_PATHS.AUTH.MODIFY_PASSWORD)
   @UseGuards(AuthGuard('jwt'))
   async modifyPassword(
     @Body() modifyPasswordUserDto: ModifyUserPasswordDto,
@@ -143,7 +144,7 @@ export class AuthController {
     return this.userService.update(id, { password: newPassword });
   }
 
-  @Delete('/delete-account')
+  @Delete(SERVICE_PATHS.AUTH.DELETE_ACCOUNT)
   @UseGuards(AuthGuard('jwt'))
   async deleteAccount(
     @Body() deleteAccountDto: DeleteAccountDto,

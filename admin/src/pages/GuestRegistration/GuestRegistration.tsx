@@ -5,7 +5,7 @@ import { Card, Button, H5 } from '@blueprintjs/core';
 import { UserForm, UserFormProps } from '../../components/UserForm';
 import { PATHS } from '../../constants';
 import { UserRole } from '../../typings';
-import { guestRegistration } from '../../services';
+import { guestRegistration } from '../../service';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 
 const exclude: UserFormProps['exclude'] = ['role'];

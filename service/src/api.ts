@@ -1,9 +1,9 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { from } from 'rxjs';
 import { retry } from 'rxjs/operators';
-import { refreshToken, REFERTSH_TOKEN_PATH } from './auth';
-import { Schema$JWT, Response$API } from '../typings';
-import { Toaster } from '../utils/toaster';
+import { refreshToken } from './auth';
+import { Schema$JWT, Response$API } from './typings';
+import PATHS from './paths.json';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -14,9 +14,10 @@ declare module 'axios' {
 let jwtToken: Schema$JWT | null = null;
 
 export const api = axios.create({
-  baseURL: '/api'
+  baseURL: PATHS.BASE_URL
 });
 
+// eslint-disable-next-line
 function isJWT(data: any): data is Schema$JWT {
   return !!(data && data.expiry && data.token);
 }
@@ -27,7 +28,7 @@ function isJWT(data: any): data is Schema$JWT {
 //   api.interceptors.request.use(async config => {
 //     if (
 //       config.url &&
-//       config.url !== REFERTSH_TOKEN_PATH &&
+//       config.url !== PATHS.REFERTSH_TOKEN &&
 //       config.url !== '/user'
 //     ) {
 //       await delay(2000);
@@ -39,7 +40,10 @@ function isJWT(data: any): data is Schema$JWT {
 api.interceptors.request.use(async config => {
   if (jwtToken) {
     if ((+new Date(jwtToken.expiry) - +new Date()) / (60 * 1000) <= 1) {
-      if (config.url && !new RegExp(REFERTSH_TOKEN_PATH).test(config.url)) {
+      if (
+        config.url &&
+        !new RegExp(PATHS.AUTH.REFERTSH_TOKEN).test(config.url)
+      ) {
         const response = await from(refreshToken())
           .pipe(retry(2))
           .toPromise();
@@ -54,26 +58,13 @@ api.interceptors.request.use(async config => {
   return config;
 });
 
-api.interceptors.response.use(
-  (response: AxiosResponse<Response$API<any>>) => {
-    const data = response.data.data;
+// eslint-disable-next-line
+api.interceptors.response.use((response: AxiosResponse<Response$API<any>>) => {
+  const data = response.data.data;
 
-    if (isJWT(data)) {
-      jwtToken = { token: data.token, expiry: data.expiry };
-    }
-
-    return response;
-  },
-  (error: AxiosError) => {
-    if (error.config.errorHandle !== false) {
-      Toaster.apiError(error);
-    }
-
-    return Promise.reject(error);
+  if (isJWT(data)) {
+    jwtToken = { token: data.token, expiry: data.expiry };
   }
-);
 
-api.interceptors.request.use(async config => {
-  config.baseURL = config.baseURL + '';
-  return config;
+  return response;
 });

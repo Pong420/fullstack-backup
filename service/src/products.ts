@@ -6,37 +6,40 @@ import {
   Response$GetProducts,
   Response$Product,
   Response$GetSuggestion
-} from '../typings';
-import { createFormData } from './createFormData';
+} from './typings';
+import { createFormData, generatePath, PATHS } from './utils';
 
 function handleSpecificSearch(search: string, reg: RegExp, key: string) {
   return reg.test(search) ? { [key]: search.replace(reg, '') } : undefined;
 }
 
 export const getProducts = ({ search, ...params }: Param$GetProducts = {}) => {
-  let searchParams = search
+  const searchParams = search
     ? handleSpecificSearch(search, /^tag:/, 'tag') ||
       handleSpecificSearch(search, /^type:/, 'type') || { search }
     : {};
 
-  return api.get<Response$GetProducts>('/products', {
+  return api.get<Response$GetProducts>(PATHS.GET_PRODUCTS, {
     params: { ...searchParams, ...params }
   });
 };
 
 export const createProduct = (params: Param$CreateProduct) =>
-  api.post<Response$Product>('/products', createFormData(params));
+  api.post<Response$Product>(PATHS.CREATE_PRODUCT, createFormData(params));
 
-export const updateProduct = (params: Param$UpdateProduct) => {
+export const updateProduct = ({ id, ...params }: Param$UpdateProduct) => {
   return api.patch<Response$Product>(
-    `/products/${params.id}`,
+    generatePath(PATHS.UPDATE_PRODUCT, { id }),
     createFormData(params)
   );
 };
 
 export const deleteProduct = ({ id }: { id: string }) => {
-  return api.delete(`/products/${id}`);
+  return api.delete(generatePath(PATHS.DELETE_PRODUCT, { id }));
 };
 
-export const getSuggestion = (type?: 'types' | 'tags') =>
-  api.get<Response$GetSuggestion>(`/products/${type}`);
+export const getSuggestion = (type: 'types' | 'tags') => {
+  return api.get<Response$GetSuggestion>(
+    type === 'types' ? PATHS.GET_SUGGESTION_TYPE : PATHS.GET_SUGGESTION_TAGS
+  );
+};

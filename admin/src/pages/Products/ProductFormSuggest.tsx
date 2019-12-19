@@ -13,7 +13,7 @@ import {
   productSuggestSelector,
   useUpdateProductSuggestion
 } from '../../store';
-import { getSuggestion } from '../../services';
+import { getSuggestion } from '../../service';
 import { getTagProps } from '../../utils/getTagProps';
 import {
   itemPredicate,

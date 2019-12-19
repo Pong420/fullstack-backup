@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 function append(form: FormData, key: string, data: any) {
   if (Array.isArray(data)) {
     if (data.length === 0) {
