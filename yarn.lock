@@ -14371,6 +14371,16 @@ rc-field-form@^0.0.0-alpha.23:
     rc-util "^4.6.0"
     warning "^4.0.3"
 
+rc-field-form@^0.0.0-alpha.25:
+  version "0.0.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/rc-field-form/-/rc-field-form-0.0.0-alpha.25.tgz#77a29df483a808a9bae7707a12a5397e59f8f0cc"
+  integrity sha512-VGi1ZQkX7jOpnbOrj1/IY+8n3O0mdXT64j1WlJLgowylVvD9b5W9Hc4AIB+b5dj8ju+jUtietmPsjXS1UG+cJA==
+  dependencies:
+    async-validator "^3.0.3"
+    lodash "^4.17.4"
+    rc-util "^4.6.0"
+    warning "^4.0.3"
+
 rc-util@^4.6.0:
   version "4.15.7"
   resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-4.15.7.tgz#8380b05765952d08dd9fdb836e19dda437cceab7"
