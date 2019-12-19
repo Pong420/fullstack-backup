@@ -5,7 +5,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf ../../dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "cross-env NODE_ENV=development yarn start:dev",
