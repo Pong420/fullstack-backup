@@ -16,14 +16,17 @@ export function EditProduct({ id = '', ...product }: Partial<Schema$Product>) {
 
   const request = useCallback(
     (params: Omit<Param$UpdateProduct, 'id'>) =>
-      updateProductAPI({ id, ...params }),
+      updateProductAPI({ id, ...params }).then(res => res.data.data),
     [id]
   );
 
-  const onSuccess = useCallback(() => {
-    off();
-    updateProduct({ id });
-  }, [id, updateProduct, off]);
+  const onSuccess = useCallback(
+    (product: Schema$Product) => {
+      off();
+      updateProduct({ id, ...product });
+    },
+    [id, updateProduct, off]
+  );
 
   const { run, loading } = useRxAsync(request, { defer: true, onSuccess });
 

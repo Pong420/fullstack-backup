@@ -22,15 +22,17 @@ export interface Schema$Product extends Schema$Timestamp {
 
   amount: number;
 
-  // freeze: number;
+  freeze: number;
 
-  // remain: number;
+  remain: number;
 
   type: string;
 
   images: string[];
 
   tags: string[];
+
+  discount: number;
 
   status: ProductStatus;
 }
@@ -40,7 +42,10 @@ export interface Required$CreateProduct
 
 export interface Required$UpdateProduct
   extends Partial<
-    Omit<Schema$Product, 'id' | 'images' | keyof Schema$Timestamp>
+    Omit<
+      Schema$Product,
+      'id' | 'images' | 'freeze' | 'remain' | keyof Schema$Timestamp
+    >
   > {
   images?: unknown[];
 }

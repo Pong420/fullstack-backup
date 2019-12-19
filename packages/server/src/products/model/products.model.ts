@@ -45,6 +45,9 @@ export class Product implements Required<Schema$Product> {
   @prop({ default: ProductStatus.VISIBLE, type: Number })
   status!: ProductStatus;
 
+  @prop({ default: 100, type: Number })
+  discount!: number;
+
   createdAt!: string;
 
   updatedAt!: string;
