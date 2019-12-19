@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
-import { InputGroup, TextArea, Checkbox } from '@blueprintjs/core';
+import { InputGroup, TextArea, Checkbox, Icon } from '@blueprintjs/core';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
@@ -34,6 +34,7 @@ const defaultValues: Fields = {
   price: 0,
   amount: 0,
   type: '',
+  discount: 100,
   images: [],
   tags: [],
   description: '',
@@ -75,7 +76,7 @@ export function ProductForm({
         label="Price"
         validators={[validators.min(1, 'Pice cannot less then 1', true)]}
       >
-        <NumericInput fill min={0} />
+        <NumericInput clampValueOnBlur fill min={0} />
       </FormItem>
 
       <FormItem
@@ -83,7 +84,7 @@ export function ProductForm({
         label="Amount"
         validators={[validators.min(1, 'Amount cannot less then 1', true)]}
       >
-        <NumericInput fill min={0} />
+        <NumericInput clampValueOnBlur fill min={0} />
       </FormItem>
 
       <FormItem
@@ -93,6 +94,22 @@ export function ProductForm({
         validators={[validators.required('Product name cannot be empty')]}
       >
         <ProductTypesInput />
+      </FormItem>
+
+      <FormItem
+        name="discount"
+        label="Discount"
+        validators={[
+          validators.max(1, 'Discount cannot less then 0', true),
+          validators.min(100, 'Discount cannot more then 100', true)
+        ]}
+      >
+        <NumericInput
+          fill
+          min={0}
+          max={100}
+          rightElement={<Icon icon="percentage" />}
+        />
       </FormItem>
 
       <FormItem name="images" label="Images">

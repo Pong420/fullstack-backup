@@ -6,11 +6,17 @@ import {
 
 export interface NumericInputProps
   extends Omit<INumericInputProps, 'onValueChange'> {
-  onChange?: INumericInputProps['onValueChange'];
+  onChange?: (input: number | string) => void;
 }
 
 export const NumericInput = React.memo<NumericInputProps>(
   ({ onChange, ...props }) => (
-    <Bp3NumericInput {...props} onValueChange={onChange} />
+    <Bp3NumericInput
+      {...props}
+      clampValueOnBlur
+      onValueChange={(valueAsNumber: number, valueAsString: string) => {
+        onChange && onChange(valueAsNumber || valueAsString);
+      }}
+    />
   )
 );

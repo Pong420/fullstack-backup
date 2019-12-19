@@ -1,10 +1,13 @@
 {
   "expo": {
-    "name": "App",
+    "name": "@fullstak/app",
     "slug": "app",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
+    "packagerOpts": {
+      "config": "metro.config.js"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,9 +22,6 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
-    },
-    "packagerOpts": {
-      "config": "./metro.config.js"
     }
   }
 }

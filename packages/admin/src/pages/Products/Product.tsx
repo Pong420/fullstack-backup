@@ -9,14 +9,39 @@ import { HideProduct } from './HideProduct';
 import { productSelector } from '../../store';
 import { getTagProps } from '../../utils/getTagProps';
 import { useSearchParam } from '../../hooks/useSearchParam';
+import { Schema$Product } from '../../typings';
 
 interface Props {
   id: string | null;
 }
 
+function FormatPrice({
+  discount,
+  price
+}: Pick<Schema$Product, 'price' | 'discount'>) {
+  if (discount >= 100) {
+    return <span>${price}</span>;
+  }
+
+  return (
+    <span>
+      <span>${(price * discount) / 100}</span>
+      <span>(${price})</span>
+    </span>
+  );
+}
+
 export const Product = React.memo<Props>(({ id }) => {
   const product = useSelector(productSelector(id || ''));
-  const { name, price, type, amount, tags = [], images = [] } = product;
+  const {
+    name,
+    price,
+    type,
+    remain,
+    discount = 100,
+    tags = [],
+    images = []
+  } = product;
   const { setSearchParam } = useSearchParam();
 
   return (
@@ -26,7 +51,9 @@ export const Product = React.memo<Props>(({ id }) => {
       <div className="caption">
         <div className="row">
           <Skeleton className="product-name">{name}</Skeleton>
-          <Skeleton className="product-price">{price && `$${price}`}</Skeleton>
+          <Skeleton className="product-price">
+            {price && <FormatPrice price={price} discount={discount} />}
+          </Skeleton>
         </div>
         <div className="row">
           <Skeleton className="product-type">
@@ -40,7 +67,7 @@ export const Product = React.memo<Props>(({ id }) => {
             )}
           </Skeleton>
           <Skeleton className="product-amount">
-            {amount && `Amount: ${amount}`}
+            {remain && `Remain: ${remain}`}
           </Skeleton>
         </div>
         <div>

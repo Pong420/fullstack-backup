@@ -14,12 +14,7 @@ export const ProductDialog = React.memo(
     const [form] = useProductForm();
 
     return (
-      <AsyncFnDialog
-        {...props}
-        intent={Intent.PRIMARY}
-        onConfirm={form.submit}
-        onClosed={() => form.resetFields()}
-      >
+      <AsyncFnDialog {...props} intent={Intent.PRIMARY} onConfirm={form.submit}>
         <ProductForm
           form={form}
           onSubmit={onSubmit}

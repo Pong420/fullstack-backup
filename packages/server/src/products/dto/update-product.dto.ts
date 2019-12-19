@@ -3,7 +3,10 @@ import {
   IsOptional,
   IsEmpty,
   IsEnum,
-  IsNumber
+  IsNumber,
+  IsInt,
+  Max,
+  Min
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UploadFile } from '../../upload';
@@ -12,10 +15,11 @@ import {
   Schema$Product,
   ProductStatus
 } from '@fullstack/service';
+import { PRICE_MIN, AMOUNT_MIN, DISCOUNT_MAX, DISCOUNT_MIN } from './index';
 
 export class UpdateProduct implements Partial<Required$UpdateProduct> {
-  @IsString()
-  id!: string;
+  @IsOptional()
+  id?: string;
 
   @IsString()
   @IsOptional()
@@ -27,11 +31,13 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
 
   @IsNumber()
   @IsOptional()
+  @Min(PRICE_MIN)
   @Transform(Number)
   price?: number;
 
-  @IsNumber()
+  @IsInt()
   @IsOptional()
+  @Min(AMOUNT_MIN)
   @Transform(Number)
   amount?: number;
 
@@ -56,6 +62,13 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
   @IsEnum(ProductStatus)
   @Transform(Number)
   status?: ProductStatus;
+
+  @IsOptional()
+  @IsInt()
+  @Max(DISCOUNT_MIN)
+  @Min(DISCOUNT_MAX)
+  @Transform(Number)
+  discount?: number;
 
   @IsEmpty()
   createdAt?: string;
