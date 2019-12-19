@@ -13,7 +13,13 @@
     "heroku-postbuild": "yarn build",
     "postinstall": "lerna run postinstall --stream --parallel"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/server",
+    "packages/admin",
+    "packages/app",
+    "packages/service",
+    "packages/utils"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
