@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node ./dist/main.js",
-    "dev": "lerna run dev --stream --parallel --ignore @fullstack/app",
+    "dev": "lerna run dev --stream --parallel",
     "dev:admin": "lerna run dev --stream --parallel --ignore @fullstack/app",
     "dev:app": "lerna run dev --stream --parallel --ignore @fullstack/admin",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
     "heroku-postbuild": "yarn build",
-    "postinstall": "lerna run --scope @fullstack/service build"
+    "postinstall": "lerna run postinstall --stream --parallel"
   },
   "workspaces": ["server", "admin", "app", "utils", "service"],
   "devDependencies": {

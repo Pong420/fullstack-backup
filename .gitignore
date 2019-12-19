@@ -26,3 +26,5 @@ lerna-debug.log*
 
 # file upload directory
 _upload
+
+.expo/*

@@ -6,7 +6,8 @@
   "files": ["dist"],
   "scripts": {
     "dev": "tsc -p tsconfig.json --watch",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "typescript": "^3.7.3"
