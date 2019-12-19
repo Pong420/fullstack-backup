@@ -12,7 +12,7 @@ import {
   Required$CreateProduct,
   Schema$Product,
   ProductStatus
-} from '@fullstack/typings';
+} from '@fullstack/service';
 
 export class Base implements Required<Required$CreateProduct> {
   @IsString()

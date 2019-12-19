@@ -72,3 +72,8 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+api.interceptors.request.use(async config => {
+  config.baseURL = config.baseURL + '';
+  return config;
+});

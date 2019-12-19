@@ -4,7 +4,7 @@ import {
   Required$CreateOrder,
   Schema$Order,
   OrderStatus
-} from '@fullstack/typings';
+} from '@fullstack/service';
 
 class Base implements Required$CreateOrder {
   @IsString()

@@ -5,7 +5,7 @@ export * from './user';
 export * from './products';
 export * from './utils';
 
-export * from '@fullstack/typings';
+export * from '@fullstack/service';
 
 export interface APIError extends Omit<AxiosError, 'response'> {
   response?: AxiosResponse<{

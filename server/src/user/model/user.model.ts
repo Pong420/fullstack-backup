@@ -7,9 +7,9 @@ import {
 } from '@typegoose/typegoose';
 import bcrypt from 'bcrypt';
 import paginate from 'mongoose-paginate-v2';
-import { UserRole, Schema$User } from '@fullstack/typings';
+import { UserRole, Schema$User } from '@fullstack/service';
 
-export { UserRole } from '@fullstack/typings';
+export { UserRole } from '@fullstack/service';
 
 function hashPassword(pwd: string) {
   return bcrypt.hashSync(pwd, 10);

@@ -1,5 +1,5 @@
 import { IsOptional } from 'class-validator';
-import { Required$GetProducts } from '@fullstack/typings';
+import { Required$GetProducts } from '@fullstack/service';
 
 export class GetProducts implements Required$GetProducts {
   @IsOptional()

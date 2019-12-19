@@ -8,7 +8,7 @@ import {
   Schema$User,
   Required$CreateUser,
   Required$UpdateUser
-} from '@fullstack/typings';
+} from '@fullstack/service';
 
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 

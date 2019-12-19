@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
-import { Schema$User } from '@fullstack/typings';
+import { Schema$User } from '@fullstack/service';
 import { UserRole } from '../user/model/user.model';
 
 export const UserLevels: UserRole[] = [

@@ -9,9 +9,9 @@
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
     "heroku-postbuild": "yarn build",
-    "postinstall": "lerna run --scope @fullstack/typings build"
+    "postinstall": "lerna run --scope @fullstack/service build"
   },
-  "workspaces": ["server", "admin", "app", "utils", "typings"],
+  "workspaces": ["server", "admin", "app", "utils", "service"],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",

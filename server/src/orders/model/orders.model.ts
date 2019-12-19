@@ -8,7 +8,7 @@ import {
 import paginate from 'mongoose-paginate-v2';
 import { Product } from '../../products/model';
 import { User } from '../../user/model';
-import { OrderStatus, Schema$Order } from '@fullstack/typings';
+import { OrderStatus, Schema$Order } from '@fullstack/service';
 
 @plugin(paginate)
 export class Order implements Schema$Order {

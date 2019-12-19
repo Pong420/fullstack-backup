@@ -11,7 +11,7 @@ import {
   Required$UpdateProduct,
   Schema$Product,
   ProductStatus
-} from '@fullstack/typings';
+} from '@fullstack/service';
 
 export class UpdateProduct implements Partial<Required$UpdateProduct> {
   @IsString()

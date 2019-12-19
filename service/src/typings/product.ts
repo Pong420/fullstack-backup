@@ -1,4 +1,4 @@
-import { Schema$Timestamp } from '.';
+import { Schema$Timestamp } from './index';
 
 export enum ProductStatus {
   VISIBLE,

@@ -23,7 +23,7 @@
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@fullstack/typings": "1.0.0",
+    "@fullstack/service": "1.0.0",
     "@babel/core": "^7.0.0",
     "@types/react": "^16.9.16",
     "@types/react-native": "^0.60.25",
