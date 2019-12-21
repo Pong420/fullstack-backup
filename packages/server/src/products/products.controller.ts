@@ -10,7 +10,7 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
-import { SERVICE_PATHS } from '@fullstack/service';
+import { SERVICE_PATHS } from '@fullstack/common/service';
 import { RoleGuard } from '../guards';
 import { UserRole } from '../user';
 import { MultiPartInterceptor } from '../interceptors';

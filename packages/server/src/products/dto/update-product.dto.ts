@@ -9,12 +9,12 @@ import {
   Min
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { UploadFile } from '../../upload';
 import {
   Required$UpdateProduct,
   Schema$Product,
   ProductStatus
-} from '@fullstack/service';
+} from '@fullstack/common/service/typings';
+import { UploadFile } from '../../upload';
 import { PRICE_MIN, AMOUNT_MIN, DISCOUNT_MAX, DISCOUNT_MIN } from './index';
 
 export class UpdateProduct implements Partial<Required$UpdateProduct> {

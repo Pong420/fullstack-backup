@@ -5,7 +5,10 @@ import {
   IsEmpty,
   ValidateIf
 } from 'class-validator';
-import { Required$UpdateUser, UserRole } from '@fullstack/service';
+import {
+  Required$UpdateUser,
+  UserRole
+} from '@fullstack/common/service/typings';
 import { UploadFile } from '../../upload';
 
 export class UpdateUser implements Partial<Required$UpdateUser> {

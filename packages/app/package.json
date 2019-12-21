@@ -15,7 +15,7 @@
     "pages": "node scripts/component.js pages"
   },
   "dependencies": {
-    "@fullstack/service": "1.0.0",
+    "@fullstack/common": "1.0.0",
     "expo": "~36.0.0",
     "rc-field-form": "^0.0.0-alpha.25",
     "react": "^16.10.2",

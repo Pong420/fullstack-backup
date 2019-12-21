@@ -4,7 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
-import { SERVICE_PATHS } from '@fullstack/service';
+import { SERVICE_PATHS } from '@fullstack/common/service';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './interceptors';
 import cookieParser from 'fastify-cookie';

@@ -22,7 +22,7 @@
     "@types/react-dom": "^16.9.2",
     "@types/react-redux": "^7.1.5",
     "@types/react-router-dom": "^5.1.0",
-    "@fullstack/service": "1.0.0",
+    "@fullstack/common": "1.0.0",
     "customize-cra": "^0.8.0",
     "node-sass": "4.12.0",
     "pong-react-scripts": "^3.1.2",
@@ -36,7 +36,6 @@
   "dependencies": {
     "@blueprintjs/core": "^3.22.2",
     "@blueprintjs/select": "^3.11.2",
-    "@fullstack/utils": "1.0.0",
     "@pong420/redux-crud": "^1.1.1",
     "axios": "0.18.1",
     "cloudinary-core": "^2.8.0",

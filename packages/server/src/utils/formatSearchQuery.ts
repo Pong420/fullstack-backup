@@ -1,4 +1,4 @@
-import { escapeRegex } from '@fullstack/utils';
+import { escapeRegex } from '@fullstack/common/utils';
 
 export function formatSearchQuery(keys: string[], search?: string) {
   const $regex = search && new RegExp(escapeRegex(search), 'gi');

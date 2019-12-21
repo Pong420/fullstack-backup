@@ -12,7 +12,7 @@ import {
   Query, // eslint-disable-line
   UseInterceptors
 } from '@nestjs/common';
-import { SERVICE_PATHS } from '@fullstack/service';
+import { SERVICE_PATHS } from '@fullstack/common/service';
 import { FastifyRequest } from 'fastify';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';

@@ -1,7 +1,7 @@
 import Constants from 'expo-constants';
-import { api } from '@fullstack/service';
+import { api } from '@fullstack/common/service';
 
-export * from '@fullstack/service';
+export * from '@fullstack/common/service';
 
 const { manifest } = Constants;
 

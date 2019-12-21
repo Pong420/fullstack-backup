@@ -28,3 +28,6 @@ lerna-debug.log*
 _upload
 
 .expo/*
+
+packages/common/service
+packages/common/utils

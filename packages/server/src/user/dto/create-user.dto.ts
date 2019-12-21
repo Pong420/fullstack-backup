@@ -5,7 +5,11 @@ import {
   IsEmail,
   IsEmpty
 } from 'class-validator';
-import { Required$CreateUser, Schema$User, UserRole } from '@fullstack/service';
+import {
+  Required$CreateUser,
+  Schema$User,
+  UserRole
+} from '@fullstack/common/service/typings';
 import { UploadFile } from '../../upload';
 
 class Base implements Required$CreateUser {

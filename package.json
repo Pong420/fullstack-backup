@@ -17,8 +17,7 @@
     "packages/server",
     "packages/admin",
     "packages/app",
-    "packages/service",
-    "packages/utils"
+    "packages/common"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",

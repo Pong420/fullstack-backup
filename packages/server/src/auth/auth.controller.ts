@@ -13,7 +13,7 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { SERVICE_PATHS } from '@fullstack/service';
+import { SERVICE_PATHS } from '@fullstack/common/service';
 import { isDocument } from '@typegoose/typegoose';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService, CreateUserDto, UserRole } from '../user';

@@ -4,7 +4,7 @@ import {
   Required$UpdateOrder,
   Schema$Order,
   OrderStatus
-} from '@fullstack/service';
+} from '@fullstack/common/service/typings';
 
 class Base implements Required$UpdateOrder {
   @IsNumber()
