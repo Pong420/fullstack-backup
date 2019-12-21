@@ -16,7 +16,7 @@
     "path-to-regexp": "^6.1.0"
   },
   "peerDependencies": {
-    "axios": "0.18.1",
-    "path-to-regexp": "^6.1.0"
+    "axios": "=0.18.1",
+    "path-to-regexp": ">=6.1.0"
   }
 }

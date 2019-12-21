@@ -42,7 +42,7 @@
     "expo-yarn-workspaces": "^1.2.1",
     "react-devtools": "^4.3.0",
     "react-native-svg-transformer": "^0.14.3",
-    "typescript": "~3.6.3"
+    "typescript": "^3.7.4"
   },
   "eslintConfig": {
     "extends": "react-app"
