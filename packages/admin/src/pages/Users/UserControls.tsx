@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
+import { validators } from '@fullstack/common/utils/form';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { AsyncFnDialog } from '../../components/Dialog';
 import { UserDialog, UserDialogProps } from './UserDialog';
@@ -11,7 +12,6 @@ import {
   deleteUser as deleteUserAPI
 } from '../../service';
 import { useBoolean } from '../../hooks/useBoolean';
-import { validators } from '../../utils/form';
 
 interface Props extends Partial<Schema$User> {}
 

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useRxAsync } from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { AsyncFnDialog } from '../../components/Dialog';
 import { Schema$Product } from '../../typings';

@@ -15,6 +15,7 @@
     "get": "node scripts/type.js"
   },
   "devDependencies": {
+    "@fullstack/common": "1.0.0",
     "@types/mousetrap": "^1.6.3",
     "@types/node": "^12.11.1",
     "@types/qs": "^6.9.0",
@@ -22,7 +23,6 @@
     "@types/react-dom": "^16.9.2",
     "@types/react-redux": "^7.1.5",
     "@types/react-router-dom": "^5.1.0",
-    "@fullstack/common": "1.0.0",
     "customize-cra": "^0.8.0",
     "pong-react-scripts": "^3.1.2",
     "prettier": "^1.18.2",
@@ -30,7 +30,7 @@
     "rimraf": "^3.0.0",
     "sass": "^1.23.0",
     "source-map-explorer": "^2.1.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.22.2",
@@ -43,9 +43,9 @@
     "jdenticon": "^2.2.0",
     "mousetrap": "^1.6.3",
     "qs": "^6.9.1",
-    "rc-field-form": "^0.0.0-alpha.23",
+    "rc-field-form": "0.0.0-alpha.23",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.12.0",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
     "react-table": "^7.0.0-beta.12",

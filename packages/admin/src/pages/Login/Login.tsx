@@ -1,12 +1,13 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { createForm } from '@fullstack/common/utils/form/form';
+import * as validators from '@fullstack/common/utils/form/validators';
 import { Card, Button, InputGroup } from '@blueprintjs/core';
 import { Password } from '../../components/Password';
 import { Param$Login } from '../../typings';
 import { loginStatusSelector, useAuthActions } from '../../store';
 import { PATHS } from '../../constants';
-import { createForm, validators } from '../../utils/form';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 
 const { Form, FormItem } = createForm<Param$Login>();

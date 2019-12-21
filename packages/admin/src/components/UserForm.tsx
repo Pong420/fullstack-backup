@@ -1,14 +1,14 @@
 import React, { useCallback, ReactNode } from 'react';
 import { InputGroup, HTMLSelect } from '@blueprintjs/core';
-import { Password } from './Password';
-import { Param$CreateUser, UserRole } from '../typings';
 import {
   createForm,
   validators,
   FormItemProps,
   FormInstance
-} from '../utils/form';
-import { Validator } from '../utils/form/validators';
+} from '@fullstack/common/utils/form';
+import { Validator } from '@fullstack/common/utils/form/validators';
+import { Password } from './Password';
+import { Param$CreateUser, UserRole } from '../typings';
 
 type Fields = Required<Param$CreateUser & { confirmPassword: string }>;
 

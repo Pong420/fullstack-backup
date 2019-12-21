@@ -3,7 +3,7 @@ module.exports = {
     es6: true,
     node: true
   },
-  extends: ['plugin:@typescript-eslint/recommended'],
+  extends: ['plugin:@typescript-eslint/recommended', 'react-app'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'

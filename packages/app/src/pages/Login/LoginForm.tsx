@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useRxAsync, RxAsyncOptions } from 'use-rx-async';
-import { Param$Login, login } from '../../service';
+import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
-import { createForm, validators } from '../../utils/form';
+import { Param$Login, login } from '../../service';
 import { PromiseOf } from '../../typings';
 
 const { Form, useForm } = createForm<Param$Login>();

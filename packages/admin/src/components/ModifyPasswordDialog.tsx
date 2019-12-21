@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import useRxAsync from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
+import { createForm, validators } from '@fullstack/common/utils/form';
 import { Password } from './Password';
 import { AsyncFnDialog, AsyncFnDialogProps } from './Dialog';
 import { Param$ModifyPassword } from '../typings';
 import { authUserSelector, useAuthActions } from '../store';
 import { modifyPassword } from '../service';
-import { createForm, validators } from '../utils/form';
 import { Toaster } from '../utils/toaster';
 
 type Field = Pick<Param$ModifyPassword, 'password' | 'newPassword'> & {

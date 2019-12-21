@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync, RxFileToImageState } from 'use-rx-hooks';
 import { InputGroup, Divider, Button } from '@blueprintjs/core';
+import { createForm, validators } from '@fullstack/common/utils/form';
 import { Avatar } from '../../components/Avatar';
 import { SettingsSection } from './SettingsSection';
 import { EditAvatar } from './EditAvatar';
 import { Param$UpdateUser, Schema$User } from '../../typings';
 import { authUserSelector, useAuthActions } from '../../store';
 import { updateUser } from '../../service';
-import { createForm, validators } from '../../utils/form';
 import { Toaster } from '../../utils/toaster';
 
 interface Field extends Omit<Param$UpdateUser, 'avatar'> {

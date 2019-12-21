@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import isEmailVaidator from 'validator/es/lib/isEmail';
 
 export type Validator = (rule: any, value: any) => Promise<void>;

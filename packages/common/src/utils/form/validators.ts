@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import isEmailVaidator from 'validator/es/lib/isEmail';
 
 export type Validator = (rule: any, value: any) => Promise<void>;
@@ -82,9 +84,7 @@ export const shouldNotBeEqual: HigherOrderValidator = (
 ) => (_, value) => (value !== val ? Promise.resolve() : Promise.reject(msg));
 
 export const passwordFormat: Validator = (_, value) =>
-  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,20}$/.test(
-    value
-  )
+  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,20}$/.test(value)
     ? Promise.resolve()
     : Promise.reject('Password must include english and number');
 

@@ -1,6 +1,11 @@
 import React, { ReactNode } from 'react';
 import { RxFileToImageState } from 'use-rx-hooks';
 import { InputGroup, TextArea, Checkbox, Icon } from '@blueprintjs/core';
+import {
+  createForm,
+  FormInstance,
+  validators
+} from '@fullstack/common/utils/form';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
 import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
@@ -10,7 +15,6 @@ import {
   Param$CreateProduct,
   ProductStatus
 } from '../../typings';
-import { createForm, FormInstance, validators } from '../../utils/form';
 
 interface Fields extends Required<Required$UpdateProduct> {
   images: Array<RxFileToImageState | string>;

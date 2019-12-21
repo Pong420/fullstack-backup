@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { useRxAsync } from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
 import { Card, Button, H5 } from '@blueprintjs/core';
 import { UserForm, UserFormProps } from '../../components/UserForm';
 import { PATHS } from '../../constants';

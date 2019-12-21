@@ -24,6 +24,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+tsconfig.tsbuildinfo
+
 # file upload directory
 _upload
 
@@ -31,3 +33,4 @@ _upload
 
 packages/common/service
 packages/common/utils
+

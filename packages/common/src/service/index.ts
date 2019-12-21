@@ -5,4 +5,5 @@ export * from './user';
 export * from './products';
 export * from './auth';
 
+// eslint-disable-next-line
 import './interceptors';

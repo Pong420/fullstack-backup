@@ -1,6 +1,6 @@
 import React, { useCallback, KeyboardEvent } from 'react';
 import { useSelector } from 'react-redux';
-import { useRxAsync } from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
 import {
   Suggest,
   MultiSelect,

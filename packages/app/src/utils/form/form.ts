@@ -3,16 +3,16 @@ import { View, ViewStyle } from 'react-native';
 import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
-import { Validator, compose } from './validators';
 import {
   FieldData,
   FieldError,
   ValidateFields,
   Store
 } from 'rc-field-form/lib/interface';
+import { Validator, compose } from '@fullstack/common/utils/form/validators';
 import { Text, TextProps } from '../../components/Text';
 
-export type ValueOf<T> = T[keyof T];
+type ValueOf<T> = T[keyof T];
 
 type NamePath<K extends PropertyKey> = K | K[];
 

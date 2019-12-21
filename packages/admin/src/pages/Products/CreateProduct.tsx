@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useRxAsync } from 'use-rx-async';
+import { useRxAsync } from 'use-rx-hooks';
 import { Classes } from '@blueprintjs/core';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { ProductDialog } from './ProductDialog';
