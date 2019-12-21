@@ -25,7 +25,8 @@
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "2.0.0-alpha.20",
     "react-native-web": "~0.11.7",
-    "react-navigation": "^4.0.10"
+    "react-navigation": "^4.0.10",
+    "use-rx-async": "^1.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

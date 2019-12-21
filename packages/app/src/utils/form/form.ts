@@ -9,7 +9,8 @@ import {
   ValidateFields,
   Store
 } from 'rc-field-form/lib/interface';
-import { Text, View } from 'react-native';
+import { Text, View, TextStyle, ViewStyle } from 'react-native';
+import { isValidElement } from 'react';
 
 export type ValueOf<T> = T[keyof T];
 
@@ -40,6 +41,7 @@ export interface FormProps<T extends {} = Store>
   form?: FormInstance<T>;
   initialValues?: Partial<T>;
   onFinish?: (values: T) => void;
+  items?: Array<FormItemProps<T>>;
 }
 
 type OmititedRcFieldProps = Omit<
@@ -58,6 +60,8 @@ interface BasicFormItemProps<T extends {}, K extends keyof T = keyof T>
   onReset?(): void;
   label?: string;
   noStyle?: boolean;
+  style?: ViewStyle;
+  key?: React.Key;
 }
 
 type FormItemPropsDeps<T extends {}, K extends keyof T = keyof T> = {
@@ -83,6 +87,11 @@ export type FormItemProps<
 
 type Rule = NonNullable<RcFieldProps['rules']>[number];
 
+interface FormItemStyles {
+  label?: TextStyle;
+  help?: TextStyle;
+}
+
 export function createShouldUpdate<FieldName extends string | number>(
   names: FieldName[]
 ): RcFieldProps['shouldUpdate'] {
@@ -96,9 +105,12 @@ export function createShouldUpdate<FieldName extends string | number>(
   };
 }
 
-export function createForm<T extends {}>(
-  defaultProps: Partial<FormItemProps<T>> = {}
-) {
+const RED = '#DB3737';
+
+export function createForm<T extends {}>({
+  itemStyles = {},
+  ...defaultProps
+}: Partial<FormItemProps<T>> & { itemStyles?: FormItemStyles } = {}) {
   const FormItem = React.memo<FormItemProps<T>>(props_ => {
     const {
       children,
@@ -107,6 +119,7 @@ export function createForm<T extends {}>(
       validateTrigger,
       noStyle,
       label,
+      style,
       deps = [],
       ...props
     } = {
@@ -134,7 +147,7 @@ export function createForm<T extends {}>(
         dependencies: [props.name, ...deps],
         shouldUpdate: createShouldUpdate([props.name, ...deps])
       },
-      (_: any, { touched, validating }: FieldData, form: FormInstance<T>) => {
+      (_: any, _fieldData: FieldData, form: FormInstance<T>) => {
         const { getFieldError, getFieldsValue } = form;
         const errors = getFieldError(props.name);
 
@@ -145,9 +158,14 @@ export function createForm<T extends {}>(
             validateTrigger,
             ...props
           },
-          typeof children !== 'function'
-            ? children
-            : children(getFieldsValue(deps))
+          isValidElement(children)
+            ? React.cloneElement(
+                typeof children !== 'function'
+                  ? children
+                  : children(getFieldsValue(deps)),
+                { hasError: !!errors[0] }
+              )
+            : children
         );
 
         if (noStyle) {
@@ -156,10 +174,31 @@ export function createForm<T extends {}>(
 
         return React.createElement(
           View,
-          {},
-          React.createElement(Text, {}, label),
+          { style },
+          React.createElement(
+            Text,
+            {
+              style: {
+                marginBottom: 5,
+                ...itemStyles.label
+              }
+            },
+            label
+          ),
           field,
-          React.createElement(Text, {}, errors[0])
+          React.createElement(
+            Text,
+            {
+              style: {
+                color: RED,
+                fontSize: 14,
+                minHeight: 20,
+                lineHeight: 20,
+                ...itemStyles.help
+              }
+            },
+            errors[0]
+          )
         );
       }
     );
@@ -167,7 +206,7 @@ export function createForm<T extends {}>(
 
   const Form = React.memo(
     React.forwardRef<FormInstance<T>, FormProps<T>>(
-      ({ children, onFinish, ...props }, ref: any) =>
+      ({ children, onFinish, items = [], ...props }, ref: any) =>
         React.createElement(
           RcForm,
           {
@@ -176,7 +215,20 @@ export function createForm<T extends {}>(
             onFinish,
             component: View
           } as any,
-          children
+          [
+            ...items.map(({ key, style, name, ...props }, index) =>
+              React.createElement(FormItem, {
+                ...props,
+                key:
+                  key ||
+                  (Array.isArray(name) ? name.join('') : `${name}`) ||
+                  Math.random(),
+                name,
+                style: { marginTop: index && 10, ...style }
+              })
+            ),
+            children
+          ]
         )
     )
   );
