@@ -3,8 +3,7 @@ import {
   View,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  ViewStyle,
-  Keyboard
+  ViewStyle
 } from 'react-native';
 import { useBoolean } from '../hooks/useBoolean';
 
@@ -77,6 +76,7 @@ export function TextInput({
         }}
       >
         <RNTextInput
+          autoCapitalize="none"
           {...props}
           onBlur={onBlur}
           onFocus={onFocus}
@@ -86,7 +86,6 @@ export function TextInput({
             height
           }}
           onChangeText={onChange}
-          onSubmitEditing={Keyboard.dismiss}
         />
         <View style={{ padding: 5 }}>{rightElement}</View>
       </View>

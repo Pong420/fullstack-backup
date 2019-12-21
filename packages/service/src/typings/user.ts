@@ -30,9 +30,7 @@ export interface Schema$User extends Schema$Timestamp {
 }
 
 export interface Required$CreateUser
-  extends Pick<Schema$User, 'email' | 'username' | 'password' | 'role'> {
-  nickname?: string;
-}
+  extends Pick<Schema$User, 'email' | 'username' | 'password'> {}
 
 export interface Required$UpdateUser
   extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Schema$Timestamp>> {
@@ -49,6 +47,8 @@ export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 
 export interface Param$CreateUser extends Required$CreateUser {
   avatar?: File | null;
+  nickname?: string;
+  role?: UserRole;
 }
 
 export interface Param$UpdateUser extends Required$UpdateUser {

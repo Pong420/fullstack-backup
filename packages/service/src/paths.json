@@ -4,6 +4,7 @@
     "PREFIX": "/auth",
     "LOGIN": "/login",
     "LOOUT": "/logout",
+    "REGISTRATION": "/register",
     "ADMIN_REGISTRATION": "/register/admin",
     "GUEST_REGISTRATION": "/register/guest",
     "REFERTSH_TOKEN": "/refresh_token",

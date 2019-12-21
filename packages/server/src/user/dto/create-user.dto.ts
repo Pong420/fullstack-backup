@@ -17,15 +17,16 @@ class Base implements Required$CreateUser {
 
   @IsEmail()
   email!: string;
-
-  @IsEnum(UserRole)
-  role!: UserRole;
 }
 
 class CreateUser extends Base
   implements Partial<Omit<Schema$User | Required$CreateUser, keyof Base>> {
   @IsEmpty()
   id?: string;
+
+  @IsEnum(UserRole)
+  @IsOptional()
+  role!: UserRole;
 
   @IsOptional()
   @IsString()

@@ -2,21 +2,28 @@ import React from 'react';
 import {
   StyleSheet,
   SafeAreaView,
+  ScrollView,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  View,
-  Keyboard
+  View
 } from 'react-native';
 import { LoginForm } from './LoginForm';
+import { RegisterForm } from './RegisterForm';
 import { Text } from '../../components/Text';
+import { Button } from '../../components/Button';
 import { flex, dimen } from '../../styles';
+import { useBoolean } from '../../hooks/useBoolean';
 import Cart from '../../assets/cart.svg';
 
 export function Login() {
+  const [isLogin, , , toggle] = useBoolean(true);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={{ ...dimen('100%') }}>
+      <SafeAreaView style={{ ...dimen('100%') }}>
+        <ScrollView
+          keyboardShouldPersistTaps="never"
+          contentContainerStyle={{ width: '100%', flexGrow: 1 }}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -32,12 +39,21 @@ export function Login() {
               <Cart style={{ ...dimen(30) }} color="#000"></Cart>
             </View>
           </View>
-          <LoginForm
-            onSuccess={() => alert('done')}
-            onFailure={() => alert('fail')}
-          />
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
+          <View style={{ padding: 20, flex: 1 }}>
+            {isLogin ? (
+              <LoginForm onSuccess={() => alert('success')} />
+            ) : (
+              <RegisterForm onSuccess={() => alert('success')} />
+            )}
+            <Button
+              ghost
+              style={{ marginTop: 15 }}
+              title={isLogin ? 'Register' : 'Already have an account'}
+              onPress={toggle}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }

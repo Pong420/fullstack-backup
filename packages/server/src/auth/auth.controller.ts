@@ -44,7 +44,7 @@ export class AuthController {
     return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
   }
 
-  @Post('/register')
+  @Post(SERVICE_PATHS.AUTH.REGISTRATION)
   register(@Body() createUserDto: CreateUserDto) {
     return this.userService.create({ ...createUserDto, role: UserRole.CLIENT });
   }

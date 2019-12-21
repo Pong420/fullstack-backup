@@ -1,3 +1,5 @@
+import isEmailVaidator from 'validator/es/lib/isEmail';
+
 export type Validator = (rule: any, value: any) => Promise<void>;
 export type HigherOrderValidator = (...args: any[]) => Validator;
 
@@ -69,14 +71,6 @@ export const maxLength = lengthComparation(
   (length, maxLength) => length <= maxLength
 );
 
-export const passwordFormat: HigherOrderValidator = (msg: string) => (
-  _,
-  value
-) =>
-  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,20}$/.test(value)
-    ? Promise.resolve()
-    : Promise.reject(msg);
-
 export const shouldBeEqual: HigherOrderValidator = (val: any, msg: string) => (
   _,
   value
@@ -86,3 +80,34 @@ export const shouldNotBeEqual: HigherOrderValidator = (
   val: any,
   msg: string
 ) => (_, value) => (value !== val ? Promise.resolve() : Promise.reject(msg));
+
+export const passwordFormat: Validator = (_, value) =>
+  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,20}$/.test(
+    value
+  )
+    ? Promise.resolve()
+    : Promise.reject('Password must include english and number');
+
+export const password = ({
+  required: _required = true,
+  msg = 'Plase input password'
+}: {
+  required?: boolean;
+  msg?: string;
+} = {}) =>
+  compose([
+    _required ? required(msg) : null,
+    minLength(8, 'Password should not less then 8'),
+    maxLength(20, 'Password should not more then 20'),
+    passwordFormat
+  ]);
+
+export const isEmail: Validator = (_, value) =>
+  isEmailVaidator(value)
+    ? Promise.resolve()
+    : Promise.reject('Plase input a correct email');
+
+export const isEmpty: Validator = (_, value) =>
+  value == null || !(Object.keys(value) || value).length
+    ? Promise.resolve()
+    : Promise.reject('');

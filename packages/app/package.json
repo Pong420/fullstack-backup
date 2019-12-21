@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "dev": "expo start --clear",
+    "dev": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -27,14 +27,20 @@
     "react-native-svg": "^9.13.6",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.0.10",
-    "use-rx-async": "^1.1.5"
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.4",
+    "use-rx-async": "^1.1.5",
+    "validator": "^12.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
+    "@types/redux": "^3.6.0",
+    "@types/validator": "^12.0.1",
     "babel-preset-expo": "~8.0.0",
     "expo-yarn-workspaces": "^1.2.1",
+    "react-devtools": "^4.3.0",
     "react-native-svg-transformer": "^0.14.3",
     "typescript": "~3.6.3"
   },

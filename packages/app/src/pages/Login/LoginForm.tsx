@@ -4,7 +4,7 @@ import { useRxAsync, RxAsyncOptions } from 'use-rx-async';
 import { Param$Login, login } from '../../service';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
-import { ButtonGroup } from '../../components/ButtonGroup';
+import { Button } from '../../components/Button';
 import { createForm, validators } from '../../utils/form';
 import { PromiseOf } from '../../typings';
 
@@ -25,7 +25,7 @@ export function LoginForm(options: Props) {
   const { loading, run } = useRxAsync(request, { defer: true, ...options });
 
   return (
-    <View style={{ padding: 15, flex: 1, justifyContent: 'space-between' }}>
+    <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <Form
         form={form}
         onFinish={run}
@@ -36,7 +36,6 @@ export function LoginForm(options: Props) {
             validators: [validators.required('Please input username')],
             children: (
               <TextInput
-                autoCapitalize="none"
                 textContentType="username"
                 autoCompleteType="username"
               />
@@ -50,13 +49,7 @@ export function LoginForm(options: Props) {
           }
         ]}
       />
-      <ButtonGroup
-        style={{ marginBottom: 20 }}
-        buttons={[
-          { title: 'Login', loading, onPress: form.submit },
-          { title: 'Register', ghost: true }
-        ]}
-      />
+      <Button title="Login" loading={loading} onPress={form.submit} />
     </View>
   );
 }
