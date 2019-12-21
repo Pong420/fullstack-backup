@@ -3,11 +3,11 @@ import {
   TouchableHighlight,
   TouchableHighlightProps,
   View,
-  Text,
   ActivityIndicator,
   ViewStyle
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Text } from './Text';
 
 export interface ButtonProps extends TouchableHighlightProps {
   intent?: keyof typeof themes;
@@ -44,7 +44,6 @@ export function Button({
   disabled,
   ghost,
   loading,
-  style,
   intent = 'NONE',
   ...props
 }: ButtonProps) {
@@ -87,8 +86,7 @@ export function Button({
           style={{
             alignItems: 'center',
             justifyContent: 'center',
-            height: 40,
-            ...style
+            height: 40
           }}
         >
           {loading ? (

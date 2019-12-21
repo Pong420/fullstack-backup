@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "dev": "expo start",
+    "dev": "expo start --clear",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -24,6 +24,7 @@
     "react-native-gesture-handler": "^1.5.2",
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "2.0.0-alpha.20",
+    "react-native-svg": "^9.13.6",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.0.10",
     "use-rx-async": "^1.1.5"
@@ -34,6 +35,7 @@
     "@types/react-native": "~0.60.23",
     "babel-preset-expo": "~8.0.0",
     "expo-yarn-workspaces": "^1.2.1",
+    "react-native-svg-transformer": "^0.14.3",
     "typescript": "~3.6.3"
   },
   "eslintConfig": {

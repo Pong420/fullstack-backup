@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, isValidElement } from 'react';
+import { View, ViewStyle } from 'react-native';
 import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
@@ -9,8 +10,7 @@ import {
   ValidateFields,
   Store
 } from 'rc-field-form/lib/interface';
-import { Text, View, TextStyle, ViewStyle } from 'react-native';
-import { isValidElement } from 'react';
+import { Text, TextProps } from '../../components/Text';
 
 export type ValueOf<T> = T[keyof T];
 
@@ -88,8 +88,8 @@ export type FormItemProps<
 type Rule = NonNullable<RcFieldProps['rules']>[number];
 
 interface FormItemStyles {
-  label?: TextStyle;
-  help?: TextStyle;
+  label?: TextProps['style'];
+  help?: TextProps['style'];
 }
 
 export function createShouldUpdate<FieldName extends string | number>(
@@ -180,6 +180,7 @@ export function createForm<T extends {}>({
             {
               style: {
                 marginBottom: 5,
+                marginLeft: 2,
                 ...itemStyles.label
               }
             },

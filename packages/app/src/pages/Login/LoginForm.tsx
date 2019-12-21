@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useRxAsync, RxAsyncOptions } from 'use-rx-async';
 import { Param$Login, login } from '../../service';
 import { TextInput } from '../../components/TextInput';
@@ -24,38 +25,38 @@ export function LoginForm(options: Props) {
   const { loading, run } = useRxAsync(request, { defer: true, ...options });
 
   return (
-    <Form
-      form={form}
-      onFinish={run}
-      style={{ padding: 15 }}
-      items={[
-        {
-          name: 'username',
-          label: 'Username',
-          validators: [validators.required('Please input username')],
-          children: (
-            <TextInput
-              autoFocus
-              autoCapitalize="none"
-              textContentType="username"
-              autoCompleteType="username"
-            />
-          )
-        },
-        {
-          name: 'password',
-          label: 'Password',
-          validators: [validators.required('Please input password')],
-          children: <Password />
-        }
-      ]}
-    >
+    <View style={{ padding: 15, flex: 1, justifyContent: 'space-between' }}>
+      <Form
+        form={form}
+        onFinish={run}
+        items={[
+          {
+            name: 'username',
+            label: 'Username',
+            validators: [validators.required('Please input username')],
+            children: (
+              <TextInput
+                autoCapitalize="none"
+                textContentType="username"
+                autoCompleteType="username"
+              />
+            )
+          },
+          {
+            name: 'password',
+            label: 'Password',
+            validators: [validators.required('Please input password')],
+            children: <Password />
+          }
+        ]}
+      />
       <ButtonGroup
+        style={{ marginBottom: 20 }}
         buttons={[
           { title: 'Login', loading, onPress: form.submit },
           { title: 'Register', ghost: true }
         ]}
       />
-    </Form>
+    </View>
   );
 }

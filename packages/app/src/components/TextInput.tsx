@@ -3,10 +3,10 @@ import {
   View,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  ViewStyle
+  ViewStyle,
+  Keyboard
 } from 'react-native';
 import { useBoolean } from '../hooks/useBoolean';
-import { dimen } from '../styles';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   onChange?: (value: string) => void;
@@ -86,17 +86,9 @@ export function TextInput({
             height
           }}
           onChangeText={onChange}
+          onSubmitEditing={Keyboard.dismiss}
         />
-        <View style={{ padding: 5 }}>
-          {rightElement &&
-            React.cloneElement(rightElement, {
-              ...rightElement.props,
-              style: {
-                ...rightElement.props.style,
-                ...dimen(height - 10)
-              }
-            })}
-        </View>
+        <View style={{ padding: 5 }}>{rightElement}</View>
       </View>
     </View>
   );
