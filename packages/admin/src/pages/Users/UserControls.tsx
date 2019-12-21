@@ -25,7 +25,7 @@ const passwordValidators: UserDialogProps['passwordValidators'] = [
 
 const EditUser = React.memo(
   ({ id = '', avatar, ...props }: Partial<Schema$User>) => {
-    const [dialogOpen, { on, off }] = useBoolean();
+    const [dialogOpen, on, off] = useBoolean();
 
     const { updateUser } = useUserActions();
 
@@ -70,7 +70,7 @@ const EditUser = React.memo(
 );
 
 const DeleteUser = React.memo(({ id = '', ...props }: Partial<Schema$User>) => {
-  const [dialogOpen, { on, off }] = useBoolean();
+  const [dialogOpen, on, off] = useBoolean();
 
   const { deleteUser } = useUserActions();
 

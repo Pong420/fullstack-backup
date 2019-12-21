@@ -52,10 +52,7 @@ export const UploadImage = React.memo<UploadImageProps>(
   }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [
-      dropAreaShown,
-      { on: showDropArea, off: hideDropArea }
-    ] = useBoolean();
+    const [dropAreaShown, showDropArea, hideDropArea] = useBoolean();
 
     const subject = useRef(new Subject<UploadEvent>());
 

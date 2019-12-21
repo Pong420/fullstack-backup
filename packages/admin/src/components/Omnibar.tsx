@@ -31,7 +31,7 @@ const _items: string[] = [];
 
 export const Omnibar = React.memo<OmnibarProps>(
   ({ items = _items, suffix = '', ...props }) => {
-    const [isOpen, { on, off }] = useBoolean();
+    const [isOpen, on, off] = useBoolean();
     const { setSearchParam } = useSearchParam();
 
     const openOmnibar = useCallback(() => {

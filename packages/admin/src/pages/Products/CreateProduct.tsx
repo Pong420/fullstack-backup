@@ -14,7 +14,7 @@ const request = (...args: Parameters<typeof createProductAPI>) =>
   createProductAPI(...args).then(res => res.data.data);
 
 export const CreateProduct = React.memo(() => {
-  const [isOpen, { on, off }] = useBoolean();
+  const [isOpen, on, off] = useBoolean();
 
   const { createProduct } = useProductActions();
 

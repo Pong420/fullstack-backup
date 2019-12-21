@@ -19,7 +19,7 @@ interface GridProps {
 const nil = () => {};
 
 const Grid = React.memo<GridProps>(({ index, payload, onRemove }) => {
-  const [dialogOpen, setDialogOpen] = useBoolean();
+  const [dialogOpen, openDialog, closeDialog] = useBoolean();
 
   const url = typeof payload === 'string' ? payload : payload.url;
 
@@ -27,13 +27,13 @@ const Grid = React.memo<GridProps>(({ index, payload, onRemove }) => {
     <div className="grid">
       <CloudinaryImage className="grid-content" url={url} width={150} />
       <div className="grid-backdrop">
-        <Button minimal icon="eye-open" onClick={setDialogOpen.on} />
+        <Button minimal icon="eye-open" onClick={openDialog} />
         <Button minimal icon="cross" onClick={() => onRemove(index)} />
       </div>
       <Dialog
         className="preview-image-dialog"
         isOpen={dialogOpen}
-        onClose={setDialogOpen.off}
+        onClose={closeDialog}
       >
         <CloudinaryImage img url={url} width={1200} />
       </Dialog>

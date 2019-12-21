@@ -13,7 +13,7 @@ const createUserAPI = (...params: Parameters<typeof createUser>) =>
 const title = 'Create User';
 
 export const CreateUser = React.memo(() => {
-  const [dialogOpen, { on, off }] = useBoolean();
+  const [dialogOpen, on, off] = useBoolean();
   const { createUser } = useUserActions();
 
   const onSuccess = useCallback(

@@ -11,7 +11,7 @@ const title = 'Edit Product';
 const icon = 'edit';
 
 export function EditProduct({ id = '', ...product }: Partial<Schema$Product>) {
-  const [isOpen, { on, off }] = useBoolean();
+  const [isOpen, on, off] = useBoolean();
   const { updateProduct } = useProductActions();
 
   const request = useCallback(

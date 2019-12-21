@@ -15,7 +15,7 @@ export function HideProduct({
 
   const { updateProduct } = useProductActions();
 
-  const [isHidden, { toggle }] = useBoolean(status === ProductStatus.HIDDEN);
+  const [isHidden, , , toggle] = useBoolean(status === ProductStatus.HIDDEN);
 
   useEffect(() => {
     const subscription = subject.current

@@ -13,7 +13,7 @@ export function DeleteProduct({
   id = '',
   name
 }: Pick<Partial<Schema$Product>, 'id' | 'name'>) {
-  const [isOpen, { on, off }] = useBoolean();
+  const [isOpen, on, off] = useBoolean();
   const { deleteProduct } = useProductActions();
 
   const request = useCallback(() => deleteProductAPI({ id }), [id]);

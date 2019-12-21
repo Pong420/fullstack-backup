@@ -15,7 +15,7 @@ interface Props
 
 export const Password = React.memo<Props>(
   ({ className = '', visible = false, autoComplete, ...props }) => {
-    const [isVisible, setVisible] = useBoolean(visible);
+    const [isVisible, , , toggleVisible] = useBoolean(visible);
     return (
       <InputGroup
         {...props}
@@ -26,7 +26,7 @@ export const Password = React.memo<Props>(
           <Button
             minimal
             icon={isVisible ? 'eye-off' : 'eye-open'}
-            onClick={setVisible.toggle}
+            onClick={toggleVisible}
           />
         }
       />

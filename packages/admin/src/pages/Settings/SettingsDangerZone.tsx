@@ -17,12 +17,12 @@ interface RowProps {
 }
 
 const DangerButton = (props: IButtonProps) => {
-  const [hover, setHover] = useBoolean();
+  const [hover, on, off] = useBoolean();
   return (
     <Button
       intent={hover ? 'danger' : 'none'}
-      onMouseEnter={setHover.on}
-      onMouseLeave={setHover.off}
+      onMouseEnter={on}
+      onMouseLeave={off}
       {...props}
     />
   );
@@ -40,7 +40,7 @@ function Row({ title, desc, children }: RowProps) {
 }
 
 function DeleteAccount() {
-  const [isOpen, setIsOpen] = useBoolean();
+  const [isOpen, on, off] = useBoolean();
   const [password, inputProps] = useRxInput();
   const { id } = useSelector(authUserSelector)!;
   const { logout } = useAuthActions();
@@ -57,13 +57,13 @@ function DeleteAccount() {
 
   return (
     <>
-      <DangerButton text="Delete Account" onClick={setIsOpen.on} />
+      <DangerButton text="Delete Account" onClick={on} />
       <AsyncFnDialog
         icon="trash"
         intent="danger"
         title="Delete Account"
         isOpen={isOpen}
-        onClose={setIsOpen.off}
+        onClose={off}
         loading={loading}
         disabled={!password}
         onConfirm={run}
@@ -76,11 +76,11 @@ function DeleteAccount() {
 }
 
 function ModifyPassword() {
-  const [isOpen, setIsOpen] = useBoolean();
+  const [isOpen, on, off] = useBoolean();
   return (
     <>
-      <DangerButton text="Modify Password" onClick={setIsOpen.on} />
-      <ModifyPasswordDialog isOpen={isOpen} onClose={setIsOpen.off} />
+      <DangerButton text="Modify Password" onClick={on} />
+      <ModifyPasswordDialog isOpen={isOpen} onClose={off} />
     </>
   );
 }
