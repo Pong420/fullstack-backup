@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -18,8 +18,12 @@ import Cart from '../../assets/cart.svg';
 
 export function Login() {
   const [isLogin, , , toggle] = useBoolean(true);
-  const { login, registration } = useAuthActions();
-  const loading = useSelector(loginStatusSelector) === 'loading';
+  const { login, registration, refreshToken } = useAuthActions();
+  const loginStatus = useSelector(loginStatusSelector);
+
+  useEffect(() => {
+    loginStatus === 'unknown' && refreshToken();
+  }, [loginStatus, refreshToken]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
@@ -45,9 +49,12 @@ export function Login() {
           </View>
           <View style={{ padding: 20, flex: 1 }}>
             {isLogin ? (
-              <LoginForm loading={loading} onSubmit={login} />
+              <LoginForm loading={loginStatus === 'loading'} onSubmit={login} />
             ) : (
-              <RegisterForm loading={loading} onSubmit={registration} />
+              <RegisterForm
+                loading={loginStatus === 'loading'}
+                onSubmit={registration}
+              />
             )}
             <Button
               ghost

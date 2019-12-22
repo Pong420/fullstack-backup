@@ -7,13 +7,13 @@ import { Screens } from '../constants';
 
 let _navigator: NavigationContainerComponent | null;
 
-function setTopLevelNavigator(
+export function setTopLevelNavigator(
   navigatorRef: NavigationContainerComponent | null
 ) {
   _navigator = navigatorRef;
 }
 
-function navigate(
+export function navigate(
   payload: NavigationNavigateActionPayload & { routeName: Screens }
 ) {
   if (_navigator) {
@@ -22,5 +22,3 @@ function navigate(
     console.warn('_navigator is not defined');
   }
 }
-
-export { navigate, setTopLevelNavigator };

@@ -16,17 +16,23 @@ interface NotLoggedIn extends SharedState {
 
 type State = LoggedIn | NotLoggedIn;
 
-const initialState: State = {
+export const authInitialState: State = {
   loginStatus: 'unknown',
   user: null
 };
 
-export default function(
-  state: State = initialState,
+export const logoutState: NotLoggedIn = {
+  loginStatus: 'required',
+  user: null
+};
+
+export function authRedcuer(
+  state: State = authInitialState,
   action: AuthActions
 ): State {
   switch (action.type) {
     case AuthActionTypes.LOGIN:
+    case AuthActionTypes.REFRESH_TOKEN:
       return {
         ...state,
         loginStatus: 'loading',

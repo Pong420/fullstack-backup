@@ -1,5 +1,5 @@
-import { from, of, merge } from 'rxjs';
-import { switchMap, catchError, mergeMap, map, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { switchMap, catchError, map, tap } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import {
   AuthActions,
@@ -47,11 +47,11 @@ const loginEpic: AuthEpic = action$ =>
     }),
     switchMap(promise => {
       return from(promise).pipe(
-        map<any, LoginSuccess>(payload => ({
+        tap(() => navigate({ routeName: 'Home' })),
+        map<LoginSuccess['payload'], LoginSuccess>(payload => ({
           type: AuthActionTypes.LOGIN_SUCCESS,
           payload
         })),
-        tap(() => navigate({ routeName: 'Home' })),
         catchError(payload =>
           of<Actions>({ type: AuthActionTypes.LOGIN_FAILURE, payload })
         )
@@ -64,12 +64,8 @@ const logoutEpic: AuthEpic = action$ =>
     ofType<Actions, Logout>(AuthActionTypes.LOGOUT),
     switchMap(() =>
       from(logout()).pipe(
-        mergeMap(() =>
-          merge<Actions>(
-            // of<Actions>(replace(PATHS.LOGIN, {})),
-            of<Actions>({ type: AuthActionTypes.LOGOUT_SUCCESS })
-          )
-        ),
+        tap(() => navigate({ routeName: 'Login' })),
+        map<unknown, Actions>(() => ({ type: AuthActionTypes.LOGOUT_SUCCESS })),
         catchError(() => of<Actions>({ type: AuthActionTypes.LOGOUT_FAILURE }))
       )
     )

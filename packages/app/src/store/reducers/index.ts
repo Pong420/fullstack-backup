@@ -1,10 +1,10 @@
 import { combineReducers, Reducer, AnyAction } from 'redux';
 import { AuthActionTypes } from '../actions';
-import auth from './auth';
+import { authRedcuer, logoutState } from './auth';
 
 const appReducer = () =>
   combineReducers({
-    auth
+    auth: authRedcuer
   });
 
 // reset store after user logout
@@ -12,7 +12,9 @@ const rootReducer = (
   ...args: Parameters<typeof appReducer>
 ): Reducer<RootState | undefined, AnyAction> => (state, action) =>
   appReducer(...args)(
-    action.type === AuthActionTypes.LOGOUT_SUCCESS ? undefined : state,
+    action.type === AuthActionTypes.LOGOUT_SUCCESS
+      ? { auth: logoutState }
+      : state,
     action
   );
 
