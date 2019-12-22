@@ -1,15 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Divider, Tag } from '@blueprintjs/core';
+import { useSearchParam } from '@fullstack/common/hooks/useSearchParam';
 import { CloudinaryImage } from '../../components/CloudinaryImage';
 import { Skeleton } from '../../components/Skeleton';
 import { EditProduct } from './EditProduct';
 import { DeleteProduct } from './DeleteProduct';
 import { HideProduct } from './HideProduct';
 import { productSelector } from '../../store';
-import { getTagProps } from '../../utils/getTagProps';
-import { useSearchParam } from '../../hooks/useSearchParam';
 import { Schema$Product } from '../../typings';
+import { getTagProps } from '../../utils/getTagProps';
 
 interface Props {
   id: string | null;

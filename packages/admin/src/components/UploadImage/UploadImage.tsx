@@ -15,7 +15,7 @@ import {
   useRxFileToImage,
   RxFileToImageState
 } from 'use-rx-hooks';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 interface Context {
   upload: () => void;

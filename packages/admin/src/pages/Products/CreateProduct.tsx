@@ -6,7 +6,7 @@ import { ProductDialog } from './ProductDialog';
 import { createProduct as createProductAPI } from '../../service';
 import { useProductActions } from '../../store';
 import { Schema$Product } from '../../typings';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 const title = 'Create Product';
 

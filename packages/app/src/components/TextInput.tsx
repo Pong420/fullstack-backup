@@ -5,7 +5,7 @@ import {
   TextInputProps as RNTextInputProps,
   ViewStyle
 } from 'react-native';
-import { useBoolean } from '../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   onChange?: (value: string) => void;

@@ -6,12 +6,12 @@ import {
   KeyboardAvoidingView,
   View
 } from 'react-native';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 import { Text } from '../../components/Text';
 import { Button } from '../../components/Button';
 import { flex, dimen } from '../../styles';
-import { useBoolean } from '../../hooks/useBoolean';
 import Cart from '../../assets/cart.svg';
 
 export function Login() {

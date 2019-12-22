@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { useMemo } from 'react';
 import { Action } from 'redux';
 import { useDispatch } from 'react-redux';
-import { useMemo } from 'react';
 
 interface Actions {
   [k: string]: (params?: any) => Action;

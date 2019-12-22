@@ -5,7 +5,7 @@ import { ProductDialog } from './ProductDialog';
 import { Schema$Product, Param$UpdateProduct } from '../../typings';
 import { useProductActions } from '../../store';
 import { updateProduct as updateProductAPI } from '../../service';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 const title = 'Edit Product';
 const icon = 'edit';

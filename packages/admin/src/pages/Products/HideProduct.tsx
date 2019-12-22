@@ -5,7 +5,7 @@ import { ButtonPopover } from '../../components/ButtonPopover';
 import { updateProduct as updateProductAPI } from '../../service';
 import { Schema$Product, ProductStatus } from '../../typings';
 import { useProductActions } from '../../store';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 export function HideProduct({
   id = '',

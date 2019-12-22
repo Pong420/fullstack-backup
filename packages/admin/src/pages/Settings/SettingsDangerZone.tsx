@@ -8,7 +8,7 @@ import { Password } from '../../components/Password';
 import { ModifyPasswordDialog } from '../../components/ModifyPasswordDialog';
 import { deleteAcctount } from '../../service';
 import { authUserSelector, useAuthActions } from '../../store';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 interface RowProps {
   title?: string;

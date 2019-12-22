@@ -5,7 +5,7 @@ import { AsyncFnDialog } from '../../components/Dialog';
 import { Schema$Product } from '../../typings';
 import { useProductActions } from '../../store';
 import { deleteProduct as deleteProductAPI } from '../../service';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 const title = 'Delete Product';
 

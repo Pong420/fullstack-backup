@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
 import { AxiosPromise, AxiosResponse } from 'axios';
-import { useSearchParam } from './useSearchParam';
+import { useSearchParam } from '@fullstack/common/hooks/useSearchParam';
 import {
   Param$Search,
   Param$Pagination,

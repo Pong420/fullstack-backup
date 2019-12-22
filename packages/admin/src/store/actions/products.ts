@@ -1,6 +1,6 @@
 import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$Product, Response$GetSuggestion } from '../../typings';
-import { useActions } from '../../hooks/useActions';
+import { useActions } from '../';
 
 export enum ProductActionTypes {
   CREATE = 'CREATE_PRODUCT',

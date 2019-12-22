@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu, MenuItem } from '@blueprintjs/core';
-import { useActions } from '../../hooks/useActions';
-import { logout } from '../../store';
+import { logout, useActions } from '../../store';
 
 const actions = { logout };
 

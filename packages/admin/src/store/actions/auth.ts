@@ -1,5 +1,5 @@
 import { Param$Login, Response$Login, Schema$User } from '../../typings';
-import { useActions } from '../../hooks/useActions';
+import { useActions } from '../';
 
 export enum AuthActionTypes {
   LOGIN = 'LOGIN',

@@ -11,7 +11,7 @@ import {
   updateUser as updateUserAPI,
   deleteUser as deleteUserAPI
 } from '../../service';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 interface Props extends Partial<Schema$User> {}
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NonIdealState, Button } from '@blueprintjs/core';
+import { useSearchParam } from '@fullstack/common/hooks/useSearchParam';
 import { searchParamSelector } from '../store';
-import { useSearchParam } from '../hooks/useSearchParam';
 
 export interface NotFoundProps {}
 

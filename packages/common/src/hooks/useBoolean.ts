@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-export function useBoolean(initialState: boolean = false) {
+export function useBoolean(initialState = false) {
   const [flag, setFlag] = useState(initialState);
   const actions = useMemo(
     () => [

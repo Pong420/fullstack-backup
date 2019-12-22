@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, TouchableHighlight } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 import { TextInput, TextInputProps } from './TextInput';
-import { useBoolean } from '../hooks/useBoolean';
 import { dimen } from '../styles';
 
 interface Props extends TextInputProps {}

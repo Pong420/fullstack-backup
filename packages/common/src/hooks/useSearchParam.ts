@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
-import { history } from '../store';
+import { useHistory } from 'react-router-dom';
 import qs from 'qs';
 
 export function useSearchParam<T extends {}>() {
+  const history = useHistory();
   const setSearchParam = useCallback(
     (payload: Partial<T> | ((params: Partial<T>) => Partial<T>)) => {
       const newState =
@@ -17,7 +18,7 @@ export function useSearchParam<T extends {}>() {
       }
       history.push({ search: qs.stringify(newState) });
     },
-    []
+    [history]
   );
 
   return { setSearchParam };

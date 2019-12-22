@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { PATHS } from '../constants';
-import { useActions } from '../hooks/useActions';
-import { refreshToken, loginStatusSelector } from '../store';
+import { refreshToken, loginStatusSelector, useActions } from '../store';
 
 const actions = { refreshToken };
 

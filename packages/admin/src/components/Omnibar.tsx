@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { Classes } from '@blueprintjs/core';
 import { Omnibar as Bp3Omnibar, IOmnibarProps } from '@blueprintjs/select';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
+import { useSearchParam } from '@fullstack/common/hooks/useSearchParam';
 import { ButtonPopover } from './ButtonPopover';
 import { useMouseTrap } from '../hooks/useMouseTrap';
-import { useBoolean } from '../hooks/useBoolean';
-import { useSearchParam } from '../hooks/useSearchParam';
 import {
   transform,
   itemPredicate,

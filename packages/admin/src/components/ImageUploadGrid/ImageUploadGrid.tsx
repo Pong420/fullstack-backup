@@ -3,7 +3,7 @@ import { RxFileToImageState } from 'use-rx-hooks';
 import { Button, Dialog } from '@blueprintjs/core';
 import { UploadImage } from '../UploadImage';
 import { CloudinaryImage } from '../CloudinaryImage';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 interface Props {
   value?: (RxFileToImageState | string)[];

@@ -5,7 +5,7 @@ import { UserDialog } from './UserDialog';
 import { createUser } from '../../service';
 import { useUserActions } from '../../store';
 import { Schema$User } from '../../typings';
-import { useBoolean } from '../../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 
 const createUserAPI = (...params: Parameters<typeof createUser>) =>
   createUser(...params).then(res => res.data.data);

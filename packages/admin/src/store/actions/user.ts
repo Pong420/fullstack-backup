@@ -1,6 +1,6 @@
 import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$User } from '../../typings';
-import { useActions } from '../../hooks/useActions';
+import { useActions } from '../';
 
 export enum UserActionTypes {
   CREATE = 'CREATE_USER',
