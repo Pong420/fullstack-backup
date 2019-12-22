@@ -1,35 +1,28 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useRxAsync, RxAsyncOptions } from 'use-rx-async';
 import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
-import { Param$CreateUser, registration } from '../../service';
-import { PromiseOf } from '../../typings';
+import { Param$CreateUser } from '../../service';
 
 type Fields = Required<Param$CreateUser & { confirmPassword: string }>;
 
 const { Form, useForm } = createForm<Fields>();
 
-const request = (params: Param$CreateUser) =>
-  registration(params).then(res => res.data.data);
+interface Props {
+  loading: boolean;
+  onSubmit: (params: Param$CreateUser) => void;
+}
 
-interface Props
-  extends Pick<
-    RxAsyncOptions<PromiseOf<ReturnType<typeof request>>>,
-    'onSuccess' | 'onFailure'
-  > {}
-
-export function RegisterForm(options: Props) {
+export function RegisterForm({ loading, onSubmit }: Props) {
   const [form] = useForm();
-  const { loading, run } = useRxAsync(request, { defer: true, ...options });
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <Form
         form={form}
-        onFinish={run}
+        onFinish={onSubmit}
         initialValues={{
           username: '',
           password: '',

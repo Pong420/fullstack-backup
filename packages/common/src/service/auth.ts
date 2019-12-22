@@ -5,6 +5,7 @@ import {
   Param$ModifyPassword,
   Param$DeleteAccount,
   Response$Login,
+  Response$Registration,
   Response$RefreshToken,
   Response$User
 } from './typings';
@@ -14,7 +15,7 @@ export const login = (params: Param$Login) =>
   api.post<Response$Login>(PATHS.LOGIN, params);
 
 export const registration = (params: Param$CreateUser) =>
-  api.post<Response$User>(PATHS.REGISTRATION, params);
+  api.post<Response$Registration>(PATHS.REGISTRATION, params);
 
 export const adminRegistration = (params: Param$CreateUser) =>
   api.post<Response$User>(PATHS.ADMIN_REGISTRATION, params);

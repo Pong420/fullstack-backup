@@ -1,34 +1,26 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useRxAsync, RxAsyncOptions } from 'use-rx-async';
 import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
-import { Param$Login, login } from '../../service';
-import { PromiseOf } from '../../typings';
+import { Param$Login } from '../../service';
 
 const { Form, useForm } = createForm<Param$Login>();
 
-const request = (params: Param$Login) =>
-  login(params).then(res => res.data.data);
+interface Props {
+  loading: boolean;
+  onSubmit: (params: Param$Login) => void;
+}
 
-interface Props
-  extends Pick<
-    RxAsyncOptions<PromiseOf<ReturnType<typeof request>>>,
-    'onSuccess' | 'onFailure'
-  > {}
-
-export function LoginForm(options: Props) {
+export function LoginForm({ loading, onSubmit }: Props) {
   const [form] = useForm();
-
-  const { loading, run } = useRxAsync(request, { defer: true, ...options });
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <Form
         form={form}
-        onFinish={run}
+        onFinish={onSubmit}
         items={[
           {
             name: 'username',

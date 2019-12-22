@@ -40,8 +40,26 @@ export class AuthController {
   }
 
   @Post(SERVICE_PATHS.AUTH.GUEST_REGISTRATION)
-  guestRegistration(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
+  async guestRegistration(@Body() createUserDto: CreateUserDto) {
+    try {
+      const user = await this.userService.create({
+        ...createUserDto,
+        role: UserRole.GUEST
+      });
+
+      if (user) {
+        return {
+          user,
+          ...(await this.authService.signJwt({
+            id: user.id,
+            username: user.username,
+            role: user.role
+          }))
+        };
+      }
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   @Post(SERVICE_PATHS.AUTH.REGISTRATION)

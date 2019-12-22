@@ -25,4 +25,8 @@ export type Response$Login = Response$API<
   Schema$JWT & { user: Schema$User; isDefaultAc: boolean }
 >;
 
+export type Response$Registration = Response$API<
+  Schema$JWT & { user: Schema$User }
+>;
+
 export type Response$RefreshToken = Response$API<Schema$JWT>;

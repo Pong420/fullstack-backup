@@ -4,6 +4,7 @@ import { PaginateOptions, QueryFindOneAndUpdateOptions } from 'mongoose';
 import { UserModel, User } from './model/user.model';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { UploadService, UploadFile, isUploadFile } from '../upload';
+import { Schema$User } from '@fullstack/common/service';
 
 @Injectable()
 export class UserService {
@@ -45,7 +46,7 @@ export class UserService {
     try {
       await createdUser.save();
       // eslint-disable-next-line
-      const { password, ...user } = createdUser.toJSON();
+      const { password, ...user } = createdUser.toJSON() as Schema$User;
       return user;
     } catch (error) {
       if (error instanceof MongoError) {
