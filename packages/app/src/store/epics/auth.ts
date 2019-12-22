@@ -1,5 +1,5 @@
 import { from, of, merge } from 'rxjs';
-import { switchMap, catchError, mergeMap, map } from 'rxjs/operators';
+import { switchMap, catchError, mergeMap, map, tap } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import {
   AuthActions,
@@ -7,7 +7,8 @@ import {
   Login,
   Logout,
   Registration,
-  RefreshToken
+  RefreshToken,
+  LoginSuccess
 } from '../actions/auth';
 import { RootState } from '../reducers';
 import {
@@ -17,6 +18,7 @@ import {
   registration,
   getUserInfo
 } from '../../service';
+import { navigate } from '../../utils/navigation';
 
 type Actions = AuthActions;
 type AuthEpic = Epic<Actions, Actions, RootState>;
@@ -45,10 +47,11 @@ const loginEpic: AuthEpic = action$ =>
     }),
     switchMap(promise => {
       return from(promise).pipe(
-        map<any, Actions>(payload => ({
+        map<any, LoginSuccess>(payload => ({
           type: AuthActionTypes.LOGIN_SUCCESS,
           payload
         })),
+        tap(() => navigate({ routeName: 'Home' })),
         catchError(payload =>
           of<Actions>({ type: AuthActionTypes.LOGIN_FAILURE, payload })
         )

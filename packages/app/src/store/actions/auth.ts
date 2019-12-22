@@ -1,8 +1,8 @@
 import {
   Param$Login,
   Param$CreateUser,
-  Response$Login,
-  Schema$User
+  Schema$User,
+  Schema$JWT
 } from '@fullstack/common/service';
 import { useActions } from '@fullstack/common/hooks/useActions';
 
@@ -25,7 +25,7 @@ export interface Login {
 
 export interface LoginSuccess {
   type: AuthActionTypes.LOGIN_SUCCESS;
-  payload: Response$Login['data'];
+  payload: Schema$JWT & { user: Schema$User };
 }
 
 export interface LoginFailure {
