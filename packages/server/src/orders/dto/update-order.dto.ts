@@ -1,4 +1,4 @@
-import { IsNumber, IsEmpty, IsEnum } from 'class-validator';
+import { IsEmpty, IsEnum, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import {
   Required$UpdateOrder,
@@ -7,11 +7,11 @@ import {
 } from '@fullstack/common/service/typings';
 
 class Base implements Required$UpdateOrder {
-  @IsNumber()
-  @Transform(Number)
-  amount!: number;
+  // TODO: validation
+  products!: Required$UpdateOrder['products'];
 
   @IsEnum(OrderStatus)
+  @IsOptional()
   @Transform(Number)
   status!: OrderStatus;
 }
@@ -19,13 +19,10 @@ class Base implements Required$UpdateOrder {
 class UpdateOrder extends Base
   implements Partial<Omit<Schema$Order | Required$UpdateOrder, keyof Base>> {
   @IsEmpty()
-  id?: string;
+  id?: undefined;
 
   @IsEmpty()
-  user?: string;
-
-  @IsEmpty()
-  product?: string;
+  user?: undefined;
 }
 
 export class UpdateOrderDto extends UpdateOrder

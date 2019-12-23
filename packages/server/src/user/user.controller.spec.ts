@@ -134,13 +134,15 @@ describe('User Controller', () => {
       );
       const changes = createMockUser(UserRole.ADMIN);
 
-      expect(
-        await controller.updateUser(
-          newUser.id,
-          { id: newUser.id, ...changes },
-          mockReq({ ...mockUser })
-        )
-      ).toMatchObject(changes);
+      if (newUser) {
+        expect(
+          await controller.updateUser(
+            newUser.id,
+            { id: newUser.id, ...changes },
+            mockReq({ ...mockUser })
+          )
+        ).toMatchObject(changes);
+      }
     });
 
     it('users who have the same role cannot be changed by each other', async () => {
@@ -151,14 +153,16 @@ describe('User Controller', () => {
         mockReq()
       );
 
-      try {
-        await controller.updateUser(
-          newAdmin.id,
-          { id: newAdmin.id, nickname: 'change' },
-          mockReq({ ...mock.user[role] })
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(HttpException);
+      if (newAdmin) {
+        try {
+          await controller.updateUser(
+            newAdmin.id,
+            { id: newAdmin.id, nickname: 'change' },
+            mockReq({ ...mock.user[role] })
+          );
+        } catch (error) {
+          expect(error).toBeInstanceOf(HttpException);
+        }
       }
     });
   });
@@ -171,12 +175,14 @@ describe('User Controller', () => {
         mockReq()
       );
 
-      try {
-        expect(
-          await controller.deleteUser(newUser.id, mockReq({ ...mockUser }))
-        ).toMatchObject({});
-      } catch (error) {
-        expect(error).toBeInstanceOf(HttpException);
+      if (newUser) {
+        try {
+          expect(
+            await controller.deleteUser(newUser.id, mockReq({ ...mockUser }))
+          ).toMatchObject({});
+        } catch (error) {
+          expect(error).toBeInstanceOf(HttpException);
+        }
       }
     });
 
@@ -188,13 +194,15 @@ describe('User Controller', () => {
         mockReq()
       );
 
-      try {
-        await controller.deleteUser(
-          newAdmin.id,
-          mockReq({ ...mock.user[role] })
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(HttpException);
+      if (newAdmin) {
+        try {
+          await controller.deleteUser(
+            newAdmin.id,
+            mockReq({ ...mock.user[role] })
+          );
+        } catch (error) {
+          expect(error).toBeInstanceOf(HttpException);
+        }
       }
     });
   });
@@ -237,20 +245,25 @@ describe('User Controller', () => {
 
       const req = mockReq({ ...mockUser });
 
-      const result = [
-        newAdmin,
-        ...(await controller.getUsers(req)).docs,
-        await controller.getUser(req, newAdmin.id),
-        await controller.updateUser(
-          newAdmin.id,
-          { id: newAdmin.id, ...createMockUser(UserRole.ADMIN) },
-          req
-        )
-      ];
+      if (newAdmin) {
+        const result = [
+          newAdmin,
+          ...(await controller.getUsers(req)).docs,
+          await controller.getUser(req, newAdmin.id),
+          await controller.updateUser(
+            newAdmin.id,
+            { id: newAdmin.id, ...createMockUser(UserRole.ADMIN) },
+            req
+          )
+        ];
 
-      expect(
-        result.every(obj => !obj || typeof obj.password === 'undefined')
-      ).toBe(true);
+        expect(
+          result.every(
+            // eslint-disable-next-line
+            (obj: any) => !obj || typeof obj.password === 'undefined'
+          )
+        ).toBe(true);
+      }
     });
   });
 

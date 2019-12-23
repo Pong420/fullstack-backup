@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PaginateOptions } from 'mongoose';
-import { CreateOrderDto } from './dto';
+import { CreateOrderDto, UpdateOrderDto } from './dto';
 import { OrderModel } from './model';
 
 @Injectable()
@@ -28,5 +28,13 @@ export class OrdersService {
 
   delete(id: string) {
     return OrderModel.deleteOne({ _id: id });
+  }
+
+  update(id: string, updateOrderDto: UpdateOrderDto) {
+    return OrderModel.updateOne({ _id: id }, updateOrderDto, { new: true });
+  }
+
+  findById(id: string) {
+    return OrderModel.findById({ _id: id });
   }
 }

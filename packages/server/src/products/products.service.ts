@@ -96,6 +96,10 @@ export class ProductsService {
     return ProductModel.find(condition, projection);
   }
 
+  findById(id: string) {
+    return ProductModel.findById({ _id: id });
+  }
+
   paginate(
     condition?: object,
     { page = 1, limit = 10, ...options }: PaginateOptions = {}

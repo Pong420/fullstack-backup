@@ -10,18 +10,26 @@ export enum OrderStatus {
 export interface Schema$Order {
   id: string;
 
-  product: Pick<Schema$Product, 'name' | 'images' | 'description' | 'price'>;
+  products: Array<{
+    product: Pick<
+      Schema$Product,
+      'name' | 'images' | 'description' | 'price' | 'remain'
+    >;
+    amount: number;
+  }>;
 
   user: Pick<Schema$User, 'id' | 'nickname' | 'username' | 'email'>;
-
-  amount: number;
 
   status: OrderStatus;
 }
 
-export interface Required$CreateOrder extends Pick<Schema$Order, 'amount'> {
-  product: string;
+export interface Required$CreateOrder {
+  products: Array<{
+    product: string;
+    amount: number;
+  }>;
 }
 
-export interface Required$UpdateOrder
-  extends Pick<Schema$Order, 'amount' | 'status'> {}
+export interface Required$UpdateOrder extends Pick<Schema$Order, 'status'> {
+  products: Required$CreateOrder['products'];
+}

@@ -18,7 +18,7 @@ import { UploadFile } from '../../upload';
 import { PRICE_MIN, AMOUNT_MIN, DISCOUNT_MAX, DISCOUNT_MIN } from './index';
 
 export class UpdateProduct implements Partial<Required$UpdateProduct> {
-  @IsOptional()
+  @IsEmpty()
   id?: string;
 
   @IsString()

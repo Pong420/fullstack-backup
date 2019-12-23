@@ -1,5 +1,6 @@
 import {
   prop,
+  arrayProp,
   plugin,
   getModelForClass,
   Ref,
@@ -12,18 +13,15 @@ import { OrderStatus, Schema$Order } from '@fullstack/common/service/typings';
 
 @plugin(paginate)
 export class Order implements Schema$Order {
-  @prop({ ref: Product, required: true })
+  @arrayProp({ itemsRef: Product, required: true })
   // eslint-disable-next-line
   // @ts-ignore
-  product!: Ref<Product>;
+  products!: Ref<Schema$Order['product'][number]>[];
 
   @prop({ ref: User })
   // eslint-disable-next-line
   // @ts-ignore
-  user!: Ref<User>;
-
-  @prop({ required: true })
-  amount!: number;
+  user!: Ref<Schema$Order['user']>;
 
   @prop({ default: OrderStatus.PENDING, type: Number })
   status!: OrderStatus;

@@ -1,18 +1,13 @@
-import { IsString, IsNumber, IsEmpty } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsEmpty } from 'class-validator';
 import {
   Required$CreateOrder,
   Schema$Order,
   OrderStatus
 } from '@fullstack/common/service/typings';
 
+// TODO: add validation
 class Base implements Required$CreateOrder {
-  @IsString()
-  product!: string;
-
-  @IsNumber()
-  @Transform(Number)
-  amount!: number;
+  products!: Required$CreateOrder['products'];
 }
 
 class CreateOrder extends Base
