@@ -20,7 +20,7 @@ type FontStyle = {
 export interface TextProps extends RnTextProps, FontStyle {
   fontSize?: number;
   style?: TextStyle & FontStyle;
-  children?: string;
+  children?: string | number;
 }
 
 export function Text({

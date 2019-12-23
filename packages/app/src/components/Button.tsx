@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from './Text';
+import { paddingX } from '../styles';
 
 export interface ButtonProps extends TouchableHighlightProps {
   intent?: keyof typeof themes;
@@ -84,6 +85,7 @@ export function Button({
         <LinearGradientWrapper
           colors={inActive || ghost ? undefined : theme.colors}
           style={{
+            ...paddingX(15),
             alignItems: 'center',
             justifyContent: 'center',
             height: 40
