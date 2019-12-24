@@ -29,16 +29,16 @@ export class ProductsController {
   {
     pageNo,
     pageSize,
+    search,
     tag,
-    type,
-    search
+    category
   }: PaginationDto & SearchDto & GetProductsDto = {}) {
     return this.productsService.paginate(
       {
         ...(tag
           ? { tags: { $in: [tag] } }
-          : type
-          ? { type }
+          : category
+          ? { category }
           : search
           ? formatSearchQuery(['name'], search)
           : {})
@@ -71,9 +71,9 @@ export class ProductsController {
     return this.productsService.update({ ...updateProductDto, id });
   }
 
-  @Get(SERVICE_PATHS.PRODUCTS.GET_SUGGESTION_TYPE)
-  async getTypes() {
-    return this.productsService.types();
+  @Get(SERVICE_PATHS.PRODUCTS.GET_SUGGESTION_CATEGORY)
+  async getCategories() {
+    return this.productsService.categories();
   }
 
   @Get(SERVICE_PATHS.PRODUCTS.GET_SUGGESTION_TAGS)

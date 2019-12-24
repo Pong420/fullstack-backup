@@ -38,11 +38,6 @@ export interface Required$UpdateUser
   oldAvatar?: string | null;
 }
 
-export interface Required$GetProducts {
-  tag?: string;
-  type?: string;
-}
-
 export interface Param$GetUsers extends Param$Search, Param$Pagination {}
 
 export interface Param$CreateUser extends Required$CreateUser {

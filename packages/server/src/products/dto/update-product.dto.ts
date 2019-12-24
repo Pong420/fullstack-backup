@@ -49,7 +49,7 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
 
   @IsString()
   @IsOptional()
-  type?: string;
+  category?: string;
 
   @IsOptional()
   images?: Array<UploadFile | string>;

@@ -8,7 +8,7 @@ import {
 } from '@fullstack/common/utils/form';
 import { NumericInput } from '../../components/NumericInput';
 import { ImageUploadGrid } from '../../components/ImageUploadGrid';
-import { ProductTypesInput, ProductTagsInput } from './ProductFormSuggest';
+import { ProductCategoryInput, ProductTagsInput } from './ProductFormSuggest';
 import {
   Required$UpdateProduct,
   Param$UpdateProduct,
@@ -37,7 +37,7 @@ const defaultValues: Fields = {
   name: '',
   price: 0,
   amount: 0,
-  type: '',
+  category: '',
   discount: 100,
   images: [],
   tags: [],
@@ -92,12 +92,12 @@ export function ProductForm({
       </FormItem>
 
       <FormItem
-        name="type"
-        label="Type"
+        name="category"
+        label="Category"
         valuePropName="value"
         validators={[validators.required('Product name cannot be empty')]}
       >
-        <ProductTypesInput />
+        <ProductCategoryInput />
       </FormItem>
 
       <FormItem

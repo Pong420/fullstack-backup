@@ -13,7 +13,7 @@ import {
   productSuggestSelector,
   useUpdateProductSuggestion
 } from '../../store';
-import { getSuggestion } from '../../service';
+import { getSuggestion, ProductSuggestTypes } from '../../service';
 import { getTagProps } from '../../utils/getTagProps';
 import {
   itemPredicate,
@@ -21,10 +21,10 @@ import {
   transform
 } from '../../utils/blueprint-select';
 
-const ProductTypesSuggest = Suggest.ofType<string>();
+const ProductCategorySuggest = Suggest.ofType<string>();
 const ProductTagsSuggest = MultiSelect.ofType<string>();
 
-interface ProductTypesSuggestProps {
+interface ProductCategorySuggestProps {
   value?: string;
   onChange?: (value: string) => void;
 }
@@ -73,7 +73,7 @@ const tagProps: Omit<
   tagRenderer: transform
 };
 
-function useSuggestion(type: 'types' | 'tags') {
+function useSuggestion(type: ProductSuggestTypes) {
   const { values, loaded } = useSelector(productSuggestSelector(type));
   const { updateSuggestion } = useUpdateProductSuggestion();
 
@@ -87,14 +87,14 @@ function useSuggestion(type: 'types' | 'tags') {
   return { values, loaded };
 }
 
-export function ProductTypesInput({
+export function ProductCategoryInput({
   value: type,
   onChange = nil
-}: ProductTypesSuggestProps) {
-  const { values, loaded } = useSuggestion('types');
+}: ProductCategorySuggestProps) {
+  const { values, loaded } = useSuggestion(ProductSuggestTypes.CATEGORY);
 
   return (
-    <ProductTypesSuggest
+    <ProductCategorySuggest
       {...typesProps}
       className="product-types-input"
       items={values}
@@ -110,7 +110,7 @@ export function ProductTagsInput({
   value: selectedTags,
   onChange = nil
 }: ProductTagsSuggestProps) {
-  const { values, loaded } = useSuggestion('tags');
+  const { values, loaded } = useSuggestion(ProductSuggestTypes.TAG);
 
   return (
     <ProductTagsSuggest

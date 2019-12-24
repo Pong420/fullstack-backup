@@ -37,7 +37,7 @@ export class Product implements Required<Schema$Product> {
   }
 
   @prop({ required: true, type: String, lowercase: true })
-  type!: string;
+  category!: string;
 
   @arrayProp({ type: String })
   images!: string[];

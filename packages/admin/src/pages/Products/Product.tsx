@@ -36,7 +36,7 @@ export const Product = React.memo<Props>(({ id }) => {
   const {
     name,
     price,
-    type,
+    category,
     remain,
     discount = 100,
     tags = [],
@@ -57,12 +57,14 @@ export const Product = React.memo<Props>(({ id }) => {
         </div>
         <div className="row">
           <Skeleton className="product-type">
-            {type && (
+            {category && (
               <span
                 className="searchable"
-                onClick={() => setSearchParam({ search: `type:${type}` })}
+                onClick={() =>
+                  setSearchParam({ search: `category:${category}` })
+                }
               >
-                {type}
+                {category}
               </span>
             )}
           </Skeleton>

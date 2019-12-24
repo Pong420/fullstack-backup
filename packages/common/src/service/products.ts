@@ -5,18 +5,20 @@ import {
   Param$UpdateProduct,
   Response$GetProducts,
   Response$Product,
-  Response$GetSuggestion
+  Response$GetSuggestion,
+  ProductSuggestTypes
 } from './typings';
 import { createFormData, generatePath, PATHS } from './utils';
 
-function handleSpecificSearch(search: string, reg: RegExp, key: string) {
-  return reg.test(search) ? { [key]: search.replace(reg, '') } : undefined;
+function handleSpecificSearch(search: string, key: string) {
+  const regex = new RegExp(`^${key}:`);
+  return regex.test(search) ? { [key]: search.replace(regex, '') } : undefined;
 }
 
 export const getProducts = ({ search, ...params }: Param$GetProducts = {}) => {
   const searchParams = search
-    ? handleSpecificSearch(search, /^tag:/, 'tag') ||
-      handleSpecificSearch(search, /^type:/, 'type') || { search }
+    ? handleSpecificSearch(search, ProductSuggestTypes.TAG) ||
+      handleSpecificSearch(search, ProductSuggestTypes.CATEGORY) || { search }
     : {};
 
   return api.get<Response$GetProducts>(PATHS.GET_PRODUCTS, {
@@ -38,8 +40,10 @@ export const deleteProduct = ({ id }: { id: string }) => {
   return api.delete(generatePath(PATHS.DELETE_PRODUCT, { id }));
 };
 
-export const getSuggestion = (type: 'types' | 'tags') => {
+export const getSuggestion = (type: ProductSuggestTypes) => {
   return api.get<Response$GetSuggestion>(
-    type === 'types' ? PATHS.GET_SUGGESTION_TYPE : PATHS.GET_SUGGESTION_TAGS
+    type === ProductSuggestTypes['CATEGORY']
+      ? PATHS.GET_SUGGESTION_CATEGORY
+      : PATHS.GET_SUGGESTION_TAGS
   );
 };

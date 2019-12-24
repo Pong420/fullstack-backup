@@ -1,5 +1,6 @@
 import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$Product, Response$GetSuggestion } from '../../typings';
+import { ProductSuggestTypes } from '../../service';
 import { useActions } from '../';
 
 export enum ProductActionTypes {
@@ -16,7 +17,7 @@ export enum ProductActionTypes {
 export interface UpdateSuggestion {
   type: ProductActionTypes.UPDATE_SUGGESSTION;
   payload: {
-    type: 'types' | 'tags';
+    type: ProductSuggestTypes;
     values: Response$GetSuggestion['data'];
   };
 }

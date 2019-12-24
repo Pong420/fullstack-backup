@@ -113,10 +113,10 @@ export class ProductsService {
     });
   }
 
-  types() {
+  categories() {
     return ProductModel.aggregate()
       .allowDiskUse(true)
-      .group({ _id: '$type', total: { $sum: 1 } })
+      .group({ _id: '$category', total: { $sum: 1 } })
       .project({
         _id: 0,
         value: '$_id',

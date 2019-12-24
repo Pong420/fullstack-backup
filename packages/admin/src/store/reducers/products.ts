@@ -1,7 +1,8 @@
-import { ProductActionTypes, ProductActions } from '../actions';
-import { Schema$Product } from '../../typings';
-import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
+import { ProductActionTypes, ProductActions } from '../actions/products';
+import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
+import { Schema$Product } from '../../typings';
+import { ProductSuggestTypes } from '../../service';
 
 const pageSize = 12;
 
@@ -12,8 +13,8 @@ interface Suggestion {
 }
 
 interface State extends CRUDStateEx<Schema$Product, 'id'> {
-  types: Suggestion;
-  tags: Suggestion;
+  [ProductSuggestTypes.CATEGORY]: Suggestion;
+  [ProductSuggestTypes.TAG]: Suggestion;
 }
 
 const [crudInitialState, crudReducer] = createCRUDReducerEx<
@@ -35,12 +36,12 @@ const placesholders = {
 const initialState: State = {
   ...crudInitialState,
   ...placesholders,
-  types: {
+  category: {
     values: [],
     count: {},
     loaded: false
   },
-  tags: {
+  tag: {
     values: [],
     count: {},
     loaded: false
@@ -75,8 +76,8 @@ export default function(
   state = initialState,
   action: ProductActions | LocationChangeAction
 ): State {
-  let tags: string[] = [];
-  let types: string[] = [];
+  let tag: string[] = [];
+  let category: string[] = [];
 
   switch (action.type) {
     case ProductActionTypes.UPDATE_SUGGESSTION:
@@ -88,9 +89,11 @@ export default function(
             acc[type].count[value] = total;
             return acc;
           },
-          { ...{ tags: state.tags, types: state.types } }
+          { ...{ tag: state.tag, category: state.tag } }
         );
+
         changes[type].loaded = true;
+
         return {
           ...state,
           ...changes
@@ -100,11 +103,11 @@ export default function(
     case ProductActionTypes.CREATE:
     case ProductActionTypes.UPDATE:
       if (action.payload.tags) {
-        tags = action.payload.tags;
+        tag = action.payload.tags;
       }
 
-      if (action.payload.type) {
-        types = [action.payload.type];
+      if (action.payload.category) {
+        category = [action.payload.category];
       }
 
     // eslint-disable: eslint(no-fallthrough)
@@ -114,13 +117,14 @@ export default function(
       return {
         ...state,
         ...crudReducer(state, action),
-        tags: handleDeleteSuggestion(
-          handleAddSuggestion(state.tags, tags),
+        tag: handleDeleteSuggestion(
+          handleAddSuggestion(state.tag, tag),
           product ? product.tags : []
         ),
-        types: handleDeleteSuggestion(handleAddSuggestion(state.types, types), [
-          product ? product.type : ''
-        ])
+        category: handleDeleteSuggestion(
+          handleAddSuggestion(state.category, category),
+          [product ? product.category : '']
+        )
       };
 
     case ProductActionTypes.RESET:

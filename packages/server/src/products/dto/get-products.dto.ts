@@ -6,7 +6,7 @@ export class GetProducts implements Required$GetProducts {
   tag?: string;
 
   @IsOptional()
-  type?: string;
+  category?: string;
 }
 
 export class GetProductsDto extends GetProducts

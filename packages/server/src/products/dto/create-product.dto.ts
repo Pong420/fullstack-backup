@@ -46,7 +46,7 @@ export class CreateProduct extends Base
   remain!: undefined;
 
   @IsString()
-  type!: string;
+  category!: string;
 
   @IsString()
   @IsOptional()

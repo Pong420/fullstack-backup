@@ -11,6 +11,11 @@ export enum ProductStatus {
   HIDDEN
 }
 
+export enum ProductSuggestTypes {
+  CATEGORY = 'category',
+  TAG = 'tag'
+}
+
 export interface Schema$Product extends Schema$Timestamp {
   id: string;
 
@@ -26,7 +31,7 @@ export interface Schema$Product extends Schema$Timestamp {
 
   remain: number;
 
-  type: string;
+  category: string;
 
   images: string[];
 
@@ -39,6 +44,11 @@ export interface Schema$Product extends Schema$Timestamp {
 
 export interface Required$CreateProduct
   extends Pick<Schema$Product, 'name' | 'price' | 'amount'> {}
+
+export interface Required$GetProducts {
+  [ProductSuggestTypes.TAG]?: string;
+  [ProductSuggestTypes.CATEGORY]?: string;
+}
 
 export interface Required$UpdateProduct
   extends Partial<

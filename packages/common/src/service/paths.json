@@ -25,7 +25,7 @@
     "CREATE_PRODUCT": "/",
     "UPDATE_PRODUCT": "/:id",
     "DELETE_PRODUCT": "/:id",
-    "GET_SUGGESTION_TYPE": "/types",
+    "GET_SUGGESTION_CATEGORY": "/types",
     "GET_SUGGESTION_TAGS": "/tags"
   }
 }
