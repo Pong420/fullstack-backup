@@ -73,7 +73,10 @@ export const UserForm = React.memo<UserFormProps>(
         <FormItem
           name="username"
           label="Username"
-          validators={[validators.required('Please input username')]}
+          validators={[
+            validators.required('Please input username'),
+            validators.username
+          ]}
         >
           <InputGroup />
         </FormItem>
@@ -91,8 +94,11 @@ export const UserForm = React.memo<UserFormProps>(
           label="Confirm Password"
           deps={['password']}
           validators={({ password }) => [
-            validators.required('Plase input confirm password'),
-            validators.shouldBeEqual(password, 'Not the same as above password')
+            validators.required('Please input the  password again'),
+            validators.shouldBeEqual(
+              password,
+              'Confirm password is not equal to the above password'
+            )
           ]}
         >
           <Password autoComplete={autoComplete} />

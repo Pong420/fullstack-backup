@@ -92,7 +92,7 @@ export function ModifyPasswordDialog({
               validators.required('Please input the new password again'),
               validators.shouldBeEqual(
                 newPassword,
-                'Not the same as above new password'
+                'Confirm password is not equal to the above new password'
               )
             ]}
           >

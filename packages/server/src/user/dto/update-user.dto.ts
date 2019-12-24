@@ -3,12 +3,16 @@ import {
   IsEnum,
   IsNotEmpty,
   IsEmpty,
-  ValidateIf
+  ValidateIf,
+  MinLength,
+  MaxLength,
+  Matches
 } from 'class-validator';
 import {
   Required$UpdateUser,
   UserRole
 } from '@fullstack/common/service/typings';
+import { validationConfig } from '@fullstack/common/utils/validationConfig';
 import { UploadFile } from '../../upload';
 
 export class UpdateUser implements Partial<Required$UpdateUser> {
@@ -22,6 +26,9 @@ export class UpdateUser implements Partial<Required$UpdateUser> {
   username?: string;
 
   @IsOptional()
+  @MinLength(validationConfig.password.minLength)
+  @MaxLength(validationConfig.password.maxLength)
+  @Matches(validationConfig.password.regex)
   password?: string;
 
   @IsOptional()

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import isEmailVaidator from 'validator/es/lib/isEmail';
+import { validationConfig } from '../validationConfig';
 
 export type Validator = (rule: any, value: any) => Promise<void>;
 export type HigherOrderValidator = (...args: any[]) => Validator;
@@ -52,13 +53,16 @@ export const min = numberComparation((value, flag) => value > flag);
 export const max = numberComparation((value, flag) => value < flag);
 
 const lengthComparation = (
+  type: string,
   callback: (length: number, flag: number) => boolean
-) => (flag: number, msg: string) => {
+) => (flag: number, prefix: string) => {
   const validator: Validator = (_, value) => {
     if (Array.isArray(value) || typeof value === 'string') {
       return callback(value.length, flag)
         ? Promise.resolve()
-        : Promise.reject(msg);
+        : Promise.reject(
+            `${prefix} must be ${type} than or equal to ${flag} characters`
+          );
     }
     return Promise.resolve();
   };
@@ -66,10 +70,12 @@ const lengthComparation = (
 };
 
 export const minLength = lengthComparation(
+  'longer',
   (length, minLength) => length >= minLength
 );
 
 export const maxLength = lengthComparation(
+  'shorter',
   (length, maxLength) => length <= maxLength
 );
 
@@ -83,8 +89,13 @@ export const shouldNotBeEqual: HigherOrderValidator = (
   msg: string
 ) => (_, value) => (value !== val ? Promise.resolve() : Promise.reject(msg));
 
+export const username = compose([
+  minLength(validationConfig.username.minLength, `Username `),
+  maxLength(validationConfig.username.maxLength, `Username`)
+]);
+
 export const passwordFormat: Validator = (_, value) =>
-  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,20}$/.test(value)
+  validationConfig.password.regex.test(value)
     ? Promise.resolve()
     : Promise.reject('Password must include english and number');
 
@@ -94,13 +105,15 @@ export const password = ({
 }: {
   required?: boolean;
   msg?: string;
-} = {}) =>
-  compose([
+} = {}) => {
+  const { password } = validationConfig;
+  return compose([
     _required ? required(msg) : null,
-    minLength(8, 'Password should not less then 8'),
-    maxLength(20, 'Password should not more then 20'),
+    minLength(password.minLength, `Password `),
+    maxLength(password.maxLength, `Password `),
     passwordFormat
   ]);
+};
 
 export const isEmail: Validator = (_, value) =>
   isEmailVaidator(value)

@@ -34,7 +34,10 @@ export function RegisterForm({ loading, onSubmit }: Props) {
           {
             name: 'username',
             label: 'Username',
-            validators: [validators.required('Please input username')],
+            validators: [
+              validators.required('Please input username'),
+              validators.username
+            ],
             children: (
               <TextInput
                 textContentType="username"
@@ -56,7 +59,7 @@ export function RegisterForm({ loading, onSubmit }: Props) {
               validators.required('Plase input confirm password'),
               validators.shouldBeEqual(
                 password,
-                'Not the same as above password'
+                'Confirm password is not equal to the above password'
               )
             ],
             children: <Password />

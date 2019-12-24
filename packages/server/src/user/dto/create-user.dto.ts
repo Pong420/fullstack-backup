@@ -3,20 +3,31 @@ import {
   IsOptional,
   IsEnum,
   IsEmail,
-  IsEmpty
+  IsEmpty,
+  MinLength,
+  MaxLength,
+  Matches
 } from 'class-validator';
 import {
   Required$CreateUser,
   Schema$User,
   UserRole
 } from '@fullstack/common/service/typings';
+import { validationConfig } from '@fullstack/common/utils/validationConfig';
 import { UploadFile } from '../../upload';
+
+const { username, password } = validationConfig;
 
 class Base implements Required$CreateUser {
   @IsString()
+  @MinLength(username.minLength)
+  @MaxLength(username.maxLength)
   username!: string;
 
   @IsString()
+  @MinLength(password.minLength)
+  @MaxLength(password.maxLength)
+  @Matches(password.regex)
   password!: string;
 
   @IsEmail()
