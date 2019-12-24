@@ -10,7 +10,7 @@
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
-    "heroku-postbuild": "yarn build",
+    "heroku-postbuild": "yarn build --ignore @fullstack/app",
     "postinstall": "lerna run postinstall --stream --parallel"
   },
   "workspaces": [
