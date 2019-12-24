@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse, AxiosError } from 'axios';
 
 export * from './auth';
@@ -13,15 +14,18 @@ export interface APIError extends Omit<AxiosError, 'response'> {
   }>;
 }
 
-export type ErrorMessage =
-  | string
-  | Array<{
-      target: Record<string, any>; // eslint-disable-line
-      value: null;
-      property: string;
-      children: any[]; // eslint-disable-line
-      constraints: Record<string, string>;
-    }>;
+export type ValidationError = {
+  target?: object;
+  property: string;
+  value?: any;
+  constraints?: Record<string, string>;
+  children: ValidationError[];
+  contexts?: {
+    [type: string]: any;
+  };
+};
+
+export type ErrorMessage = string | Array<ValidationError>;
 
 export interface Param$Pagination {
   pageNo?: number;

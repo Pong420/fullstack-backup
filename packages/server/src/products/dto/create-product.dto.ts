@@ -37,13 +37,13 @@ export class CreateProduct extends Base
   implements
     Partial<Omit<Schema$Product | Required$CreateProduct, keyof Base>> {
   @IsEmpty()
-  id?: string;
+  id?: undefined;
 
   @IsEmpty()
-  freeze!: number;
+  freeze!: undefined;
 
   @IsEmpty()
-  remain!: number;
+  remain!: undefined;
 
   @IsString()
   type!: string;
@@ -73,10 +73,10 @@ export class CreateProduct extends Base
   discount?: number;
 
   @IsEmpty()
-  createdAt?: string;
+  createdAt?: undefined;
 
   @IsEmpty()
-  updatedAt?: string;
+  updatedAt?: undefined;
 }
 
 export class CreateProductDto extends CreateProduct

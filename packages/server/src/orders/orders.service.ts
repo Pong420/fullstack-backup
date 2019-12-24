@@ -31,7 +31,9 @@ export class OrdersService {
   }
 
   update(id: string, updateOrderDto: UpdateOrderDto) {
-    return OrderModel.updateOne({ _id: id }, updateOrderDto, { new: true });
+    return OrderModel.findOneAndUpdate({ _id: id }, updateOrderDto, {
+      new: true
+    });
   }
 
   findById(id: string) {

@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
   HttpStatus,
-  InternalServerErrorException,
   BadRequestException,
   UnauthorizedException
 } from '@nestjs/common';
@@ -140,7 +139,7 @@ export class AuthController {
         .status(HttpStatus.OK)
         .send(transformResponse('OK', res));
     } catch (error) {
-      throw new InternalServerErrorException();
+      return Promise.reject(error);
     }
   }
 

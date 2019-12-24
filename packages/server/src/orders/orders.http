@@ -25,11 +25,15 @@ Authorization: bearer {{authToken}}
 
 # @name create
 POST {{baseUrl}}/orders HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 Authorization: bearer {{authToken}}
 
-product={{productId}}
-&amount=1
+{
+  "products": [{
+    "product": "{{productId}}",
+    "amount": 1
+  }]
+}
 ###
 
 @id = {{orders.response.body.data.docs[0].id}}
@@ -38,4 +42,20 @@ product={{productId}}
 DELETE {{baseUrl}}/orders/{{id}} HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 Authorization: bearer {{authToken}}
+
+###
+
+@orderId = {{create.response.body.data.id}}
+
+# @name update
+PATCH  {{baseUrl}}/orders/{{orderId}} HTTP/1.1
+Content-Type: application/json
+Authorization: bearer {{authToken}}
+
+{
+  "products": [{
+    "product": "{{productId}}",
+    "amount": 4
+  }]
+}
 ###

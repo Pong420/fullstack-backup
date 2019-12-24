@@ -1,35 +1,46 @@
+import {
+  Response$API,
+  Response$PaginationAPI,
+  Schema$Timestamp
+} from './index';
 import { Schema$Product } from './product';
 import { Schema$User } from './user';
 
 export enum OrderStatus {
   PENDING,
+  SHIPPING,
+  ARRIVAL,
   CACNELED,
   DONE
 }
 
-export interface Schema$Order {
+type Products<T> = Array<{
+  product: T;
+  amount: number;
+}>;
+
+export interface Schema$Order extends Schema$Timestamp {
   id: string;
 
-  products: Array<{
-    product: Pick<
-      Schema$Product,
-      'name' | 'images' | 'description' | 'price' | 'remain'
-    >;
-    amount: number;
-  }>;
+  products: Products<
+    Pick<Schema$Product, 'name' | 'images' | 'description' | 'price' | 'remain'>
+  >;
 
-  user: Pick<Schema$User, 'id' | 'nickname' | 'username' | 'email'>;
+  user?: Pick<Schema$User, 'id' | 'nickname' | 'username' | 'email'>;
 
   status: OrderStatus;
 }
 
 export interface Required$CreateOrder {
-  products: Array<{
-    product: string;
-    amount: number;
-  }>;
+  products: Products<string>;
 }
 
 export interface Required$UpdateOrder extends Pick<Schema$Order, 'status'> {
   products: Required$CreateOrder['products'];
 }
+
+export type Response$CreateOrder = Response$API<Schema$Order>;
+
+export type Response$GetOrders = Response$PaginationAPI<Schema$Order>;
+
+export type Response$UpdateOrders = Response$API<Schema$Order>;

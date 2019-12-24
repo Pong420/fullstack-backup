@@ -57,6 +57,8 @@ export class ProductsService {
             throw new BadRequestException('Product already exsits');
         }
       }
+
+      return Promise.reject(error);
     }
   }
 

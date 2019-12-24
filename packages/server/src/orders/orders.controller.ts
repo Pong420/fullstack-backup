@@ -11,23 +11,17 @@ import {
   Patch
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
-import { Schema$Order } from '@fullstack/common/service/typings';
+import {
+  Schema$Order,
+  Required$CreateOrder
+} from '@fullstack/common/service/typings';
+import { QueryPopulateOptions } from 'mongoose';
 import { CreateOrderDto, UpdateOrderDto } from './dto';
 import { RoleGuard } from '../guards';
 import { ProductModel } from '../products/model';
 import { UserRole, UserModel } from '../user';
 import { OrdersService } from './orders.service';
 import { ProductsService } from '../products';
-import { Order } from './model';
-
-const isOrderProducts = (
-  payload: Order['products']
-): payload is Schema$Order['products'] => {
-  return (
-    Array.isArray(payload) &&
-    payload.every(item => item && typeof item.product === 'string')
-  );
-};
 
 @Controller('orders')
 @UseGuards(RoleGuard(UserRole.GUEST))
@@ -37,44 +31,44 @@ export class OrdersController {
     private readonly productService: ProductsService
   ) {}
 
-  @Get('/')
-  getOrders() {
-    const selectProduct: Array<
-      keyof Schema$Order['products'][number]['product']
-    > = ['name', 'images', 'description', 'price', 'remain'];
+  getPopulateOptions({ user = false }: { user?: boolean } = {}) {
+    type ProductKeys = keyof Schema$Order['products'][number]['product'];
 
-    const selectUser: Array<keyof Schema$Order['user']> = [
+    const selectProduct: ProductKeys[] = [
+      'name',
+      'images',
+      'description',
+      'price',
+      'remain'
+    ];
+
+    const selectUser: Array<keyof NonNullable<Schema$Order['user']>> = [
       'id',
       'nickname',
       'username',
       'email'
     ];
 
-    return this.orderService.paginate(
-      {},
+    const options: QueryPopulateOptions[] = [
       {
-        populate: [
-          {
-            path: 'product',
-            model: ProductModel,
-            select: selectProduct.join(' ')
-          },
-          {
-            path: 'user',
-            model: UserModel,
-            select: selectUser.join(' ')
-          }
-        ]
+        path: 'products.product',
+        model: ProductModel,
+        select: selectProduct.join(' ')
       }
-    );
+    ];
+
+    if (user) {
+      options.push({
+        path: 'user',
+        model: UserModel,
+        select: selectUser.join(' ')
+      });
+    }
+
+    return options;
   }
 
-  @Post('/')
-  async createOrder(
-    @Body()
-    { products, ...createOrderDto }: CreateOrderDto,
-    @Req() req: FastifyRequest
-  ) {
+  async checkProducts(products: Required$CreateOrder['products']) {
     for (const { product: id, amount } of products) {
       const product = await this.productService.findById(id);
 
@@ -86,38 +80,51 @@ export class OrdersController {
         throw new BadRequestException('Cannot provide enough products');
       }
     }
+  }
 
-    return this.orderService.create({
+  @Get('/')
+  getOrders() {
+    return this.orderService.paginate(
+      {},
+      {
+        populate: this.getPopulateOptions()
+      }
+    );
+  }
+
+  @Post('/')
+  async createOrder(
+    @Body()
+    { products, ...createOrderDto }: CreateOrderDto,
+    @Req() req: FastifyRequest
+  ) {
+    this.checkProducts(products);
+
+    return (await this.orderService.create({
       products,
       user: req.user.id,
       ...createOrderDto
-    });
+    }))
+      .populate(this.getPopulateOptions())
+      .execPopulate();
   }
 
   @Patch('/:id')
   async updateOrder(
-    @Param() id: string,
+    @Param('id') id: string,
     @Body() { products, ...updateOrderDto }: UpdateOrderDto
   ) {
     const order = await this.orderService.findById(id);
 
-    if (order && isOrderProducts(order.products)) {
-      for (const { product: id, amount } of products) {
-        const product = await this.productService.findById(id);
+    if (order) {
+      this.checkProducts(products);
 
-        if (!product) {
-          throw new BadRequestException('Product not found');
-        }
-
-        if (product.remain < amount) {
-          throw new BadRequestException('Cannot provide enough products');
-        }
-      }
-
-      return this.orderService.update(order.id, {
-        products,
-        ...updateOrderDto
-      });
+      return await this.orderService
+        .update(order.id, {
+          products,
+          ...updateOrderDto
+        })
+        .populate(this.getPopulateOptions());
     }
 
     throw new BadRequestException('Order not found');

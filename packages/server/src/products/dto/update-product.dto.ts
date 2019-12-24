@@ -42,10 +42,10 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
   amount?: number;
 
   @IsEmpty()
-  freeze?: number;
+  freeze?: undefined;
 
   @IsEmpty()
-  remain?: number;
+  remain?: undefined;
 
   @IsString()
   @IsOptional()
@@ -71,10 +71,10 @@ export class UpdateProduct implements Partial<Required$UpdateProduct> {
   discount?: number;
 
   @IsEmpty()
-  createdAt?: string;
+  createdAt?: undefined;
 
   @IsEmpty()
-  updatedAt?: string;
+  updatedAt?: undefined;
 }
 
 export class UpdateProductDto extends UpdateProduct

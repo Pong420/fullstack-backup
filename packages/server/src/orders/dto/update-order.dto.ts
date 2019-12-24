@@ -1,14 +1,25 @@
-import { IsEmpty, IsEnum, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import {
+  IsEmpty,
+  IsEnum,
+  IsObject,
+  IsOptional,
+  ArrayNotEmpty,
+  ValidateNested
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import {
   Required$UpdateOrder,
   Schema$Order,
   OrderStatus
 } from '@fullstack/common/service/typings';
+import { OrderProductDto } from './order-product-dto';
 
 class Base implements Required$UpdateOrder {
-  // TODO: validation
-  products!: Required$UpdateOrder['products'];
+  @ArrayNotEmpty()
+  @IsObject({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => OrderProductDto)
+  products!: OrderProductDto[];
 
   @IsEnum(OrderStatus)
   @IsOptional()
@@ -19,10 +30,16 @@ class Base implements Required$UpdateOrder {
 class UpdateOrder extends Base
   implements Partial<Omit<Schema$Order | Required$UpdateOrder, keyof Base>> {
   @IsEmpty()
-  id?: undefined;
+  id?: string;
 
   @IsEmpty()
   user?: undefined;
+
+  @IsEmpty()
+  createdAt?: undefined;
+
+  @IsEmpty()
+  updatedAt?: undefined;
 }
 
 export class UpdateOrderDto extends UpdateOrder

@@ -56,6 +56,8 @@ export class UserService {
             throw new BadRequestException('Email have been register');
         }
       }
+
+      return Promise.reject(error);
     }
   }
 
