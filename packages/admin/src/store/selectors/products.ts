@@ -1,10 +1,10 @@
-import { paginationSelectorEx } from '../redux-crud-ex';
+import { paginationSelector } from '@pong420/redux-crud';
 import { RootState } from '../reducers';
 import { Schema$Product } from '../../typings';
 import { ProductSuggestTypes } from '../../service';
 
 export const productPaginationSelector = (state: RootState) => {
-  return paginationSelectorEx<Schema$Product, 'id'>(state.products);
+  return paginationSelector(state.products);
 };
 
 export const productSelector = (id: string) => (

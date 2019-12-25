@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import qs from 'qs';
+import qs from 'query-string';
 
 export function useSearchParam<T extends {}>() {
   const history = useHistory();
@@ -8,7 +8,7 @@ export function useSearchParam<T extends {}>() {
     (payload: Partial<T> | ((params: Partial<T>) => Partial<T>)) => {
       const newState =
         typeof payload === 'function'
-          ? payload(qs.parse(window.location.search.slice(1)))
+          ? payload(qs.parse(window.location.search.slice(1)) as T)
           : payload;
 
       for (const key in newState) {

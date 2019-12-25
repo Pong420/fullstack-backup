@@ -2913,10 +2913,12 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@pong420/redux-crud@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.1.1.tgz#ac9142e705c5bed60159c3e50d9eccca42883ea7"
-  integrity sha512-04BogHNLBM0WrrLNcBOIOkutf/x360DhSg5H0avbhOGClri33HOsbXN/isnPx7DlJ4C0ZqvOV340tCEGpvtgNg==
+"@pong420/redux-crud@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.2.0.tgz#4358cd9685e331dd6cbd8cdd39740209b5e915ac"
+  integrity sha512-9pLiKUiukhx1UksmqhCPGSzntNlheD8UnBEdnc/JwRVZBX5uvXLSt/XZpvCHaBwYRVz9f0aovPUOvf0yGhUq8Q==
+  dependencies:
+    query-string "^6.9.0"
 
 "@react-native-community/cli-debugger-ui@^3.0.0":
   version "3.0.0"
@@ -14486,7 +14488,7 @@ query-string@^4.1.0:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
-query-string@^6.4.2:
+query-string@^6.4.2, query-string@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.9.0.tgz#1c3b727c370cf00f177c99f328fda2108f8fa3dd"
   integrity sha512-KG4bhCFYapExLsUHrFt+kQVEegF2agm4cpF/VNc6pZVthIfCc/GK8t8VyNIE3nyXG9DK3Tf2EGkxjR6/uRdYsA==

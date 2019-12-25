@@ -1,6 +1,5 @@
-import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router';
+import { createCRUDReducer, CRUDState } from '@pong420/redux-crud';
 import { ProductActionTypes, ProductActions } from '../actions/products';
-import { createCRUDReducerEx, CRUDStateEx } from '../redux-crud-ex';
 import { Schema$Product } from '../../typings';
 import { ProductSuggestTypes } from '../../service';
 
@@ -12,19 +11,18 @@ interface Suggestion {
   loaded: boolean;
 }
 
-interface State extends CRUDStateEx<Schema$Product, 'id'> {
+interface State extends CRUDState<Schema$Product, 'id'> {
   [ProductSuggestTypes.CATEGORY]: Suggestion;
   [ProductSuggestTypes.TAG]: Suggestion;
 }
 
-const [crudInitialState, crudReducer] = createCRUDReducerEx<
-  Schema$Product,
-  'id'
->({
-  key: 'id',
-  pageSize,
-  actions: ProductActionTypes
-});
+const [crudInitialState, crudReducer] = createCRUDReducer<Schema$Product, 'id'>(
+  {
+    key: 'id',
+    pageSize,
+    actions: ProductActionTypes
+  }
+);
 
 const fill = crudInitialState.pageNo * pageSize;
 
@@ -72,10 +70,7 @@ function handleDeleteSuggestion(target: Suggestion, values: string[]) {
   return clone;
 }
 
-export default function(
-  state = initialState,
-  action: ProductActions | LocationChangeAction
-): State {
+export default function(state = initialState, action: ProductActions): State {
   let tag: string[] = [];
   let category: string[] = [];
 
@@ -129,13 +124,6 @@ export default function(
 
     case ProductActionTypes.RESET:
       return { ...initialState };
-
-    case LOCATION_CHANGE:
-      return {
-        ...state,
-        ...crudReducer(state, action),
-        ...placesholders
-      };
 
     default:
       return { ...state, ...crudReducer(state, action) };

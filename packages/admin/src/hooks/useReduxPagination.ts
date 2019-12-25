@@ -9,7 +9,8 @@ import {
   Response$PaginationAPI,
   AllowedNames
 } from '../typings';
-import { PaginationSelectorReturnTypeEx, RootState } from '../store';
+import { RootState } from '../store';
+import { PaginationSelectorReturnType, CRUDState } from '@pong420/redux-crud';
 import { PaginationProps } from '../components/Pagination';
 
 export type AsyncFn<T> = (
@@ -24,17 +25,19 @@ interface PaginationPayload<T> {
 
 export interface ReduxPaginationProps<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
+  K extends AllowedNames<I, PropertyKey>,
+  S extends CRUDState<I, K>
 > {
   fn: AsyncFn<I>;
   onSuccess: (payload: PaginationPayload<I>) => void;
-  selector: (state: RootState) => PaginationSelectorReturnTypeEx<I, K>;
+  selector: (state: RootState) => PaginationSelectorReturnType<S>;
 }
 
 export function useReduxPagination<
   I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
->({ fn, selector, onSuccess }: ReduxPaginationProps<I, K>) {
+  K extends AllowedNames<I, PropertyKey>,
+  S extends CRUDState<I, K>
+>({ fn, selector, onSuccess }: ReduxPaginationProps<I, K, S>) {
   const { data, ids, total, pageSize, defer, pageNo, search } = useSelector(
     selector
   );
