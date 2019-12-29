@@ -10,7 +10,7 @@ export const productPaginationSelector = (state: RootState) => {
 export const productSelector = (id: string) => (
   state: RootState
 ): Partial<Schema$Product> => {
-  return id ? state.products.byIds[id] : {};
+  return state.products.byIds[id] || {};
 };
 
 export const productSuggestSelector = (type: ProductSuggestTypes) => (

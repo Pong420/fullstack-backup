@@ -1,49 +1,37 @@
-import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
+import { createCRUDActions, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$Product, Response$GetSuggestion } from '../../typings';
 import { ProductSuggestTypes } from '../../service';
 import { useActions } from '../';
 
-export enum ProductActionTypes {
-  CREATE = 'CREATE_PRODUCT',
-  DELETE = 'DELETE_PRODUCT',
-  UPDATE = 'UPDATE_PRODUCT',
-  RESET = 'RESET_PRODUCTS',
-  PAGINATE = 'PAGINATE_PRODUCT',
-  SET_PAGE = 'SET_PAGE_PRODUCT',
-  SEARCH = 'SEARCH_PRODUCT',
-  UPDATE_SUGGESSTION = 'UPDATE_SUGGESSTION'
-}
+const [productActions, defaultProductActionTypes] = createCRUDActions<
+  Schema$Product,
+  'id'
+>()({
+  createProduct: ['CREATE', 'CREATE_PRODUCT'],
+  deleteProduct: ['DELETE', 'DELETE_PRODUCT'],
+  updateProduct: ['UPDATE', 'UPDATE_PRODUCT'],
+  paginateProduct: ['PAGINATE', 'PAGINATE_PRODUCT']
+});
 
-export interface UpdateSuggestion {
-  type: ProductActionTypes.UPDATE_SUGGESSTION;
-  payload: {
-    type: ProductSuggestTypes;
-    values: Response$GetSuggestion['data'];
+export const ProductActionTypes = {
+  ...defaultProductActionTypes,
+  UPDATE_SUGGESSTION: 'UPDATE_SUGGESSTION' as const
+};
+
+function updateSuggestion(payload: {
+  type: ProductSuggestTypes;
+  values: Response$GetSuggestion['data'];
+}) {
+  return {
+    type: ProductActionTypes.UPDATE_SUGGESSTION,
+    payload
   };
 }
 
-const crudActionsCreator = getCRUDActionCreator<
-  typeof ProductActionTypes,
-  Schema$Product,
-  'id'
->();
+export type UpdateSuggestion = ReturnType<typeof updateSuggestion>;
 
 export const updateProductSuggestion = {
-  updateSuggestion: (
-    payload: UpdateSuggestion['payload']
-  ): UpdateSuggestion => ({
-    type: ProductActionTypes.UPDATE_SUGGESSTION,
-    payload
-  })
-};
-
-export const productActions = {
-  createProduct: crudActionsCreator['CREATE'](ProductActionTypes.CREATE),
-  deleteProduct: crudActionsCreator['DELETE'](ProductActionTypes.DELETE),
-  updateProduct: crudActionsCreator['UPDATE'](ProductActionTypes.UPDATE),
-  resetProducts: crudActionsCreator['RESET'](ProductActionTypes.RESET),
-  paginateProduct: crudActionsCreator['PAGINATE'](ProductActionTypes.PAGINATE),
-  setPageProduct: crudActionsCreator['SET_PAGE'](ProductActionTypes.SET_PAGE)
+  updateSuggestion
 };
 
 export type ProductActions =

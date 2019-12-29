@@ -16,24 +16,22 @@ interface State extends CRUDState<Schema$Product, 'id'> {
   [ProductSuggestTypes.TAG]: Suggestion;
 }
 
+const placesholders = {
+  ids: new Array(pageSize).fill(null),
+  list: new Array(pageSize).fill({})
+};
+
 const [crudInitialState, crudReducer] = createCRUDReducer<Schema$Product, 'id'>(
   {
     key: 'id',
     pageSize,
-    actions: ProductActionTypes
+    actions: ProductActionTypes,
+    ...placesholders
   }
 );
 
-const fill = crudInitialState.pageNo * pageSize;
-
-const placesholders = {
-  ids: new Array(fill).fill(null),
-  list: new Array(fill).fill({})
-};
-
 const initialState: State = {
   ...crudInitialState,
-  ...placesholders,
   category: {
     values: [],
     count: {},
@@ -121,9 +119,6 @@ export default function(state = initialState, action: ProductActions): State {
           [product ? product.category : '']
         )
       };
-
-    case ProductActionTypes.RESET:
-      return { ...initialState };
 
     default:
       return { ...state, ...crudReducer(state, action) };

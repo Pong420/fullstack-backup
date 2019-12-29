@@ -1,31 +1,16 @@
-import { getCRUDActionCreator, UnionCRUDActions } from '@pong420/redux-crud';
+import { createCRUDActions, UnionCRUDActions } from '@pong420/redux-crud';
 import { Schema$User } from '../../typings';
 import { useActions } from '../';
 
-export enum UserActionTypes {
-  CREATE = 'CREATE_USER',
-  DELETE = 'DELETE_USER',
-  UPDATE = 'UPDATE_USER',
-  RESET = 'RESET_USERS',
-  PAGINATE = 'PAGINATE_USER',
-  SET_PAGE = 'SET_PAGE_USER',
-  SEARCH = 'SEARCH_USER'
-}
-
-const crudActionsCreator = getCRUDActionCreator<
-  typeof UserActionTypes,
+export const [userActions, UserActionTypes] = createCRUDActions<
   Schema$User,
   'id'
->();
-
-export const userActions = {
-  createUser: crudActionsCreator['CREATE'](UserActionTypes.CREATE),
-  deleteUser: crudActionsCreator['DELETE'](UserActionTypes.DELETE),
-  updateUser: crudActionsCreator['UPDATE'](UserActionTypes.UPDATE),
-  resetUsers: crudActionsCreator['RESET'](UserActionTypes.RESET),
-  paginateUser: crudActionsCreator['PAGINATE'](UserActionTypes.PAGINATE),
-  setPageUser: crudActionsCreator['SET_PAGE'](UserActionTypes.SET_PAGE)
-};
+>()({
+  createUser: ['CREATE', 'CREATE_USER'],
+  deleteUser: ['DELETE', 'DELETE_USER'],
+  updateUser: ['UPDATE', 'UPDATE_USER'],
+  paginateUser: ['PAGINATE', 'PAGINATE_USER']
+});
 
 export type UserActions = UnionCRUDActions<typeof userActions>;
 

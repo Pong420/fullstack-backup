@@ -10,21 +10,8 @@ import {
 } from './typings';
 import { createFormData, generatePath, PATHS } from './utils';
 
-function handleSpecificSearch(search: string, key: string) {
-  const regex = new RegExp(`^${key}:`);
-  return regex.test(search) ? { [key]: search.replace(regex, '') } : undefined;
-}
-
-export const getProducts = ({ search, ...params }: Param$GetProducts = {}) => {
-  const searchParams = search
-    ? handleSpecificSearch(search, ProductSuggestTypes.TAG) ||
-      handleSpecificSearch(search, ProductSuggestTypes.CATEGORY) || { search }
-    : {};
-
-  return api.get<Response$GetProducts>(PATHS.GET_PRODUCTS, {
-    params: { ...searchParams, ...params }
-  });
-};
+export const getProducts = (params: Param$GetProducts = {}) =>
+  api.get<Response$GetProducts>(PATHS.GET_PRODUCTS, { params });
 
 export const createProduct = (params: Param$CreateProduct) =>
   api.post<Response$Product>(PATHS.CREATE_PRODUCT, createFormData(params));

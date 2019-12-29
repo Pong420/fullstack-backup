@@ -12,7 +12,7 @@ import { useReduxPagination } from '../../hooks/useReduxPagination';
 export function Products() {
   const { paginateProduct } = useProductActions();
 
-  const [{ ids, search }, paginationProps] = useReduxPagination({
+  const [{ ids, params }, paginationProps] = useReduxPagination({
     fn: getProducts,
     onSuccess: paginateProduct,
     selector: productPaginationSelector
@@ -30,7 +30,7 @@ export function Products() {
         </>
       }
     >
-      {search && ids.length === 0 && <NotFound />}
+      {!!Object.keys(params).length && ids.length === 0 && <NotFound />}
       <div className="products-container">
         {ids.map(id => (
           <Product id={id} key={id || Math.random()}></Product>

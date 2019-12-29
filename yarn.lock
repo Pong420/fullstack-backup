@@ -2913,10 +2913,10 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@pong420/redux-crud@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.2.0.tgz#4358cd9685e331dd6cbd8cdd39740209b5e915ac"
-  integrity sha512-9pLiKUiukhx1UksmqhCPGSzntNlheD8UnBEdnc/JwRVZBX5uvXLSt/XZpvCHaBwYRVz9f0aovPUOvf0yGhUq8Q==
+"@pong420/redux-crud@1.3.0-beta.2":
+  version "1.3.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@pong420/redux-crud/-/redux-crud-1.3.0-beta.2.tgz#503d518c25c0557a2a8f98e3c877bb1578c176ce"
+  integrity sha512-27DpdJYtP+HnUF2eR/j61XZdoG1cFMaWxlZLwCPrr8uGxx8kCQ6t6Y4IoEYrO/ObIl4FriGJGsW/3KWwtxWRTA==
   dependencies:
     query-string "^6.9.0"
 
