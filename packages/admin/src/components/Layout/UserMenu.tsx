@@ -2,13 +2,11 @@ import React from 'react';
 import { Menu, MenuItem } from '@blueprintjs/core';
 import { logout, useActions } from '../../store';
 
-const actions = { logout };
-
 export const UserMenu = React.memo(() => {
-  const { logout } = useActions(actions);
+  const actions = useActions({ logout });
   return (
     <Menu>
-      <MenuItem text="Loout" icon="log-out" onClick={logout} />
+      <MenuItem text="Loout" icon="log-out" onClick={actions.logout} />
     </Menu>
   );
 });

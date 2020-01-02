@@ -30,10 +30,6 @@ function updateSuggestion(payload: {
 
 export type UpdateSuggestion = ReturnType<typeof updateSuggestion>;
 
-export const updateProductSuggestion = {
-  updateSuggestion
-};
-
 export type ProductActions =
   | UnionCRUDActions<typeof productActions>
   | UpdateSuggestion;
@@ -41,4 +37,4 @@ export type ProductActions =
 export const useProductActions = () => useActions(productActions);
 
 export const useUpdateProductSuggestion = () =>
-  useActions(updateProductSuggestion);
+  useActions({ updateSuggestion });
