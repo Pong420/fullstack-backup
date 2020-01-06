@@ -38,7 +38,7 @@ export function useReduxPagination<
   K extends AllowedNames<I, PropertyKey>,
   S extends CRUDState<I, K>
 >({ fn, selector, onSuccess }: ReduxPaginationProps<I, K, S>) {
-  const { data, ids, total, pageSize, defer, pageNo, params } = useSelector(
+  const { data, ids, total, pageSize, hasData, pageNo, params } = useSelector(
     selector
   );
 
@@ -69,8 +69,12 @@ export function useReduxPagination<
   };
 
   useEffect(() => {
-    !defer && run({ pageNo, pageSize, ...params });
-  }, [defer, run, pageNo, pageSize, params]);
+    if (!hasData) {
+      // timeout prevent unxpected request on history go back
+      const timeout = setTimeout(() => run({ pageNo, pageSize, ...params }), 0);
+      return () => clearTimeout(timeout);
+    }
+  }, [hasData, run, pageNo, pageSize, params]);
 
   return [{ ids, data, params, loading }, paginationProps] as const;
 }
