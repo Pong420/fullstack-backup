@@ -10,7 +10,7 @@ import { ResponseInterceptor } from './interceptors';
 import cookieParser from 'fastify-cookie';
 import multipart from 'fastify-multipart';
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
