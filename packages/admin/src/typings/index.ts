@@ -2,6 +2,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 export * from './auth';
 export * from './utils';
+export * from './guard';
 export * from '@fullstack/common/service/typings';
 
 export interface APIError extends Omit<AxiosError, 'response'> {

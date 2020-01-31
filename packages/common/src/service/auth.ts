@@ -26,13 +26,7 @@ export const guestRegistration = (params: Param$CreateUser) =>
 export const logout = () => api.post(PATHS.LOOUT);
 
 export const refreshToken = () =>
-  api.post<Response$RefreshToken>(
-    PATHS.REFERTSH_TOKEN,
-    {},
-    {
-      errorHandle: false
-    }
-  );
+  api.post<Response$RefreshToken>(PATHS.REFERTSH_TOKEN, {});
 
 export const modifyPassword = (params: Param$ModifyPassword) =>
   api.patch<Response$User>(PATHS.MODIFY_PASSWORD, params);

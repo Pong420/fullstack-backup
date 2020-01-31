@@ -12,8 +12,7 @@ import {
 import { RootState } from '../reducers';
 import { login, refreshToken, logout, getUserInfo } from '../../service';
 import { PATHS } from '../../constants';
-import { Response$Login } from '../../typings';
-import { isLocation } from '../../utils/isLocation';
+import { Response$Login, isLocation } from '../../typings';
 
 type Actions = AuthActions | RouterAction;
 type AuthEpic = Epic<Actions, Actions, RootState>;
