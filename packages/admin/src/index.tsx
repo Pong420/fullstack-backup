@@ -47,7 +47,7 @@ function render() {
               path={PATHS.ADMIN_REGISTRATION}
               component={AdminRegistration}
             />
-            <Route path="" component={App} />
+            <Route path="/" component={App} />
           </Switch>
         </Suspense>
       </ConnectedRouter>

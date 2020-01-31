@@ -14148,10 +14148,10 @@ pnp-webpack-plugin@1.5.0:
   dependencies:
     ts-pnp "^1.1.2"
 
-pong-react-scripts@^3.3.0-1:
-  version "3.3.0-1"
-  resolved "https://registry.yarnpkg.com/pong-react-scripts/-/pong-react-scripts-3.3.0-1.tgz#3cd44e03b7be0d0bdf702bb44aa3f4382c59d410"
-  integrity sha512-LPac/YPA8uHQ64Z6qImsBsGveuF9dz3LoLM2rWOG17FaTRxJmI0VZrklrQ/mL0wZbF7lgYwRMd529SiyzaBCww==
+pong-react-scripts@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/pong-react-scripts/-/pong-react-scripts-3.3.1.tgz#6d547966ea07918ffcdf63be17c645158ff2ac28"
+  integrity sha512-nLU0Di03kX7SUhcCMA24WEgw5TWzd+Y0TW4fVUV8RguixB1N1EIhaQjYKInN4uaRZqLpilv45dAKOQZ8IIXuqQ==
   dependencies:
     "@babel/core" "7.7.4"
     "@svgr/webpack" "4.3.3"
@@ -15798,14 +15798,6 @@ redux@*, redux@^4.0.0, redux@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
   integrity sha512-vKv4WdiJxOWKxK0yRoaK3Y4pxxB0ilzVx6dszU2W8wLxlb2yikRph4iV/ymtdJ6ZxpBLFbyrxklnT5yBbQSl3Q==
-  dependencies:
-    loose-envify "^1.4.0"
-    symbol-observable "^1.2.0"
-
-redux@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
-  integrity sha512-VSz1uMAH24DM6MF72vcojpYPtrTUu3ByVWfPL1nPfVRb5mZVTve5GnNCUV53QM/BZ66xfWrm0CTWoM+Xlz8V1w==
   dependencies:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
