@@ -1,0 +1,56 @@
+{
+  "name": "fullstack",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "server": "yarn workspace @fullstack/server",
+    "typings": "yarn workspace @fullstack/typings",
+    "dev": "yarn workspaces run dev",
+    "postinstall": "yarn workspace @fullstack/typings build"
+  },
+  "workspaces": [
+    "packages/server",
+    "packages/typings"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.3.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-plugin-flowtype": "^5.1.3",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.4",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --rule 'no-console: [\"error\", { allow: [\"warn\", \"error\"] }]'  --max-warnings=0",
+      "prettier --ignore-path .eslintignore --write",
+      "git add"
+    ],
+    "{*.json,.{babelrc,eslintrc,prettierrc}}": [
+      "prettier --ignore-path .eslintignore --parser json --write",
+      "git add"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --single-quote --write",
+      "git add"
+    ],
+    "*.{yml,md}": [
+      "prettier --ignore-path .eslintignore --single-quote --write",
+      "git add"
+    ]
+  }
+}
