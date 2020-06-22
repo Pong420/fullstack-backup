@@ -5,6 +5,20 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+export interface Page<T> {
+  data: T[];
+  total: number;
+  limit: number;
+  page?: number;
+  totalPages: number;
+  nextPage?: number | null;
+  prevPage?: number | null;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  meta?: any;
+}
+
 export interface Timestamp {
   createdAt: string;
   updatedAt: string;

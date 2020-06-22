@@ -466,11 +466,14 @@ __metadata:
     "@nestjs/testing": ^7.2.0
     "@types/jest": 26.0.0
     "@types/mongoose": ^5.7.27
+    "@types/mongoose-paginate-v2": ^1
     "@types/supertest": ^2.0.9
     bcrypt: ^5.0.0
+    class-transformer: ^0.2.3
     class-validator: ^0.12.2
     jest: 26.0.1
     mongoose: ^5.9.19
+    mongoose-paginate-v2: ^1.3.9
     prettier: ^2.0.5
     reflect-metadata: ^0.1.13
     rimraf: ^3.0.2
@@ -1042,7 +1045,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongoose@npm:^5.7.27":
+"@types/mongoose-paginate-v2@npm:^1":
+  version: 1.3.6
+  resolution: "@types/mongoose-paginate-v2@npm:1.3.6"
+  dependencies:
+    "@types/mongoose": "*"
+  checksum: 409ba2b6025e539af828212104c7693fe9a163a9302cc001ecca39f92a4e0e25c564e950840a7a12daf20ad7163959857273ac6539454880208b122bc877e3b0
+  languageName: node
+  linkType: hard
+
+"@types/mongoose@npm:*, @types/mongoose@npm:^5.7.27":
   version: 5.7.27
   resolution: "@types/mongoose@npm:5.7.27"
   dependencies:
@@ -2482,6 +2494,13 @@ __metadata:
     inherits: ^2.0.1
     safe-buffer: ^5.0.1
   checksum: ec80001ec91dbb7c5c08facc00ffc9c75fed7abd6d720c7a9c62c260aa2e5cb2655c183e011b50b8b711f755b1753c7fdd2ca44c091ee78d81c377ca74ed83c9
+  languageName: node
+  linkType: hard
+
+"class-transformer@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "class-transformer@npm:0.2.3"
+  checksum: e5967902d0d3b142f055608b85236ad099b42445ffbe61d69f8e5d6a5cfed80fe0ee68f7becfc0a821685d7e72d8decc5feb8d45d84d921cbfc11a01b6d895b9
   languageName: node
   linkType: hard
 
@@ -6710,6 +6729,13 @@ fsevents@^1.2.7:
   peerDependencies:
     mongoose: "*"
   checksum: a1f86450b3540a1883cfb093001846806d14cd3a8b80f6681fdac13afcfd4a1f57875fb79009aceacf2e80e3ffd2d5ab7e289ba873c586958ce536eff270dc0a
+  languageName: node
+  linkType: hard
+
+"mongoose-paginate-v2@npm:^1.3.9":
+  version: 1.3.52
+  resolution: "mongoose-paginate-v2@npm:1.3.52"
+  checksum: e07aeec4c2bda2e24ace9adba635020662806d8198272f70ffc886f13aee01fa8d1332da605f00419a0981481bba08578fa3ac294ddfacc0bbff192a4bb3993e
   languageName: node
   linkType: hard
 
