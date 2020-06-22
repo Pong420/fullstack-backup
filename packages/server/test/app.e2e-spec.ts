@@ -2,23 +2,23 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import {
   FastifyAdapter,
-  NestFastifyApplication,
+  NestFastifyApplication
 } from '@nestjs/platform-fastify';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/setup';
-import { transformResponse } from '../src/interceptors/response.interceptor';
-import * as request from 'supertest';
+import { transformResponse } from '../src/utils/ResponseInterceptor';
+import request from 'supertest';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule]
     }).compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(
-      new FastifyAdapter(),
+      new FastifyAdapter()
     );
 
     await setupApp(app);

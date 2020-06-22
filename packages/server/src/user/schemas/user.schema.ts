@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema$User, UserRole, MongoSchema } from '@fullstack/typings';
 import bcrypt from 'bcrypt';
 

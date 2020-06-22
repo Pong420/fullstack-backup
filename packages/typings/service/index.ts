@@ -5,7 +5,7 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface Page<T> {
+export interface PaginateResult<T> {
   data: T[];
   total: number;
   limit: number;
