@@ -1,16 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Schema$User, UserRole, MongoSchema } from '@fullstack/typings';
+import bcrypt from 'bcrypt';
+
+function hashPassword(pwd: string) {
+  return bcrypt.hashSync(pwd, 10);
+}
 
 @Schema({ timestamps: true })
 export class User extends Document implements MongoSchema<Schema$User> {
-  @Prop({ type: String })
+  @Prop({ type: String, required: true, unique: true })
   username: string;
 
-  @Prop({ type: String })
+  @Prop({
+    type: String,
+    select: false,
+    set: hashPassword,
+    get: (pwd: string) => pwd
+  })
   password: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
   @Prop({ default: UserRole.CLIENT })
@@ -19,7 +29,7 @@ export class User extends Document implements MongoSchema<Schema$User> {
   @Prop()
   avatar: string;
 
-  @Prop(String)
+  @Prop({ type: String })
   nickname: string;
 }
 
