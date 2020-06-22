@@ -1,18 +1,17 @@
 {
+  "private": true,
   "name": "fullstack",
   "version": "1.0.0",
   "license": "MIT",
-  "private": true,
+  "repository": "https://github.com/Pong420/fullstack.git",
+  "author": "Pong <samfunghp@gmail.com>",
   "scripts": {
     "server": "yarn workspace @fullstack/server",
     "typings": "yarn workspace @fullstack/typings",
-    "dev": "yarn workspaces run dev",
-    "postinstall": "yarn workspace @fullstack/typings build"
+    "dev": "yarn workspaces foreach run dev",
+    "postinstall": "yarn typings build"
   },
-  "workspaces": [
-    "packages/server",
-    "packages/typings"
-  ],
+  "workspaces": ["packages/*"],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
@@ -52,5 +51,8 @@
       "prettier --ignore-path .eslintignore --single-quote --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^6.11.0"
   }
 }
