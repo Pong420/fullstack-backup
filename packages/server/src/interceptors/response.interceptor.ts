@@ -7,7 +7,7 @@ import {
 import { FastifyReply } from 'fastify';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiResponse } from '@fullstack/typings/service';
+import { ApiResponse } from '@fullstack/typings';
 
 export function transformResponse<T>(
   statusCode: number,

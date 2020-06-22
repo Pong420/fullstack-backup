@@ -1,7 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
+import mongoose from 'mongoose';
+
+//  remove _v and _id
+mongoose.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: <T extends { _id: string }>(_: unknown, ret: T) => {
+    delete ret._id;
+  }
+});
 
 @Module({
   imports: [
@@ -11,11 +23,23 @@ import { AppService } from './app.service';
         '.env',
         '.env.local',
         `.env.${process.env.NODE_ENV}`,
-        `.env.${process.env.NODE_ENV}.local`,
-      ],
+        `.env.${process.env.NODE_ENV}.local`
+      ]
     }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+      })
+    }),
+    UserModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}
