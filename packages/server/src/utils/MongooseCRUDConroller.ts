@@ -1,17 +1,86 @@
 import { Document, FilterQuery } from 'mongoose';
-import { Body, Param, Get, Post, Delete } from '@nestjs/common';
-import { PaginateResult } from '@fullstack/typings';
+import { IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  Body,
+  Param,
+  Get,
+  Post,
+  Delete,
+  Query // eslint-disable-line @typescript-eslint/no-unused-vars
+} from '@nestjs/common';
+import { PaginateResult, Param$Pagination } from '@fullstack/typings';
 import { MongooseCRUDService } from './MongooseCRUDService';
+import { formatSearchQuery } from './formatSearchQuery';
+import { Order, Condition } from '../typings';
+
+type Schema = { [K in keyof Param$Pagination]: unknown };
+export class PaginationDto implements Schema {
+  @IsNumber()
+  @IsOptional()
+  @Transform(Number)
+  page?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Transform(Number)
+  size?: number;
+
+  @IsOptional()
+  sort?: string | Record<string, unknown>;
+
+  @IsOptional()
+  condition?: Condition[];
+}
+
+export class SearchDto {
+  @IsOptional()
+  search?: string;
+}
+
+export type QueryAll<D> = PaginationDto & SearchDto & FilterQuery<D>;
+
+interface Options<D extends Document> {
+  searchKeys?: (keyof D)[];
+}
 
 export class MongooseCRUDConroller<
   D extends Document,
   T extends MongooseCRUDService<D>
 > {
-  constructor(private readonly service: T) {}
+  constructor(
+    private readonly service: T,
+    private readonly options: Options<D> = {}
+  ) {}
 
   @Get()
-  async getAll(): Promise<PaginateResult<D>> {
-    return this.service.paginate();
+  async getAll(@Query() query: QueryAll<D> = {}): Promise<PaginateResult<D>> {
+    const {
+      page = 1,
+      size = 10,
+      search,
+      condition = [],
+      sort = { createdAt: Order.DESC },
+      ...fullMatches
+    } = query;
+
+    // TODO: make this better
+    delete fullMatches.password;
+
+    return this.service.paginate(
+      {
+        $and: [
+          ...condition,
+          fullMatches,
+          formatSearchQuery(this.options.searchKeys as string[], search)
+        ]
+      },
+      {
+        sort,
+        page,
+        limit: size
+      }
+    );
   }
 
   @Post()

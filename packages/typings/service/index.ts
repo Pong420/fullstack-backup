@@ -25,3 +25,13 @@ export interface Timestamp {
 }
 
 export type MongoSchema<T> = Omit<T, 'id' | keyof Timestamp>;
+
+export class Param$Pagination {
+  page?: number;
+  size?: number;
+  sort?: string | Record<string, unknown>;
+}
+
+export class Param$SearchQuery {
+  search?: string;
+}

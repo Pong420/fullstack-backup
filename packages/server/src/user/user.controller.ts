@@ -7,7 +7,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Controller('user')
 export class UserController extends MongooseCRUDConroller<User, UserService> {
   constructor(private readonly userService: UserService) {
-    super(userService);
+    super(userService, {
+      searchKeys: ['username', 'email', 'nickname']
+    });
   }
 
   @Post()

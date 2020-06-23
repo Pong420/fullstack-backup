@@ -46,12 +46,10 @@ export class MongooseCRUDService<T extends Document> {
   }
 
   paginate(
-    query?: FilterQuery<T>,
-    { page = 1, limit = 10, ...options }: PaginateOptions = {}
+    query?: Record<string, unknown>,
+    options: PaginateOptions = {}
   ): Promise<PaginateResult<T>> {
-    return this.model.paginate(query, {
-      page,
-      limit,
+    return this.model.paginate(query as any, {
       customLabels: { docs: 'data', totalDocs: 'total' },
       ...options
     }) as any;
