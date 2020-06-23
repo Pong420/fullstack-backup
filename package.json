@@ -53,6 +53,8 @@
     ]
   },
   "dependencies": {
-    "eslint-config-prettier": "^6.11.0"
+    "@nestjs/jwt": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "passport-jwt": "^4.0.0"
   }
 }

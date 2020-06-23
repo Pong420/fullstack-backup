@@ -19,6 +19,7 @@ import paginate from 'mongoose-paginate-v2';
     ])
   ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
+  exports: [UserService]
 })
 export class UserModule {}
