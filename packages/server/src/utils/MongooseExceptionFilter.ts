@@ -1,8 +1,12 @@
 import { MongoError } from 'mongodb';
 import { Error as MongooseError } from 'mongoose';
 import { FastifyReply } from 'fastify';
-import { BaseExceptionFilter } from '@nestjs/core';
-import { Catch, ArgumentsHost, HttpStatus } from '@nestjs/common';
+import {
+  Catch,
+  ArgumentsHost,
+  HttpStatus,
+  ExceptionFilter
+} from '@nestjs/common';
 
 function handleMongooseError(
   error: unknown
@@ -28,8 +32,9 @@ function handleMongooseError(
   }
 }
 
-@Catch()
-export class ExceptionFilter extends BaseExceptionFilter {
+@Catch(MongooseError)
+@Catch(MongoError)
+export class MongooseExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
@@ -41,8 +46,6 @@ export class ExceptionFilter extends BaseExceptionFilter {
         statusCode: status,
         message
       });
-    } else {
-      super.catch(exception, host);
     }
   }
 }
