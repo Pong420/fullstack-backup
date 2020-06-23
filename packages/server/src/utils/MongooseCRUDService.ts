@@ -26,13 +26,13 @@ export class MongooseCRUDService<T extends Document> {
     options?: QueryFindOneAndUpdateOptions
   ): Promise<T> {
     return this.model.findOneAndUpdate(query, changes, {
-      new: true,
-      ...options
+      ...options,
+      new: true
     });
   }
 
   async findOne(
-    { id, ...query }: UpdateQuery<T>,
+    { id, ...query }: FilterQuery<T>,
     projection: any = ''
   ): Promise<T> {
     return this.model.findOne(

@@ -1,4 +1,4 @@
-import { Document, FilterQuery } from 'mongoose';
+import { Document, FilterQuery, UpdateQuery } from 'mongoose';
 import { IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import {
@@ -6,11 +6,14 @@ import {
   Param,
   Get,
   Post,
+  Put,
   Delete,
-  Query // eslint-disable-line @typescript-eslint/no-unused-vars
+  Query, // eslint-disable-line @typescript-eslint/no-unused-vars
+  NotFoundException
 } from '@nestjs/common';
 import { PaginateResult, Param$Pagination } from '@fullstack/typings';
 import { MongooseCRUDService } from './MongooseCRUDService';
+import { ParseObjectIdPipe } from './ParseObjectIdPipe';
 import { formatSearchQuery } from './formatSearchQuery';
 import { Order, Condition } from '../typings';
 
@@ -88,8 +91,27 @@ export class MongooseCRUDController<
     return this.service.create(createDto);
   }
 
+  @Get(':id')
+  async get(@Param('id', new ParseObjectIdPipe()) id: string): Promise<D> {
+    const result = await this.service.findOne({ _id: id } as FilterQuery<D>);
+    if (result) {
+      return result;
+    }
+    throw new NotFoundException();
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id', new ParseObjectIdPipe()) id: string,
+    @Body() changes: UpdateQuery<D>
+  ): Promise<D> {
+    return this.service.update({ _id: id } as FilterQuery<D>, changes);
+  }
+
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
+  async delete(
+    @Param('id', new ParseObjectIdPipe()) id: string
+  ): Promise<void> {
     await this.service.delete({ _id: id } as FilterQuery<D>);
   }
 }
