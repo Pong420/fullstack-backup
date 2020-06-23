@@ -26,14 +26,13 @@ function handleMongooseError(
       case 11000:
         return [
           'BAD_REQUEST',
-          `${Object.keys((error as any).keyValue).join(',')} already exists`
+          `${Object.keys((error as any).keyValue).join(',')} already used`
         ];
     }
   }
 }
 
-@Catch(MongooseError)
-@Catch(MongoError)
+@Catch(MongoError, MongooseError)
 export class MongooseExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();

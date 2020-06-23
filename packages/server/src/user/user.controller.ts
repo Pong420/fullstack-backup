@@ -13,7 +13,9 @@ export class UserController extends MongooseCRUDController<User, UserService> {
   }
 
   @Post()
-  create(dto: CreateUserDto): Promise<User> {
-    return this.userService.create(dto);
+  async create(dto: CreateUserDto): Promise<User> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...user } = (await this.userService.create(dto)).toJSON();
+    return user;
   }
 }

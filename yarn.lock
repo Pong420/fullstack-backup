@@ -472,6 +472,7 @@ __metadata:
     class-transformer: ^0.2.3
     class-validator: ^0.12.2
     jest: 26.0.1
+    jest-environment-node: ^26.0.1
     mongoose: ^5.9.19
     mongoose-paginate-v2: ^1.3.9
     prettier: ^2.0.5

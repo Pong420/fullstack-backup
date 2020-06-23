@@ -30,7 +30,7 @@ class CreateUser extends Base
 
   @IsEnum(UserRole)
   @IsOptional()
-  role!: UserRole;
+  role?: UserRole;
 
   @IsOptional()
   @IsString()
