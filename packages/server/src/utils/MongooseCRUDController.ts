@@ -44,7 +44,7 @@ interface Options<D extends Document> {
   searchKeys?: (keyof D)[];
 }
 
-export class MongooseCRUDConroller<
+export class MongooseCRUDController<
   D extends Document,
   T extends MongooseCRUDService<D>
 > {
