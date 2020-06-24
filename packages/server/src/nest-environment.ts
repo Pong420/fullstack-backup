@@ -6,6 +6,7 @@ import {
 import { AppModule } from './app.module';
 import { setupApp } from './setup';
 import NodeEnvironment from 'jest-environment-node';
+import supertest from 'supertest';
 
 export default class NestNodeEnvironment extends NodeEnvironment {
   async setup(): Promise<void> {
@@ -24,6 +25,7 @@ export default class NestNodeEnvironment extends NodeEnvironment {
     await app.getHttpAdapter().getInstance().ready();
 
     this.global.app = app;
+    this.global.request = supertest(app);
   }
 
   async teardown(): Promise<void> {

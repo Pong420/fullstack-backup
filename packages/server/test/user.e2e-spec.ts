@@ -1,8 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+import { PaginateResult } from '@fullstack/typings';
 import { User } from 'src/user/schemas/user.schema';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
-import { PaginateResult } from '@fullstack/typings';
-import request from 'supertest';
 
 const createUser: CreateUserDto = {
   username: 'e2e-user',
@@ -14,6 +14,14 @@ const updateUser: Partial<UpdateUserDto> = {
   nickname: 'e2e-nickname'
 };
 
+const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
+  const clone = { ...payload };
+  for (const key of keys) {
+    delete clone[key];
+  }
+  return clone;
+};
+
 describe('UserController (e2e)', () => {
   let user: User;
   let users: User[];
@@ -21,9 +29,9 @@ describe('UserController (e2e)', () => {
   it('(POST) Create User', async done => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...match } = createUser;
-    const create = () =>
-      request(app.getHttpServer()).post('/user').send(createUser);
-    let response = await create();
+    const create = (params: Partial<CreateUserDto> = createUser) =>
+      request.post(`/api/user`).send(params);
+    const response = await create();
 
     user = response.body.data;
 
@@ -31,14 +39,21 @@ describe('UserController (e2e)', () => {
     expect(user).toMatchObject(match);
     expect(user.password).toBeUndefined();
 
-    response = await create();
-    expect(response.status).toBe(400);
+    [
+      create(),
+      create(omit(createUser, 'username')),
+      create(omit(createUser, 'password')),
+      create(omit(createUser, 'email'))
+    ].map(async request => {
+      const response = await request;
+      expect(response.status).toBe(400);
+    });
 
     done();
   });
 
   describe('(GET)  Get Users', () => {
-    const getUsers = () => request(app.getHttpServer()).get(`/user`);
+    const getUsers = () => request.get(`/api/user`);
 
     it('Normal', async done => {
       // TODO: expect.not.arrayContaining ?
@@ -70,20 +85,21 @@ describe('UserController (e2e)', () => {
         done();
       });
 
-      it('unique property', async done => {
-        if (users.length > 1) {
-          [{ username: createUser.username }, { email: createUser.email }].map(
-            async query =>
-              expect(
-                getUsers()
-                  .query(query)
-                  .then(
-                    res => (res.body.data as PaginateResult<User>).data.length
-                  )
-              ).resolves.toBe(1)
-          );
-        }
+      it('empty', async done => {
+        const query = { username: uuidv4() };
+        const response = await getUsers().query(query);
+        const { data: newUsers }: PaginateResult<User> = response.body.data;
+        expect(newUsers.length).toBe(0);
+        done();
+      });
 
+      it('unique property', async done => {
+        [{ username: createUser.username }, { email: createUser.email }].map(
+          async query => {
+            const response = await getUsers().query(query);
+            expect(response.body.data.data.length).toBe(1);
+          }
+        );
         done();
       });
     });
@@ -91,9 +107,7 @@ describe('UserController (e2e)', () => {
 
   it('(GET)  Get User', async done => {
     if (user) {
-      const response = await request(app.getHttpServer()).get(
-        `/user/${user.id}`
-      );
+      const response = await request.get(`/api/user/${user.id}`);
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(user);
     }
@@ -103,8 +117,8 @@ describe('UserController (e2e)', () => {
 
   it('(PUT)  Update User', async done => {
     if (user) {
-      const response = await request(app.getHttpServer())
-        .put(`/user/${user.id}`)
+      const response = await request
+        .put(`/api/user/${user.id}`)
         .send(updateUser);
 
       user = response.body.data;
@@ -119,9 +133,7 @@ describe('UserController (e2e)', () => {
 
   it('(DEL)  Delete User', async done => {
     if (user) {
-      const response = await request(app.getHttpServer()).delete(
-        `/user/${user.id}`
-      );
+      const response = await request.delete(`/api/user/${user.id}`);
       expect(response.status).toBe(200);
     }
 
