@@ -35,7 +35,7 @@ export class RefreshTokenService extends MongooseCRUDService<
         { [index]: num },
         {
           expireAfterSeconds:
-            Number(configService.get('REFRESH_TOKEN_EXPIRES_IN_MINUTES')) * 60
+            configService.get<number>('REFRESH_TOKEN_EXPIRES_IN_MINUTES') * 60
         }
       );
     }

@@ -20,7 +20,7 @@ import { RefreshTokenModule } from 'src/refresh-token/refresh-token.module';
           secret: configService.get<string>('JWT_SECRET'),
           signOptions: {
             expiresIn:
-              configService.get<string>('JWT_TOKEN_EXPIRES_IN_MINUTES') + 'm'
+              configService.get<number>('JWT_TOKEN_EXPIRES_IN_MINUTES') + 'm'
           }
         };
       },

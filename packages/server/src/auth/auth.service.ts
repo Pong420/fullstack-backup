@@ -64,9 +64,7 @@ export class AuthService {
       }),
       expiry: new Date(
         now +
-          Number(
-            this.configService.get<string>('JWT_TOKEN_EXPIRES_IN_MINUTES')
-          ) *
+          this.configService.get<number>('JWT_TOKEN_EXPIRES_IN_MINUTES') *
             60 *
             1000
       )
@@ -77,7 +75,7 @@ export class AuthService {
     return {
       maxAge:
         Number(
-          this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN_MINUTES')
+          this.configService.get<number>('REFRESH_TOKEN_EXPIRES_IN_MINUTES')
         ) *
         60 *
         1000,

@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
 
 //  remove _v and _id
@@ -26,7 +27,23 @@ mongoose.set('toJSON', {
         '.env.local',
         `.env.${process.env.NODE_ENV}`,
         `.env.${process.env.NODE_ENV}.local`
-      ]
+      ],
+      validationSchema: Joi.object({
+        PORT: Joi.number().default(3000),
+        NODE_ENV: Joi.string()
+          .valid('development', 'production')
+          .default('development'),
+        MONGODB_URI: Joi.string().default(
+          'mongodb://localhost:27017/fullstack'
+        ),
+        JWT_SECRET: Joi.string().default('JWT_SECRET'),
+        JWT_TOKEN_EXPIRES_IN_MINUTES: Joi.number().min(1).default(15),
+        REFRESH_TOKEN_EXPIRES_IN_MINUTES: Joi.number()
+          .min(1)
+          .default(7 * 24 * 60),
+        DEFAULT_USERNAME: Joi.string().default('admin'),
+        DEFAULT_PASSWORD: Joi.string().default('admin')
+      })
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
