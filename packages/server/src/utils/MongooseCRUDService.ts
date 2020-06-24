@@ -41,7 +41,7 @@ export class MongooseCRUDService<T extends Document> {
     );
   }
 
-  async findAll(query: FilterQuery<T>): Promise<T[]> {
+  async findAll(query?: FilterQuery<T>): Promise<T[]> {
     return this.model.find(query).exec();
   }
 

@@ -10,9 +10,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { UserService } from '../user/user.service';
+import { UserService } from 'src/user/user.service';
+import { transformResponse } from 'src/utils/ResponseInterceptor';
+import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 import { AuthService } from './auth.service';
-import { transformResponse } from '../utils/ResponseInterceptor';
+import { JWTSignPayload } from 'src/typings';
 
 const REFRESH_TOKEN = 'fullstack_refresh_token';
 
@@ -20,7 +22,8 @@ const REFRESH_TOKEN = 'fullstack_refresh_token';
 export class AuthController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly refreshTokenService: RefreshTokenService
   ) {}
 
   @UseGuards(AuthGuard('local'))
@@ -30,11 +33,23 @@ export class AuthController {
     @Res() reply: FastifyReply
   ): Promise<FastifyReply> {
     const isDefaultAc = !(req.user instanceof Document);
-    const user = isDefaultAc ? req.user : req.user.toJSON();
+    const user: JWTSignPayload = isDefaultAc ? req.user : req.user.toJSON();
     const sign = this.authService.signJwt(user);
     const refreshToken = uuidv4();
 
-    delete user.password;
+    try {
+      await this.refreshTokenService.update(
+        { user_id: user.user_id },
+        {
+          ...user,
+          refreshToken,
+          expires: new Date(new Date().getTime() + 1 + 60 * 1000)
+        },
+        { upsert: true }
+      );
+    } catch (error) {
+      console.error(error);
+    }
 
     return reply
       .setCookie(

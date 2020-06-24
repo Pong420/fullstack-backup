@@ -2,27 +2,33 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@fullstack/typings';
-import { UserService } from '../user/user.service';
-import { ValidateResult, JWTSignPayload, JWTSignResult } from '../typings';
-import bcrypt from 'bcrypt';
 import { FastifyCookieOptions } from 'fastify-cookie';
+import { UserService } from 'src/user/user.service';
+import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
+import { JWTSignPayload, JWTSignResult } from 'src/typings';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UserService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<ValidateResult> {
+  async validateUser(username: string, pass: string): Promise<JWTSignPayload> {
     const user = await this.userService.findOne({ username }, '+password');
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);
 
       if (valid) {
-        return user;
+        return {
+          user_id: user.id,
+          username: user.username,
+          role: user.role
+        };
       }
 
       throw new BadRequestException('Incorrect Password');
@@ -33,11 +39,11 @@ export class AuthService {
         const [defaultUsername, defaultPassword] = [
           'DEFAULT_USERNAME',
           'DEFAULT_PASSWORD'
-        ].map(this.configService.get);
+        ].map(k => this.configService.get(k));
 
         if (username === defaultUsername && pass === defaultPassword) {
           return {
-            id: defaultUsername,
+            user_id: defaultUsername,
             username: defaultUsername,
             role: UserRole.ADMIN
           };
@@ -48,9 +54,9 @@ export class AuthService {
     throw new BadRequestException('User Not Found');
   }
 
-  signJwt({ id, username, role }: JWTSignPayload): JWTSignResult {
+  signJwt({ user_id, username, role }: JWTSignPayload): JWTSignResult {
     const now = +new Date();
-    const payload: JWTSignPayload = { id, role, username };
+    const payload: JWTSignPayload = { user_id, role, username };
     return {
       token: this.jwtService.sign({
         ...payload,
@@ -58,7 +64,9 @@ export class AuthService {
       }),
       expiry: new Date(
         now +
-          Number(this.configService.get<string>('JWT_TOKEN_EXPIRES')) *
+          Number(
+            this.configService.get<string>('JWT_TOKEN_EXPIRES_IN_MINUTES')
+          ) *
             60 *
             1000
       )
@@ -68,7 +76,9 @@ export class AuthService {
   getTokenCookieOps(): FastifyCookieOptions {
     return {
       maxAge:
-        Number(this.configService.get<string>('REFRESH_TOKEN_EXPIRES')) *
+        Number(
+          this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN_MINUTES')
+        ) *
         60 *
         1000,
       httpOnly: true,
@@ -78,5 +88,9 @@ export class AuthService {
 
   async login(user: JWTSignPayload): Promise<JWTSignResult> {
     return this.signJwt(user);
+  }
+
+  async logout(refreshToken: string): Promise<void> {
+    this.refreshTokenService.delete({ refreshToken });
   }
 }
