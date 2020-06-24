@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # sh scripts/mongo-import.sh <file path> <collection name>

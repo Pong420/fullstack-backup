@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # sh scripts/mongo-export.sh <collection name> <output file>
