@@ -53,6 +53,7 @@
     "@types/uuid": "^8",
     "jest": "26.0.1",
     "jest-environment-node": "^26.0.1",
+    "mongodb-memory-server": "^6.6.1",
     "prettier": "^2.0.5",
     "supertest": "^4.0.2",
     "ts-jest": "26.1.0",

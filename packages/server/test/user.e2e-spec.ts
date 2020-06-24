@@ -79,8 +79,8 @@ describe('UserController (e2e)', () => {
           limit
         }: PaginateResult<User> = response.body.data;
 
-        expect(newUsers.length).toBe(query.size);
-        expect(limit).toBe(query.size);
+        expect(newUsers.length).toBeLessThanOrEqual(query.size);
+        expect(limit).toBeLessThanOrEqual(query.size);
 
         done();
       });

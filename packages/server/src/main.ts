@@ -8,7 +8,7 @@ import { setupApp } from './setup';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
+    AppModule.init(),
     new FastifyAdapter()
   );
 

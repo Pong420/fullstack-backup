@@ -26,7 +26,9 @@ function handleMongooseError(
       case 11000:
         return [
           'BAD_REQUEST',
-          `${Object.keys((error as any).keyValue).join(',')} already used`
+          'keyValue' in error
+            ? `${Object.keys((error as any).keyValue).join(',')} already used`
+            : ''
         ];
     }
   }
