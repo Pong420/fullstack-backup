@@ -4,7 +4,9 @@ import {
   Post,
   Req,
   Res,
-  HttpStatus
+  HttpStatus,
+  Body,
+  BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Document } from 'mongoose';
@@ -13,10 +15,12 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService } from 'src/user/user.service';
 import { transformResponse } from 'src/utils/ResponseInterceptor';
 import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
-import { AuthService } from './auth.service';
 import { JWTSignPayload } from 'src/typings';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { User } from 'src/user/schemas/user.schema';
+import { AuthService } from './auth.service';
 
-const REFRESH_TOKEN = 'fullstack_refresh_token';
+const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
 @Controller('auth')
 export class AuthController {
@@ -26,8 +30,13 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
+  @Post('register')
+  register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.create(createUserDto);
+  }
+
   @UseGuards(AuthGuard('local'))
-  @Post('/login')
+  @Post('login')
   async login(
     @Req() req: FastifyRequest,
     @Res() reply: FastifyReply
@@ -53,11 +62,62 @@ export class AuthController {
 
     return reply
       .setCookie(
-        REFRESH_TOKEN,
+        REFRESH_TOKEN_COOKIES,
         refreshToken,
         this.authService.getTokenCookieOps()
       )
       .status(HttpStatus.OK)
       .send(transformResponse(HttpStatus.OK, { ...sign, user, isDefaultAc }));
+  }
+
+  @Post('refresh-token')
+  async refreshToken(
+    @Req() req: FastifyRequest,
+    @Res() reply: FastifyReply
+  ): Promise<FastifyReply> {
+    const tokenFromCookies = req.cookies[REFRESH_TOKEN_COOKIES];
+
+    if (tokenFromCookies) {
+      const newRefreshToken = uuidv4();
+      const exists = await this.refreshTokenService.update(
+        { refreshToken: tokenFromCookies },
+        { refreshToken: newRefreshToken }
+      );
+
+      if (exists) {
+        const payload = this.authService.signJwt(exists.toJSON());
+        return reply
+          .setCookie(
+            REFRESH_TOKEN_COOKIES,
+            newRefreshToken,
+            this.authService.getTokenCookieOps()
+          )
+          .status(HttpStatus.OK)
+          .send(transformResponse(HttpStatus.OK, payload));
+      }
+
+      return reply
+        .status(HttpStatus.BAD_REQUEST)
+        .send(new BadRequestException('Invalid refresh token'));
+    }
+
+    return reply
+      .status(HttpStatus.UNAUTHORIZED)
+      .send(new BadRequestException('Refresh token not found'));
+  }
+
+  @Post('logout')
+  async logout(
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply
+  ): Promise<FastifyReply> {
+    await this.authService.logout(req.cookies[REFRESH_TOKEN_COOKIES]);
+    return res
+      .setCookie(REFRESH_TOKEN_COOKIES, '', {
+        httpOnly: true,
+        expires: new Date(0)
+      })
+      .status(HttpStatus.OK)
+      .send(transformResponse(HttpStatus.OK, 'OK'));
   }
 }
