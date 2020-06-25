@@ -12,20 +12,21 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserRole } from '@fullstack/typings';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { UserService } from 'src/user/user.service';
-import { transformResponse } from 'src/utils/ResponseInterceptor';
-import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
-import { JWTSignPayload } from 'src/typings';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { User } from 'src/user/schemas/user.schema';
-import { IsObjectId } from 'src/utils/ParseObjectIdPipe';
-import { throwMongoError } from 'src/utils/MongooseExceptionFilter';
-import { RefreshTokenModel } from 'src/refresh-token/schemas/refreshToken.schema';
+import { UserService } from '../user/user.service';
+import { transformResponse } from '../utils/ResponseInterceptor';
+import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { JWTSignPayload } from '../typings';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { User } from '../user/schemas/user.schema';
+import { IsObjectId } from '../utils/ParseObjectIdPipe';
+import { throwMongoError } from '../utils/MongooseExceptionFilter';
+import { RefreshTokenModel } from '../refresh-token/schemas/refreshToken.schema';
 import { AuthService } from './auth.service';
-import { Access } from 'src/utils/role.guard';
+import { Access } from '../utils/role.guard';
 
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
+@Access('EVERYONE')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -34,15 +35,19 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
-  @Access('EVERYONE')
+  @Access('ADMIN')
+  @Post('register/admin')
+  registerAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
+  }
+
   @Post('register')
   register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create({ ...createUserDto, role: UserRole.CLIENT });
   }
 
-  @Access('EVERYONE')
-  @UseGuards(AuthGuard('local'))
   @Post('login')
+  @UseGuards(AuthGuard('local'))
   async login(
     @Req() req: FastifyRequest,
     @Res() reply: FastifyReply
@@ -77,7 +82,6 @@ export class AuthController {
       );
   }
 
-  @Access('EVERYONE')
   @Post('refresh-token')
   async refreshToken(
     @Req() req: FastifyRequest,
@@ -120,7 +124,6 @@ export class AuthController {
       .send(new BadRequestException('Refresh token not found'));
   }
 
-  @Access('EVERYONE')
   @Post('logout')
   async logout(
     @Req() req: FastifyRequest,

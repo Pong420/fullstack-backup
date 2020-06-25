@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@fullstack/typings';
 import { FastifyCookieOptions } from 'fastify-cookie';
-import { UserService } from 'src/user/user.service';
-import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
-import { JWTSignPayload, JWTSignResult } from 'src/typings';
+import { UserService } from '../user/user.service';
+import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { JWTSignPayload, JWTSignResult } from '../typings';
 import bcrypt from 'bcrypt';
 
 @Injectable()

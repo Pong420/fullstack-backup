@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { MongooseCRUDController } from '../utils/MongooseCRUDController';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Access } from 'src/utils/role.guard';
+import { Access } from '../utils/role.guard';
 
 @Controller('user')
 export class UserController extends MongooseCRUDController<User, UserService> {

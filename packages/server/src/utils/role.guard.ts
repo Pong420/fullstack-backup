@@ -18,7 +18,10 @@ export class RoleGuard extends AuthGuard('jwt') {
 
   canActivate(context: ExecutionContext): Observable<boolean> {
     const access =
-      this.reflector.get<AccessType[]>('access', context.getHandler()) || [];
+      this.reflector.getAllAndOverride<AccessType[]>('access', [
+        context.getHandler(),
+        context.getClass()
+      ]) || [];
 
     if (access.includes('EVERYONE')) {
       return of(true);
@@ -41,6 +44,3 @@ export class RoleGuard extends AuthGuard('jwt') {
     );
   }
 }
-
-// return mixin(RoleGuard) as Type<CanActivate>;
-// }
