@@ -3,8 +3,7 @@ import { Timestamp } from './';
 export enum UserRole {
   ADMIN,
   MANAGER,
-  CLIENT,
-  GUEST
+  CLIENT
 }
 
 export interface Required$CreateUser {

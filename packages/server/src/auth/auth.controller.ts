@@ -9,6 +9,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { UserRole } from '@fullstack/typings';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService } from 'src/user/user.service';
@@ -21,6 +22,7 @@ import { IsObjectId } from 'src/utils/ParseObjectIdPipe';
 import { throwMongoError } from 'src/utils/MongooseExceptionFilter';
 import { RefreshTokenModel } from 'src/refresh-token/schemas/refreshToken.schema';
 import { AuthService } from './auth.service';
+import { Access } from 'src/utils/role.guard';
 
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
@@ -32,11 +34,13 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
+  @Access('EVERYONE')
   @Post('register')
   register(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
+    return this.userService.create({ ...createUserDto, role: UserRole.CLIENT });
   }
 
+  @Access('EVERYONE')
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(
@@ -73,6 +77,7 @@ export class AuthController {
       );
   }
 
+  @Access('EVERYONE')
   @Post('refresh-token')
   async refreshToken(
     @Req() req: FastifyRequest,
@@ -115,6 +120,7 @@ export class AuthController {
       .send(new BadRequestException('Refresh token not found'));
   }
 
+  @Access('EVERYONE')
   @Post('logout')
   async logout(
     @Req() req: FastifyRequest,

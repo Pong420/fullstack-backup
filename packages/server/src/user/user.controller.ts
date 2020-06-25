@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { MongooseCRUDController } from '../utils/MongooseCRUDController';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Access } from 'src/utils/role.guard';
 
 @Controller('user')
 export class UserController extends MongooseCRUDController<User, UserService> {
@@ -13,6 +14,7 @@ export class UserController extends MongooseCRUDController<User, UserService> {
   }
 
   @Post()
+  @Access('ADMIN', 'MANAGER')
   async create(dto: CreateUserDto): Promise<User> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user } = (await this.userService.create(dto)).toJSON();

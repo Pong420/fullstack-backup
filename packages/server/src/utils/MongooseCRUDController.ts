@@ -6,7 +6,7 @@ import {
   Param,
   Get,
   Post,
-  Put,
+  Patch,
   Delete,
   Query, // eslint-disable-line @typescript-eslint/no-unused-vars
   NotFoundException
@@ -100,7 +100,7 @@ export class MongooseCRUDController<
     throw new NotFoundException();
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id', new ParseObjectIdPipe()) id: string,
     @Body() changes: UpdateQuery<D>
