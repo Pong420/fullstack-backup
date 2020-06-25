@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { PaginateResult } from '@fullstack/typings';
-import { User } from 'src/user/schemas/user.schema';
+import { User } from '../src/user/schemas/user.schema';
 import { createUser, rid } from './utils/user';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { UpdateUserDto } from 'src/user/dto/update-user.dto';
+import { CreateUserDto } from '../src/user/dto/create-user.dto';
+import { UpdateUserDto } from '../src/user/dto/update-user.dto';
 
 const mockUser = createUser();
 
@@ -22,12 +22,21 @@ const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
 describe('UserController (e2e)', () => {
   let user: User;
   let users: User[];
+  let adminToken: string;
+
+  beforeAll(async () => {
+    const respose = await loginAsDefaultAdmin();
+    adminToken = respose.body.data.token;
+  });
 
   it('(POST) Create User', async done => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...match } = mockUser;
     const create = (params: Partial<CreateUserDto> = mockUser) =>
-      request.post(`/api/user`).send(params);
+      request
+        .post(`/api/user`)
+        .set('Authorization', `bearer ${adminToken}`)
+        .send(params);
     const response = await create();
 
     user = response.body.data;
@@ -50,15 +59,16 @@ describe('UserController (e2e)', () => {
   });
 
   describe('(GET)  Get Users', () => {
-    const getUsers = () => request.get(`/api/user`);
+    const getUsers = () =>
+      request.get(`/api/user`).set('Authorization', `bearer ${adminToken}`);
 
     it('Normal', async done => {
       // TODO: expect.not.arrayContaining ?
       const response = await getUsers();
-      users = response.body.data.data;
-
       expect(response.status).toBe(200);
-      expect(Array.isArray(users)).toBeTruthy();
+      expect(Array.isArray(response.body.data.data)).toBeTruthy();
+
+      users = response.body.data.data;
 
       for (const user of users) {
         expect(user.password).toBeUndefined();
@@ -104,7 +114,9 @@ describe('UserController (e2e)', () => {
 
   it('(GET)  Get User', async done => {
     if (user) {
-      const response = await request.get(`/api/user/${user.id}`);
+      const response = await request
+        .get(`/api/user/${user.id}`)
+        .set('Authorization', `bearer ${adminToken}`);
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(user);
     }
@@ -112,10 +124,11 @@ describe('UserController (e2e)', () => {
     done();
   });
 
-  it('(PUT)  Update User', async done => {
+  it('(PTCH)  Update User', async done => {
     if (user) {
       const response = await request
-        .put(`/api/user/${user.id}`)
+        .patch(`/api/user/${user.id}`)
+        .set('Authorization', `bearer ${adminToken}`)
         .send(updateUser);
 
       user = response.body.data;
@@ -130,7 +143,9 @@ describe('UserController (e2e)', () => {
 
   it('(DEL)  Delete User', async done => {
     if (user) {
-      const response = await request.delete(`/api/user/${user.id}`);
+      const response = await request
+        .delete(`/api/user/${user.id}`)
+        .set('Authorization', `bearer ${adminToken}`);
       expect(response.status).toBe(200);
     }
 

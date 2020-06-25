@@ -35,7 +35,8 @@ export class RoleGuard extends AuthGuard('jwt') {
       map(active => {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
-          return access
+
+          return access.length
             ? access.includes(UserRole[req.user.role] as AccessType)
             : true;
         }

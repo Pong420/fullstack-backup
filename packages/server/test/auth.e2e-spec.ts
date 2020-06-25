@@ -1,18 +1,11 @@
 import { Response } from 'supertest';
 import { ConfigService } from '@nestjs/config';
 import { HttpStatus } from '@nestjs/common';
-import { UserRole } from '@fullstack/typings';
-import { User } from 'src/user/schemas/user.schema';
-import { createUser } from './utils/user';
+import { User } from '../src/user/schemas/user.schema';
+import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
+import { mockAdmin } from './utils/constants';
+import { login } from './utils/login';
 import { extractCookies } from './utils/extractCookies';
-
-interface Login {
-  username: string;
-  password: string;
-}
-
-const login = (payload: Login) => request.post('/api/auth/login').send(payload);
-const mockAdmin = createUser({ role: UserRole.ADMIN });
 
 describe('AuthController (e2e)', () => {
   const configService = app.get<ConfigService>(ConfigService);
@@ -27,37 +20,33 @@ describe('AuthController (e2e)', () => {
 
   function validateCookies(response: Response) {
     const cookies = extractCookies(response.header);
-    const cookie = cookies['fullstack_refresh_token'];
+    const cookie = cookies[REFRESH_TOKEN_COOKIES];
     expect(cookie).toBeDefined();
     expect(cookie.flag['Max-Age']).toBe(String(refreshTokenExpires));
     expect(cookie.flag['HttpOnly']).toBeTruthy();
 
-    refreshToken = `fullstack_refresh_token=${cookie.value}`;
+    refreshToken = `${REFRESH_TOKEN_COOKIES}=${cookie.value}`;
 
     return cookie;
   }
 
   describe('Login', () => {
     it('Login with default admin', async done => {
-      const loginAsDefault = () =>
-        login({
-          username: configService.get('DEFAULT_USERNAME'),
-          password: configService.get('DEFAULT_PASSWORD')
-        });
-
-      let response = await loginAsDefault();
+      let response = await loginAsDefaultAdmin();
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toMatchObject({ isDefaultAc: true });
-      expect(response.body.data.password).toBeUndefined();
 
       // Register an admin
-      response = await request.post('/api/auth/register').send(mockAdmin);
+      response = await request
+        .post('/api/auth/register/admin')
+        .set('Authorization', `bearer ${response.body.data.token}`)
+        .send(mockAdmin);
 
       expect(response.status).toBe(HttpStatus.CREATED);
       admin = response.body.data;
 
       // Default account will be disabled
-      response = await loginAsDefault();
+      response = await loginAsDefaultAdmin();
       expect(response.status).toBe(HttpStatus.BAD_REQUEST);
 
       done();
@@ -104,7 +93,7 @@ describe('AuthController (e2e)', () => {
     const response = await request.post('/api/auth/logout');
     expect(response.status).toBe(HttpStatus.OK);
     const cookies = extractCookies(response.header);
-    const cookie = cookies['fullstack_refresh_token'];
+    const cookie = cookies[REFRESH_TOKEN_COOKIES];
     expect(cookie.value).toBe('');
   });
 });

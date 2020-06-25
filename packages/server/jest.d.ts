@@ -1,15 +1,17 @@
 import { INestApplication } from '@nestjs/common';
-import supertest from 'supertest';
-import superagent from 'superagent';
+import { SuperTest } from 'supertest';
+import { SuperAgentRequest } from 'superagent';
 
 declare global {
   let app: INestApplication;
-  let request: supertest.SuperTest<superagent.SuperAgentRequest>;
+  let request: SuperTest<SuperAgentRequest>;
+  let loginAsDefaultAdmin: () => SuperAgentRequest;
 
   namespace NodeJS {
     interface Global {
       app: INestApplication;
-      request: supertest.SuperTest<superagent.SuperAgentRequest>;
+      request: SuperTest<SuperAgentRequest>;
+      loginAsDefaultAdmin: () => SuperAgentRequest;
     }
   }
 }
