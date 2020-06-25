@@ -9,7 +9,6 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { UserService } from 'src/user/user.service';
@@ -18,6 +17,7 @@ import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 import { JWTSignPayload } from 'src/typings';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
+import { IsObjectId } from 'src/utils/ParseObjectIdPipe';
 import { AuthService } from './auth.service';
 
 const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
@@ -41,19 +41,14 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res() reply: FastifyReply
   ): Promise<FastifyReply> {
-    const isDefaultAc = !(req.user instanceof Document);
-    const user: JWTSignPayload = isDefaultAc ? req.user : req.user.toJSON();
+    const user: JWTSignPayload = req.user;
     const sign = this.authService.signJwt(user);
     const refreshToken = uuidv4();
 
     try {
       await this.refreshTokenService.update(
         { user_id: user.user_id },
-        {
-          ...user,
-          refreshToken,
-          expires: new Date(new Date().getTime() + 1 + 60 * 1000)
-        },
+        { refreshToken },
         { upsert: true }
       );
     } catch (error) {
@@ -67,7 +62,13 @@ export class AuthController {
         this.authService.getTokenCookieOps()
       )
       .status(HttpStatus.OK)
-      .send(transformResponse(HttpStatus.OK, { ...sign, user, isDefaultAc }));
+      .send(
+        transformResponse(HttpStatus.OK, {
+          ...sign,
+          user,
+          isDefaultAc: !IsObjectId(user.user_id)
+        })
+      );
   }
 
   @Post('refresh-token')

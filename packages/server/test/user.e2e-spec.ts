@@ -1,17 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { PaginateResult } from '@fullstack/typings';
 import { User } from 'src/user/schemas/user.schema';
+import { createUser, rid } from './utils/user';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
-const createUser: CreateUserDto = {
-  username: 'e2e-user',
-  password: 'e2e12345',
-  email: 'e2e-user-email@gmail.com'
-};
+const mockUser = createUser();
 
 const updateUser: Partial<UpdateUserDto> = {
-  nickname: 'e2e-nickname'
+  nickname: `e2e-${rid()}`
 };
 
 const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
@@ -28,8 +25,8 @@ describe('UserController (e2e)', () => {
 
   it('(POST) Create User', async done => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...match } = createUser;
-    const create = (params: Partial<CreateUserDto> = createUser) =>
+    const { password, ...match } = mockUser;
+    const create = (params: Partial<CreateUserDto> = mockUser) =>
       request.post(`/api/user`).send(params);
     const response = await create();
 
@@ -41,9 +38,9 @@ describe('UserController (e2e)', () => {
 
     [
       create(),
-      create(omit(createUser, 'username')),
-      create(omit(createUser, 'password')),
-      create(omit(createUser, 'email'))
+      create(omit(mockUser, 'username')),
+      create(omit(mockUser, 'password')),
+      create(omit(mockUser, 'email'))
     ].map(async request => {
       const response = await request;
       expect(response.status).toBe(400);
@@ -94,7 +91,7 @@ describe('UserController (e2e)', () => {
       });
 
       it('unique property', async done => {
-        [{ username: createUser.username }, { email: createUser.email }].map(
+        [{ username: mockUser.username }, { email: mockUser.email }].map(
           async query => {
             const response = await getUsers().query(query);
             expect(response.body.data.data.length).toBe(1);

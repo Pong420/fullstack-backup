@@ -1,28 +1,26 @@
-import { IsOptional, IsNumber, IsEnum } from 'class-validator';
+import { IsString, IsEmpty } from 'class-validator';
 import { RefreshToken } from '../schemas/refreshToken.schema';
 import { UserRole } from '@fullstack/typings';
 
 export class UpdateRefreshToken implements Partial<RefreshToken> {
-  @IsOptional()
-  @IsNumber()
+  @IsEmpty()
   user_id?: string;
 
-  @IsOptional()
-  @IsNumber()
+  @IsEmpty()
   username?: string;
 
-  @IsOptional()
-  @IsEnum(UserRole)
+  @IsEmpty()
   role?: UserRole;
 
-  @IsOptional()
-  @IsNumber()
-  refreshToken?: string;
+  @IsEmpty()
+  createdAt?: string;
 
-  @IsOptional()
-  @IsNumber()
-  expires?: Date | string;
+  @IsEmpty()
+  updatedAt?: string;
 }
 
 export class UpdateRefreshTokenDto extends UpdateRefreshToken
-  implements Required<Omit<RefreshToken, keyof UpdateRefreshToken>> {}
+  implements Required<Omit<RefreshToken, keyof UpdateRefreshToken>> {
+  @IsString()
+  refreshToken: string;
+}

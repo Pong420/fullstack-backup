@@ -46,8 +46,8 @@ export default class NestNodeEnvironment extends NodeEnvironment {
   }
 
   async teardown(): Promise<void> {
-    await this.mongod.stop();
     await this.global.app.close();
+    await this.mongod.stop();
     await super.teardown();
   }
 }
