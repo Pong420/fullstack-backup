@@ -22,15 +22,17 @@ export class RefreshTokenService extends MongooseCRUDService<
   ) {
     super(model);
 
-    const index: keyof RefreshToken = 'expires';
+    const index: keyof RefreshToken = 'updatedAt';
     const num = 1;
     async function init() {
-      if (process.env.NODE_ENV !== 'development') {
+      if (configService.get<string>('NODE_ENV') !== 'development') {
         await model.deleteMany({});
       }
+
       try {
         await model.collection.dropIndex(`${index}_${num}`);
       } catch (error) {}
+
       await model.collection.createIndex(
         { [index]: num },
         {

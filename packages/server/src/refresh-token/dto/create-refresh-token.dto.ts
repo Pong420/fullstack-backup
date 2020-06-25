@@ -1,8 +1,11 @@
-import { IsString, IsEnum, IsNumber } from 'class-validator';
+import { IsString, IsEnum, IsEmpty } from 'class-validator';
 import { UserRole } from '@fullstack/typings';
 import { RefreshToken } from '../schemas/refreshToken.schema';
 
-export class CreateRefreshTokenDto implements Omit<RefreshToken, 'id'> {
+export class CreateRefreshTokenDto implements RefreshToken {
+  @IsEmpty()
+  id?: string;
+
   @IsString()
   user_id: string;
 
@@ -15,6 +18,9 @@ export class CreateRefreshTokenDto implements Omit<RefreshToken, 'id'> {
   @IsString()
   refreshToken: string;
 
-  @IsNumber()
-  expires: Date | string;
+  @IsEmpty()
+  createdAt: string;
+
+  @IsEmpty()
+  updatedAt: string;
 }

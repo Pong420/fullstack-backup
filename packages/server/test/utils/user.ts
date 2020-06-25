@@ -7,11 +7,12 @@ export const rid = (N = 5): string => {
   ).join('');
 };
 
-export const createUser = (): CreateUserDto => {
+export const createUser = (payload?: Partial<CreateUserDto>): CreateUserDto => {
   const name = rid(8);
   return {
     username: `e2e-${name}`,
     password: `e2e-${rid()}`,
-    email: `e2e-${rid()}@gmail.com`
+    email: `e2e-${rid()}@gmail.com`,
+    ...payload
   };
 };

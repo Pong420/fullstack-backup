@@ -5,10 +5,11 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
-  ExceptionFilter
+  ExceptionFilter,
+  HttpException
 } from '@nestjs/common';
 
-function handleMongooseError(
+export function handleMongoError(
   error: unknown
 ): [keyof typeof HttpStatus, string] | undefined {
   if (error instanceof MongooseError.CastError) {
@@ -28,9 +29,16 @@ function handleMongooseError(
           'BAD_REQUEST',
           'keyValue' in error
             ? `${Object.keys((error as any).keyValue).join(',')} already used`
-            : ''
+            : 'DuplicateKey'
         ];
     }
+  }
+}
+
+export function throwMongoError(error: unknown): void {
+  const [type, message] = handleMongoError(error) || [];
+  if (typeof type !== 'undefined') {
+    throw new HttpException(message, HttpStatus[type]);
   }
 }
 
@@ -39,7 +47,7 @@ export class MongooseExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
-    const [type, message] = handleMongooseError(exception) || [];
+    const [type, message] = handleMongoError(exception) || [];
 
     if (typeof type !== 'undefined') {
       const status = HttpStatus[type];

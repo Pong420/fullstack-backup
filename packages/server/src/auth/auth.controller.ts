@@ -18,9 +18,11 @@ import { JWTSignPayload } from 'src/typings';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/schemas/user.schema';
 import { IsObjectId } from 'src/utils/ParseObjectIdPipe';
+import { throwMongoError } from 'src/utils/MongooseExceptionFilter';
+import { RefreshTokenModel } from 'src/refresh-token/schemas/refreshToken.schema';
 import { AuthService } from './auth.service';
 
-const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
+export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
 @Controller('auth')
 export class AuthController {
@@ -48,11 +50,11 @@ export class AuthController {
     try {
       await this.refreshTokenService.update(
         { user_id: user.user_id },
-        { refreshToken },
+        { ...user, refreshToken },
         { upsert: true }
       );
     } catch (error) {
-      console.error(error);
+      throwMongoError(error);
     }
 
     return reply
@@ -80,13 +82,19 @@ export class AuthController {
 
     if (tokenFromCookies) {
       const newRefreshToken = uuidv4();
-      const exists = await this.refreshTokenService.update(
-        { refreshToken: tokenFromCookies },
-        { refreshToken: newRefreshToken }
-      );
+      let refreshToken: RefreshTokenModel | null = null;
 
-      if (exists) {
-        const payload = this.authService.signJwt(exists.toJSON());
+      try {
+        refreshToken = await this.refreshTokenService.update(
+          { refreshToken: tokenFromCookies },
+          { refreshToken: newRefreshToken }
+        );
+      } catch (error) {
+        throwMongoError(error);
+      }
+
+      if (refreshToken) {
+        const payload = this.authService.signJwt(refreshToken.toJSON());
         return reply
           .setCookie(
             REFRESH_TOKEN_COOKIES,
