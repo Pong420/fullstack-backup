@@ -7,6 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { AppModule } from './app.module';
 import { setupApp } from './setup';
 import { ConfigService } from '@nestjs/config';
+import { login } from '../test/utils/login';
 import NodeEnvironment from 'jest-environment-node';
 import supertest from 'supertest';
 
@@ -43,7 +44,7 @@ export default class NestNodeEnvironment extends NodeEnvironment {
       this.global.app = app;
       this.global.request = supertest(app.getHttpServer());
       this.global.loginAsDefaultAdmin = () =>
-        this.global.request.post('/api/auth/login').send({
+        login({
           username: configService.get('DEFAULT_USERNAME'),
           password: configService.get('DEFAULT_PASSWORD')
         });

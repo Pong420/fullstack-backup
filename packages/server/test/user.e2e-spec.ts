@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
+import { HttpStatus } from '@nestjs/common';
 import { PaginateResult } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
-import { createUser, rid } from './utils/user';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UpdateUserDto } from '../src/user/dto/update-user.dto';
+import { createUser, rid } from './utils/user';
 
 const mockUser = createUser();
 
@@ -41,7 +42,7 @@ describe('UserController (e2e)', () => {
 
     user = response.body.data;
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(HttpStatus.CREATED);
     expect(user).toMatchObject(match);
     expect(user.password).toBeUndefined();
 
@@ -52,7 +53,7 @@ describe('UserController (e2e)', () => {
       create(omit(mockUser, 'email'))
     ].map(async request => {
       const response = await request;
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     });
 
     done();
@@ -65,7 +66,7 @@ describe('UserController (e2e)', () => {
     it('Normal', async done => {
       // TODO: expect.not.arrayContaining ?
       const response = await getUsers();
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(HttpStatus.OK);
       expect(Array.isArray(response.body.data.data)).toBeTruthy();
 
       users = response.body.data.data;
@@ -117,7 +118,7 @@ describe('UserController (e2e)', () => {
       const response = await request
         .get(`/api/user/${user.id}`)
         .set('Authorization', `bearer ${adminToken}`);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toEqual(user);
     }
 
@@ -133,7 +134,7 @@ describe('UserController (e2e)', () => {
 
       user = response.body.data;
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(HttpStatus.OK);
       expect(user).toMatchObject(updateUser);
       expect(user.password).toBeUndefined();
     }
@@ -146,7 +147,7 @@ describe('UserController (e2e)', () => {
       const response = await request
         .delete(`/api/user/${user.id}`)
         .set('Authorization', `bearer ${adminToken}`);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(HttpStatus.OK);
     }
 
     done();
