@@ -10,7 +10,6 @@ function hashPassword(pwd: string) {
 @Schema({
   timestamps: true,
   toJSON: {
-    // eslint-disable-next-line
     transform: (_model, { _id, ...raw }) => new User(raw)
   }
 })

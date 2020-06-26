@@ -466,6 +466,7 @@ __metadata:
     "@nestjs/platform-fastify": ^7.2.0
     "@nestjs/schematics": ^7.0.1
     "@nestjs/testing": ^7.2.0
+    "@types/bcrypt": ^3.0.0
     "@types/hapi__joi": ^17
     "@types/jest": 26.0.0
     "@types/mongoose": ^5.7.27
@@ -1029,6 +1030,13 @@ __metadata:
   dependencies:
     "@babel/types": ^7.3.0
   checksum: b59b0c196d7b37966b49471b517bbbe227705ba6a939d4a9d30a9667dd9aae8683bf2abf17ebdf6791a118da461d90fbc1c044f0c0a71271e17ae1d3b8dc05d7
+  languageName: node
+  linkType: hard
+
+"@types/bcrypt@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@types/bcrypt@npm:3.0.0"
+  checksum: d33ea3bcef63750afb35ea18a586559be9876f7143c6b2ba770474f7b2d34e8d47e47dd9f267b1afc1c84615f7338e47abaae8ed913d5a447139562cb4bb44d7
   languageName: node
   linkType: hard
 
