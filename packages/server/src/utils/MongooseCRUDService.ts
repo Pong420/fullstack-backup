@@ -8,21 +8,21 @@ import {
 } from 'mongoose';
 import { PaginateResult } from '@fullstack/typings';
 
-export class MongooseCRUDService<T extends Document> {
-  constructor(private model: PaginateModel<T>) {}
+export class MongooseCRUDService<T, D extends T & Document = T & Document> {
+  constructor(private model: PaginateModel<D>) {}
 
-  async create<R = T>(createDto: unknown): Promise<T | R> {
+  async create(createDto: unknown): Promise<T> {
     const createdCat = new this.model(createDto);
     return createdCat.save();
   }
 
-  async delete(query: FilterQuery<T>): Promise<T> {
+  async delete(query: FilterQuery<D>): Promise<T> {
     return this.model.findOneAndDelete(query);
   }
 
   async update(
-    query: FilterQuery<T>,
-    changes: UpdateQuery<T>,
+    query: FilterQuery<D>,
+    changes: UpdateQuery<D>,
     options?: QueryFindOneAndUpdateOptions
   ): Promise<T> {
     return this.model.findOneAndUpdate(query, changes, {
@@ -41,7 +41,7 @@ export class MongooseCRUDService<T extends Document> {
     );
   }
 
-  async findAll(query?: FilterQuery<T>): Promise<T[]> {
+  async findAll(query?: FilterQuery<D>): Promise<T[]> {
     return this.model.find(query).exec();
   }
 

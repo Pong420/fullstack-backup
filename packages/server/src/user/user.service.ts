@@ -5,10 +5,11 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { MongooseCRUDService } from '../utils/MongooseCRUDService';
+import { Document } from 'mongoose';
 
 @Injectable()
 export class UserService extends MongooseCRUDService<User> {
-  constructor(@InjectModel(User.name) model: PaginateModel<User>) {
+  constructor(@InjectModel(User.name) model: PaginateModel<User & Document>) {
     super(model);
   }
 

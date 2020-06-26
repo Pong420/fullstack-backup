@@ -43,21 +43,18 @@ export class SearchDto {
 
 export type QueryAll<D> = PaginationDto & SearchDto & FilterQuery<D>;
 
-interface Options<D extends Document> {
-  searchKeys?: (keyof D)[];
+interface Options<T> {
+  searchKeys?: (keyof T)[];
 }
 
-export class MongooseCRUDController<
-  D extends Document,
-  T extends MongooseCRUDService<D>
-> {
+export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   constructor(
-    private readonly service: T,
-    private readonly options: Options<D> = {}
+    private readonly service: MongooseCRUDService<T, D>,
+    private readonly options: Options<T> = {}
   ) {}
 
   @Get()
-  async getAll(@Query() query: QueryAll<D> = {}): Promise<PaginateResult<D>> {
+  async getAll(@Query() query: QueryAll<D> = {}): Promise<PaginateResult<T>> {
     const {
       page = 1,
       size = 10,
@@ -87,12 +84,12 @@ export class MongooseCRUDController<
   }
 
   @Post()
-  async create(@Body() createDto: unknown): Promise<D> {
+  async create(@Body() createDto: unknown): Promise<T> {
     return this.service.create(createDto);
   }
 
   @Get(':id')
-  async get(@Param('id', new ParseObjectIdPipe()) id: string): Promise<D> {
+  async get(@Param('id', new ParseObjectIdPipe()) id: string): Promise<T> {
     const result = await this.service.findOne({ _id: id } as FilterQuery<D>);
     if (result) {
       return result;
@@ -104,8 +101,8 @@ export class MongooseCRUDController<
   async update(
     @Param('id', new ParseObjectIdPipe()) id: string,
     @Body() changes: UpdateQuery<D>
-  ): Promise<D> {
-    return this.service.update({ _id: id } as FilterQuery<D>, changes);
+  ): Promise<T> {
+    return this.service.update({ _id: id } as any, changes);
   }
 
   @Delete(':id')

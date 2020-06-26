@@ -11,13 +11,9 @@ import mongoose from 'mongoose';
 import { ModuleMetadata, DynamicModule } from '@nestjs/common/interfaces';
 import { ConfigFactory } from '@nestjs/config/dist/interfaces';
 
-//  remove _v and _id
 mongoose.set('toJSON', {
-  virtuals: true,
-  versionKey: false,
-  transform: <T extends { _id: string }>(_: unknown, ret: T) => {
-    delete ret._id;
-  }
+  virtuals: true, // clone '_id' to 'id'
+  versionKey: false // remove '__v'
 });
 
 const configure = (factory: ConfigFactory[] = []) =>

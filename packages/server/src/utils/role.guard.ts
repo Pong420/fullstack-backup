@@ -4,6 +4,7 @@ import { FastifyRequest } from 'fastify';
 import { ExecutionContext, SetMetadata, CustomDecorator } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@fullstack/typings';
 
 type AccessType = keyof typeof UserRole | 'EVERYONE';
@@ -12,7 +13,10 @@ export const Access = (...access: AccessType[]): CustomDecorator<string> =>
   SetMetadata('access', access);
 
 export class RoleGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private readonly configService: ConfigService
+  ) {
     super();
   }
 
@@ -23,7 +27,10 @@ export class RoleGuard extends AuthGuard('jwt') {
         context.getClass()
       ]) || [];
 
-    if (access.includes('EVERYONE')) {
+    if (
+      access.includes('EVERYONE') ||
+      this.configService.get<string>('NODE_ENV') === 'development'
+    ) {
       return of(true);
     }
 
