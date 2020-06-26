@@ -6,11 +6,17 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@fullstack/typings';
+import { Expose, ExposeOptions } from 'class-transformer';
 
 type AccessType = keyof typeof UserRole | 'EVERYONE';
 
 export const Access = (...access: AccessType[]): CustomDecorator<string> =>
   SetMetadata('access', access);
+
+export const Group = (
+  groups: (keyof typeof UserRole)[],
+  options?: ExposeOptions
+): ReturnType<typeof Expose> => Expose({ groups, ...options });
 
 export class RoleGuard extends AuthGuard('jwt') {
   constructor(
@@ -28,8 +34,8 @@ export class RoleGuard extends AuthGuard('jwt') {
       ]) || [];
 
     if (
-      access.includes('EVERYONE') ||
-      this.configService.get<string>('NODE_ENV') === 'development'
+      access.includes('EVERYONE')
+      // this.configService.get<string>('NODE_ENV') === 'development'
     ) {
       return of(true);
     }

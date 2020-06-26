@@ -15,7 +15,7 @@ export class UserController extends MongooseCRUDController<User> {
 
   @Post()
   @Access('ADMIN', 'MANAGER')
-  async create(dto: CreateUserDto): Promise<User> {
+  create(dto: CreateUserDto): Promise<User> {
     return this.userService.create(dto);
   }
 }

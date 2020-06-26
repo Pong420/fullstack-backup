@@ -47,10 +47,6 @@ export class User implements MongoSchema<Schema$User> {
   constructor(payload: Partial<User>) {
     Object.assign(this, payload);
   }
-
-  // toJSON(): User {
-  //   return new User(this);
-  // }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

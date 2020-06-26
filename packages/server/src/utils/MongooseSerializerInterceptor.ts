@@ -1,21 +1,59 @@
 import { classToPlain } from 'class-transformer';
 import { isObject } from 'class-validator';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { FastifyRequest } from 'fastify';
+import { Reflector } from '@nestjs/core';
 import {
   Injectable,
-  ClassSerializerInterceptor,
-  PlainLiteralObject
+  PlainLiteralObject,
+  ExecutionContext,
+  NestInterceptor,
+  CallHandler,
+  Inject,
+  Optional,
+  Type,
+  Scope
 } from '@nestjs/common';
+import { CLASS_SERIALIZER_OPTIONS } from '@nestjs/common/serializer/class-serializer.constants';
 import { ClassTransformOptions } from '@nestjs/common/interfaces/external/class-transform-options.interface';
-import { PaginateResult } from '@fullstack/typings';
+import { PaginateResult, UserRole } from '@fullstack/typings';
 
-@Injectable()
-export class MongooseSerializerInterceptor extends ClassSerializerInterceptor {
+type Res =
+  | PlainLiteralObject
+  | Array<PlainLiteralObject>
+  | PaginateResult<unknown>;
+
+@Injectable({ scope: Scope.REQUEST })
+export class MongooseSerializerInterceptor implements NestInterceptor {
+  constructor(
+    @Inject(Reflector) protected readonly reflector: Reflector,
+    @Optional() protected readonly defaultOptions: ClassTransformOptions = {}
+  ) {}
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const contextOptions = this.getContextOptions(context);
+    const req = context.switchToHttp().getRequest<FastifyRequest>();
+    const role = UserRole[req?.user?.role];
+
+    const options = {
+      ...this.defaultOptions,
+      ...contextOptions
+    };
+
+    return next.handle().pipe(
+      map((res: Res) =>
+        this.serialize(res, {
+          ...options,
+          groups: [...(options.groups || []), role]
+        })
+      )
+    );
+  }
+
   serialize(
-    response:
-      | PlainLiteralObject
-      | Array<PlainLiteralObject>
-      | PaginateResult<unknown>,
+    response: Res,
     options: ClassTransformOptions
   ): PlainLiteralObject | PlainLiteralObject[] {
     const isArray = Array.isArray(response);
@@ -49,5 +87,21 @@ export class MongooseSerializerInterceptor extends ClassSerializerInterceptor {
     return plainOrClass && plainOrClass.constructor !== Object
       ? classToPlain(plainOrClass, options)
       : plainOrClass;
+  }
+
+  getContextOptions(
+    context: ExecutionContext
+  ): ClassTransformOptions | undefined {
+    return (
+      this.reflectSerializeMetadata(context.getHandler()) ||
+      this.reflectSerializeMetadata(context.getClass())
+    );
+  }
+
+  reflectSerializeMetadata(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    obj: Function | Type<any>
+  ): ClassTransformOptions | undefined {
+    return this.reflector.get(CLASS_SERIALIZER_OPTIONS, obj);
   }
 }
