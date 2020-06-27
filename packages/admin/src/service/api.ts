@@ -10,9 +10,13 @@ function isJWT(data: any): data is JWTSignResult {
   return !!(data && data.expiry && data.token);
 }
 
-const authPaths = ['/auth/login'];
-const authRegex = new RegExp(`(${authPaths.join('|').replace(/\//g, '\\/')})`);
-const isAuthUrl = (url?: string) => url && authRegex.test(url);
+const authRegex = /\/auth\.*/;
+const exlcudePaths = ['register/admin'];
+const excludeRegex = new RegExp(
+  `(${exlcudePaths.join('|').replace(/\//g, '\\/')})`
+);
+const isAuthUrl = (url?: string) =>
+  url && authRegex.test(url) && !excludeRegex.test(url);
 
 export const api = axios.create({
   baseURL: '/api'

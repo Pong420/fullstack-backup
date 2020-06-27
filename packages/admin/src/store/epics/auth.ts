@@ -1,5 +1,5 @@
 import { of, merge, empty, defer } from 'rxjs';
-import { switchMap, mergeMap } from 'rxjs/operators';
+import { switchMap, mergeMap, catchError } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
@@ -54,7 +54,8 @@ const loginEpic: AuthEpic = (action$, state$) =>
               ? of<Actions>(replace(redirect, {}))
               : empty()
           );
-        })
+        }),
+        catchError(() => of<Actions>({ type: AuthActionTypes.FAILURE }))
       );
     })
   );
