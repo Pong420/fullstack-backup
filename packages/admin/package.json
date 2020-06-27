@@ -1,0 +1,45 @@
+{
+  "name": "@fullstack/admin",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint 'src/**/*.ts?(x)'",
+    "component": "node scripts/component.js",
+    "redux": "node scripts/redux.js",
+    "get": "node scripts/type.js"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.14",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "pong-react-scripts": "^3.4.0",
+    "prettier": "^2.0.5",
+    "sass": "^1.26.9",
+    "typescript": "3.9.5"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "react/self-closing-comp": "warn"
+    }
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
