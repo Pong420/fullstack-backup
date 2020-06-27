@@ -5,9 +5,12 @@ import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
 import { mockAdmin } from './utils/constants';
 import { extractCookies } from './utils/extractCookies';
+import { CreateUserDto, createUser } from './utils/user';
 
 describe('AuthController (e2e)', () => {
   const configService = app.get<ConfigService>(ConfigService);
+  const jwtExpires =
+    configService.get<number>('JWT_TOKEN_EXPIRES_IN_MINUTES') * 60 * 1000;
   const refreshTokenExpires =
     configService.get<number>('REFRESH_TOKEN_EXPIRES_IN_MINUTES') * 60 * 1000;
   let admin: User;
@@ -29,6 +32,13 @@ describe('AuthController (e2e)', () => {
     return cookie;
   }
 
+  function registerAdmin(dto: CreateUserDto, token: string) {
+    return request
+      .post('/api/auth/register/admin')
+      .set('Authorization', `bearer ${token}`)
+      .send(dto);
+  }
+
   describe('Login', () => {
     it('Login with default admin', async done => {
       let response = await loginAsDefaultAdmin();
@@ -36,10 +46,7 @@ describe('AuthController (e2e)', () => {
       expect(response.body.data).toMatchObject({ isDefaultAc: true });
 
       // Register an admin
-      response = await request
-        .post('/api/auth/register/admin')
-        .set('Authorization', `bearer ${response.body.data.token}`)
-        .send(mockAdmin);
+      response = await registerAdmin(mockAdmin, response.body.data.token);
 
       expect(response.status).toBe(HttpStatus.CREATED);
       admin = response.body.data;
@@ -94,5 +101,16 @@ describe('AuthController (e2e)', () => {
     const cookies = extractCookies(response.header);
     const cookie = cookies[REFRESH_TOKEN_COOKIES];
     expect(cookie.value).toBe('');
+  });
+
+  it.skip('JWT expires', async () => {
+    const token = await getToken(
+      admin ? login(mockAdmin) : loginAsDefaultAdmin()
+    );
+    let response = await registerAdmin(createUser(), token);
+    expect(response.status).toBe(HttpStatus.CREATED);
+    await delay(jwtExpires * 2);
+    response = await registerAdmin(createUser(), token);
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 });

@@ -58,10 +58,7 @@ export class AuthService {
     const now = +new Date();
     const payload: JWTSignPayload = { user_id, role, username };
     return {
-      token: this.jwtService.sign({
-        ...payload,
-        iat: now
-      }),
+      token: this.jwtService.sign(payload),
       expiry: new Date(
         now +
           this.configService.get<number>('JWT_TOKEN_EXPIRES_IN_MINUTES') *

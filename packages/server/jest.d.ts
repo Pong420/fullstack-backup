@@ -24,7 +24,7 @@ declare global {
   let login: (payload: Login) => Promise<Response>;
   let loginAsDefaultAdmin: () => Promise<Response>;
   let createAndLogin: CreateAndLogin;
-  let getToken: (payload: Promise<Response>) => Promise<string>;
+  let getToken: (payload: Response | Promise<Response>) => Promise<string>;
 
   namespace NodeJS {
     interface Global {
@@ -33,7 +33,7 @@ declare global {
       login: (payload: Login) => Promise<Response>;
       loginAsDefaultAdmin: () => Promise<Response>;
       createAndLogin: CreateAndLogin;
-      getToken: (payload: Promise<Response>) => Promise<string>;
+      getToken: (payload: Response | Promise<Response>) => Promise<string>;
     }
   }
 }

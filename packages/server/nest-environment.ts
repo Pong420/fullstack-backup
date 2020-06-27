@@ -49,8 +49,12 @@ export default class NestNodeEnvironment extends NodeEnvironment {
       const request = supertest(app.getHttpServer());
       const login = async (payload: Login): Promise<Response> =>
         request.post('/api/auth/login').send(payload);
-      const getToken = (payload: Promise<Response>): Promise<string> =>
-        payload.then(res => res.body.data.token);
+      const getToken = (
+        payload: Response | Promise<Response>
+      ): Promise<string> =>
+        (payload instanceof Promise ? payload : Promise.resolve(payload)).then(
+          res => res.body.data.token
+        );
 
       const createAndLogin = async (
         adminToken: string,
