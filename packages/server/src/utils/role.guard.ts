@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@fullstack/typings';
 import { Expose, ExposeOptions } from 'class-transformer';
 
-type AccessType = keyof typeof UserRole | 'EVERYONE';
+type AccessType = keyof typeof UserRole | 'EVERYONE' | 'SELF';
 
 export const Access = (...access: AccessType[]): CustomDecorator<string> =>
   SetMetadata('access', access);
@@ -41,6 +41,7 @@ export class RoleGuard extends AuthGuard('jwt') {
     }
 
     const canActive = super.canActivate(context);
+
     const source$ =
       typeof canActive === 'boolean' ? of(canActive) : from(canActive);
 
@@ -48,9 +49,13 @@ export class RoleGuard extends AuthGuard('jwt') {
       map(active => {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
+          const id: string | null = req.params?.id;
+          const user = req.user || {};
+
+          if (access.includes('SELF') && id && id === user.id) return true;
 
           return access.length
-            ? access.includes(UserRole[req.user.role] as AccessType)
+            ? access.includes(UserRole[user.role] as AccessType)
             : true;
         }
         return false;

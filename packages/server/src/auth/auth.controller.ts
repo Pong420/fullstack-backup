@@ -12,17 +12,17 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserRole } from '@fullstack/typings';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
-import { transformResponse } from '../utils/ResponseInterceptor';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
-import { JWTSignPayload } from '../typings';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/schemas/user.schema';
-import { IsObjectId } from '../utils/ParseObjectIdPipe';
-import { throwMongoError } from '../utils/MongooseExceptionFilter';
 import { RefreshTokenModel } from '../refresh-token/schemas/refreshToken.schema';
-import { AuthService } from './auth.service';
+import { JWTSignPayload } from '../typings';
+import { transformResponse } from '../utils/ResponseInterceptor';
+import { throwMongoError } from '../utils/MongooseExceptionFilter';
 import { Access } from '../utils/role.guard';
+import { IsObjectId } from '../decorators';
 
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 

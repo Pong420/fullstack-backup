@@ -3,7 +3,6 @@ import { IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import {
   Body,
-  Param,
   Get,
   Post,
   Patch,
@@ -13,9 +12,11 @@ import {
 } from '@nestjs/common';
 import { PaginateResult, Param$Pagination } from '@fullstack/typings';
 import { MongooseCRUDService } from './MongooseCRUDService';
-import { ParseObjectIdPipe } from './ParseObjectIdPipe';
 import { formatSearchQuery } from './formatSearchQuery';
+import { ObjectId } from '../decorators';
 import { Order, Condition } from '../typings';
+
+export { PaginateResult } from '@fullstack/typings';
 
 type Schema = { [K in keyof Param$Pagination]: unknown };
 export class PaginationDto implements Schema {
@@ -41,7 +42,7 @@ export class SearchDto {
   search?: string;
 }
 
-export type QueryAll<D> = PaginationDto & SearchDto & FilterQuery<D>;
+export type QueryAll<T> = PaginationDto & SearchDto & FilterQuery<T>;
 
 interface Options<T> {
   searchKeys?: (keyof T)[];
@@ -63,9 +64,6 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
       sort = { createdAt: Order.DESC },
       ...fullMatches
     } = query;
-
-    // TODO: make this better
-    delete fullMatches.password;
 
     return this.service.paginate(
       {
@@ -89,7 +87,7 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   }
 
   @Get(':id')
-  async get(@Param('id', new ParseObjectIdPipe()) id: string): Promise<T> {
+  async get(@ObjectId() id: string): Promise<T> {
     const result = await this.service.findOne({ _id: id } as FilterQuery<D>);
     if (result) {
       return result;
@@ -99,16 +97,14 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
 
   @Patch(':id')
   async update(
-    @Param('id', new ParseObjectIdPipe()) id: string,
+    @ObjectId() id: string,
     @Body() changes: UpdateQuery<D>
   ): Promise<T> {
     return this.service.update({ _id: id } as any, changes);
   }
 
   @Delete(':id')
-  async delete(
-    @Param('id', new ParseObjectIdPipe()) id: string
-  ): Promise<void> {
+  async delete(@ObjectId() id: string): Promise<void> {
     await this.service.delete({ _id: id } as FilterQuery<D>);
   }
 }

@@ -34,7 +34,7 @@ export class User implements MongoSchema<Schema$User> {
   role: UserRole;
 
   @Prop({ default: null })
-  avatar: string;
+  avatar: string | null;
 
   @Prop({
     type: String,

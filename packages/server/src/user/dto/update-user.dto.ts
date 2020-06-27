@@ -8,8 +8,8 @@ import {
 import { Required$UpdateUser, UserRole } from '@fullstack/typings';
 
 export class UpdateUser implements Partial<Required$UpdateUser> {
-  @IsString()
-  id: string;
+  @IsEmpty()
+  id?: string;
 
   @IsOptional()
   @IsEmail()
