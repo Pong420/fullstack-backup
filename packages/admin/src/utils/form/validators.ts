@@ -82,13 +82,6 @@ export const maxLength = lengthComparation(
   (length, maxLength) => length <= maxLength
 );
 
-export const passwordFormat = (
-  msg: string = 'Password must contain number and english character'
-): Validator => (_, value) =>
-  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,20}$/.test(value)
-    ? Promise.resolve()
-    : Promise.reject(msg);
-
 export const shouldBeEqual = (val: any, msg: string): Validator => (_, value) =>
   value === val ? Promise.resolve() : Promise.reject(msg);
 
@@ -96,3 +89,8 @@ export const shouldNotBeEqual = (val: any, msg: string): Validator => (
   _,
   value
 ) => (value !== val ? Promise.resolve() : Promise.reject(msg));
+
+export const regex = (regex: RegExp, msg: string): Validator => (_, value) => {
+  const valid = typeof value === 'string' ? regex.test(value) : false;
+  return valid ? Promise.resolve() : Promise.reject(msg);
+};

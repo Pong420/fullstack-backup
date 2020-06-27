@@ -8,22 +8,21 @@
   box-sizing: border-box;
 }
 
-html {
-  height: 100%;
-}
-
 html,
 body,
 #root {
+  height: 100%;
   min-height: 100%;
 }
 
 body {
+  background-color: $light-gray5;
+  color: $dark-gray5;
+  font-family: 'Muli', #{$pt-font-family};
+  font-size: $pt-font-size;
   margin: 0;
+  overflow: auto;
   padding: 0;
-  font-family: Helvetica, Arial, 微軟正黑體, Microsoft JhengHei, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 img {

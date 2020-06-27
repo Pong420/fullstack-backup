@@ -9,7 +9,7 @@
     "admin": "yarn workspace @fullstack/admin",
     "server": "yarn workspace @fullstack/server",
     "typings": "yarn workspace @fullstack/typings",
-    "dev": "yarn workspaces foreach -p -i run dev ",
+    "dev": "yarn workspaces foreach -pi run dev ",
     "postinstall": "yarn typings build"
   },
   "workspaces": ["packages/*"],

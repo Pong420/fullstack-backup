@@ -7,7 +7,7 @@ export function ValidUsername(): ReturnType<typeof applyDecorators> {
     MinLength(6),
     MaxLength(20),
     Matches(/^[a-z][a-z0-9]*$/i, {
-      message: 'Username must be english character or alphanumeric '
+      message: 'Username must be english character or alphanumeric'
     })
   );
 }

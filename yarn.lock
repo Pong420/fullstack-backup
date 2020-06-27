@@ -1649,6 +1649,7 @@ __metadata:
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.9
     "@types/react-router-dom": ^5.1.5
+    "@types/validator": ^13
     axios: ^0.19.2
     pong-react-scripts: ^3.4.0
     prettier: ^2.0.5
@@ -1658,7 +1659,9 @@ __metadata:
     react-router-dom: ^5.2.0
     rxjs: ^6.5.5
     sass: ^1.26.9
+    typeface-muli: ^1.1.3
     typescript: 3.9.5
+    validator: ^13.1.1
   languageName: unknown
   linkType: soft
 
@@ -2949,6 +2952,13 @@ __metadata:
   version: 13.0.0
   resolution: "@types/validator@npm:13.0.0"
   checksum: 22cd062bf92c81939c7610f94252a1997b0ed4d67f5f39c36db0d28dfb17d554077b8c7abe70cf91bb38bc69d2ec0110e4ccd7cc3a98e177ddcf5bbe2c654426
+  languageName: node
+  linkType: hard
+
+"@types/validator@npm:^13":
+  version: 13.1.0
+  resolution: "@types/validator@npm:13.1.0"
+  checksum: 0a0d0f89d6e111ea7428319efeb983291d8e091d20ed75a90f4ef4a89a4f5b1434e66399f875c280ecfb389c71ecd6b12505cddc4855186d4d04c0f9499e1b65
   languageName: node
   linkType: hard
 
@@ -17000,6 +17010,13 @@ resolve@1.15.0:
   languageName: node
   linkType: hard
 
+"typeface-muli@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "typeface-muli@npm:1.1.3"
+  checksum: 19b7d635cb3d990822500dd077336119c25f306ca0437e16b5201d5df9ca1ec54429060cc4adef3b21e5dd3cd0870b611bf4998ffd62c4d63132137cc7e1f8ff
+  languageName: node
+  linkType: hard
+
 "typescript@3.9.5, typescript@^3.6.4, typescript@^3.9.5":
   version: 3.9.5
   resolution: "typescript@npm:3.9.5"
@@ -17325,6 +17342,13 @@ resolve@1.15.0:
   version: 13.0.0
   resolution: "validator@npm:13.0.0"
   checksum: c537ecd87c245aad5466a3821c9f87909d6ddd695daddc37691863a79b481a7efc0f3d3e88d0bf001d8d9c64fb4151c4e7a92fe060899c86d8ad9c334dceac2d
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.1.1":
+  version: 13.1.1
+  resolution: "validator@npm:13.1.1"
+  checksum: deca81bd2e5debfa8f3c214658fb5a3df06c10f153ed0b2a332d2782090d47988a54d8c7bc7b743d47797157921ac3e5425b53f4bf02c89910b5e3bbb80e5ab5
   languageName: node
   linkType: hard
 
