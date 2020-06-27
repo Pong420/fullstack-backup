@@ -25,10 +25,13 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.29.0",
+    "@fullstack/typings": "workspace:packages/typings",
+    "axios": "^0.19.2",
     "rc-field-form": "^1.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "rxjs": "^6.5.5"
   },
   "eslintConfig": {
     "extends": "react-app",

@@ -1643,17 +1643,20 @@ __metadata:
   resolution: "@fullstack/admin@workspace:packages/admin"
   dependencies:
     "@blueprintjs/core": ^3.29.0
+    "@fullstack/typings": "workspace:packages/typings"
     "@types/node": ^14.0.14
     "@types/react": ^16.9.41
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.9
     "@types/react-router-dom": ^5.1.5
+    axios: ^0.19.2
     pong-react-scripts: ^3.4.0
     prettier: ^2.0.5
     rc-field-form: ^1.5.0
     react: ^16.13.1
     react-dom: ^16.13.1
     react-router-dom: ^5.2.0
+    rxjs: ^6.5.5
     sass: ^1.26.9
     typescript: 3.9.5
   languageName: unknown
@@ -4148,7 +4151,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:0.19.2":
+"axios@npm:0.19.2, axios@npm:^0.19.2":
   version: 0.19.2
   resolution: "axios@npm:0.19.2"
   dependencies:
