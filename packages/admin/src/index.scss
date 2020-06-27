@@ -1,20 +1,27 @@
+@import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import '~@blueprintjs/select/lib/css/blueprint-select.css';
+
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 html,
 body,
 #root {
-  min-height: 100vh;
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-
   font-family: Helvetica, Arial, 微軟正黑體, Microsoft JhengHei, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
