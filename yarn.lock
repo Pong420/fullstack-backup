@@ -1644,24 +1644,27 @@ __metadata:
   dependencies:
     "@blueprintjs/core": ^3.29.0
     "@fullstack/typings": "workspace:packages/typings"
+    "@pong420/redux-crud": ^1.4.5
     "@types/node": ^14.0.14
     "@types/react": ^16.9.41
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.9
     "@types/react-router-dom": ^5.1.5
-    "@types/validator": ^13
     axios: ^0.19.2
+    connected-react-router: ^6.8.0
+    history: ^4.10.1
     pong-react-scripts: ^3.4.0
-    prettier: ^2.0.5
     rc-field-form: ^1.5.0
     react: ^16.13.1
     react-dom: ^16.13.1
+    react-redux: ^7.2.0
     react-router-dom: ^5.2.0
+    redux: ^4.0.5
+    redux-observable: ^1.2.0
     rxjs: ^6.5.5
     sass: ^1.26.9
     typeface-muli: ^1.1.3
     typescript: 3.9.5
-    validator: ^13.1.1
   languageName: unknown
   linkType: soft
 
@@ -1675,6 +1678,7 @@ __metadata:
     "@nestjs/common": ^7.2.0
     "@nestjs/config": ^0.5.0
     "@nestjs/core": ^7.2.0
+    "@nestjs/jwt": ^7.0.0
     "@nestjs/mongoose": ^7.0.1
     "@nestjs/passport": ^7.0.0
     "@nestjs/platform-fastify": ^7.2.0
@@ -1699,6 +1703,7 @@ __metadata:
     mongoose: ^5.9.19
     mongoose-paginate-v2: ^1.3.9
     passport: ^0.4.1
+    passport-jwt: ^4.0.0
     passport-local: ^1.0.0
     prettier: ^2.0.5
     reflect-metadata: ^0.1.13
@@ -2221,6 +2226,15 @@ __metadata:
   bin:
     opencollective: bin/opencollective.js
   checksum: e118f103639802e8daeee125dc7c9f67ba36faf83bbb8823441c4c81b891cfc51ea0b8dd937f5cd484d4d75885c92674f381d01cdc5bddfbf52bc1375492db56
+  languageName: node
+  linkType: hard
+
+"@pong420/redux-crud@npm:^1.4.5":
+  version: 1.4.5
+  resolution: "@pong420/redux-crud@npm:1.4.5"
+  dependencies:
+    qs: ^6.9.1
+  checksum: c12418d722efcbcc99ead5e97b3208bd511ba1cb66a17de2e397223253a7a00b7cfcb5c5a9cf874edc17c01091abb6739ceff3b9c990b81fd8834ec8f3657f76
   languageName: node
   linkType: hard
 
@@ -2893,12 +2907,12 @@ __metadata:
   linkType: hard
 
 "@types/superagent@npm:*":
-  version: 4.1.7
-  resolution: "@types/superagent@npm:4.1.7"
+  version: 4.1.8
+  resolution: "@types/superagent@npm:4.1.8"
   dependencies:
     "@types/cookiejar": "*"
     "@types/node": "*"
-  checksum: 1e548d4f9331c814ce4ce069e1f5a723df678d92109dedcbb222e5a61c58731fecc48ce38f2fe027fec8cee560b3919e4e83f681f12a43298252ba3f30762fca
+  checksum: e52885b990219ec20f0efbcf7c8aa355b293350738a5a2ef8448e0923279da18cc55b1e3b0df74833802336e275ea91a5edbdd254cf1be609ef736ca54ef2ea4
   languageName: node
   linkType: hard
 
@@ -2952,13 +2966,6 @@ __metadata:
   version: 13.0.0
   resolution: "@types/validator@npm:13.0.0"
   checksum: 22cd062bf92c81939c7610f94252a1997b0ed4d67f5f39c36db0d28dfb17d554077b8c7abe70cf91bb38bc69d2ec0110e4ccd7cc3a98e177ddcf5bbe2c654426
-  languageName: node
-  linkType: hard
-
-"@types/validator@npm:^13":
-  version: 13.1.0
-  resolution: "@types/validator@npm:13.1.0"
-  checksum: 0a0d0f89d6e111ea7428319efeb983291d8e091d20ed75a90f4ef4a89a4f5b1434e66399f875c280ecfb389c71ecd6b12505cddc4855186d4d04c0f9499e1b65
   languageName: node
   linkType: hard
 
@@ -5520,6 +5527,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"connected-react-router@npm:^6.8.0":
+  version: 6.8.0
+  resolution: "connected-react-router@npm:6.8.0"
+  dependencies:
+    prop-types: ^15.7.2
+  peerDependencies:
+    history: ^4.7.2
+    immutable: ^3.8.1 || ^4.0.0-rc.1
+    react: ^16.4.0
+    react-redux: ^6.0.0 || ^7.1.0
+    react-router: ^4.3.1 || ^5.0.0
+    redux: ^3.6.0 || ^4.0.0
+    seamless-immutable: ^7.1.3
+  checksum: 480dd39cbe57edad1c0dffd1ee623a27fe13bb3d1e542bb911dee5b1a0b2d1a76964b397f05c427a08b684b26d6926cf8418f3d674915f13916a43e558528131
+  languageName: node
+  linkType: hard
+
 "consola@npm:^2.3.0":
   version: 2.14.0
   resolution: "consola@npm:2.14.0"
@@ -6903,19 +6927,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^6.11.0":
-  version: 6.11.0
-  resolution: "eslint-config-prettier@npm:6.11.0"
-  dependencies:
-    get-stdin: ^6.0.0
-  peerDependencies:
-    eslint: ">=3.14.1"
-  bin:
-    eslint-config-prettier-check: bin/cli.js
-  checksum: 59efd906c78d47753a673c205ef515fdab19cd6ea0fd992c9cb2366804861746238244526ab565ccc7448569f5472ce7646a77d0c9998787192e4ebae95df71d
-  languageName: node
-  linkType: hard
-
 "eslint-config-react-app@npm:^5.1.0, eslint-config-react-app@npm:^5.2.1":
   version: 5.2.1
   resolution: "eslint-config-react-app@npm:5.2.1"
@@ -7181,7 +7192,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:6.6.0":
+"eslint@npm:6.6.0, eslint@npm:^6.6.0":
   version: 6.6.0
   resolution: "eslint@npm:6.6.0"
   dependencies:
@@ -7225,53 +7236,6 @@ __metadata:
   bin:
     eslint: ./bin/eslint.js
   checksum: e593370f38c42dc5333f2052941ee8199aa194c6753d2d83d195f895c788ac131eead9b0b80ab40c3a972f6907c9573f793f7dd856da6e55a6bf4342a8976b12
-  languageName: node
-  linkType: hard
-
-"eslint@npm:^6.6.0":
-  version: 6.8.0
-  resolution: "eslint@npm:6.8.0"
-  dependencies:
-    "@babel/code-frame": ^7.0.0
-    ajv: ^6.10.0
-    chalk: ^2.1.0
-    cross-spawn: ^6.0.5
-    debug: ^4.0.1
-    doctrine: ^3.0.0
-    eslint-scope: ^5.0.0
-    eslint-utils: ^1.4.3
-    eslint-visitor-keys: ^1.1.0
-    espree: ^6.1.2
-    esquery: ^1.0.1
-    esutils: ^2.0.2
-    file-entry-cache: ^5.0.1
-    functional-red-black-tree: ^1.0.1
-    glob-parent: ^5.0.0
-    globals: ^12.1.0
-    ignore: ^4.0.6
-    import-fresh: ^3.0.0
-    imurmurhash: ^0.1.4
-    inquirer: ^7.0.0
-    is-glob: ^4.0.0
-    js-yaml: ^3.13.1
-    json-stable-stringify-without-jsonify: ^1.0.1
-    levn: ^0.3.0
-    lodash: ^4.17.14
-    minimatch: ^3.0.4
-    mkdirp: ^0.5.1
-    natural-compare: ^1.4.0
-    optionator: ^0.8.3
-    progress: ^2.0.0
-    regexpp: ^2.0.1
-    semver: ^6.1.2
-    strip-ansi: ^5.2.0
-    strip-json-comments: ^3.0.1
-    table: ^5.2.3
-    text-table: ^0.2.0
-    v8-compile-cache: ^2.0.3
-  bin:
-    eslint: ./bin/eslint.js
-  checksum: 796be0e038188d4cd8062541394d29f35606a7cee00cead5f6c8e3f9db932f0d19ee946df16fd593e0bcd614f896a416afa916bf82d9420576537ac349f2a06d
   languageName: node
   linkType: hard
 
@@ -8242,12 +8206,10 @@ fsevents@^1.2.7:
   version: 0.0.0-use.local
   resolution: "fullstack@workspace:."
   dependencies:
-    "@nestjs/jwt": ^7.0.0
     "@typescript-eslint/eslint-plugin": ^3.3.0
     "@typescript-eslint/parser": ^3.3.0
     babel-eslint: 10.0.3
     eslint: 6.6.0
-    eslint-config-prettier: ^6.11.0
     eslint-config-react-app: ^5.2.1
     eslint-plugin-flowtype: ^5.1.3
     eslint-plugin-import: ^2.21.2
@@ -8257,7 +8219,6 @@ fsevents@^1.2.7:
     husky: ^4.2.5
     jest: 24.9.0
     lint-staged: ^10.2.11
-    passport-jwt: ^4.0.0
     prettier: ^2.0.5
     rimraf: ^3.0.2
   languageName: unknown
@@ -8325,13 +8286,6 @@ fsevents@^1.2.7:
   version: 5.1.1
   resolution: "get-port@npm:5.1.1"
   checksum: 75a5af5cef1e601cfa5a071d1b205ba94338f69f83f1092039bdf8e15351a76f5e6b7df7d3987bd3b7ad5d6893759d2bc28d36d8a4ee65976c3868d7efe7cf8c
-  languageName: node
-  linkType: hard
-
-"get-stdin@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "get-stdin@npm:6.0.0"
-  checksum: b51d664838aef7f8353dc57371ce59cea54d8d584fec015a9d89d24561e95b97806d5b5ba120bc81574c9ed63cb3e210176ffa0ff9263c7e7ba4d56d0fe54913
   languageName: node
   linkType: hard
 
@@ -8433,15 +8387,6 @@ fsevents@^1.2.7:
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
   checksum: 2563d3306a7e646fd9ec484b0ca29bf8847d9dc6ebbe86026f11e31bda04f420f6536c2decbd4cb96350379801d2cce352ab373c40be8b024324775b31f882f9
-  languageName: node
-  linkType: hard
-
-"globals@npm:^12.1.0":
-  version: 12.4.0
-  resolution: "globals@npm:12.4.0"
-  dependencies:
-    type-fest: ^0.8.1
-  checksum: 0b9764bdeab0bc9762dea8954a0d4c5db029420bd8bf693df9098ce7e045ccaf9b2d259185396fd048b051d42fdc8dc7ab02af62e3dbeb2324a78a05aac8d33c
   languageName: node
   linkType: hard
 
@@ -8664,7 +8609,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"history@npm:^4.9.0":
+"history@npm:^4.10.1, history@npm:^4.9.0":
   version: 4.10.1
   resolution: "history@npm:4.10.1"
   dependencies:
@@ -12413,7 +12358,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"optionator@npm:^0.8.1, optionator@npm:^0.8.2, optionator@npm:^0.8.3":
+"optionator@npm:^0.8.1, optionator@npm:^0.8.2":
   version: 0.8.3
   resolution: "optionator@npm:0.8.3"
   dependencies:
@@ -14244,7 +14189,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.5.1, qs@npm:^6.9.4":
+"qs@npm:^6.5.1, qs@npm:^6.9.1, qs@npm:^6.9.4":
   version: 6.9.4
   resolution: "qs@npm:6.9.4"
   checksum: beba62d1e1c66e9888cc08a488eb95771c252a92289a96bff4b767a49e4e7afe9487d7ee3269b856292d8281b855ac5eac927c2e77f845e407ee4fe54743fea7
@@ -14447,7 +14392,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.12.0, react-is@npm:^16.6.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1, react-is@npm:^16.8.4":
+"react-is@npm:^16.12.0, react-is@npm:^16.6.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1, react-is@npm:^16.8.4, react-is@npm:^16.9.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 11bcf1267a314a522615f626f3ce3727a3a24cdbf61c4d452add3550a7875326669631326cfb1ba3e92b6f72244c32ffecf93ad21c0cad8455d3e169d0e3f060
@@ -14475,6 +14420,29 @@ fsevents@^1.2.7:
   peerDependencies:
     react: 0.14.x || ^15.0.0 || ^16.0.0
   checksum: 09ef58054bd9d449283939af861cbb205aee771289884fa62e30a6927163fab53e865593c0e014364d807a8e219d9642be6d34ae58b1e4f2f0530ffc9b289e5a
+  languageName: node
+  linkType: hard
+
+"react-redux@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "react-redux@npm:7.2.0"
+  dependencies:
+    "@babel/runtime": ^7.5.5
+    hoist-non-react-statics: ^3.3.0
+    loose-envify: ^1.4.0
+    prop-types: ^15.7.2
+    react-is: ^16.9.0
+  peerDependencies:
+    react: ^16.8.3
+    react-dom: "*"
+    react-native: "*"
+    redux: ^2.0.0 || ^3.0.0 || ^4.0.0-0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: e4beaa6064a5354f65bdeaf22c90fb8bf3df1ec0bcecf7c568321c6eba0cdf4b432236a828cb53801c5815a83d5090f38738f67ed14fb8cfddd21abe5fba317c
   languageName: node
   linkType: hard
 
@@ -14656,7 +14624,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0":
+"redux-observable@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "redux-observable@npm:1.2.0"
+  peerDependencies:
+    redux: ">=4 <5"
+    rxjs: ">=6.0.0-beta.0 <7"
+  checksum: e9405ed5f9725dda0afbcc2a0a4693be2a08836bc5ee591748c778331c0530b055dca6068f1b280e3a1516f4a1af137f8a35558fa77632bbe016adcef4bf98bb
+  languageName: node
+  linkType: hard
+
+"redux@npm:^4.0.0, redux@npm:^4.0.5":
   version: 4.0.5
   resolution: "redux@npm:4.0.5"
   dependencies:
@@ -16965,13 +16943,6 @@ resolve@1.15.0:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "type-fest@npm:0.8.1"
-  checksum: f8c4b4249f52e8bea7a4fc55b3653c96c2d547240e4c772e001d02b7cc38b8c3eb493ab9fbe985a76a203cd1aa7044776b728a71ba12bf36e7131f989597885b
-  languageName: node
-  linkType: hard
-
 "type-is@npm:~1.6.17, type-is@npm:~1.6.18":
   version: 1.6.18
   resolution: "type-is@npm:1.6.18"
@@ -17342,13 +17313,6 @@ resolve@1.15.0:
   version: 13.0.0
   resolution: "validator@npm:13.0.0"
   checksum: c537ecd87c245aad5466a3821c9f87909d6ddd695daddc37691863a79b481a7efc0f3d3e88d0bf001d8d9c64fb4151c4e7a92fe060899c86d8ad9c334dceac2d
-  languageName: node
-  linkType: hard
-
-"validator@npm:^13.1.1":
-  version: 13.1.1
-  resolution: "validator@npm:13.1.1"
-  checksum: deca81bd2e5debfa8f3c214658fb5a3df06c10f153ed0b2a332d2782090d47988a54d8c7bc7b743d47797157921ac3e5425b53f4bf02c89910b5e3bbb80e5ab5
   languageName: node
   linkType: hard
 

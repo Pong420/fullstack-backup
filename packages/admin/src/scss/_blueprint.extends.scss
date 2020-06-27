@@ -12,9 +12,9 @@ $help-line-height: 1em;
 
   .rc-form-item-help {
     color: $error-color;
-    margin-top: 3px;
+    margin-top: 5px;
     font-size: 14px;
-    height: $help-line-height;
+    min-height: $help-line-height;
     line-height: $help-line-height;
   }
 

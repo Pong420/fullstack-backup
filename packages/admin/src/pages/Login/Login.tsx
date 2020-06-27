@@ -4,15 +4,20 @@ import { Param$Login } from '@fullstack/typings';
 import { CardWithLogo } from '../../components/CardWithLogo';
 import { Input, Password } from '../../components/Input';
 import { createForm, validators } from '../../utils/form';
+import { useAuthActions, loginStatusSelector } from '../../store';
+import { useSelector } from 'react-redux';
 
 const { Form, FormItem } = createForm<Param$Login>();
 const initialValues: Param$Login = { username: '', password: '' };
 
 export function Login() {
+  const { authorize } = useAuthActions();
+  const loading = useSelector(loginStatusSelector) === 'loading';
+
   return (
     <div className="login">
       <CardWithLogo title="LOGIN">
-        <Form initialValues={initialValues}>
+        <Form initialValues={initialValues} onFinish={authorize}>
           <FormItem
             name="username"
             label="Username"
@@ -41,11 +46,16 @@ export function Login() {
             <Password />
           </FormItem>
 
-          <Button fill type="submit" intent="primary">
+          <Button fill type="submit" intent="primary" loading={loading}>
             Login
           </Button>
 
-          <Button fill minimal className="goto-guest-registration">
+          <Button
+            fill
+            minimal
+            className="goto-guest-registration"
+            disabled={loading}
+          >
             Register as Guest
           </Button>
         </Form>

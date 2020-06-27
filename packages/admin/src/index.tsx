@@ -2,15 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import configureStore, { history } from './store';
 import { FocusStyleManager } from '@blueprintjs/core';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
 
 import 'typeface-muli';
 import './index.scss';
 
+const store = configureStore();
+
 FocusStyleManager.onlyShowFocusOnTabs();
 
 function render() {
-  return ReactDOM.render(<App />, document.getElementById('root'));
+  return ReactDOM.render(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
+  );
 }
 
 render();
