@@ -9,7 +9,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserRole, JWTSignPayload } from '@fullstack/typings';
+import { UserRole, JWTSignPayload, Schema$Login } from '@fullstack/typings';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './auth.service';
@@ -17,11 +17,12 @@ import { UserService } from '../user/user.service';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/schemas/user.schema';
-import { RefreshTokenModel } from '../refresh-token/schemas/refreshToken.schema';
+import { RefreshToken } from '../refresh-token/schemas/refreshToken.schema';
 import { transformResponse } from '../utils/ResponseInterceptor';
 import { throwMongoError } from '../utils/MongooseExceptionFilter';
 import { Access } from '../utils/role.guard';
 import { IsObjectId } from '../decorators';
+import { formatJWTSignPayload } from './dto/JWTSignDto';
 
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
@@ -53,7 +54,7 @@ export class AuthController {
     @Res() reply: FastifyReply
   ): Promise<FastifyReply> {
     const user: JWTSignPayload = req.user;
-    const sign = this.authService.signJwt(user);
+    const signPayload = this.authService.signJwt(user);
     const refreshToken = uuidv4();
 
     try {
@@ -74,8 +75,8 @@ export class AuthController {
       )
       .status(HttpStatus.OK)
       .send(
-        transformResponse(HttpStatus.OK, {
-          ...sign,
+        transformResponse<Schema$Login>(HttpStatus.OK, {
+          ...signPayload,
           user,
           isDefaultAc: !IsObjectId(user.user_id)
         })
@@ -91,7 +92,7 @@ export class AuthController {
 
     if (tokenFromCookies) {
       const newRefreshToken = uuidv4();
-      let refreshToken: RefreshTokenModel | null = null;
+      let refreshToken: RefreshToken | null = null;
 
       try {
         refreshToken = await this.refreshTokenService.update(
@@ -103,7 +104,7 @@ export class AuthController {
       }
 
       if (refreshToken) {
-        const payload = this.authService.signJwt(refreshToken.toJSON());
+        const signResult = this.authService.signJwt(refreshToken.toJSON());
         return reply
           .setCookie(
             REFRESH_TOKEN_COOKIES,
@@ -111,7 +112,13 @@ export class AuthController {
             this.authService.getTokenCookieOps()
           )
           .status(HttpStatus.OK)
-          .send(transformResponse(HttpStatus.OK, payload));
+          .send(
+            transformResponse<Schema$Login>(HttpStatus.OK, {
+              ...signResult,
+              isDefaultAc: false,
+              user: formatJWTSignPayload(refreshToken)
+            })
+          );
       }
 
       return reply

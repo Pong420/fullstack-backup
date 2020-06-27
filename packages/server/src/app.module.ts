@@ -13,7 +13,7 @@ import { ConfigFactory } from '@nestjs/config/dist/interfaces';
 
 mongoose.set('toJSON', {
   virtuals: true, // clone '_id' to 'id'
-  versionKey: false // remove '__v'
+  versionKey: false // remove '__v',
 });
 
 const configure = (factory: ConfigFactory[] = []) =>

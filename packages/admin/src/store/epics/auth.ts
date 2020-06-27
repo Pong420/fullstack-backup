@@ -1,12 +1,11 @@
 import { of, merge, empty, defer } from 'rxjs';
-import { switchMap, mergeMap, catchError } from 'rxjs/operators';
+import { switchMap, mergeMap, catchError, map } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
+import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
-import { Response$Login } from '@fullstack/typings';
-import { Location } from 'history';
 import { login, refreshToken } from '../../service';
 
 type Actions = AuthActions | RouterAction;
@@ -26,16 +25,8 @@ const loginEpic: AuthEpic = (action$, state$) =>
     ofType<Actions, AuthActionMap['AUTHORIZE']>(AuthActionTypes.AUTHORIZE),
     switchMap(action => {
       const request$ = defer(() =>
-        action.payload
-          ? login(action.payload).then(res => res.data.data)
-          : refreshToken().then(res => {
-              return {
-                ...res.data.data,
-                isDefaultAc: false,
-                user: {}
-              } as Response$Login['data'];
-            })
-      );
+        action.payload ? login(action.payload) : refreshToken()
+      ).pipe(map(res => res.data.data));
 
       return request$.pipe(
         mergeMap(payload => {

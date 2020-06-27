@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 import {
+  Document,
   FilterQuery,
   PaginateModel,
   QueryFindOneAndUpdateOptions
@@ -8,16 +10,13 @@ import {
 import { MongooseCRUDService } from '../utils/MongooseCRUDService';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
-import { RefreshTokenModel, RefreshToken } from './schemas/refreshToken.schema';
-import { ConfigService } from '@nestjs/config';
+import { RefreshToken } from './schemas/refreshToken.schema';
 
 @Injectable()
-export class RefreshTokenService extends MongooseCRUDService<
-  RefreshTokenModel
-> {
+export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
   constructor(
-    @InjectModel(RefreshTokenModel.name)
-    model: PaginateModel<RefreshTokenModel>,
+    @InjectModel(RefreshToken.name)
+    model: PaginateModel<RefreshToken & Document>,
     private readonly configService: ConfigService
   ) {
     super(model);
@@ -45,17 +44,15 @@ export class RefreshTokenService extends MongooseCRUDService<
     init();
   }
 
-  create(
-    createRefreshTokenDto: CreateRefreshTokenDto
-  ): Promise<RefreshTokenModel> {
+  create(createRefreshTokenDto: CreateRefreshTokenDto): Promise<RefreshToken> {
     return super.create(createRefreshTokenDto);
   }
 
   update(
-    query: FilterQuery<RefreshTokenModel>,
+    query: FilterQuery<RefreshToken>,
     changes: UpdateRefreshTokenDto,
     options?: QueryFindOneAndUpdateOptions
-  ): Promise<RefreshTokenModel> {
+  ): Promise<RefreshToken> {
     return super.update(query, changes, options);
   }
 }

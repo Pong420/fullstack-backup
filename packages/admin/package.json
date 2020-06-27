@@ -18,6 +18,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
+    "jest": "24.9.0",
     "pong-react-scripts": "^3.4.0",
     "sass": "^1.26.9",
     "typescript": "3.9.5"

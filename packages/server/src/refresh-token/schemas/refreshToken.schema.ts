@@ -1,8 +1,12 @@
-import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  toJSON: {
+    transform: (_model, { _id, ...raw }) => new RefreshToken(raw)
+  }
+})
 export class RefreshToken implements Schema$RefreshToken {
   id: string;
 
@@ -11,6 +15,9 @@ export class RefreshToken implements Schema$RefreshToken {
 
   @Prop({ type: String, required: true, unique: true })
   username: string;
+
+  @Prop({ type: String, required: true, unique: true })
+  nickname: string;
 
   @Prop({ required: true })
   role: UserRole;
@@ -21,8 +28,14 @@ export class RefreshToken implements Schema$RefreshToken {
   createdAt: string;
 
   updatedAt: string;
-}
 
-export class RefreshTokenModel extends Document {}
+  constructor(payload: Partial<RefreshToken>) {
+    Object.assign(this, payload);
+  }
+
+  toJSON(): RefreshToken {
+    return new RefreshToken(this);
+  }
+}
 
 export const RefreshTokenSchema = SchemaFactory.createForClass(RefreshToken);

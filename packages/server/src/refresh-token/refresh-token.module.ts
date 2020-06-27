@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RefreshTokenController } from './refresh-token.controller';
 import { RefreshTokenService } from './refresh-token.service';
 import {
-  RefreshTokenModel,
+  RefreshToken,
   RefreshTokenSchema
 } from './schemas/refreshToken.schema';
 
@@ -11,7 +11,7 @@ import {
   imports: [
     MongooseModule.forFeature([
       {
-        name: RefreshTokenModel.name,
+        name: RefreshToken.name,
         schema: RefreshTokenSchema
       }
     ])

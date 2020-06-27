@@ -5,6 +5,7 @@ import { UserRole, JWTSignPayload, JWTSignResult } from '@fullstack/typings';
 import { FastifyCookieOptions } from 'fastify-cookie';
 import { UserService } from '../user/user.service';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { formatJWTSignPayload } from './dto/JWTSignDto';
 import bcrypt from 'bcrypt';
 
 @Injectable()
@@ -21,13 +22,10 @@ export class AuthService {
 
     if (user) {
       const valid = await bcrypt.compare(pass, user.password);
+      const { id: user_id, ...rest } = user.toJSON();
 
       if (valid) {
-        return {
-          user_id: user.id,
-          username: user.username,
-          role: user.role
-        };
+        return formatJWTSignPayload({ user_id, ...rest });
       }
 
       throw new BadRequestException('Incorrect Password');
@@ -44,6 +42,7 @@ export class AuthService {
           return {
             user_id: defaultUsername,
             username: defaultUsername,
+            nickname: defaultUsername,
             role: UserRole.ADMIN
           };
         }
@@ -53,11 +52,11 @@ export class AuthService {
     throw new BadRequestException('User Not Found');
   }
 
-  signJwt({ user_id, username, role }: JWTSignPayload): JWTSignResult {
+  signJwt(payload: JWTSignPayload): JWTSignResult {
     const now = +new Date();
-    const payload: JWTSignPayload = { user_id, role, username };
+    const signPayload = formatJWTSignPayload(payload);
     return {
-      token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(signPayload),
       expiry: new Date(
         now +
           this.configService.get<number>('JWT_TOKEN_EXPIRES_IN_MINUTES') *

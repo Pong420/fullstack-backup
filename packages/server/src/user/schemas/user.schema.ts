@@ -51,6 +51,10 @@ export class User implements Schema$User {
   constructor(payload: Partial<User>) {
     Object.assign(this, payload);
   }
+
+  toJSON(): User {
+    return new User(this);
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

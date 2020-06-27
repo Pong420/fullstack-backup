@@ -16,6 +16,9 @@ class Base {
   username?: string;
 
   @IsEmpty()
+  nickname?: string;
+
+  @IsEmpty()
   role?: UserRole;
 
   @IsEmpty()

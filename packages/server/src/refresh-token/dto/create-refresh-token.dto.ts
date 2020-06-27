@@ -12,6 +12,9 @@ class Base implements Param$CreateRefreshToken {
   @IsString()
   username: string;
 
+  @IsString()
+  nickname: string;
+
   @IsEnum(UserRole)
   role: UserRole;
 

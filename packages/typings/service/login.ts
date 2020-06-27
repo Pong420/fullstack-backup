@@ -6,6 +6,9 @@ export interface Param$Login {
   password: string;
 }
 
-export type Response$Login = ApiResponse<
-  JWTSignResult & { user: JWTSignPayload; isDefaultAc: boolean }
->;
+export interface Schema$Login extends JWTSignResult {
+  user: JWTSignPayload;
+  isDefaultAc: boolean;
+}
+
+export type Response$Login = ApiResponse<Schema$Login>;
