@@ -4,7 +4,6 @@ import { HttpStatus } from '@nestjs/common';
 import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
 import { mockAdmin } from './utils/constants';
-import { login } from './utils/login';
 import { extractCookies } from './utils/extractCookies';
 
 describe('AuthController (e2e)', () => {

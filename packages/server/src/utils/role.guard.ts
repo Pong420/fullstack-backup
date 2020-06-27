@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@fullstack/typings';
 import { Expose, ExposeOptions } from 'class-transformer';
+import { JWTSignPayload } from '../typings';
 
 type AccessType = keyof typeof UserRole | 'EVERYONE' | 'SELF';
 
@@ -35,6 +36,7 @@ export class RoleGuard extends AuthGuard('jwt') {
 
     if (
       access.includes('EVERYONE')
+      // ||
       // this.configService.get<string>('NODE_ENV') === 'development'
     ) {
       return of(true);
@@ -50,9 +52,9 @@ export class RoleGuard extends AuthGuard('jwt') {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
           const id: string | null = req.params?.id;
-          const user = req.user || {};
+          const user: Partial<JWTSignPayload> = req.user || {};
 
-          if (access.includes('SELF') && id && id === user.id) return true;
+          if (access.includes('SELF') && id && id === user.user_id) return true;
 
           return access.length
             ? access.includes(UserRole[user.role] as AccessType)
