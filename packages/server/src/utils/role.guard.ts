@@ -5,9 +5,8 @@ import { ExecutionContext, SetMetadata, CustomDecorator } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { UserRole } from '@fullstack/typings';
+import { UserRole, JWTSignPayload } from '@fullstack/typings';
 import { Expose, ExposeOptions } from 'class-transformer';
-import { JWTSignPayload } from '../typings';
 
 type AccessType = keyof typeof UserRole | 'EVERYONE' | 'SELF';
 

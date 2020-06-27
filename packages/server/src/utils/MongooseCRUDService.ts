@@ -6,25 +6,14 @@ import {
   UpdateQuery,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import {
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsArray,
-  IsEnum
-} from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsEmpty } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { PaginateResult, Param$Pagination } from '@fullstack/typings';
-import { Condition, Order } from '../typings';
-import { formatSearchQuery } from './formatSearchQuery';
+import { PaginateResult, Pagination, Search, Order } from '@fullstack/typings';
+import { formatSearchQuery, Condition } from './formatSearchQuery';
 
-class SearchDto {
-  search?: string;
-}
+type QuerySchema = { [K in keyof (Pagination & Search)]: unknown };
 
-type PaginationDto = { [K in keyof Param$Pagination]: unknown };
-
-export class QueryDto implements PaginationDto, SearchDto {
+class Base implements QuerySchema {
   @IsNumber()
   @IsOptional()
   @Transform(Number)
@@ -36,11 +25,9 @@ export class QueryDto implements PaginationDto, SearchDto {
   size?: number;
 
   @IsOptional()
-  @IsEnum(Order)
-  sort?: string | Record<string, unknown>;
+  sort?: Pagination['sort'];
 
-  @IsOptional()
-  @IsArray()
+  @IsEmpty()
   condition?: Condition[];
 
   @IsOptional()
@@ -48,7 +35,8 @@ export class QueryDto implements PaginationDto, SearchDto {
   search?: string;
 }
 
-// type T1 = QueryDto['page'];
+export class QueryDto extends Base
+  implements Required<Omit<QuerySchema, keyof Base>> {}
 
 interface Options<T> {
   searchKeys?: (keyof T)[];

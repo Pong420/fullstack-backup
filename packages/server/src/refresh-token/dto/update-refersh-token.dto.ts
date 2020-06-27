@@ -1,8 +1,14 @@
 import { IsString, IsEmpty } from 'class-validator';
-import { RefreshToken } from '../schemas/refreshToken.schema';
-import { UserRole } from '@fullstack/typings';
 
-export class UpdateRefreshToken implements Partial<RefreshToken> {
+import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
+
+class Base {
+  @IsEmpty()
+  id?: string;
+
+  @IsString()
+  refreshToken: string;
+
   @IsEmpty()
   user_id?: string;
 
@@ -19,8 +25,5 @@ export class UpdateRefreshToken implements Partial<RefreshToken> {
   updatedAt?: string;
 }
 
-export class UpdateRefreshTokenDto extends UpdateRefreshToken
-  implements Required<Omit<RefreshToken, keyof UpdateRefreshToken>> {
-  @IsString()
-  refreshToken: string;
-}
+export class UpdateRefreshTokenDto extends Base
+  implements Required<Omit<Schema$RefreshToken, keyof Base>> {}

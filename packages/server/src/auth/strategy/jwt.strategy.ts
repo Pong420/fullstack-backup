@@ -1,8 +1,8 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JWTSignPayload } from '@fullstack/typings';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JWTSignPayload } from '../../typings';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

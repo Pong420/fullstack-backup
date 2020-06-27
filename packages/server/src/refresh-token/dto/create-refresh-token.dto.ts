@@ -1,11 +1,11 @@
 import { IsString, IsEnum, IsEmpty } from 'class-validator';
-import { UserRole } from '@fullstack/typings';
-import { RefreshToken } from '../schemas/refreshToken.schema';
+import {
+  UserRole,
+  Schema$RefreshToken,
+  Param$CreateRefreshToken
+} from '@fullstack/typings';
 
-export class CreateRefreshTokenDto implements RefreshToken {
-  @IsEmpty()
-  id?: string;
-
+class Base implements Param$CreateRefreshToken {
   @IsString()
   user_id: string;
 
@@ -17,10 +17,26 @@ export class CreateRefreshTokenDto implements RefreshToken {
 
   @IsString()
   refreshToken: string;
-
-  @IsEmpty()
-  createdAt: string;
-
-  @IsEmpty()
-  updatedAt: string;
 }
+
+class CreateRefreshToken extends Base
+  implements
+    Partial<Omit<Schema$RefreshToken | Param$CreateRefreshToken, keyof Base>> {
+  @IsEmpty()
+  id?: string;
+
+  @IsEmpty()
+  createdAt?: string;
+
+  @IsEmpty()
+  updatedAt?: string;
+}
+
+export class CreateRefreshTokenDto extends CreateRefreshToken
+  implements
+    Required<
+      Omit<
+        Schema$RefreshToken & Param$CreateRefreshToken,
+        keyof CreateRefreshToken
+      >
+    > {}

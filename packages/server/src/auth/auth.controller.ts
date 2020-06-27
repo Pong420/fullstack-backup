@@ -9,7 +9,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserRole } from '@fullstack/typings';
+import { UserRole, JWTSignPayload } from '@fullstack/typings';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './auth.service';
@@ -18,7 +18,6 @@ import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/schemas/user.schema';
 import { RefreshTokenModel } from '../refresh-token/schemas/refreshToken.schema';
-import { JWTSignPayload } from '../typings';
 import { transformResponse } from '../utils/ResponseInterceptor';
 import { throwMongoError } from '../utils/MongooseExceptionFilter';
 import { Access } from '../utils/role.guard';

@@ -1,6 +1,4 @@
 import { Document, FilterQuery, UpdateQuery } from 'mongoose';
-import { IsNumber, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
 import {
   Body,
   Get,
@@ -10,36 +8,11 @@ import {
   Query, // eslint-disable-line @typescript-eslint/no-unused-vars
   NotFoundException
 } from '@nestjs/common';
-import { PaginateResult, Param$Pagination } from '@fullstack/typings';
+import { PaginateResult } from '@fullstack/typings';
 import { MongooseCRUDService, QueryDto } from './MongooseCRUDService';
 import { ObjectId } from '../decorators';
-import { Condition } from '../typings';
 
 export { PaginateResult, QueryDto, ObjectId };
-
-type Schema = { [K in keyof Param$Pagination]: unknown };
-export class PaginationDto implements Schema {
-  @IsNumber()
-  @IsOptional()
-  @Transform(Number)
-  page?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @Transform(Number)
-  size?: number;
-
-  @IsOptional()
-  sort?: string | Record<string, unknown>;
-
-  @IsOptional()
-  condition?: Condition[];
-}
-
-export class SearchDto {
-  @IsOptional()
-  search?: string;
-}
 
 export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   constructor(private readonly service: MongooseCRUDService<T, D>) {}

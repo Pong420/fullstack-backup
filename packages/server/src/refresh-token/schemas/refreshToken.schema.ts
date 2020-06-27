@@ -1,10 +1,11 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { UserRole, Timestamp } from '@fullstack/typings';
-import { JWTSignPayload } from '../../typings';
+import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
 
 @Schema({ timestamps: true })
-export class RefreshToken implements JWTSignPayload, Timestamp {
+export class RefreshToken implements Schema$RefreshToken {
+  id: string;
+
   @Prop({ type: String, required: true, unique: true })
   user_id: string;
 

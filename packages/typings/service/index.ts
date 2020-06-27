@@ -1,4 +1,6 @@
 export * from './user';
+export * from './jwt';
+export * from './refreshToken';
 
 export interface ApiResponse<T> {
   statusCode: number;
@@ -24,12 +26,17 @@ export interface Timestamp {
   updatedAt: string;
 }
 
-export class Param$Pagination {
-  page?: number;
-  size?: number;
-  sort?: string | Record<string, unknown>;
+export enum Order {
+  ASC,
+  DESC
 }
 
-export class Param$SearchQuery {
+export interface Pagination<T = any> {
+  page?: number;
+  size?: number;
+  sort?: string | Record<keyof T, Order>;
+}
+
+export interface Search {
   search?: string;
 }

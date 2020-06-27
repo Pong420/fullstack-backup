@@ -1,4 +1,4 @@
-import { UserRole } from '@fullstack/typings';
+import { UserRole } from './user';
 
 export interface JWTSignPayload {
   user_id: string;
