@@ -24,8 +24,6 @@ export interface Timestamp {
   updatedAt: string;
 }
 
-export type MongoSchema<T> = Omit<T, 'id' | keyof Timestamp>;
-
 export class Param$Pagination {
   page?: number;
   size?: number;

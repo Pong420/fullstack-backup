@@ -6,17 +6,13 @@ import {
   IsEmpty
 } from 'class-validator';
 import { Required$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
+import { ValidUsername, ValidPassword } from '../../decorators';
 
 class Base implements Required$CreateUser {
-  @IsString()
-  // @MinLength(username.minLength)
-  // @MaxLength(username.maxLength)
+  @ValidUsername()
   username!: string;
 
-  @IsString()
-  // @MinLength(password.minLength)
-  // @MaxLength(password.maxLength)
-  // @Matches(password.regex)
+  @ValidPassword()
   password!: string;
 
   @IsEmail()

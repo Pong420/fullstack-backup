@@ -6,6 +6,7 @@ import {
   IsEmail
 } from 'class-validator';
 import { Required$UpdateUser, UserRole } from '@fullstack/typings';
+import { ValidPassword } from '../../decorators';
 
 export class UpdateUser implements Partial<Required$UpdateUser> {
   @IsEmpty()
@@ -19,9 +20,7 @@ export class UpdateUser implements Partial<Required$UpdateUser> {
   username?: string;
 
   @IsOptional()
-  // @MinLength(validationConfig.password.minLength)
-  // @MaxLength(validationConfig.password.maxLength)
-  // @Matches(validationConfig.password.regex)
+  @ValidPassword()
   password?: string;
 
   @IsOptional()

@@ -6,10 +6,59 @@ import {
   UpdateQuery,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import { PaginateResult } from '@fullstack/typings';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsArray,
+  IsEnum
+} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { PaginateResult, Param$Pagination } from '@fullstack/typings';
+import { Condition, Order } from '../typings';
+import { formatSearchQuery } from './formatSearchQuery';
+
+class SearchDto {
+  search?: string;
+}
+
+type PaginationDto = { [K in keyof Param$Pagination]: unknown };
+
+export class QueryDto implements PaginationDto, SearchDto {
+  @IsNumber()
+  @IsOptional()
+  @Transform(Number)
+  page?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Transform(Number)
+  size?: number;
+
+  @IsOptional()
+  @IsEnum(Order)
+  sort?: string | Record<string, unknown>;
+
+  @IsOptional()
+  @IsArray()
+  condition?: Condition[];
+
+  @IsOptional()
+  @IsString()
+  search?: string;
+}
+
+// type T1 = QueryDto['page'];
+
+interface Options<T> {
+  searchKeys?: (keyof T)[];
+}
 
 export class MongooseCRUDService<T, D extends T & Document = T & Document> {
-  constructor(private model: PaginateModel<D>) {}
+  constructor(
+    private model: PaginateModel<D>,
+    private readonly options: Options<T> = {}
+  ) {}
 
   async create(createDto: unknown): Promise<T> {
     const createdCat = new this.model(createDto);
@@ -46,12 +95,33 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
   }
 
   paginate(
-    query?: Record<string, unknown>,
+    query?: QueryDto,
     options: PaginateOptions = {}
   ): Promise<PaginateResult<T>> {
-    return this.model.paginate(query as any, {
-      customLabels: { docs: 'data', totalDocs: 'total' },
-      ...options
-    }) as any;
+    const {
+      page = 1,
+      size = 10,
+      search,
+      condition = [],
+      sort = { createdAt: Order.DESC },
+      ...fullMatches
+    } = query;
+
+    return this.model.paginate(
+      {
+        $and: [
+          ...condition,
+          fullMatches,
+          formatSearchQuery(this.options.searchKeys as string[], search)
+        ]
+      } as any,
+      {
+        customLabels: { docs: 'data', totalDocs: 'total' },
+        sort,
+        page,
+        limit: size,
+        ...options
+      }
+    ) as any;
   }
 }

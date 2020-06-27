@@ -11,12 +11,11 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import { PaginateResult, Param$Pagination } from '@fullstack/typings';
-import { MongooseCRUDService } from './MongooseCRUDService';
-import { formatSearchQuery } from './formatSearchQuery';
+import { MongooseCRUDService, QueryDto } from './MongooseCRUDService';
 import { ObjectId } from '../decorators';
-import { Order, Condition } from '../typings';
+import { Condition } from '../typings';
 
-export { PaginateResult } from '@fullstack/typings';
+export { PaginateResult, QueryDto, ObjectId };
 
 type Schema = { [K in keyof Param$Pagination]: unknown };
 export class PaginationDto implements Schema {
@@ -42,43 +41,12 @@ export class SearchDto {
   search?: string;
 }
 
-export type QueryAll<T> = PaginationDto & SearchDto & FilterQuery<T>;
-
-interface Options<T> {
-  searchKeys?: (keyof T)[];
-}
-
 export class MongooseCRUDController<T, D extends T & Document = T & Document> {
-  constructor(
-    private readonly service: MongooseCRUDService<T, D>,
-    private readonly options: Options<T> = {}
-  ) {}
+  constructor(private readonly service: MongooseCRUDService<T, D>) {}
 
   @Get()
-  async getAll(@Query() query: QueryAll<D> = {}): Promise<PaginateResult<T>> {
-    const {
-      page = 1,
-      size = 10,
-      search,
-      condition = [],
-      sort = { createdAt: Order.DESC },
-      ...fullMatches
-    } = query;
-
-    return this.service.paginate(
-      {
-        $and: [
-          ...condition,
-          fullMatches,
-          formatSearchQuery(this.options.searchKeys as string[], search)
-        ]
-      },
-      {
-        sort,
-        page,
-        limit: size
-      }
-    );
+  async getAll(@Query() query: QueryDto): Promise<PaginateResult<T>> {
+    return this.service.paginate(query);
   }
 
   @Post()
