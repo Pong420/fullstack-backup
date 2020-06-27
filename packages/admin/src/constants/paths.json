@@ -1,4 +1,7 @@
 {
   "HOME": "/",
-  "LOGIN": "/login"
+  "AUTH": "/auth",
+  "LOGIN": "/auth/login",
+  "ADMIN_REGISTRATION": "/auth/register/admin",
+  "GUEST_REGISTRATION": "/auth/register/guest"
 }

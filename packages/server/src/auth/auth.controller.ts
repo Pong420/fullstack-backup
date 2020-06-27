@@ -37,6 +37,7 @@ export class AuthController {
   @Access('ADMIN')
   @Post('register/admin')
   registerAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
+    // TODO: check admin?
     return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
   }
 

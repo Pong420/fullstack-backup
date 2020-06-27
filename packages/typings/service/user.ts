@@ -1,4 +1,4 @@
-import { Timestamp } from './';
+import { Timestamp, ApiResponse, PaginateApiResponse } from './';
 
 export enum UserRole {
   ADMIN,
@@ -6,20 +6,26 @@ export enum UserRole {
   CLIENT
 }
 
-export interface Required$CreateUser {
+export interface Param$CreateUser {
   email: string;
   username: string;
   password: string;
+  role?: UserRole;
+  nickname?: string;
+  avatar?: unknown;
 }
 
-export interface Schema$User extends Required$CreateUser, Timestamp {
+export interface Param$UpdateUser
+  extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Timestamp>> {
+  avatar?: unknown | null;
+}
+
+export interface Schema$User extends Param$CreateUser, Timestamp {
   id: string;
   role: UserRole;
   nickname: string;
   avatar: string | null;
 }
 
-export interface Required$UpdateUser
-  extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Timestamp>> {
-  avatar?: unknown | null;
-}
+export type Response$GetUsers = PaginateApiResponse<Schema$User>;
+export type Response$User = ApiResponse<Schema$User>;

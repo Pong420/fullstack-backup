@@ -5,10 +5,10 @@ import {
   IsEmpty,
   IsEmail
 } from 'class-validator';
-import { Required$UpdateUser, UserRole } from '@fullstack/typings';
+import { Param$UpdateUser, UserRole } from '@fullstack/typings';
 import { ValidPassword } from '../../decorators';
 
-export class UpdateUser implements Partial<Required$UpdateUser> {
+export class UpdateUser implements Partial<Param$UpdateUser> {
   @IsEmpty()
   id?: string;
 
@@ -43,4 +43,4 @@ export class UpdateUser implements Partial<Required$UpdateUser> {
 }
 
 export class UpdateUserDto extends UpdateUser
-  implements Required<Omit<Required$UpdateUser, keyof UpdateUser>> {}
+  implements Required<Omit<Param$UpdateUser, keyof UpdateUser>> {}

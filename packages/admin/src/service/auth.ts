@@ -2,7 +2,10 @@ import { api } from './api';
 import {
   Param$Login,
   Response$Login,
-  Response$RefreshToken
+  Response$RefreshToken,
+  Param$CreateUser,
+  Response$User,
+  UserRole
 } from '@fullstack/typings';
 
 export const login = (params: Param$Login) =>
@@ -10,3 +13,9 @@ export const login = (params: Param$Login) =>
 
 export const refreshToken = () =>
   api.post<Response$RefreshToken>('/auth/refresh-token', {});
+
+export const registerAdmin = (params: Param$CreateUser) =>
+  api.post<Response$User>('/auth/register/admin', {
+    ...params,
+    role: UserRole.ADMIN
+  });

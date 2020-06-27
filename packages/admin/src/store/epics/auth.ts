@@ -7,7 +7,7 @@ import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
 import { Response$Login } from '@fullstack/typings';
 import { Location } from 'history';
-import { login, refreshToken } from '../../service/auth';
+import { login, refreshToken } from '../../service';
 
 type Actions = AuthActions | RouterAction;
 type AuthEpic = Epic<Actions, Actions, RootState>;

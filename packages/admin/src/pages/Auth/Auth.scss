@@ -1,0 +1,28 @@
+.auth {
+  @include sq-dimen(100%);
+  @include flex(center, center);
+
+  .card-with-logo {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 50px;
+
+    .card-with-logo-header {
+      text-align: center;
+      margin-bottom: 30px;
+
+      svg {
+        font-size: 100px;
+      }
+
+      h5 {
+        margin-top: 10px;
+        text-transform: capitalize;
+      }
+    }
+
+    button + button {
+      margin-top: 15px;
+    }
+  }
+}

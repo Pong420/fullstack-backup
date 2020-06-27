@@ -1665,6 +1665,7 @@ __metadata:
     sass: ^1.26.9
     typeface-muli: ^1.1.3
     typescript: 3.9.5
+    use-rx-hooks: ^1.4.3-beta.1
   languageName: unknown
   linkType: soft
 
@@ -6927,6 +6928,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-config-prettier@npm:^6.11.0":
+  version: 6.11.0
+  resolution: "eslint-config-prettier@npm:6.11.0"
+  dependencies:
+    get-stdin: ^6.0.0
+  peerDependencies:
+    eslint: ">=3.14.1"
+  bin:
+    eslint-config-prettier-check: bin/cli.js
+  checksum: 59efd906c78d47753a673c205ef515fdab19cd6ea0fd992c9cb2366804861746238244526ab565ccc7448569f5472ce7646a77d0c9998787192e4ebae95df71d
+  languageName: node
+  linkType: hard
+
 "eslint-config-react-app@npm:^5.1.0, eslint-config-react-app@npm:^5.2.1":
   version: 5.2.1
   resolution: "eslint-config-react-app@npm:5.2.1"
@@ -8210,6 +8224,7 @@ fsevents@^1.2.7:
     "@typescript-eslint/parser": ^3.3.0
     babel-eslint: 10.0.3
     eslint: 6.6.0
+    eslint-config-prettier: ^6.11.0
     eslint-config-react-app: ^5.2.1
     eslint-plugin-flowtype: ^5.1.3
     eslint-plugin-import: ^2.21.2
@@ -8286,6 +8301,13 @@ fsevents@^1.2.7:
   version: 5.1.1
   resolution: "get-port@npm:5.1.1"
   checksum: 75a5af5cef1e601cfa5a071d1b205ba94338f69f83f1092039bdf8e15351a76f5e6b7df7d3987bd3b7ad5d6893759d2bc28d36d8a4ee65976c3868d7efe7cf8c
+  languageName: node
+  linkType: hard
+
+"get-stdin@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "get-stdin@npm:6.0.0"
+  checksum: b51d664838aef7f8353dc57371ce59cea54d8d584fec015a9d89d24561e95b97806d5b5ba120bc81574c9ed63cb3e210176ffa0ff9263c7e7ba4d56d0fe54913
   languageName: node
   linkType: hard
 
@@ -17197,6 +17219,17 @@ resolve@1.15.0:
     punycode: 1.3.2
     querystring: 0.2.0
   checksum: 537f785b16f873fdd2b63ccb7a61463b8e41370fdba95385b0102f3ed7b953c300d95b8755ec3b65f3e406372d47d16c3c989e196b25b70f42190da1fc36c56f
+  languageName: node
+  linkType: hard
+
+"use-rx-hooks@npm:^1.4.3-beta.1":
+  version: 1.4.3
+  resolution: "use-rx-hooks@npm:1.4.3"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+    rxjs: ">=6.5.3"
+  checksum: d07ee0864a0f4ef6836c6f1c93238f72a7de536054b8ef3b871abd7efabb1bb68694a19404eda9a7c513a5c3d383c7484b0e20ee5f70954e87997352539b31c1
   languageName: node
   linkType: hard
 

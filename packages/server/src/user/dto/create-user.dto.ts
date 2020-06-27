@@ -5,22 +5,22 @@ import {
   IsEmail,
   IsEmpty
 } from 'class-validator';
-import { Required$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
+import { Param$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
 import { ValidUsername, ValidPassword } from '../../decorators';
 
-class Base implements Required$CreateUser {
+class Base implements Param$CreateUser {
   @ValidUsername()
-  username!: string;
+  username: string;
 
   @ValidPassword()
-  password!: string;
+  password: string;
 
   @IsEmail()
-  email!: string;
+  email: string;
 }
 
 class CreateUser extends Base
-  implements Partial<Omit<Schema$User | Required$CreateUser, keyof Base>> {
+  implements Partial<Omit<Schema$User | Param$CreateUser, keyof Base>> {
   @IsEmpty()
   id?: string;
 
@@ -43,5 +43,4 @@ class CreateUser extends Base
 }
 
 export class CreateUserDto extends CreateUser
-  implements
-    Required<Omit<Schema$User & Required$CreateUser, keyof CreateUser>> {}
+  implements Required<Omit<Schema$User & Param$CreateUser, keyof CreateUser>> {}

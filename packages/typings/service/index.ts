@@ -8,6 +8,11 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+export interface PaginateApiResponse<T> {
+  statusCode: number;
+  data: PaginateResult<T>;
+}
+
 export interface PaginateResult<T> {
   data: T[];
   total: number;
