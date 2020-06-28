@@ -1,4 +1,13 @@
-import { of, merge, empty, defer, fromEvent, race } from 'rxjs';
+import {
+  of,
+  merge,
+  empty,
+  defer,
+  fromEvent,
+  race,
+  from,
+  throwError
+} from 'rxjs';
 import {
   switchMap,
   mergeMap,
@@ -13,7 +22,7 @@ import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
-import { login, logout, refreshToken } from '../../service';
+import { login, logout, getJwtToken } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
 type Actions = AuthActions | RouterAction;
@@ -32,14 +41,15 @@ const loginEpic: AuthEpic = (action$, state$) =>
   action$.pipe(
     ofType<Actions, AuthActionMap['AUTHORIZE']>(AuthActionTypes.AUTHORIZE),
     switchMap(action => {
-      const request$ = defer(() =>
-        action.payload
-          ? login(action.payload).catch(error => {
+      const request$ = action.payload
+        ? from(login(action.payload)).pipe(
+            map(res => res.data.data),
+            catchError(error => {
               Toaster.apiError('Login failure', error);
-              throw error;
+              return throwError(error);
             })
-          : refreshToken()
-      ).pipe(map(res => res.data.data));
+          )
+        : getJwtToken();
 
       return request$.pipe(
         mergeMap(payload => {

@@ -1,12 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { useMemo } from 'react';
-import { AnyAction } from 'redux';
+import { useRef, Dispatch as ReactDispatch } from 'react';
+import { AnyAction, Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 
-interface Actions {
+interface ActionCreators {
   [k: string]: (...args: any[]) => AnyAction;
 }
+
+type Handler<A extends ActionCreators> = {
+  [X in keyof A]: (...args: Parameters<A[X]>) => void;
+};
 
 export type ExtractAction<
   T1 extends { type: string },
@@ -17,19 +19,23 @@ export type ActionsMap<T1 extends { type: string }> = {
   [K in T1['type']]: T1 extends { type: K } ? T1 : never;
 };
 
-export function useActions<A extends Actions>(actions: A): A {
+export function bindDispatch<A extends ActionCreators>(
+  creators: A,
+  dispatch: Dispatch | ReactDispatch<any>
+) {
+  const handler = {} as Handler<A>;
+  for (const key in creators) {
+    const creator = creators[key];
+    handler[key] = (...args: Parameters<typeof creator>) => {
+      dispatch(creator(...args));
+    };
+  }
+
+  return handler;
+}
+
+export function useActions<A extends ActionCreators>(creators: A): Handler<A> {
   const dispatch = useDispatch();
-
-  return useMemo(() => {
-    const handler: any = {};
-
-    for (const key in actions) {
-      const action = actions[key];
-      handler[key] = (...args: Parameters<typeof action>) => {
-        dispatch(action(...args));
-      };
-    }
-
-    return handler as A;
-  }, [actions, dispatch]);
+  const creatorsRef = useRef(creators);
+  return bindDispatch(creatorsRef.current, dispatch);
 }

@@ -21,7 +21,7 @@ export function Table<T extends object>({
   } = useTable(props);
 
   return (
-    <HTMLTable {...getTableProps()} className={className}>
+    <HTMLTable {...getTableProps()} className={className} striped>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>

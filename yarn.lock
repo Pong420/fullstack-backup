@@ -1686,6 +1686,7 @@ __metadata:
     "@fullstack/typings": "workspace:packages/typings"
     "@pong420/redux-crud": ^1.4.5
     "@types/node": ^14.0.14
+    "@types/qs": ^6
     "@types/react": ^16.9.41
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.9
@@ -1695,8 +1696,10 @@ __metadata:
     connected-react-router: ^6.8.0
     dayjs: ^1.8.28
     history: ^4.10.1
+    jdenticon: ^2.2.0
     jest: 24.9.0
     pong-react-scripts: ^3.4.0
+    qs: ^6.9.4
     rc-field-form: ^1.5.0
     react: ^16.13.1
     react-dom: ^16.13.1
@@ -3066,7 +3069,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*":
+"@types/qs@npm:*, @types/qs@npm:^6":
   version: 6.9.3
   resolution: "@types/qs@npm:6.9.3"
   checksum: 4b6b5b759423dbd08581e6dc55d140651455f01a8587a03ac557799e605c190119f6f9446494665d7409889f08aaec7763223f7c26972de0d897a3238710ed71
@@ -5320,6 +5323,13 @@ __metadata:
   version: 1.0.30001089
   resolution: "caniuse-lite@npm:1.0.30001089"
   checksum: c4aeb153f17889009802249c2698d69356c2485ef5f18599b04af2cab656b7ffc27d36095eaafbaf0a7370b5fd58f596c2d52e3b81b42e4fba475ccdb197b0aa
+  languageName: node
+  linkType: hard
+
+"canvas-renderer@npm:~2.1.1":
+  version: 2.1.1
+  resolution: "canvas-renderer@npm:2.1.1"
+  checksum: 03b482b9d4f7e5c56a46116bbb489dff5d3c09f0bb4347ec7957645b5789fcbdb90c64217a1342f8f4fba749b68d603248370254a4bed58c06d177a7734a4d44
   languageName: node
   linkType: hard
 
@@ -10296,6 +10306,18 @@ fsevents@^1.2.7:
   version: 1.2.1
   resolution: "iterare@npm:1.2.1"
   checksum: b1a896c566581b153a68067bb5939e1b7242ab596fa4d3f907a7a0dd2aa234e71958377278155f4d224bf33431b6ce0a3288e666ef9e1dbc138955b498db8256
+  languageName: node
+  linkType: hard
+
+"jdenticon@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "jdenticon@npm:2.2.0"
+  dependencies:
+    "@types/node": "*"
+    canvas-renderer: ~2.1.1
+  bin:
+    jdenticon: bin/jdenticon.js
+  checksum: d78e5100894765c43c5544e0d4b74ca2d90464adb431d2bc1fbf4fa4ed86e525262569883145f388385d5771ddc8eab39a7c9bb39b2b0a474595066037c57c92
   languageName: node
   linkType: hard
 

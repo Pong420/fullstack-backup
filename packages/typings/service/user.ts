@@ -1,9 +1,25 @@
-import { Timestamp, ApiResponse, PaginateApiResponse } from './';
+import {
+  Timestamp,
+  ApiResponse,
+  PaginateApiResponse,
+  Pagination,
+  Search
+} from './';
 
 export enum UserRole {
   ADMIN,
   MANAGER,
   CLIENT
+}
+
+export interface Param$GetUsers extends Pagination, Search {
+  id?: string;
+  username?: string;
+  email?: string;
+  nickname?: string;
+  role?: UserRole;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Param$CreateUser {

@@ -15,12 +15,15 @@ table {
     pointer-events: auto;
   }
 
-  td:empty {
-    &:after {
-      @include dimen(80%, 1.4em);
-      content: '';
-      background-color: $selekon-color;
-      display: block;
+  td[role='cell'] {
+    vertical-align: middle;
+    min-height: 1.4em;
+    &:empty {
+      &:after {
+        @include dimen(80%);
+        content: '';
+        display: block;
+      }
     }
   }
 }
