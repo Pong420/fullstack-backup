@@ -1690,8 +1690,10 @@ __metadata:
     "@types/react-dom": ^16.9.8
     "@types/react-redux": ^7.1.9
     "@types/react-router-dom": ^5.1.5
+    "@types/react-table": ^7
     axios: ^0.19.2
     connected-react-router: ^6.8.0
+    dayjs: ^1.8.28
     history: ^4.10.1
     jest: 24.9.0
     pong-react-scripts: ^3.4.0
@@ -1700,6 +1702,7 @@ __metadata:
     react-dom: ^16.13.1
     react-redux: ^7.2.0
     react-router-dom: ^5.2.0
+    react-table: ^7.2.1
     redux: ^4.0.5
     redux-observable: ^1.2.0
     rxjs: ^6.5.5
@@ -2455,6 +2458,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scarf/scarf@npm:^1.0.4":
+  version: 1.0.6
+  resolution: "@scarf/scarf@npm:1.0.6"
+  checksum: e86e85b0496afe7fab177098f8e41e6dee174c4d7dc1d15dc06ca0aa15876bd1062b7c28e4f54f5220cacd384572458c0031bb05d7e64ad48d7d83565aae711f
+  languageName: node
+  linkType: hard
+
 "@schematics/schematics@npm:0.901.9":
   version: 0.901.9
   resolution: "@schematics/schematics@npm:0.901.9"
@@ -3109,6 +3119,15 @@ __metadata:
     "@types/history": "*"
     "@types/react": "*"
   checksum: 8b4c8fefdba877971aeaa642d81074d0fda0db9d8891709071c8586c32c75afca1baf478c3b26bcbd404503304599d8ea3243beb4e01080ee77f48f56815ee73
+  languageName: node
+  linkType: hard
+
+"@types/react-table@npm:^7":
+  version: 7.0.19
+  resolution: "@types/react-table@npm:7.0.19"
+  dependencies:
+    "@types/react": "*"
+  checksum: bfcc956d4dfc3619108b3afeb34b7019e99f1a3282d88c36f2ec18a3b28cd78afc010bfebd2fa6a4e4b9940c28d029b7da048d15f1db5213f31d52342dee6d6f
   languageName: node
   linkType: hard
 
@@ -6554,6 +6573,13 @@ __metadata:
     whatwg-mimetype: ^2.3.0
     whatwg-url: ^8.0.0
   checksum: 42239927c6a202e2d02b7f41c94ca53e3cea036898b97b8bf6120ed1b25e0dd11c48ec7aa5c84cf807c2cb9f3a637df9fb50f3ca25a52863186a4ac46254726b
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.8.28":
+  version: 1.8.28
+  resolution: "dayjs@npm:1.8.28"
+  checksum: 1d8a48d3b4888f3b6c0443b69db71105fa47a6ca45b34f02516c6c2367bd2fded163cfcdf292262b85171c91ef1a445f674d0c2f74e869741078d9044136700f
   languageName: node
   linkType: hard
 
@@ -15467,6 +15493,17 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">=15"
   checksum: 4437eaa9bab02d46a7d6ea4915731c1f31642d6c3e3f7b9f951f5c6a9a73f35d4deb43a2d6b4be85f27816a20de96c3b9a9239f4b7e9136742106794ad20e95c
+  languageName: node
+  linkType: hard
+
+"react-table@npm:^7.2.1":
+  version: 7.2.1
+  resolution: "react-table@npm:7.2.1"
+  dependencies:
+    "@scarf/scarf": ^1.0.4
+  peerDependencies:
+    react: ^16.8.3
+  checksum: 69912526f53ead5dd284b27171e4b8f649865c0609d318eb6b0d13df080d2b7654aa113c8d129f3a359827251c31d0b54572548dcad7d59553ec8fdc30d5bdf9
   languageName: node
   linkType: hard
 
