@@ -14,6 +14,7 @@ import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
 import { login, logout, refreshToken } from '../../service';
+import { Toaster } from '../../utils/toaster';
 
 type Actions = AuthActions | RouterAction;
 type AuthEpic = Epic<Actions, Actions, RootState>;
@@ -53,7 +54,11 @@ const loginEpic: AuthEpic = (action$, state$) =>
               : empty()
           );
         }),
-        catchError(() => of<Actions>({ type: AuthActionTypes.FAILURE }))
+        catchError(error =>
+          of<Actions>({ type: AuthActionTypes.FAILURE }).pipe(
+            tap(() => Toaster.apiError(error, 'Login failure'))
+          )
+        )
       );
     })
   );
@@ -71,8 +76,14 @@ const logoutEpic: AuthEpic = action$ => {
     ofType<Actions, AuthActionMap['LOGOUT']>(AuthActionTypes.LOGOUT),
     switchMap(() => {
       return defer(() => logout()).pipe(
-        tap(() => localStorage.setItem(key, new Date().toISOString())),
-        catchError(() => empty())
+        tap(() => {
+          localStorage.setItem(key, new Date().toISOString());
+          Toaster.success({ message: 'Logout success' });
+        }),
+        catchError(error => {
+          Toaster.apiError(error, 'Logout failure');
+          return empty();
+        })
       );
     })
   );

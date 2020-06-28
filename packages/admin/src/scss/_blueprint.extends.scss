@@ -39,3 +39,14 @@ $help-line-height: 1em;
     }
   }
 }
+
+.#{$ns}-toast {
+  max-width: 320px;
+}
+
+.#{$ns}-toast-message {
+  div:nth-child(1) {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}

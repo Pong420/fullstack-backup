@@ -1,3 +1,5 @@
+import { AxiosError, AxiosResponse } from 'axios';
+
 export * from './user';
 export * from './jwt';
 export * from './refreshToken';
@@ -45,4 +47,14 @@ export interface Pagination<T = any> {
 
 export interface Search {
   search?: string;
+}
+
+interface ApiErrorValue {
+  statusCode: number;
+  message: string | string[];
+  error?: string;
+}
+
+export interface ApiError extends Omit<AxiosError, 'response'> {
+  response?: AxiosResponse<ApiErrorValue>;
 }
