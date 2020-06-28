@@ -5,11 +5,10 @@ import {
   IsEmail,
   IsEmpty
 } from 'class-validator';
-import { Schema$User, UserRole } from '@fullstack/typings';
+import { Schema$User, Param$GetUsers, UserRole } from '@fullstack/typings';
 import { QueryDto } from '../../utils/MongooseCRUDService';
-import { User } from '../schemas/user.schema';
 
-class Base extends QueryDto implements Partial<User> {
+class Base extends QueryDto implements Param$GetUsers {
   @IsOptional()
   @IsString()
   id?: string;
@@ -17,9 +16,6 @@ class Base extends QueryDto implements Partial<User> {
   @IsOptional()
   @IsString()
   username?: string;
-
-  @IsEmpty()
-  password?: string;
 
   @IsOptional()
   @IsEmail()
@@ -33,9 +29,6 @@ class Base extends QueryDto implements Partial<User> {
   @IsEnum(UserRole)
   role?: UserRole;
 
-  @IsEmpty()
-  avatar?: any;
-
   @IsOptional()
   @IsString()
   createdAt?: string;
@@ -46,7 +39,13 @@ class Base extends QueryDto implements Partial<User> {
 }
 
 class QueryUser extends Base
-  implements Partial<Omit<Schema$User, keyof Base>> {}
+  implements Partial<Omit<Param$GetUsers | Schema$User, keyof Base>> {
+  @IsEmpty()
+  password?: string;
+
+  @IsEmpty()
+  avatar?: any;
+}
 
 export class QueryUserDto extends QueryUser
-  implements Required<Omit<Schema$User, keyof QueryUser>> {}
+  implements Required<Omit<Param$GetUsers & Schema$User, keyof QueryUser>> {}

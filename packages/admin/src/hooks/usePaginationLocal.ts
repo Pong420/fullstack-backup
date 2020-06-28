@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import { AllowedNames, paginationSelector } from '@pong420/redux-crud';
 import {
   usePagination,
@@ -19,32 +19,36 @@ interface Props<
   onSuccess?: onSuceess<I>;
 }
 
-const defaultPageSize = 5;
+const defaultPageSize = 10;
 const list = new Array(defaultPageSize).fill({});
 const ids = new Array(defaultPageSize).fill(null);
 
 export function usePaginationLocal<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey> = AllowedNames<I, PropertyKey>
->({ key, pageSize = defaultPageSize, onSuccess, ...props }: Props<I, K>) {
+>({
+  key,
+  pageSize = defaultPageSize,
+  onSuccess,
+  cache = true,
+  ...props
+}: Props<I, K>) {
   const [state, actions] = useCRUDReducer<I, K>({ key, list, ids, pageSize });
-  const { hasData, ...payload } = useMemo(() => paginationSelector(state), [
-    state
-  ]);
-  const { paginate } = actions;
   const onSuccessCallback = useCallback<onSuceess<I>>(
     payload => {
-      paginate(payload);
+      actions.paginate(payload);
       onSuccess && onSuccess(payload);
     },
-    [paginate, onSuccess]
+    [actions, onSuccess]
   );
+
+  const payload = paginationSelector(state);
 
   const { loading, pagination, run } = usePagination({
     ...props,
     ...payload,
     pageSize,
-    hasData,
+    hasData: cache && payload.hasData,
     onSuccess: onSuccessCallback
   });
 

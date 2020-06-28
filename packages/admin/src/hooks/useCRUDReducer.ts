@@ -9,6 +9,7 @@ import {
   parsePageNo
 } from '@pong420/redux-crud';
 import { bindDispatch } from './useActions';
+import { history } from '../store';
 
 const parseOptions: IParseOptions = {
   parseArrays: true
@@ -48,7 +49,7 @@ export function useCRUDReducer<
     // prevent error when dispatch 'RESET'
     function init(state: typeof initialState) {
       const { pageNo, ...params } = qs.parse(
-        window.location.search.slice(1),
+        history.location.search.slice(1),
         parseOptions
       );
       return {

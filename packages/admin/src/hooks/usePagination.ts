@@ -1,9 +1,9 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useRxAsync, RxAsyncFn } from 'use-rx-hooks';
 import { AxiosResponse } from 'axios';
 import { PaginateApiResponse, Pagination } from '@fullstack/typings';
-import { useSearchParam } from './useSearchParam';
 import { PaginationProps } from '../components/Pagination';
+import { setSearchParam } from '../utils/setSearchParam';
 
 export interface PaginationPayload<T> {
   data: T[];
@@ -13,18 +13,15 @@ export interface PaginationPayload<T> {
 
 type Response<I> = I[] | AxiosResponse<PaginateApiResponse<I>>;
 
-export interface RequiredUsePaginationProps<I> {
-  fn: RxAsyncFn<Response<I>, Pagination>;
-  onSuccess: (res: PaginationPayload<I>) => void;
-  onFailure?: (error: any) => void;
-}
-
-export interface UsePaginationProps<I> extends RequiredUsePaginationProps<I> {
+export interface UsePaginationProps<I> {
   pageNo: number;
   total: number;
   pageSize: number;
   hasData?: boolean;
   params: any;
+  fn: RxAsyncFn<Response<I>, Pagination>;
+  onSuccess: (res: PaginationPayload<I>) => void;
+  onFailure?: (error: any) => void;
 }
 
 export function usePagination<I>({
@@ -37,14 +34,13 @@ export function usePagination<I>({
   pageNo,
   params
 }: UsePaginationProps<I>) {
-  const { setSearchParam } = useSearchParam();
+  const paramsRef = useRef(params);
 
   const onSuccessCallback = useCallback(
     (res: Response<I>) => {
       const [data, total] = Array.isArray(res)
         ? [res, res.length]
         : [res.data.data.data, res.data.data.total];
-
       onSuccess({ data, total, pageNo });
     },
     [onSuccess, pageNo]
@@ -58,7 +54,7 @@ export function usePagination<I>({
 
   const { run } = asyncState;
 
-  const pagination: PaginationProps = {
+  const pagination: PaginationProps | undefined = {
     total,
     pageNo,
     size: pageSize,
@@ -67,14 +63,9 @@ export function usePagination<I>({
 
   useEffect(() => {
     if (!hasData) {
-      // this prevent mutile request send
-      const timeout = setTimeout(
-        () => run({ page: pageNo, size: pageSize, ...params }),
-        0
-      );
-      return () => clearTimeout(timeout);
+      run({ page: pageNo, size: pageSize, ...paramsRef.current });
     }
-  }, [hasData, run, pageNo, pageSize, params]);
+  }, [hasData, run, pageNo, pageSize]);
 
   return { ...asyncState, pagination };
 }

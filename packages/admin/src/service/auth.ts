@@ -5,8 +5,11 @@ import {
   Response$RefreshToken,
   Param$CreateUser,
   Response$User,
-  UserRole
+  UserRole,
+  Schema$Login
 } from '@fullstack/typings';
+import { defer, Observable, of } from 'rxjs';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 
 export const login = (params: Param$Login) =>
   api.post<Response$Login>('/auth/login', params);
@@ -21,3 +24,28 @@ export const registerAdmin = (params: Param$CreateUser) =>
   });
 
 export const logout = () => api.post<unknown>('/auth/logout');
+
+let jwtToken$: Observable<Schema$Login> | null;
+
+export function clearJwtToken() {
+  jwtToken$ = null;
+}
+
+const refreshToken$ = (): Observable<Schema$Login> =>
+  defer(() => refreshToken()).pipe(
+    map(res => res.data.data),
+    shareReplay(1)
+  );
+
+export function getJwtToken() {
+  jwtToken$ = jwtToken$ || refreshToken$();
+  return jwtToken$.pipe(
+    switchMap(payload => {
+      const expired = +new Date(payload.expiry) - +new Date() <= 30 * 1000;
+      if (expired) {
+        jwtToken$ = refreshToken$();
+      }
+      return jwtToken$ || of(payload);
+    })
+  );
+}

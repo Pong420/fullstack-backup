@@ -24,10 +24,6 @@ export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
     const index: keyof RefreshToken = 'updatedAt';
     const num = 1;
     async function init() {
-      if (configService.get<string>('NODE_ENV') !== 'development') {
-        await model.deleteMany({});
-      }
-
       try {
         await model.collection.dropIndex(`${index}_${num}`);
       } catch (error) {}
