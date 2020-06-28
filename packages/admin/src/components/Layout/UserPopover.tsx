@@ -10,7 +10,7 @@ const UserMenu = () => {
   const actions = useAuthActions();
   return (
     <Menu>
-      <MenuItem text="Loout" icon="log-out" onClick={actions.logout} />
+      <MenuItem text="Logut" icon="log-out" onClick={actions.logout} />
     </Menu>
   );
 };
