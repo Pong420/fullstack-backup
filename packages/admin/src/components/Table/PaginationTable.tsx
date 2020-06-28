@@ -4,7 +4,9 @@ import { Table, TableProps } from './Table';
 import { NotFound, NotFoundProps } from '../NonIdealState';
 import { Pagination, PaginationProps } from '../Pagination';
 
-interface Props<T extends object> extends TableProps<T>, NotFoundProps {
+export interface PaginationTableProps<T extends object>
+  extends TableProps<T>,
+    NotFoundProps {
   pagination?: PaginationProps;
   loading?: boolean;
 }
@@ -14,7 +16,7 @@ export function PaginationTable<T extends object>({
   loading,
   data,
   ...props
-}: Props<T>) {
+}: PaginationTableProps<T>) {
   const { onPageChange = () => {}, ...paginateProps } = pagination || {};
 
   return (
