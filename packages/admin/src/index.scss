@@ -42,6 +42,6 @@ a {
   @include flex();
   @include dimen(100%);
   min-height: 100%;
-  max-width: 1440px;
+  max-width: $max-width;
   margin: auto;
 }

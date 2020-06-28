@@ -7,6 +7,7 @@ import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
 import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
 import { Validator, compose as composeValidator } from './validators';
 import { NamePath, Paths, PathType, DeepPartial } from './typings';
+import { FormGroup, IFormGroupProps } from '@blueprintjs/core';
 
 export type FormInstance<S extends {} = Store, K extends keyof S = keyof S> = {
   getFieldValue(name: K): S[K];
@@ -37,6 +38,7 @@ export interface FormProps<S extends {} = Store, V = S>
   onValuesChange?: (changes: DeepPartial<S>, values: S) => void;
   transoformInitialValues?: (payload: DeepPartial<V>) => DeepPartial<S>;
   beforeSubmit?: (payload: S) => V;
+  layout?: 'vertical' | 'hrozional' | 'inline' | 'grid';
 }
 
 type OmititedRcFieldProps = Omit<
@@ -73,11 +75,11 @@ type FormItemPropsDeps<S extends {} = Store> =
     };
 
 export type FormItemProps<S extends {} = Store> = BasicFormItemProps<S> &
-  FormItemPropsDeps<S>;
+  FormItemPropsDeps<S> &
+  Pick<IFormGroupProps, 'label' | 'inline'>;
 
 export interface FormItemClassName {
   item?: string;
-  label?: string;
   error?: string;
   touched?: string;
   validating?: string;
@@ -105,26 +107,17 @@ export function createShouldUpdate(
 
 const defaultFormItemClassName: Required<FormItemClassName> = {
   item: 'rc-form-item',
-  label: 'rc-form-item-label',
   error: 'rc-form-item-error',
   touched: 'rc-form-item-touched',
   validating: 'rc-form-item-validating',
   help: 'rc-form-item-help'
 };
 
-export function createForm<S extends {} = Store, V = S>({
+export function createForm<S extends {} = Store>({
   itemClassName,
   ...defaultProps
 }: Partial<FormItemProps<S>> & { itemClassName?: FormItemClassName } = {}) {
   const ClassNames = { ...defaultFormItemClassName, ...itemClassName };
-
-  const FormItemLabel: React.FC<{ label: string }> = ({ children, label }) =>
-    React.createElement(
-      'div',
-      { className: ClassNames.item },
-      React.createElement('label', { className: ClassNames.label }, label),
-      children
-    );
 
   const FormItem = (props_: FormItemProps<S>) => {
     const {
@@ -134,6 +127,7 @@ export function createForm<S extends {} = Store, V = S>({
       deps = [],
       noStyle,
       label,
+      inline,
       className = '',
       ...props
     } = {
@@ -187,9 +181,11 @@ export function createForm<S extends {} = Store, V = S>({
 
         const error = errors && errors[0];
 
-        return React.createElement(
-          'div',
+        return React.createElement<IFormGroupProps>(
+          FormGroup,
           {
+            label,
+            inline,
             className: [
               className,
               ClassNames.item,
@@ -201,7 +197,6 @@ export function createForm<S extends {} = Store, V = S>({
               .join(' ')
               .trim()
           },
-          React.createElement('label', { className: ClassNames.label }, label),
           childNode,
           React.createElement('div', { className: ClassNames.help }, error)
         );
@@ -212,6 +207,7 @@ export function createForm<S extends {} = Store, V = S>({
   const Form = React.forwardRef<FormInstance<S>, FormProps<S>>(
     (
       {
+        layout = 'vertical',
         children,
         onFinish,
         beforeSubmit,
@@ -220,12 +216,13 @@ export function createForm<S extends {} = Store, V = S>({
         ...props
       },
       ref
-    ) =>
-      React.createElement(
+    ) => {
+      return React.createElement(
         RcForm,
         {
           ...props,
           ref,
+          className: `rc-form ${layout}`,
           initialValues:
             initialValues && transoformInitialValues
               ? transoformInitialValues(initialValues)
@@ -237,7 +234,8 @@ export function createForm<S extends {} = Store, V = S>({
             })
         } as any,
         children
-      )
+      );
+    }
   );
 
   const useForm: () => [FormInstance<S>] = RcUseForm as any;
@@ -247,7 +245,6 @@ export function createForm<S extends {} = Store, V = S>({
     FormItem,
     FormList: RcForm.List,
     FormProvider: RcForm.FormProvider,
-    FormItemLabel,
     useForm
   };
 }

@@ -1,0 +1,26 @@
+.filter-popover {
+  $padding: 15px;
+  $popover-max-width: calc(100vw - #{$sidebar-width} - 170px - #{$padding} * 2);
+
+  .#{$ns}-popover-content {
+    padding: $padding;
+    max-width: $popover-max-width;
+    @media only screen and (min-width: $max-width) {
+      max-width: $max-width - $sidebar-width - $padding * 2 - 170px;
+    }
+  }
+
+  .rc-form.grid {
+    @include dimen($popover-max-width);
+    max-width: 100%;
+  }
+
+  .filter-footer {
+    text-align: right;
+    .#{$ns}-button {
+      + .#{$ns}-button {
+        margin-left: 10px;
+      }
+    }
+  }
+}

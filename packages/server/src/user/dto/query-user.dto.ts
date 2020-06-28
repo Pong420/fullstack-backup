@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { Schema$User, Param$GetUsers, UserRole } from '@fullstack/typings';
 import { QueryDto } from '../../utils/MongooseCRUDService';
+import { Transform } from 'class-transformer';
 
 class Base extends QueryDto implements Param$GetUsers {
   @IsOptional()
@@ -27,6 +28,7 @@ class Base extends QueryDto implements Param$GetUsers {
 
   @IsOptional()
   @IsEnum(UserRole)
+  @Transform(Number)
   role?: UserRole;
 
   @IsOptional()

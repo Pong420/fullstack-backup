@@ -35,6 +35,7 @@ export function usePagination<I>({
   params
 }: UsePaginationProps<I>) {
   const paramsRef = useRef(params);
+  paramsRef.current = params;
 
   const onSuccessCallback = useCallback(
     (res: Response<I>) => {

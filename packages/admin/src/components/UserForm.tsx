@@ -1,8 +1,8 @@
 import React from 'react';
-import { HTMLSelect } from '@blueprintjs/core';
 import { Schema$User } from '@fullstack/typings';
 import { createForm, FormItemProps, validators } from '../utils/form';
 import { Input, Password as PasswordInput } from './Input';
+import { UserRoleSelect } from './UserRoleSelect';
 
 interface Schema extends Schema$User {
   confirmPassword: string;
@@ -89,13 +89,7 @@ export function createUserForm(itemProps?: FormItemProps<Schema>) {
 
   const UserRole = () => (
     <FormItem name="nickname" label="Nickname">
-      <HTMLSelect>
-        {Object.entries(UserRole).map(([label, value]) => (
-          <option key={label} value={value}>
-            {label}
-          </option>
-        ))}
-      </HTMLSelect>
+      <UserRoleSelect />
     </FormItem>
   );
 
