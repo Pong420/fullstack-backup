@@ -10,7 +10,7 @@ import { Users } from './pages/Users';
 import { Settings } from './pages/Settings';
 import { PATHS } from './constants';
 
-function Main() {
+const Main = React.memo(() => {
   return (
     <>
       <Sidebar />
@@ -21,7 +21,7 @@ function Main() {
       <PrivateRoute path={PATHS.SETTINGS} component={Settings} />
     </>
   );
-}
+});
 
 const App = React.memo(() => (
   <Switch>

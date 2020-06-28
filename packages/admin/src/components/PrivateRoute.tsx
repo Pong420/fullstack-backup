@@ -1,40 +1,61 @@
-import React, { useEffect } from 'react';
-import { Route, RouteProps, Redirect } from 'react-router-dom';
+import React, { useEffect, ReactElement } from 'react';
+import {
+  Route,
+  Redirect,
+  RouteProps,
+  RouteComponentProps
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { PATHS } from '../constants';
 import { loginStatusSelector, useAuthActions } from '../store';
+import { PATHS } from '../constants';
 
-export function PrivateRoute({
-  component: Component,
-  render,
-  ...rest
-}: RouteProps) {
-  const loginStatus = useSelector(loginStatusSelector);
+interface ContentProps extends RouteComponentProps {
+  children: ReactElement;
+}
+
+interface PrivateRouteProps extends Omit<RouteProps, 'render'> {
+  render?: (props: RouteComponentProps) => ReactElement;
+}
+
+const PrivateRouteConent = ({ children, location }: ContentProps) => {
   const { authorize } = useAuthActions();
+  const loginStatus = useSelector(loginStatusSelector);
 
   useEffect(() => {
     loginStatus === 'unknown' && authorize();
   }, [authorize, loginStatus]);
 
-  if (loginStatus === 'unknown' || loginStatus === 'loading') {
-    return null;
+  switch (loginStatus) {
+    case 'unknown':
+    case 'loading':
+      return null;
+    case 'loggedIn':
+      return children;
+    case 'required':
+      return <Redirect to={{ pathname: PATHS.LOGIN, state: location }} />;
   }
+};
 
+export function PrivateRoute({
+  component: Component,
+  render,
+  ...rest
+}: PrivateRouteProps) {
   return (
     <Route
       {...rest}
       render={props => {
-        switch (loginStatus) {
-          case 'loggedIn':
-            if (render) {
-              return render(props);
-            } else if (Component) {
-              return <Component {...props} />;
-            }
+        let content: ReactElement | null = null;
+
+        if (render) {
+          content = render(props);
+        } else if (Component) {
+          content = <Component {...props} />;
         }
-        return (
-          <Redirect to={{ pathname: PATHS.LOGIN, state: props.location }} />
-        );
+
+        if (content) {
+          return <PrivateRouteConent {...props}>{content}</PrivateRouteConent>;
+        }
       }}
     />
   );
