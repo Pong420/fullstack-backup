@@ -1,12 +1,19 @@
-import { of, merge, empty, defer } from 'rxjs';
-import { switchMap, mergeMap, catchError, map } from 'rxjs/operators';
+import { of, merge, empty, defer, fromEvent, race } from 'rxjs';
+import {
+  switchMap,
+  mergeMap,
+  catchError,
+  map,
+  tap,
+  filter
+} from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
 import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
-import { login, refreshToken } from '../../service';
+import { login, logout, refreshToken } from '../../service';
 
 type Actions = AuthActions | RouterAction;
 type AuthEpic = Epic<Actions, Actions, RootState>;
@@ -51,4 +58,28 @@ const loginEpic: AuthEpic = (action$, state$) =>
     })
   );
 
-export default [loginEpic];
+const logoutEpic: AuthEpic = action$ => {
+  const key = 'logout';
+
+  // Sync log out if user logged in on the different tab
+  // Note: StorageEvent is fired in different page with the same domain.
+  const logoutEvent$ = fromEvent<StorageEvent>(window, 'storage').pipe(
+    filter(event => event.key === key)
+  );
+
+  const logoutApi$ = action$.pipe(
+    ofType<Actions, AuthActionMap['LOGOUT']>(AuthActionTypes.LOGOUT),
+    switchMap(() => {
+      return defer(() => logout()).pipe(
+        tap(() => localStorage.setItem(key, new Date().toISOString())),
+        catchError(() => empty())
+      );
+    })
+  );
+
+  return race(logoutEvent$, logoutApi$).pipe(
+    map<unknown, Actions>(() => replace(PATHS.LOGIN))
+  );
+};
+
+export default [loginEpic, logoutEpic];

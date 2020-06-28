@@ -19,3 +19,5 @@ export const registerAdmin = (params: Param$CreateUser) =>
     ...params,
     role: UserRole.ADMIN
   });
+
+export const logout = () => api.post<unknown>('/auth/logout');

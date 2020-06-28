@@ -41,7 +41,7 @@ function authFailure() {
   };
 }
 
-function logout() {
+export function logout() {
   return {
     type: AuthActionTypes.LOGOUT
   };

@@ -31,6 +31,7 @@ export default function (
         loginStatus: 'loggedIn'
       };
 
+    case AuthActionTypes.LOGOUT:
     case AuthActionTypes.FAILURE:
       return {
         ...state,
