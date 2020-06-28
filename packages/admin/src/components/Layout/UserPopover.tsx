@@ -10,7 +10,7 @@ const UserMenu = () => {
   const actions = useAuthActions();
   return (
     <Menu>
-      <MenuItem text="Logut" icon="log-out" onClick={actions.logout} />
+      <MenuItem text="Logout" icon="log-out" onClick={actions.logout} />
     </Menu>
   );
 };
@@ -18,7 +18,7 @@ const UserMenu = () => {
 export const UserPopover = ({ nickname }: UserPopoverProps) => (
   <Popover content={<UserMenu />} position="bottom-right">
     <Button minimal icon="user">
-      <b>{nickname}</b>
+      {nickname && <b>{nickname}</b>}
     </Button>
   </Popover>
 );
