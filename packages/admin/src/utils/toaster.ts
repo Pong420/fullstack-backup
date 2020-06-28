@@ -60,7 +60,7 @@ export const Toaster = {
       message: renderMessage('Error', options.message)
     });
   },
-  apiError<T extends ApiError>(error: T, prefix?: string) {
+  apiError<T extends ApiError>(prefix: string = '', error: T) {
     toaseterSubject.next({
       ...defaultOptions,
       className: 'api-error-toaster',

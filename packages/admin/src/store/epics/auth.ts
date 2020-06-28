@@ -33,7 +33,12 @@ const loginEpic: AuthEpic = (action$, state$) =>
     ofType<Actions, AuthActionMap['AUTHORIZE']>(AuthActionTypes.AUTHORIZE),
     switchMap(action => {
       const request$ = defer(() =>
-        action.payload ? login(action.payload) : refreshToken()
+        action.payload
+          ? login(action.payload).catch(error => {
+              Toaster.apiError('Login failure', error);
+              throw error;
+            })
+          : refreshToken()
       ).pipe(map(res => res.data.data));
 
       return request$.pipe(
@@ -54,11 +59,7 @@ const loginEpic: AuthEpic = (action$, state$) =>
               : empty()
           );
         }),
-        catchError(error =>
-          of<Actions>({ type: AuthActionTypes.FAILURE }).pipe(
-            tap(() => Toaster.apiError(error, 'Login failure'))
-          )
-        )
+        catchError(() => of<Actions>({ type: AuthActionTypes.FAILURE }))
       );
     })
   );
@@ -81,7 +82,7 @@ const logoutEpic: AuthEpic = action$ => {
           Toaster.success({ message: 'Logout success' });
         }),
         catchError(error => {
-          Toaster.apiError(error, 'Logout failure');
+          Toaster.apiError('Logout failure', error);
           return empty();
         })
       );
