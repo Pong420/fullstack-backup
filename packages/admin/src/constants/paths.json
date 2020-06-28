@@ -3,5 +3,9 @@
   "AUTH": "/auth",
   "LOGIN": "/auth/login",
   "ADMIN_REGISTRATION": "/auth/register/admin",
-  "GUEST_REGISTRATION": "/auth/register/guest"
+  "GUEST_REGISTRATION": "/auth/register/guest",
+  "ORDERS": "/orders",
+  "PRODUCTS": "/products",
+  "USERS": "/users",
+  "SETTINGS": "/settings"
 }

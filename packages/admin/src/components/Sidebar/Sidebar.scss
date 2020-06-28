@@ -1,0 +1,131 @@
+$sidebar-width: 250px;
+$sidebar-padding-x: 15px;
+$radius: 5px;
+
+.sidebar {
+  @include sq-dimen(100%);
+  @include relative();
+  width: $sidebar-width;
+  flex: 0 0 auto;
+  z-index: $pt-z-index-overlay - 1;
+}
+
+.sidebar-inner {
+  @include dimen(1000px + $sidebar-width, 100vh);
+  @include fixed();
+  @include padding-y(20px 30px);
+  box-shadow: 1px 0 0 rgba(16, 22, 26, 0.15);
+  background-color: #fff;
+  overflow-y: auto;
+  margin-left: -1000px;
+  padding-left: 1000px + $sidebar-padding-x;
+  padding-right: $sidebar-padding-x;
+}
+
+$logo-size: 80px;
+$icon-size: 28px;
+
+.sidebar-header {
+  @include flex(center);
+  font-weight: 600;
+
+  svg {
+    color: $dark-gray5;
+    font-size: $logo-size;
+    margin-right: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  a {
+    color: $pt-text-color-muted;
+    font-size: 12px;
+    margin-left: 2.5px;
+  }
+
+  + .#{$ns}-divider {
+    @include margin-y(15px 10px);
+    @include margin-x(-$sidebar-padding-x);
+  }
+}
+
+.sidebar-item {
+  @include relative();
+  @include margin-x(-$sidebar-padding-x);
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  padding-left: $sidebar-padding-x;
+
+  .sidebar-item-body {
+    @include dimen(100%, 50px);
+    @include flex(center);
+    @include relative();
+  }
+
+  .icon {
+    @include sq-dimen($icon-size);
+    @include flex(center, center);
+    margin-right: 10px;
+    border-radius: 9px;
+    margin-left: (($logo-size * 0.65) - $icon-size) / 2 - 1px;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:before {
+    @include absolute(0, 0, 0);
+    @include margin-y(auto);
+    @include dimen(calc(100% - #{$sidebar-padding-x}), 100%);
+
+    border-radius: $radius;
+    content: '';
+    margin-left: -$radius;
+  }
+
+  + .sidebar-item {
+    margin-top: 10px;
+  }
+
+  $colors: ($gray3, $blue3, $green3, $orange3, $red3);
+  @each $color in $colors {
+    $i: index($colors, $color);
+    &:nth-child(#{$i}) {
+      .icon {
+        color: #fff;
+        background-color: $color;
+      }
+
+      &:hover {
+        color: $color;
+
+        &:before {
+          background-color: rgba($color, 0.1);
+        }
+      }
+
+      &.active {
+        & {
+          color: #fff;
+        }
+
+        .icon {
+          background-color: #fff;
+          color: $color;
+        }
+
+        &:before {
+          background-color: $color;
+          box-shadow: 0 0 0 1px rgba($color, 0.1), 0 2px 4px rgba($color, 0.2),
+            0 8px 24px rgba($color, 0.2);
+        }
+      }
+    }
+  }
+}

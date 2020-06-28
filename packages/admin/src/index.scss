@@ -31,6 +31,17 @@ img {
 
 a,
 a:hover {
-  text-decoration: none;
   color: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  @include flex();
+  @include dimen(100%);
+  min-height: 100%;
+  max-width: 1440px;
+  margin: auto;
 }

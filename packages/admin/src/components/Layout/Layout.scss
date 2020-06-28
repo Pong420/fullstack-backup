@@ -1,0 +1,28 @@
+.layout {
+  @include flex($flex-direction: column);
+  @include dimen(100%);
+  padding: 15px;
+
+  .layout-content {
+    @include sq-dimen(100%);
+    margin-top: 15px;
+  }
+
+  .#{$ns}-navbar {
+    position: sticky;
+    top: 15px;
+
+    .#{$ns}-navbar-heading {
+      @include flex(center);
+      font-weight: bold;
+
+      .bp3-icon {
+        margin-right: 8px;
+
+        svg {
+          @include sq-dimen(22px);
+        }
+      }
+    }
+  }
+}

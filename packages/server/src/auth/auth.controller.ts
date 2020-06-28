@@ -104,7 +104,8 @@ export class AuthController {
       }
 
       if (refreshToken) {
-        const signResult = this.authService.signJwt(refreshToken.toJSON());
+        const refreshTokenJson = refreshToken.toJSON();
+        const signResult = this.authService.signJwt(refreshTokenJson);
         return reply
           .setCookie(
             REFRESH_TOKEN_COOKIES,
@@ -116,7 +117,7 @@ export class AuthController {
             transformResponse<Schema$Login>(HttpStatus.OK, {
               ...signResult,
               isDefaultAc: false,
-              user: formatJWTSignPayload(refreshToken)
+              user: formatJWTSignPayload(refreshTokenJson)
             })
           );
       }

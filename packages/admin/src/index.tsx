@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import configureStore, { history, logout } from './store';
+import configureStore, { history } from './store';
 import { FocusStyleManager } from '@blueprintjs/core';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
@@ -13,10 +13,6 @@ import './index.scss';
 const store = configureStore();
 
 FocusStyleManager.onlyShowFocusOnTabs();
-
-window.addEventListener('dblclick', () => {
-  store.dispatch(logout());
-});
 
 function render() {
   return ReactDOM.render(
