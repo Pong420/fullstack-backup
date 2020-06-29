@@ -37,3 +37,4 @@ function createSetSearchParam({
 }
 
 export const setSearchParam = createSetSearchParam();
+export const clearSearchParam = () => history.push({ search: '' });

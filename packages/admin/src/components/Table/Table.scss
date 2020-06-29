@@ -2,6 +2,12 @@ table {
   @include dimen(100%);
 }
 
+.#{$ns}-html-table {
+  + .#{$ns}-non-ideal-state {
+    @include margin-y(20px);
+  }
+}
+
 .pagination-table {
   @include flex($flex-direction: column);
   @include relative();
