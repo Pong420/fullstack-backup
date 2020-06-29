@@ -16,7 +16,7 @@ export const userValidaors = {
       validators.maxLength(20, 'Username cannot more then 20'),
       validators.regex(
         /^[a-z][a-z0-9]*$/i,
-        'Username must be english character or alphanumeric'
+        'Username can only contain alphanumeric characters (letters A-Z, numbers 0-9)'
       )
     ])
   },
