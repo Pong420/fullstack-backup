@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { Schema$User, UserRole } from '@fullstack/typings';
 import { PaginationTable, PaginationTableProps } from '../../components/Table';
 import { Avatar } from '../../components/Avatar';
+import { DeleteUser, OnDelete } from './UserActions';
 
 type Props = PaginationTableProps<Partial<Schema$User>>;
+type Columns = Props['columns'];
 
-const columns: Props['columns'] = [
+const userColumns: Columns = [
   {
     Header: 'Avatar',
     accessor: ({ avatar, username }) => (
@@ -35,15 +37,29 @@ const columns: Props['columns'] = [
     Header: 'Created At',
     accessor: ({ createdAt }) =>
       createdAt && dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
-  },
-  {
-    Header: 'Actions',
-    accessor: () => {
-      return null;
-    }
   }
 ];
 
-export function UserTable(props: Omit<Props, 'columns'>) {
+export function UserTable({
+  onDelete,
+  ...props
+}: Omit<Props, 'columns'> & OnDelete) {
+  const columns = useMemo(
+    () => [
+      ...userColumns,
+      {
+        Header: 'Actions',
+        accessor: ({ id, nickname }) =>
+          !!id &&
+          !!nickname && (
+            <>
+              <DeleteUser id={id} nickname={nickname} onDelete={onDelete} />
+            </>
+          )
+      }
+    ],
+    [onDelete]
+  );
+
   return <PaginationTable {...props} columns={columns} />;
 }

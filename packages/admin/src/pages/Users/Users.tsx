@@ -19,7 +19,7 @@ const {
 } = createFilter<Param$GetUsers>();
 
 export function Users() {
-  const { data, loading, pagination, params } = usePaginationLocal<
+  const { data, loading, pagination, params, actions } = usePaginationLocal<
     Schema$User,
     'id'
   >({
@@ -45,7 +45,12 @@ export function Users() {
       }
     >
       <Card>
-        <UserTable data={data} loading={loading} pagination={pagination} />
+        <UserTable
+          data={data}
+          loading={loading}
+          pagination={pagination}
+          onDelete={actions.delete}
+        />
       </Card>
     </Layout>
   );

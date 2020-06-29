@@ -36,6 +36,10 @@ export interface Param$UpdateUser
   avatar?: unknown | null;
 }
 
+export interface Param$User {
+  id: string;
+}
+
 export interface Schema$User extends Param$CreateUser, Timestamp {
   id: string;
   role: UserRole;
