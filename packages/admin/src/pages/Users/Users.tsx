@@ -11,7 +11,12 @@ import { UserRoleSelect } from '../../components/UserRoleSelect';
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Get users failure');
 
-const { Filter, FilterInput, FormItem } = createFilter<Param$GetUsers>();
+const {
+  Filter, //
+  FilterInput,
+  FormItem,
+  FilterDateRange
+} = createFilter<Param$GetUsers>();
 
 export function Users() {
   const { data, loading, pagination, params } = usePaginationLocal<
@@ -35,6 +40,7 @@ export function Users() {
           <FormItem name="role" label="Role">
             <UserRoleSelect />
           </FormItem>
+          <FilterDateRange name="createdAt" label="Created At" />
         </Filter>
       }
     >

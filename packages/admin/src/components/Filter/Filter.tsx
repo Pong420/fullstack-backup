@@ -1,20 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { fromEvent } from 'rxjs';
 import { Button, Popover, H5, IPopoverProps } from '@blueprintjs/core';
+import { DateRangeInput } from '@blueprintjs/datetime';
+import { Timestamp } from '@fullstack/typings';
 import { createForm, FormProps, FormItemProps } from '../../utils/form';
 import { setSearchParam } from '../../utils/setSearchParam';
 import { useBoolean } from '../../hooks/useBoolean';
 import { Input } from '../Input';
+import dayjs from 'dayjs';
 
 interface FilterInputProps {
   deps?: undefined;
   placeholder?: string;
 }
 
+interface FilterDateRangeProps {
+  deps?: undefined;
+}
+
 export { Input };
 
+const dateKeys: (keyof Timestamp)[] = ['createdAt', 'updatedAt'];
+
 export function createFilter<T>(itemProps?: FormItemProps<T>) {
-  const components = createForm<T>(itemProps);
+  const components = createForm<T, T>(itemProps);
   const { Form, FormItem, useForm } = components;
 
   function FilterContent({
@@ -25,12 +34,20 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
     ...props
   }: FormProps<T> = {}) {
     const [form] = useForm();
+    const { setFieldsValue } = form;
     const params = useRef<any>();
     params.current = initialValues;
 
     useEffect(() => {
-      form.setFieldsValue(params.current);
-    }, [form]);
+      const clone = { ...params.current };
+      for (const key of dateKeys) {
+        const date = clone[key];
+        clone[key] = Array.isArray(date)
+          ? date.map(s => new Date(s))
+          : undefined;
+      }
+      setFieldsValue(clone);
+    }, [setFieldsValue]);
 
     return (
       <>
@@ -41,7 +58,7 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
             form={form}
             layout={layout}
             onFinish={payload => {
-              setSearchParam(payload);
+              setSearchParam(payload as Record<string, unknown>);
               onFinish && onFinish(payload);
             }}
           >
@@ -114,9 +131,26 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
     );
   }
 
+  function FilterDateRange(
+    props: FormItemProps<T> & FilterDateRangeProps = {}
+  ) {
+    return (
+      <FormItem {...props}>
+        <DateRangeInput
+          className="date-range-input"
+          shortcuts={false}
+          allowSingleDayRange
+          formatDate={date => dayjs(date).format('YYYY-MM-DD')}
+          parseDate={str => new Date(str)}
+        />
+      </FormItem>
+    );
+  }
+
   return {
     ...components,
     Filter,
-    FilterInput
+    FilterInput,
+    FilterDateRange
   };
 }

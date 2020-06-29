@@ -6,14 +6,37 @@ import {
   UpdateQuery,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import { IsNumber, IsOptional, IsString, IsEmpty } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsEmpty,
+  IsObject
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-import { PaginateResult, Pagination, Search, Order } from '@fullstack/typings';
+import {
+  PaginateResult,
+  Pagination,
+  Search,
+  Order,
+  Timestamp
+} from '@fullstack/typings';
 import { formatSearchQuery, Condition } from './formatSearchQuery';
 
 export { Condition };
 
-type QuerySchema = { [K in keyof (Pagination & Search)]: unknown };
+type QuerySchema = {
+  [K in keyof (Pagination & Search & Timestamp)]?: unknown;
+};
+
+const formatDateRange = (payload?: unknown) => {
+  if (Array.isArray(payload)) {
+    const [from, to] = payload;
+    if (from && to) {
+      return { $gte: from, $lte: to };
+    }
+  }
+};
 
 class Base implements QuerySchema {
   @IsNumber()
@@ -35,6 +58,16 @@ class Base implements QuerySchema {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @IsObject({ each: true })
+  @Transform(formatDateRange)
+  createdAt?: { $gte: string; $lte: string };
+
+  @IsOptional()
+  @IsString({ each: true })
+  @Transform(formatDateRange)
+  updatedAt?: { $gte: string; $lte: string };
 }
 
 export class QueryDto extends Base

@@ -1642,6 +1642,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@blueprintjs/datetime@npm:^3.18.3":
+  version: 3.18.3
+  resolution: "@blueprintjs/datetime@npm:3.18.3"
+  dependencies:
+    "@blueprintjs/core": ^3.29.0
+    classnames: ^2.2
+    react-day-picker: 7.3.2
+    react-lifecycles-compat: ^3.0.4
+    tslib: ~1.10.0
+  peerDependencies:
+    react: ^15.3.0 || 16
+    react-dom: ^15.3.0 || 16
+  checksum: 6d596722b719d35b9de245359f86f7e74de14ef4590e2c265b8a1676648450c0e7e6287d8c7a507e5e76999f8e1a6b07c38c3e2b50a734191db23a8400e1505b
+  languageName: node
+  linkType: hard
+
 "@blueprintjs/icons@npm:^3.19.0":
   version: 3.19.0
   resolution: "@blueprintjs/icons@npm:3.19.0"
@@ -1683,6 +1699,7 @@ __metadata:
   resolution: "@fullstack/admin@workspace:packages/admin"
   dependencies:
     "@blueprintjs/core": ^3.29.0
+    "@blueprintjs/datetime": ^3.18.3
     "@fullstack/typings": "workspace:packages/typings"
     "@pong420/redux-crud": ^1.4.6
     "@types/node": ^14.0.14
@@ -15371,6 +15388,17 @@ fsevents@^1.2.7:
     regenerator-runtime: ^0.13.3
     whatwg-fetch: ^3.0.0
   checksum: 94d24bf1d69a0cbb26d8adbb14ba600b29c7c5adc06c9f9c8337d0f8ee7358ee2c443d806f8ca96fdf002d7f37c1a5fae6a796f63164df44a4fc3996aeb2d71f
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:7.3.2":
+  version: 7.3.2
+  resolution: "react-day-picker@npm:7.3.2"
+  dependencies:
+    prop-types: ^15.6.2
+  peerDependencies:
+    react: ~0.13.x || ~0.14.x || ^15.0.0 || ^16.0.0
+  checksum: 88d35df1960a68564394895c41268c13c5a12221e659be6bc4dd90afebf06ff20aef3a36e5857d25baa4e8322841c5c22132df4b0be1e2bb185105eeb1ab259a
   languageName: node
   linkType: hard
 

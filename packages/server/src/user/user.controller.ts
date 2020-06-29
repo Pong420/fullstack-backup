@@ -30,7 +30,6 @@ export class UserController extends MongooseCRUDController<User> {
   create(dto: CreateUserDto): Promise<User> {
     return this.userService.create(dto);
   }
-  // Cast to 'Object' failed for value '1' at path '$or.0'
   @Get()
   @Access('ADMIN', 'MANAGER')
   getAll(

@@ -1,13 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  FastifyAdapter,
-  NestFastifyApplication
-} from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Response } from 'superagent';
 import { AppModule } from './src/app.module';
-import { setupApp } from './src/setup';
+import { setupApp, fastifyAdapter, NestFastifyApplication } from './src/setup';
 import { createUser, CreateUserDto } from './test/utils/user';
 import NodeEnvironment from 'jest-environment-node';
 import supertest from 'supertest';
@@ -38,7 +34,7 @@ export default class NestNodeEnvironment extends NodeEnvironment {
       }).compile();
 
       const app = moduleFixture.createNestApplication<NestFastifyApplication>(
-        new FastifyAdapter()
+        fastifyAdapter
       );
 
       await setupApp(app);

@@ -3,11 +3,21 @@ import { Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication
+} from '@nestjs/platform-fastify';
 import { MongooseExceptionFilter } from './utils/MongooseExceptionFilter';
 import { ResponseInterceptor } from './utils/ResponseInterceptor';
 import { RoleGuard } from './utils/role.guard';
 import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
+import qs from 'qs';
+
+export { NestFastifyApplication };
+
+export const fastifyAdapter = new FastifyAdapter({
+  querystringParser: qs.parse
+});
 
 export async function setupApp(app: NestFastifyApplication): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

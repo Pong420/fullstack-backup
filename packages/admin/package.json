@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.29.0",
+    "@blueprintjs/datetime": "^3.18.3",
     "@fullstack/typings": "workspace:packages/typings",
     "@pong420/redux-crud": "^1.4.6",
     "axios": "^0.19.2",

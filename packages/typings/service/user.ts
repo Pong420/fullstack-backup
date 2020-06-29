@@ -3,7 +3,8 @@ import {
   ApiResponse,
   PaginateApiResponse,
   Pagination,
-  Search
+  Search,
+  DateRange
 } from './';
 
 export enum UserRole {
@@ -18,8 +19,7 @@ export interface Param$GetUsers extends Pagination, Search {
   email?: string;
   nickname?: string;
   role?: UserRole;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: DateRange;
 }
 
 export interface Param$CreateUser {

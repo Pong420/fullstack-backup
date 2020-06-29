@@ -34,6 +34,8 @@ export interface Timestamp {
   updatedAt: string;
 }
 
+export type DateRange = [string, string];
+
 export enum Order {
   ASC,
   DESC
