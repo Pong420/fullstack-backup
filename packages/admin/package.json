@@ -28,7 +28,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.29.0",
     "@fullstack/typings": "workspace:packages/typings",
-    "@pong420/redux-crud": "^1.4.5",
+    "@pong420/redux-crud": "^1.4.6",
     "axios": "^0.19.2",
     "connected-react-router": "^6.8.0",
     "dayjs": "^1.8.28",

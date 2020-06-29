@@ -1684,7 +1684,7 @@ __metadata:
   dependencies:
     "@blueprintjs/core": ^3.29.0
     "@fullstack/typings": "workspace:packages/typings"
-    "@pong420/redux-crud": ^1.4.5
+    "@pong420/redux-crud": ^1.4.6
     "@types/node": ^14.0.14
     "@types/qs": ^6
     "@types/react": ^16.9.41
@@ -2452,12 +2452,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pong420/redux-crud@npm:^1.4.5":
-  version: 1.4.5
-  resolution: "@pong420/redux-crud@npm:1.4.5"
+"@pong420/redux-crud@npm:^1.4.6":
+  version: 1.4.6
+  resolution: "@pong420/redux-crud@npm:1.4.6"
   dependencies:
     qs: ^6.9.1
-  checksum: c12418d722efcbcc99ead5e97b3208bd511ba1cb66a17de2e397223253a7a00b7cfcb5c5a9cf874edc17c01091abb6739ceff3b9c990b81fd8834ec8f3657f76
+  checksum: 827a17a93bf1b69ae49167582d38ae8219abf436f530e764b51fd61f6a58c0e221748e6a2014e50bfae33a26c6e455c5a9ed490a1eb7cc68c6a78bea40c43aa7
   languageName: node
   linkType: hard
 

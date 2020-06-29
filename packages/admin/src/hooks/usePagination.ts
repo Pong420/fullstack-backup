@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRxAsync, RxAsyncFn } from 'use-rx-hooks';
 import { AxiosResponse } from 'axios';
 import { PaginateApiResponse, Pagination } from '@fullstack/typings';
@@ -34,9 +34,6 @@ export function usePagination<I>({
   pageNo,
   params
 }: UsePaginationProps<I>) {
-  const paramsRef = useRef(params);
-  paramsRef.current = params;
-
   const onSuccessCallback = useCallback(
     (res: Response<I>) => {
       const [data, total] = Array.isArray(res)
@@ -64,9 +61,9 @@ export function usePagination<I>({
 
   useEffect(() => {
     if (!hasData) {
-      run({ page: pageNo, size: pageSize, ...paramsRef.current });
+      run({ page: pageNo, size: pageSize, ...params });
     }
-  }, [hasData, run, pageNo, pageSize]);
+  }, [hasData, run, pageNo, pageSize, params]);
 
   return { ...asyncState, pagination };
 }
