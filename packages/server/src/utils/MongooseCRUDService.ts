@@ -11,6 +11,8 @@ import { Transform } from 'class-transformer';
 import { PaginateResult, Pagination, Search, Order } from '@fullstack/typings';
 import { formatSearchQuery, Condition } from './formatSearchQuery';
 
+export { Condition };
+
 type QuerySchema = { [K in keyof (Pagination & Search)]: unknown };
 
 class Base implements QuerySchema {

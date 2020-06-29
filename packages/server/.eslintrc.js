@@ -23,7 +23,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-unused-vars': [
       'warn',
-      { ignoreRestSiblings: true, argsIgnorePattern: 'Query' }
+      { ignoreRestSiblings: true, argsIgnorePattern: '_' }
     ]
   }
 };

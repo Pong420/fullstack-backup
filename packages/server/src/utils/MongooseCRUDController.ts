@@ -5,20 +5,27 @@ import {
   Post,
   Patch,
   Delete,
-  Query, // eslint-disable-line @typescript-eslint/no-unused-vars
+  Query,
   NotFoundException
 } from '@nestjs/common';
 import { PaginateResult } from '@fullstack/typings';
-import { MongooseCRUDService, QueryDto } from './MongooseCRUDService';
+import {
+  MongooseCRUDService,
+  QueryDto,
+  Condition
+} from './MongooseCRUDService';
 import { ObjectId } from '../decorators';
 
-export { PaginateResult, QueryDto, ObjectId };
+export { PaginateResult, QueryDto, ObjectId, Condition };
 
 export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   constructor(private readonly service: MongooseCRUDService<T, D>) {}
 
   @Get()
-  async getAll(@Query() query: QueryDto): Promise<PaginateResult<T>> {
+  async getAll(
+    @Query() query: QueryDto,
+    ..._args: unknown[]
+  ): Promise<PaginateResult<T>> {
     return this.service.paginate(query);
   }
 
