@@ -41,7 +41,12 @@ describe('AuthController (e2e)', () => {
 
   describe('Login', () => {
     it('Login with default admin', async done => {
-      let response = await loginAsDefaultAdmin();
+      // Check auth guard for registerAdmin
+      let response = await registerAdmin(mockAdmin, '');
+      expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+
+      // Check login with default admin
+      response = await loginAsDefaultAdmin();
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toMatchObject({ isDefaultAc: true });
 

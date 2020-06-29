@@ -54,7 +54,9 @@ const loginEpic: AuthEpic = (action$, state$) =>
       return request$.pipe(
         mergeMap(payload => {
           const { location } = state$.value.router;
-          const redirect = isLocation(location.state)
+          const redirect = payload.isDefaultAc
+            ? PATHS.ADMIN_REGISTRATION
+            : isLocation(location.state)
             ? location.state.pathname + location.state.search
             : location.pathname === PATHS.LOGIN
             ? PATHS.HOME
@@ -62,11 +64,7 @@ const loginEpic: AuthEpic = (action$, state$) =>
 
           return merge<Actions>(
             of({ type: AuthActionTypes.SCCUESS, payload: payload.user }),
-            payload.isDefaultAc
-              ? empty()
-              : redirect
-              ? of<Actions>(replace(redirect, {}))
-              : empty()
+            redirect ? of<Actions>(replace(redirect, {})) : empty()
           );
         }),
         catchError(() => of<Actions>({ type: AuthActionTypes.FAILURE }))

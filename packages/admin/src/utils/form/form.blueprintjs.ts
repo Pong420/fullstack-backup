@@ -113,7 +113,7 @@ const defaultFormItemClassName: Required<FormItemClassName> = {
   help: 'rc-form-item-help'
 };
 
-export function createForm<S extends {} = Store>({
+export function createForm<S extends {} = Store, V = S>({
   itemClassName,
   ...defaultProps
 }: Partial<FormItemProps<S>> & { itemClassName?: FormItemClassName } = {}) {
@@ -204,7 +204,7 @@ export function createForm<S extends {} = Store>({
     );
   };
 
-  const Form = React.forwardRef<FormInstance<S>, FormProps<S>>(
+  const Form = React.forwardRef<FormInstance<S>, FormProps<S, V>>(
     (
       {
         layout = 'vertical',

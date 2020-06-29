@@ -209,7 +209,7 @@ export function createForm<S extends {} = Store, V = S>({
     );
   };
 
-  const Form = React.forwardRef<FormInstance<S>, FormProps<S>>(
+  const Form = React.forwardRef<FormInstance<S>, FormProps<S, V>>(
     (
       {
         children,

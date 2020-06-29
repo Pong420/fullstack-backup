@@ -6,6 +6,11 @@ import { createUserForm, userValidaors } from '../../../components/UserForm';
 import { registerAdmin } from '../../../service';
 import { history } from '../../../store';
 import { PATHS } from '../../../constants';
+import { Toaster } from '../../../utils/toaster';
+
+interface Store extends Omit<Param$CreateUser, 'avatar'> {
+  confirmPassword: string;
+}
 
 const {
   Form,
@@ -16,24 +21,32 @@ const {
   useForm
 } = createUserForm();
 
-const initialValues: Omit<Param$CreateUser, 'avatar'> = {
+const initialValues: Store = {
   username: '',
   password: '',
+  confirmPassword: '',
   email: '',
   nickname: ''
 };
 
 const backToLogin = () => history.replace(PATHS.LOGIN);
 
+const onFailure = Toaster.apiError.bind(Toaster, 'Register admin failure');
+
 export function AdminRegisterForm() {
   const [form] = useForm();
   const { run, loading } = useRxAsync(registerAdmin, {
     defer: true,
-    onSuccess: backToLogin
+    onSuccess: backToLogin,
+    onFailure
   });
 
   return (
-    <Form form={form} initialValues={initialValues} onFinish={run}>
+    <Form
+      form={form}
+      initialValues={initialValues}
+      onFinish={({ confirmPassword, ...params }) => run(params)}
+    >
       <Username
         validators={[
           userValidaors.username.required,

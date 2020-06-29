@@ -6,7 +6,8 @@ import {
   Res,
   HttpStatus,
   Body,
-  BadRequestException
+  BadRequestException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole, JWTSignPayload, Schema$Login } from '@fullstack/typings';
@@ -129,7 +130,7 @@ export class AuthController {
 
     return reply
       .status(HttpStatus.UNAUTHORIZED)
-      .send(new BadRequestException('Refresh token not found'));
+      .send(new UnauthorizedException());
   }
 
   @Post('logout')
