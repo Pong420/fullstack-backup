@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, Popover, H5 } from '@blueprintjs/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { fromEvent } from 'rxjs';
+import { Button, Popover, H5, IPopoverProps } from '@blueprintjs/core';
 import { createForm, FormProps, FormItemProps } from '../../utils/form';
 import { setSearchParam } from '../../utils/setSearchParam';
 import { useBoolean } from '../../hooks/useBoolean';
@@ -60,18 +61,44 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
 
   function Filter(props: FormProps<T> = {}) {
     const [isOpen, open, close] = useBoolean();
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const [modifiers, setModifiers] = useState<IPopoverProps['modifiers']>();
+
+    useEffect(() => {
+      function handler() {
+        const button = buttonRef.current;
+        const layout = document.querySelector<HTMLElement>(
+          '.layout .layout-content'
+        );
+        if (button && layout) {
+          const rect = button.getBoundingClientRect();
+          let left =
+            rect.left -
+            layout.getBoundingClientRect().left -
+            layout.offsetWidth / 2 +
+            15.5;
+          setModifiers({ offset: { offset: `${left * -1}, -5` } });
+        }
+      }
+
+      if (isOpen) {
+        handler();
+        const subscription = fromEvent(window, 'resize').subscribe(close);
+        return () => subscription.unsubscribe();
+      }
+    }, [isOpen, close]);
 
     return (
       <Popover
+        position="bottom"
+        boundary="viewport"
+        popoverClassName="filter-popover"
         isOpen={isOpen}
         onClose={close}
-        popoverClassName="filter-popover"
-        position="top-right"
-        boundary="viewport"
-        modifiers={{ offset: { offset: '0, -5' } }}
+        modifiers={modifiers}
         content={<FilterContent {...props} onFinish={close} />}
       >
-        <Button icon="filter" onClick={open} minimal />
+        <Button icon="filter" onClick={open} minimal elementRef={buttonRef} />
       </Popover>
     );
   }
