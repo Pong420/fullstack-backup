@@ -12,7 +12,9 @@
     "dev": "yarn workspaces foreach -pi run dev ",
     "postinstall": "yarn typings build"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
@@ -42,7 +44,7 @@
       "git add"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc}}": [
-      "prettier --ignore-path .eslintignore --parser json --write",
+      "prettier --ignore-path .eslintignore --write",
       "git add"
     ],
     "*.{css,scss}": [

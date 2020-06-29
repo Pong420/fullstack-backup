@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/**/*"],
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "dev": "tsc -p tsconfig.json --watch",
     "build": "tsc -p tsconfig.json"
