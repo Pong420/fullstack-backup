@@ -1,4 +1,4 @@
-import { useRef, Dispatch as ReactDispatch } from 'react';
+import { useRef, Dispatch as ReactDispatch, useMemo } from 'react';
 import { AnyAction, Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 
@@ -37,5 +37,5 @@ export function bindDispatch<A extends ActionCreators>(
 export function useActions<A extends ActionCreators>(creators: A): Handler<A> {
   const dispatch = useDispatch();
   const creatorsRef = useRef(creators);
-  return bindDispatch(creatorsRef.current, dispatch);
+  return useMemo(() => bindDispatch(creatorsRef.current, dispatch), [dispatch]);
 }
