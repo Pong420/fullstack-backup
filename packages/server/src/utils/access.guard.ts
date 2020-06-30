@@ -1,7 +1,12 @@
 import { from, of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
-import { ExecutionContext, SetMetadata, CustomDecorator } from '@nestjs/common';
+import {
+  ExecutionContext,
+  SetMetadata,
+  CustomDecorator,
+  Inject
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
@@ -18,10 +23,10 @@ export const Group = (
   options?: ExposeOptions
 ): ReturnType<typeof Expose> => Expose({ groups, ...options });
 
-export class RoleGuard extends AuthGuard('jwt') {
+export class AcessGuard extends AuthGuard('jwt') {
   constructor(
-    private reflector: Reflector,
-    private readonly configService: ConfigService
+    @Inject(Reflector) private reflector: Reflector,
+    @Inject(ConfigService) private readonly configService: ConfigService
   ) {
     super();
   }
@@ -33,11 +38,7 @@ export class RoleGuard extends AuthGuard('jwt') {
         context.getClass()
       ]) || [];
 
-    if (
-      access.includes('EVERYONE')
-      // ||
-      // this.configService.get<string>('NODE_ENV') === 'development'
-    ) {
+    if (access.includes('EVERYONE')) {
       return of(true);
     }
 

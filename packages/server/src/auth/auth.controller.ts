@@ -21,7 +21,7 @@ import { User } from '../user/schemas/user.schema';
 import { RefreshToken } from '../refresh-token/schemas/refreshToken.schema';
 import { transformResponse } from '../utils/ResponseInterceptor';
 import { throwMongoError } from '../utils/MongooseExceptionFilter';
-import { Access } from '../utils/role.guard';
+import { Access } from '../utils/access.guard';
 import { IsObjectId } from '../decorators';
 import { formatJWTSignPayload } from './dto/JWTSignDto';
 

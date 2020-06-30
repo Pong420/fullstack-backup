@@ -9,7 +9,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { MongooseExceptionFilter } from './utils/MongooseExceptionFilter';
 import { ResponseInterceptor } from './utils/ResponseInterceptor';
-import { RoleGuard } from './utils/role.guard';
+import { AcessGuard } from './utils/access.guard';
 import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
 import qs from 'qs';
 
@@ -27,7 +27,7 @@ export async function setupApp(app: NestFastifyApplication): Promise<void> {
     new MongooseSerializerInterceptor(app.get(Reflector), app.get(JwtService))
   );
   app.useGlobalGuards(
-    new RoleGuard(app.get(Reflector), app.get<ConfigService>(ConfigService))
+    new AcessGuard(app.get(Reflector), app.get<ConfigService>(ConfigService))
   );
   app.setGlobalPrefix('api');
   app.register(cookieParser);

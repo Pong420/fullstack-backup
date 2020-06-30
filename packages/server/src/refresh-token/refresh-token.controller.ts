@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { RefreshTokenService } from './refresh-token.service';
 import { RefreshToken } from './schemas/refreshToken.schema';
-import { Access } from '../utils/role.guard';
+import { Access } from '../utils/access.guard';
 
 // TODO: access
 @Access('EVERYONE')
