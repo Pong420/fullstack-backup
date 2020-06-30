@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Schema$User, UserRole } from '@fullstack/typings';
 import { PaginationTable, PaginationTableProps } from '../../components/Table';
 import { Avatar } from '../../components/Avatar';
-import { DeleteUser, OnDelete } from './UserActions';
+import { DeleteUser, OnDelete } from './DeleteUser';
 
 type Props = PaginationTableProps<Partial<Schema$User>>;
 type Columns = Props['columns'];
@@ -61,5 +61,7 @@ export function UserTable({
     [onDelete]
   );
 
-  return <PaginationTable {...props} columns={columns} />;
+  return (
+    <PaginationTable {...props} className="user-table" columns={columns} />
+  );
 }

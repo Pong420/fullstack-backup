@@ -15,13 +15,14 @@ export function PaginationTable<T extends object>({
   pagination,
   loading,
   data,
+  className = '',
   ...props
 }: PaginationTableProps<T>) {
   const { onPageChange = () => {}, ...paginateProps } = pagination || {};
 
   return (
     <>
-      <div className="pagination-table">
+      <div className={`pagination-table ${className}`.trim()}>
         <Table data={data} {...props} />
         {!loading && data.length === 0 && <NotFound />}
         {loading && (

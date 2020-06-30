@@ -3,7 +3,8 @@ import React, {
   createContext,
   useState,
   useEffect,
-  useContext
+  useContext,
+  useMemo
 } from 'react';
 import {
   Button,
@@ -15,6 +16,7 @@ import {
 import { DIALOG_FOOTER_ACTIONS } from '@blueprintjs/core/lib/esm/common/classes';
 import { useRxAsync } from 'use-rx-hooks';
 import { useBoolean } from '../hooks/useBoolean';
+import { createOpenDialog } from '../utils/openDialog';
 
 interface ConfirmDialogProps extends IDialogProps {
   children?: ReactNode;
@@ -33,16 +35,22 @@ const Context = createContext({} as Context);
 
 export const useConfirmDialog = () => useContext(Context);
 
+export const openConfirmDialog = createOpenDialog<ConfirmDialogProps>(
+  ConfirmDialog
+);
+
 export const ConfirmDialogProvider: React.FC = ({ children }) => {
   const [props, setProps] = useState<Partial<ConfirmDialogProps>>();
   const [isOpen, open, close] = useBoolean();
+  const { onClosed } = props || {};
+  const value = useMemo<Context>(() => ({ openConfirmDialog: setProps }), []);
 
   useEffect(() => {
     props && open();
   }, [props, open]);
 
   return (
-    <Context.Provider value={{ openConfirmDialog: setProps }}>
+    <Context.Provider value={value}>
       {children}
       {props && (
         <ConfirmDialog
@@ -50,7 +58,7 @@ export const ConfirmDialogProvider: React.FC = ({ children }) => {
           isOpen={isOpen}
           onClose={close}
           onClosed={(...args) => {
-            props.onClosed && props.onClosed(...args);
+            onClosed && onClosed(...args);
             setProps(undefined);
           }}
         />
