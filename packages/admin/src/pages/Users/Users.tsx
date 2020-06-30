@@ -4,6 +4,7 @@ import { Schema$User, Param$GetUsers } from '@fullstack/typings';
 import { Layout } from '../../components/Layout';
 import { createFilter } from '../../components/Filter';
 import { UserRoleSelect } from '../../components/UserRoleSelect';
+import { CreateUser } from './CreateUser';
 import { UserTable } from './UserTable';
 import { usePaginationLocal } from '../../hooks/usePaginationLocal';
 import { getUsers } from '../../service';
@@ -35,16 +36,19 @@ export function Users() {
     <Layout
       className="users"
       navbar={
-        <Filter initialValues={params}>
-          <FilterInput name="search" label="Search" />
-          <FilterInput name="username" label="Username" />
-          <FilterInput name="email" label="Email" />
-          <FilterInput name="nickname" label="Nickname" />
-          <FormItem name="role" label="Role">
-            <UserRoleSelect />
-          </FormItem>
-          <FilterDateRange name="createdAt" label="Created At" />
-        </Filter>
+        <>
+          <CreateUser onCreate={actions.create} />
+          <Filter initialValues={params}>
+            <FilterInput name="search" label="Search" />
+            <FilterInput name="username" label="Username" />
+            <FilterInput name="email" label="Email" />
+            <FilterInput name="nickname" label="Nickname" />
+            <FormItem name="role" label="Role">
+              <UserRoleSelect />
+            </FormItem>
+            <FilterDateRange name="createdAt" label="Created At" />
+          </Filter>
+        </>
       }
     >
       <Card>
