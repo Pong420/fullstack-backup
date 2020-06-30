@@ -4,18 +4,19 @@ $radius: 5px;
 .sidebar {
   @include sq-dimen(100%);
   @include relative();
-  width: $sidebar-width;
   flex: 0 0 auto;
+  width: $sidebar-width;
   z-index: $pt-z-index-overlay - 1;
 }
 
 .sidebar-inner {
-  @include dimen(1000px + $sidebar-width, 100vh);
+  @include dimen(1000px + $sidebar-width);
   @include fixed();
   @include padding-y(20px 30px);
   box-shadow: 1px 0 0 rgba(16, 22, 26, 0.15);
   background-color: #fff;
   overflow-y: auto;
+  min-height: 100%;
   margin-left: -1000px;
   padding-left: 1000px + $sidebar-padding-x;
   padding-right: $sidebar-padding-x;

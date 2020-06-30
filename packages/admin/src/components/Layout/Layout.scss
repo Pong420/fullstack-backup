@@ -1,10 +1,9 @@
 .layout {
-  @include flex($flex-direction: column);
+  // @include flex($flex-direction: column);
   @include dimen(100%);
   padding: 15px;
 
   .layout-content {
-    @include sq-dimen(100%);
     margin-top: 15px;
   }
 

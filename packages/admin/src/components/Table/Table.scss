@@ -1,16 +1,17 @@
-table {
-  @include dimen(100%);
-}
-
-.#{$ns}-html-table {
+.table {
   + .#{$ns}-non-ideal-state {
     @include margin-y(20px);
+  }
+
+  table {
+    @include dimen(100%);
   }
 }
 
 .pagination-table {
   @include flex($flex-direction: column);
   @include relative();
+  overflow: auto;
 
   .loading {
     @include absolute(0, null, 0);

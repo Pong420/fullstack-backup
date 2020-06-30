@@ -20,17 +20,18 @@ export function PaginationTable<T extends object>({
 }: PaginationTableProps<T>) {
   const { onPageChange = () => {}, ...paginateProps } = pagination || {};
   return (
-    <>
-      <div className={`pagination-table ${className}`.trim()}>
-        <Table data={data} {...props} />
-        {!loading && data.length === 0 && <NotFound />}
-        {loading && (
-          <div className="loading">
-            <Spinner size={40} />
-          </div>
-        )}
-      </div>
+    <Table
+      {...props}
+      data={data}
+      className={`pagination-table ${className}`.trim()}
+    >
+      {!loading && data.length === 0 && <NotFound />}
+      {loading && (
+        <div className="loading">
+          <Spinner size={40} />
+        </div>
+      )}
       <Pagination {...paginateProps} onPageChange={onPageChange} />
-    </>
+    </Table>
   );
 }

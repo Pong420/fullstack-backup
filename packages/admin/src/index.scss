@@ -9,21 +9,25 @@
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html {
   height: 100%;
+  overflow: hidden;
+}
+
+html,
+body {
   min-height: 100%;
 }
 
 body {
+  @include sq-dimen(100%);
   background-color: $light-gray5;
   color: $dark-gray5;
   font-family: 'Muli', #{$pt-font-family};
   font-size: $pt-font-size;
   margin: 0;
-  overflow: auto;
   padding: 0;
+  overflow: auto; // prevent bouding scroll
 }
 
 img {
