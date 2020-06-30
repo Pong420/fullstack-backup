@@ -5,6 +5,7 @@ import {
   IsEmail,
   IsEmpty
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { Param$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
 import { ValidUsername, ValidPassword } from '../../decorators';
 
@@ -24,8 +25,9 @@ class CreateUser extends Base
   @IsEmpty()
   id?: string;
 
-  @IsEnum(UserRole)
   @IsOptional()
+  @IsEnum(UserRole)
+  @Transform(Number)
   role?: UserRole;
 
   @IsOptional()

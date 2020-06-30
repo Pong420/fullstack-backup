@@ -1,4 +1,5 @@
 import { IsString, IsEnum, IsEmpty } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {
   UserRole,
   Schema$RefreshToken,
@@ -16,6 +17,7 @@ class Base implements Param$CreateRefreshToken {
   nickname: string;
 
   @IsEnum(UserRole)
+  @Transform(Number)
   role: UserRole;
 
   @IsString()

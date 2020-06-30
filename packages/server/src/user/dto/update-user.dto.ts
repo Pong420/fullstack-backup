@@ -5,6 +5,7 @@ import {
   IsEmpty,
   IsEmail
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { Param$UpdateUser, UserRole } from '@fullstack/typings';
 import { ValidPassword } from '../../decorators';
 
@@ -27,8 +28,9 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   // avatar?: UploadFile | null;
   avatar?: null;
 
-  @IsEnum(UserRole)
   @IsOptional()
+  @IsEnum(UserRole)
+  @Transform(Number)
   role?: UserRole;
 
   @IsOptional()
