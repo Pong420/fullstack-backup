@@ -30,7 +30,7 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   }
 
   @Post()
-  async create(@Body() createDto: unknown): Promise<T> {
+  async create(@Body() createDto: unknown, ..._args: unknown[]): Promise<T> {
     return this.service.create(createDto);
   }
 

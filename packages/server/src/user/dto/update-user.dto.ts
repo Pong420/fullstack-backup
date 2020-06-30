@@ -7,7 +7,6 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { Param$UpdateUser, UserRole } from '@fullstack/typings';
-import { ValidPassword } from '../../decorators';
 
 export class UpdateUser implements Partial<Param$UpdateUser> {
   @IsEmpty()
@@ -20,8 +19,7 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   @IsEmpty()
   username?: string;
 
-  @IsOptional()
-  @ValidPassword()
+  @IsEmpty()
   password?: string;
 
   @IsOptional()

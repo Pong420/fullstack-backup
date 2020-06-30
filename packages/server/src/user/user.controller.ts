@@ -1,18 +1,28 @@
-import { Controller, Post, Body, Get, Query, Patch, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Query,
+  Patch,
+  Req,
+  UseGuards
+} from '@nestjs/common';
+import { UserRole } from '@fullstack/typings';
 import { FastifyRequest } from 'fastify';
+import { UserRoleGuard } from './user-role.guard';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';
-import { Access } from '../utils/role.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { Access } from '../utils/access.guard';
 import {
   MongooseCRUDController,
   PaginateResult,
   ObjectId,
   Condition
 } from '../utils/MongooseCRUDController';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRole } from '@fullstack/typings';
 
 const roles = Object.values(UserRole)
   .filter((v): v is number => !isNaN(Number(v)))
@@ -25,11 +35,6 @@ export class UserController extends MongooseCRUDController<User> {
     super(userService);
   }
 
-  @Post()
-  @Access('ADMIN', 'MANAGER')
-  create(dto: CreateUserDto): Promise<User> {
-    return this.userService.create(dto);
-  }
   @Get()
   @Access('ADMIN', 'MANAGER')
   getAll(
@@ -51,8 +56,16 @@ export class UserController extends MongooseCRUDController<User> {
     });
   }
 
+  @Post()
+  @Access('ADMIN', 'MANAGER')
+  @UseGuards(UserRoleGuard)
+  create(@Body() dto: CreateUserDto): Promise<User> {
+    return this.userService.create(dto);
+  }
+
   @Patch(':id')
   @Access('ADMIN', 'MANAGER', 'SELF')
+  @UseGuards(UserRoleGuard)
   async update(
     @ObjectId() id: string,
     @Body() changes: UpdateUserDto
