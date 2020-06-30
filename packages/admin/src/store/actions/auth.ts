@@ -1,4 +1,4 @@
-import { JWTSignPayload, Param$Login } from '@fullstack/typings';
+import { JWTSignPayload, Param$Login, Schema$User } from '@fullstack/typings';
 import { UnionCRUDActions } from '@pong420/redux-crud';
 import { useActions, ActionsMap } from '../../hooks/useActions';
 
@@ -6,7 +6,7 @@ export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
 export interface LoggedIn {
   loginStatus: 'loggedIn';
-  user: JWTSignPayload;
+  user: JWTSignPayload & Partial<Schema$User>;
 }
 
 export interface NotLoggedIn {
@@ -18,7 +18,8 @@ export const AuthActionTypes = {
   AUTHORIZE: 'AUTHORIZE' as const,
   SCCUESS: 'AUTH_SUCCESS' as const,
   FAILURE: 'AUTH_FAILURE' as const,
-  LOGOUT: 'LOGOUT' as const
+  LOGOUT: 'LOGOUT' as const,
+  PROFILE_UPDATE: 'PROFILE_UPDATE' as const
 };
 
 function authorize(payload?: Param$Login) {
@@ -47,11 +48,19 @@ export function logout() {
   };
 }
 
+export function profileUpdate(user: Partial<Schema$User>) {
+  return {
+    type: AuthActionTypes.PROFILE_UPDATE,
+    payload: user
+  };
+}
+
 const actions = {
   authorize,
   authSuccess,
   authFailure,
-  logout
+  logout,
+  profileUpdate
 };
 
 export type AuthActions = UnionCRUDActions<typeof actions>;

@@ -19,3 +19,6 @@ export const updateUser = ({ id, ...update }: Param$User & Param$UpdateUser) =>
 
 export const deleteUser = ({ id }: Param$User) =>
   api.delete<unknown>(`/user/${id}`);
+
+export const getUserProfile = ({ id }: Param$User) =>
+  api.get<Response$User>(`/user/${id}`);

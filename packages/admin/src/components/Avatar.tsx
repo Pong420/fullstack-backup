@@ -1,13 +1,13 @@
 import React from 'react';
 import jdenticon from 'jdenticon';
 
-interface Props {
+export interface AvatarProps {
   avatar?: string | null;
   fallback?: string;
   size?: number;
 }
 
-export const Avatar = React.memo(({ size = 40, avatar, fallback }: Props) => {
+export const Avatar = ({ size = 40, avatar, fallback }: AvatarProps) => {
   const dimen = { width: size, height: size };
   let content = avatar ? (
     <div
@@ -31,4 +31,4 @@ export const Avatar = React.memo(({ size = 40, avatar, fallback }: Props) => {
       {content}
     </div>
   );
-});
+};

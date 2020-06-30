@@ -1,0 +1,26 @@
+.upload {
+  @include relative();
+
+  .drop-area {
+    @include absolute(0, null, 0);
+    @include sq-dimen(100%);
+    border: 1px dashed;
+    background-color: #fff;
+    box-shadow: $pt-elevation-shadow-3;
+    min-height: 180px;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 1000;
+
+    .drop-area-backdrop {
+      @include fixed(0, null, 0);
+      @include sq-dimen(100%);
+    }
+
+    .drop-area-content {
+      @include flex(center, center);
+      @include relative();
+      @include sq-dimen(100%);
+    }
+  }
+}

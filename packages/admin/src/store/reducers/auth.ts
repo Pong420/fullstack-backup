@@ -39,6 +39,18 @@ export default function (
         loginStatus: 'required'
       };
 
+    case AuthActionTypes.PROFILE_UPDATE:
+      if (state.loginStatus === 'loggedIn') {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            ...action.payload
+          }
+        };
+      }
+      return state;
+
     default:
       return state;
   }

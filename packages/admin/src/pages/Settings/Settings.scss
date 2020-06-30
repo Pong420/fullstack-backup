@@ -1,0 +1,61 @@
+.settings-section {
+  + .settings-section {
+    margin-top: 100px;
+  }
+
+  .#{$ns}-divider {
+    @include margin-x(0);
+  }
+
+  .settings-section-content {
+    margin-top: 20px;
+  }
+
+  .rc-form-item-label {
+    font-weight: bold;
+  }
+}
+
+.settings-profile {
+  .settings-section-content {
+    .form-content {
+      @include flex(flex-start, space-between);
+      .left {
+        flex: 1 1 auto;
+        margin-right: 5%;
+      }
+    }
+
+    .form-footer {
+      text-align: right;
+      button {
+        margin-left: 10px;
+      }
+    }
+
+    .#{$ns}-divider {
+      @include margin-y(20px);
+    }
+  }
+}
+
+.update-avatar {
+  @include relative();
+  box-shadow: $pt-dark-elevation-shadow-1;
+  .#{$ns}-popover-wrapper.#{$ns}-popover-wrapper {
+    @include absolute(null, 5px, null, 5px);
+    button {
+      background-color: $dark-gray4;
+      &,
+      svg {
+        color: #fff;
+      }
+      .#{$ns}-icon {
+        margin-right: 3px;
+      }
+      svg {
+        @include sq-dimen(13px);
+      }
+    }
+  }
+}
