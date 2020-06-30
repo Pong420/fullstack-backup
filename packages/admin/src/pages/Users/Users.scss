@@ -1,17 +1,10 @@
 .users {
-  // @include flex($flex-direction: column);
-
-  // .layout-content {
-  //   flex: 1 1 auto;
-
-  //   .#{$ns}-card {
-  //     @include sq-dimen(100%);
-  //   }
-  // }
-
   .user-table {
-    td:last-child {
-      text-align: center;
+    th,
+    td {
+      &:last-child {
+        text-align: center;
+      }
     }
   }
 }

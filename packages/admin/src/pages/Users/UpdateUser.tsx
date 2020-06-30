@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { Button, IconName } from '@blueprintjs/core';
 import { Schema$User, Param$User } from '@fullstack/typings';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
+import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { createUserForm, UserFormInstance } from '../../components/UserForm';
 import { Toaster } from '../../utils/toaster';
 import { updateUser } from '../../service';
@@ -39,6 +39,7 @@ function UpdateUserForm({
 }
 
 const icon: IconName = 'edit';
+const title = 'Update User';
 export function UpdateUser({ id, onUpdate, ...user }: UpdateUserProps) {
   const [form] = useForm();
 
@@ -49,12 +50,13 @@ export function UpdateUser({ id, onUpdate, ...user }: UpdateUserProps) {
   }
 
   return (
-    <Button
+    <ButtonPopover
       icon={icon}
+      content={title}
       onClick={() =>
         openConfirmDialog({
           icon,
-          title: 'Update User',
+          title,
           onFailure,
           onConfirm,
           children: <UpdateUserForm form={form} {...user} />

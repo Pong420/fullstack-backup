@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, IconName } from '@blueprintjs/core';
 import { Schema$User } from '@fullstack/typings';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
+import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { createUserForm, userValidaors } from '../../components/UserForm';
 import { Toaster } from '../../utils/toaster';
 import { createUser } from '../../service';
@@ -25,6 +25,7 @@ const {
 } = createUserForm();
 
 const icon: IconName = 'new-person';
+const title = 'Create User';
 export function CreateUser({ onCreate }: CreateUserProps) {
   const [form] = useForm();
 
@@ -35,13 +36,14 @@ export function CreateUser({ onCreate }: CreateUserProps) {
   }
 
   return (
-    <Button
+    <ButtonPopover
       minimal
       icon={icon}
+      content={title}
       onClick={() =>
         openConfirmDialog({
           icon,
-          title: 'Create User',
+          title,
           onFailure,
           onConfirm,
           onClosed: () => form.resetFields(),

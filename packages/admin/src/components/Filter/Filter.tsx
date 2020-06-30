@@ -3,11 +3,13 @@ import { fromEvent } from 'rxjs';
 import { Button, Popover, H5, IPopoverProps } from '@blueprintjs/core';
 import { DateRangeInput } from '@blueprintjs/datetime';
 import { Timestamp } from '@fullstack/typings';
+import { ButtonPopover } from '../../components/ButtonPopover';
 import { createForm, FormProps, FormItemProps } from '../../utils/form';
 import { setSearchParam } from '../../utils/setSearchParam';
 import { useBoolean } from '../../hooks/useBoolean';
 import { Input } from '../Input';
 import dayjs from 'dayjs';
+import { useLocation } from 'react-router-dom';
 
 interface FilterInputProps {
   deps?: undefined;
@@ -78,8 +80,10 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
 
   function Filter(props: FormProps<T> = {}) {
     const [isOpen, open, close] = useBoolean();
-    const buttonRef = useRef<HTMLButtonElement>(null);
     const [modifiers, setModifiers] = useState<IPopoverProps['modifiers']>();
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const localtion = useLocation();
+    const hasQuery = !!localtion.search.slice(1);
 
     useEffect(() => {
       function handler() {
@@ -115,7 +119,13 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
         modifiers={modifiers}
         content={<FilterContent {...props} onFinish={close} />}
       >
-        <Button icon="filter" onClick={open} minimal elementRef={buttonRef} />
+        <ButtonPopover
+          icon={hasQuery ? 'filter-keep' : 'filter'}
+          content="Filter"
+          onClick={open}
+          elementRef={buttonRef}
+          minimal
+        />
       </Popover>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, IconName } from '@blueprintjs/core';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
+import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { Toaster } from '../../utils/toaster';
 import { deleteUser } from '../../service';
 
@@ -16,15 +16,17 @@ interface DeleteUserProps extends OnDelete {
 const onFailure = Toaster.apiError.bind(Toaster, 'Delete user failure');
 
 const icon: IconName = 'trash';
+const title = 'Delete User';
 export function DeleteUser({ nickname, id, onDelete }: DeleteUserProps) {
   return (
-    <Button
+    <ButtonPopover
       icon={icon}
+      content={title}
       onClick={() =>
         openConfirmDialog({
-          icon,
           intent: 'danger',
-          title: 'Delete User',
+          icon,
+          title,
           onFailure,
           onConfirm: () => deleteUser({ id }).then(() => onDelete({ id })),
           children: (
