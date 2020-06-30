@@ -21,8 +21,8 @@ export class UserService extends MongooseCRUDService<User> {
 
   update(
     query: FilterQuery<User>,
-    createUserDto: UpdateUserDto
+    updateUserDto: UpdateUserDto
   ): Promise<User> {
-    return super.update(query, createUserDto);
+    return super.update(query, updateUserDto);
   }
 }

@@ -52,6 +52,7 @@ export function Users() {
           data={data}
           loading={loading}
           pagination={pagination}
+          onUpdate={actions.update}
           onDelete={actions.delete}
         />
       </Card>

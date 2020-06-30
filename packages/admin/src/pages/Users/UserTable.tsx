@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
-import dayjs from 'dayjs';
-import { Schema$User, UserRole } from '@fullstack/typings';
+import { ButtonGroup } from '@blueprintjs/core';
+import { Schema$User, UserRole, isNotEmpty } from '@fullstack/typings';
 import { PaginationTable, PaginationTableProps } from '../../components/Table';
 import { Avatar } from '../../components/Avatar';
 import { DeleteUser, OnDelete } from './DeleteUser';
+import { UpdateUser, OnUpdate } from './UpdateUser';
+import dayjs from 'dayjs';
 
 type Props = PaginationTableProps<Partial<Schema$User>>;
 type Columns = Props['columns'];
@@ -41,24 +43,29 @@ const userColumns: Columns = [
 ];
 
 export function UserTable({
+  onUpdate,
   onDelete,
   ...props
-}: Omit<Props, 'columns'> & OnDelete) {
+}: Omit<Props, 'columns'> & OnDelete & OnUpdate) {
   const columns = useMemo(
     () => [
       ...userColumns,
       {
         Header: 'Actions',
-        accessor: ({ id, nickname }) =>
-          !!id &&
-          !!nickname && (
-            <>
-              <DeleteUser id={id} nickname={nickname} onDelete={onDelete} />
-            </>
+        accessor: data =>
+          isNotEmpty(data) && (
+            <ButtonGroup>
+              <UpdateUser {...data} onUpdate={onUpdate} />
+              <DeleteUser
+                id={data.id}
+                nickname={data.nickname}
+                onDelete={onDelete}
+              />
+            </ButtonGroup>
           )
       }
     ],
-    [onDelete]
+    [onDelete, onUpdate]
   );
 
   return (

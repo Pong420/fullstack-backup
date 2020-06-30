@@ -19,7 +19,6 @@ export function PaginationTable<T extends object>({
   ...props
 }: PaginationTableProps<T>) {
   const { onPageChange = () => {}, ...paginateProps } = pagination || {};
-
   return (
     <>
       <div className={`pagination-table ${className}`.trim()}>

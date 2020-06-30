@@ -1,12 +1,20 @@
 import React from 'react';
 import { Schema$User } from '@fullstack/typings';
-import { createForm, FormItemProps, validators } from '../utils/form';
+import {
+  createForm,
+  validators,
+  FormProps,
+  FormItemProps
+} from '../utils/form';
 import { Input, Password as PasswordInput } from './Input';
 import { UserRoleSelect } from './UserRoleSelect';
 
 interface Schema extends Schema$User {
   confirmPassword: string;
 }
+
+export type UserFormProps = FormProps<Schema>;
+export type UserFormInstance = NonNullable<FormProps<Schema>['form']>;
 
 export const userValidaors = {
   username: {
@@ -88,7 +96,7 @@ export function createUserForm(itemProps?: FormItemProps<Schema>) {
   );
 
   const UserRole = () => (
-    <FormItem name="nickname" label="Nickname">
+    <FormItem name="role" label="User role" normalize={Number}>
       <UserRoleSelect />
     </FormItem>
   );
