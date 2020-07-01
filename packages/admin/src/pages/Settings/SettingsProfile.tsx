@@ -12,7 +12,7 @@ import { authUserSelector, useAuthActions } from '../../store';
 import { getUserProfile, getJwtToken, updateUser } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
-const { Form, FormItem, Nickname, Email, useForm } = createUserForm();
+const { UserForm, FormItem, Nickname, Email, useForm } = createUserForm();
 
 const getProfile$ = defer(() => getJwtToken()).pipe(
   switchMap(({ user }) =>
@@ -33,8 +33,8 @@ const updateUserReq = (...args: Parameters<typeof updateUser>) =>
   updateUser(...args).then(res => res.data.data);
 
 export function SettingsProfile() {
-  const user = useSelector(authUserSelector);
-  const { id, username } = user || {};
+  const user: Partial<Schema$User> = useSelector(authUserSelector) || {};
+  const { id, username, avatar, ...initialValues } = user;
   const { profileUpdate } = useAuthActions();
   const [form] = useForm();
 
@@ -61,11 +61,11 @@ export function SettingsProfile() {
 
   return (
     <SettingsSection title="Profile" className="settings-profile">
-      <Form
+      <UserForm
         key={id} // for update initialValues
         form={form}
-        initialValues={user && user.id ? user : undefined} // for rest
-        onFinish={run}
+        initialValues={initialValues} // for rest
+        onFinish={payload => id && run({ id, ...payload })}
       >
         <div className="form-content">
           <div className="left">
@@ -87,10 +87,7 @@ export function SettingsProfile() {
             Apply
           </Button>
         </div>
-        <FormItem name="id" noStyle>
-          <input type="text" hidden />
-        </FormItem>
-      </Form>
+      </UserForm>
     </SettingsSection>
   );
 }

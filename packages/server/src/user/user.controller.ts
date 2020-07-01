@@ -6,7 +6,8 @@ import {
   Query,
   Patch,
   Req,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { UserRole } from '@fullstack/typings';
 import { FastifyRequest } from 'fastify';
@@ -23,6 +24,7 @@ import {
   ObjectId,
   Condition
 } from '../utils/MongooseCRUDController';
+import { MultiPartInterceptor } from 'src/utils/MultiPartInterceptor';
 
 const roles = Object.values(UserRole)
   .filter((v): v is number => !isNaN(Number(v)))
@@ -66,6 +68,7 @@ export class UserController extends MongooseCRUDController<User> {
   @Patch(':id')
   @Access('ADMIN', 'MANAGER', 'SELF')
   @UseGuards(UserRoleGuard)
+  @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
     @Body() changes: UpdateUserDto

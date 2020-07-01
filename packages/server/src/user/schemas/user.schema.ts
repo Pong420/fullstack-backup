@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema$User, UserRole } from '@fullstack/typings';
+import { Schema$User, UserRole, Uploaded } from '@fullstack/typings';
 import { Exclude } from 'class-transformer';
 import bcrypt from 'bcrypt';
 
@@ -13,13 +13,14 @@ function hashPassword(pwd: string) {
     transform: (_model, { _id, ...raw }) => new User(raw)
   }
 })
-export class User implements Schema$User {
+export class User implements Omit<Schema$User, 'avatar'> {
   id: string;
 
   @Prop({ type: String, required: true, unique: true })
   username: string;
 
   @Prop({
+    select: false,
     type: String,
     set: hashPassword,
     get: (pwd: string) => pwd
@@ -33,8 +34,8 @@ export class User implements Schema$User {
   @Prop({ default: UserRole.CLIENT })
   role: UserRole;
 
-  @Prop({ default: null })
-  avatar: string | null;
+  @Prop({ type: String, default: null })
+  avatar: Uploaded;
 
   @Prop({
     type: String,

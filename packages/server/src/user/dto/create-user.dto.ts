@@ -6,7 +6,12 @@ import {
   IsEmpty
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { Param$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
+import {
+  Param$CreateUser,
+  Schema$User,
+  UserRole,
+  Uploaded
+} from '@fullstack/typings';
 import { ValidUsername, ValidPassword } from '../../decorators';
 
 class Base implements Param$CreateUser {
@@ -35,7 +40,7 @@ class CreateUser extends Base
   nickname?: string;
 
   @IsOptional()
-  avatar?: unknown;
+  avatar?: Uploaded;
 
   @IsEmpty()
   createdAt?: string;

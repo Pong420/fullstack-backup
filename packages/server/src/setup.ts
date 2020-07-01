@@ -1,4 +1,5 @@
 import cookieParser from 'fastify-cookie';
+import multipart from 'fastify-multipart';
 import { Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -31,4 +32,5 @@ export async function setupApp(app: NestFastifyApplication): Promise<void> {
   );
   app.setGlobalPrefix('api');
   app.register(cookieParser);
+  app.register(multipart);
 }

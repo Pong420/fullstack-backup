@@ -26,7 +26,8 @@ function UpdateUserForm({
   const persists = useRef(user);
 
   useEffect(() => {
-    setFieldsValue(persists.current);
+    const { avatar, ...changes } = persists.current;
+    setFieldsValue(changes);
   }, [setFieldsValue]);
 
   return (

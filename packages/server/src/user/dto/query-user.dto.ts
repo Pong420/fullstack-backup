@@ -44,7 +44,7 @@ class QueryUser extends Base
   password?: string;
 
   @IsEmpty()
-  avatar?: any;
+  avatar?: unknown;
 }
 
 export class QueryUserDto extends QueryUser

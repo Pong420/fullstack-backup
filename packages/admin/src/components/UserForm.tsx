@@ -1,5 +1,6 @@
 import React from 'react';
-import { Schema$User } from '@fullstack/typings';
+import { Param$UpdateUser } from '@fullstack/typings';
+import { RxFileToImageState } from 'use-rx-hooks';
 import {
   createForm,
   validators,
@@ -9,12 +10,19 @@ import {
 import { Input, Password as PasswordInput } from './Input';
 import { UserRoleSelect } from './UserRoleSelect';
 
-interface Schema extends Schema$User {
+interface Schema extends Required<Omit<Param$UpdateUser, 'avatar'>> {
   confirmPassword: string;
 }
 
-export type UserFormProps = FormProps<Schema>;
-export type UserFormInstance = NonNullable<FormProps<Schema>['form']>;
+interface Avatar<T> {
+  avatar?: T;
+}
+
+type Store = Schema & Avatar<RxFileToImageState | null>;
+type Value = Schema & Avatar<File | null>;
+
+export type UserFormProps = FormProps<Store, Value>;
+export type UserFormInstance = NonNullable<FormProps<Store, Value>['form']>;
 
 export const userValidaors = {
   username: {
@@ -41,11 +49,23 @@ export const userValidaors = {
   }
 };
 
-export function createUserForm(itemProps?: FormItemProps<Schema>) {
-  const components = createForm<Schema>(itemProps);
-  const { FormItem } = components;
+export function createUserForm(itemProps?: FormItemProps<Store>) {
+  const components = createForm<Store, Value>(itemProps);
+  const { Form, FormItem } = components;
 
-  type FND = FormItemProps<Schema> & { deps?: undefined };
+  type FND = FormItemProps<Store> & { deps?: undefined };
+
+  function UserForm(props?: UserFormProps) {
+    return (
+      <Form
+        {...props}
+        beforeSubmit={({ avatar, ...payload }) => ({
+          avatar: avatar && avatar.file,
+          ...payload
+        })}
+      />
+    );
+  }
 
   const Username = (props?: FND) => (
     <FormItem {...props} name="username" label="Username">
@@ -103,6 +123,7 @@ export function createUserForm(itemProps?: FormItemProps<Schema>) {
 
   return {
     ...components,
+    UserForm,
     Username,
     Password,
     ConfirmPassword,

@@ -7,6 +7,7 @@ import {
   Param$CreateUser
 } from '@fullstack/typings';
 import { api } from './api';
+import { createFormData } from './createFormData';
 
 export const getUsers = (params: Param$GetUsers) =>
   api.get<Response$GetUsers>('/user', { params });
@@ -15,7 +16,7 @@ export const createUser = (payload: Param$CreateUser) =>
   api.post<Response$User>(`/user`, payload);
 
 export const updateUser = ({ id, ...update }: Param$User & Param$UpdateUser) =>
-  api.patch<Response$User>(`/user/${id}`, update);
+  api.patch<Response$User>(`/user/${id}`, createFormData(update));
 
 export const deleteUser = ({ id }: Param$User) =>
   api.delete<unknown>(`/user/${id}`);

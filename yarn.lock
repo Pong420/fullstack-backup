@@ -1763,6 +1763,7 @@ __metadata:
     class-transformer: ^0.2.3
     class-validator: ^0.12.2
     fastify-cookie: ^3.6.1
+    fastify-multipart: ^1.0.6
     jest: ^26.1.0
     jest-environment-node: ^26.0.1
     mongodb-memory-server: ^6.6.1
@@ -1772,6 +1773,7 @@ __metadata:
     passport-jwt: ^4.0.0
     passport-local: ^1.0.0
     prettier: ^2.0.5
+    pump: ^3.0.0
     reflect-metadata: ^0.1.13
     rimraf: ^3.0.2
     rxjs: ^6.5.5
@@ -5174,6 +5176,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"busboy@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "busboy@npm:0.3.1"
+  dependencies:
+    dicer: 0.3.0
+  checksum: acc5c3d2f806c1f43a7a9a342bb4aaaa1223bac81cf3ba35ae3cc999f4e3a2e1b6db2d3895a228a862efbbc7b6fb39a7252e830bb5943e1b4362caa221c868ea
+  languageName: node
+  linkType: hard
+
 "bytes@npm:3.0.0":
   version: 3.0.0
   resolution: "bytes@npm:3.0.0"
@@ -6707,7 +6718,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.2.2":
+"deepmerge@npm:^4.0.0, deepmerge@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge@npm:4.2.2"
   checksum: 85abf8e0045ee280996e7d2396979c877ef0741e413b716e42441110e0a83ac08098b2a49cea035510060bf667c0eae3189b2a52349f5fa4b000c211041637b1
@@ -6870,6 +6881,15 @@ __metadata:
     detect: ./bin/detect-port
     detect-port: ./bin/detect-port
   checksum: 246570e7557d54b9c8e125e338a351546cd9007d11802e89205c6970c05c5ce7be28f5b47124d2d535eb5295c25e0c503275bb518a1f57564edbb9f5a690de3c
+  languageName: node
+  linkType: hard
+
+"dicer@npm:0.3.0":
+  version: 0.3.0
+  resolution: "dicer@npm:0.3.0"
+  dependencies:
+    streamsearch: 0.1.2
+  checksum: eb06a8c283287da1f0034cde3f2bafe8bbd70636d4c9b12783f36d919c88533d6d285e044197853e03c1a2ea5d68f8ebcf59d366bd873a4a91e5d370e9871ad7
   languageName: node
   linkType: hard
 
@@ -8132,7 +8152,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^1.4.0, fastify-plugin@npm:^1.6.0, fastify-plugin@npm:^1.6.1":
+"fastify-multipart@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "fastify-multipart@npm:1.0.6"
+  dependencies:
+    busboy: ^0.3.0
+    deepmerge: ^4.0.0
+    end-of-stream: ^1.4.1
+    fastify-plugin: ^1.5.0
+  checksum: 590f5d214703661ea34fabfd8d97b29e1ce04c077c2f9c4de5b8244169c094db3eef274285560f8020f066c75361863f389522720377633e6dc65ebe883aaef5
+  languageName: node
+  linkType: hard
+
+"fastify-plugin@npm:^1.4.0, fastify-plugin@npm:^1.5.0, fastify-plugin@npm:^1.6.0, fastify-plugin@npm:^1.6.1":
   version: 1.6.1
   resolution: "fastify-plugin@npm:1.6.1"
   dependencies:
@@ -17206,6 +17238,13 @@ resolve@1.15.0:
   version: 1.0.1
   resolution: "stream-shift@npm:1.0.1"
   checksum: 5d777b222e460dc660ee29acad4f99649eb8d0051d3cb648fc92f3f77557b33d0a8ad656291c2cfa87703204191534a6003c2b035606a699674d0bb600353ad3
+  languageName: node
+  linkType: hard
+
+"streamsearch@npm:0.1.2":
+  version: 0.1.2
+  resolution: "streamsearch@npm:0.1.2"
+  checksum: f72befba95082d49be19cd4318112bc141f6cd7cbb201ee8079887f6f3cbcdf79c311977ce0eaa93d7d8c3e6b9727412f6177a87ced5b98d0fd4075723ad8eaf
   languageName: node
   linkType: hard
 

@@ -32,3 +32,5 @@ tsconfig.tsbuildinfo
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+_upload
