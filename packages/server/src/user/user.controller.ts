@@ -6,13 +6,11 @@ import {
   Query,
   Patch,
   Req,
-  UseGuards,
   UseInterceptors
 } from '@nestjs/common';
 import { UserRole } from '@fullstack/typings';
 import { FastifyRequest } from 'fastify';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { UserRoleGuard } from './user-role.guard';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,6 +25,7 @@ import {
   Condition
 } from '../utils/MongooseCRUDController';
 import { Cloudinary } from '../cloudinary/cloudinary.decorator';
+import { UserRolePipe } from './user-role.pipe';
 
 const roles = Object.values(UserRole)
   .filter((v): v is number => !isNaN(Number(v)))
@@ -65,18 +64,20 @@ export class UserController extends MongooseCRUDController<User> {
 
   @Post()
   @Access('ADMIN', 'MANAGER')
-  @UseGuards(UserRoleGuard)
-  create(@Body() dto: CreateUserDto): Promise<User> {
-    return this.userService.create(dto);
+  @UseInterceptors(MultiPartInterceptor())
+  create(
+    @Body(UserRolePipe) dto: CreateUserDto,
+    @Cloudinary('avatar') [avatar]: (string | null)[]
+  ): Promise<User> {
+    return this.userService.create({ ...dto, avatar });
   }
 
   @Patch(':id')
   @Access('ADMIN', 'MANAGER', 'SELF')
-  @UseGuards(UserRoleGuard)
   @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
-    @Body() changes: UpdateUserDto,
+    @Body(UserRolePipe) changes: UpdateUserDto,
     @Cloudinary('avatar') [avatar]: (string | null)[]
   ): Promise<User> {
     return this.userService.update({ _id: id }, { ...changes, avatar });

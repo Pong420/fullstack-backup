@@ -13,10 +13,10 @@ export const getUsers = (params: Param$GetUsers) =>
   api.get<Response$GetUsers>('/user', { params });
 
 export const createUser = (payload: Param$CreateUser) =>
-  api.post<Response$User>(`/user`, payload);
+  api.post<Response$User>(`/user`, createFormData(payload));
 
-export const updateUser = ({ id, ...update }: Param$User & Param$UpdateUser) =>
-  api.patch<Response$User>(`/user/${id}`, createFormData(update));
+export const updateUser = ({ id, ...payload }: Param$User & Param$UpdateUser) =>
+  api.patch<Response$User>(`/user/${id}`, createFormData(payload));
 
 export const deleteUser = ({ id }: Param$User) =>
   api.delete<unknown>(`/user/${id}`);

@@ -9,12 +9,12 @@ export class CloudinaryPipe implements PipeTransform {
   ) {}
 
   async transform(value: UploadFile): Promise<unknown> {
-    if (typeof value === 'string' || value === null) return value;
-    if (typeof value === 'object' && 'path' in value) {
+    if (value && typeof value === 'object' && 'path' in value) {
       return this.cloudinaryService
         .upload(value)
         .then(response => response.map(data => data.secure_url));
     }
+    return [value];
   }
 }
 
