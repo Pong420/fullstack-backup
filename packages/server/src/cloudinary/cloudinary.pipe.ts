@@ -1,6 +1,6 @@
 import { Inject, PipeTransform, mixin, Type } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
-import { Uploaded } from '../utils/MultiPartInterceptor';
+import { Uploaded } from '../utils/multi-part.interceptor';
 
 export function CloudinaryPipe(fieldName?: string): Type<PipeTransform> {
   class MixinPipe implements PipeTransform {

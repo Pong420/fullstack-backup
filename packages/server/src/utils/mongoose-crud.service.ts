@@ -15,7 +15,7 @@ import {
   Order,
   Timestamp
 } from '@fullstack/typings';
-import { formatSearchQuery, Condition } from './formatSearchQuery';
+import { formatSearchQuery, Condition } from './format-search-query';
 
 export { Condition };
 

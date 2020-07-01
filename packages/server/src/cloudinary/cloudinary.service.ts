@@ -15,7 +15,7 @@ import cloudinary, {
   UploadApiOptions,
   UploadApiResponse
 } from 'cloudinary';
-import { Uploaded } from '../utils/MultiPartInterceptor';
+import { Uploaded } from '../utils/multi-part.interceptor';
 import fs from 'fs';
 
 type RemovePayload = string | { public_id: string };

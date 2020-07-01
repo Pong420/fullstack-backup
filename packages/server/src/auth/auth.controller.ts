@@ -21,11 +21,11 @@ import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/schemas/user.schema';
 import { RefreshToken } from '../refresh-token/schemas/refreshToken.schema';
-import { transformResponse } from '../utils/ResponseInterceptor';
-import { throwMongoError } from '../utils/MongooseExceptionFilter';
+import { transformResponse } from '../utils/response.interceptor';
+import { throwMongoError } from '../utils/mongoose-exception-filter';
 import { Access } from '../utils/access.guard';
 import { IsObjectId } from '../decorators';
-import { formatJWTSignPayload } from './dto/JWTSignDto';
+import { formatJWTSignPayload } from './dto/jwt-sign.dto';
 import { DeleteAccountDto } from './dto/delete-account.dto';
 import { ModifyUserPasswordDto } from './dto/modify-password.dto';
 

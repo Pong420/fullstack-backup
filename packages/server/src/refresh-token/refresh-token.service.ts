@@ -7,7 +7,7 @@ import {
   PaginateModel,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import { MongooseCRUDService } from '../utils/MongooseCRUDService';
+import { MongooseCRUDService } from '../utils/mongoose-crud.service';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
 import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
 import { RefreshToken } from './schemas/refreshToken.schema';

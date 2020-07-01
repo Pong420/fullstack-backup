@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
+import { MongooseSerializerInterceptor } from './utils/mongoose-serializer.interceptor';
 import { AcessGuard } from './utils/access.guard';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';

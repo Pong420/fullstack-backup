@@ -6,7 +6,7 @@ import {
   UserRole,
   Timestamp
 } from '@fullstack/typings';
-import { QueryDto } from '../../utils/MongooseCRUDService';
+import { QueryDto } from '../../utils/mongoose-crud.service';
 
 class Base extends QueryDto
   implements Partial<Omit<Param$GetUsers, keyof Timestamp>> {

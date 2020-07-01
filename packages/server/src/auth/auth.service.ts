@@ -5,7 +5,7 @@ import { UserRole, JWTSignPayload, JWTSignResult } from '@fullstack/typings';
 import { FastifyCookieOptions } from 'fastify-cookie';
 import { UserService } from '../user/user.service';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
-import { formatJWTSignPayload } from './dto/JWTSignDto';
+import { formatJWTSignPayload } from './dto/jwt-sign.dto';
 import bcrypt from 'bcrypt';
 
 @Injectable()

@@ -18,13 +18,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Access } from '../utils/access.guard';
-import { MultiPartInterceptor } from '../utils/MultiPartInterceptor';
+import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
 import {
   MongooseCRUDController,
   PaginateResult,
   ObjectId,
   Condition
-} from '../utils/MongooseCRUDController';
+} from '../utils/mongoose-crud.controller';
 import { UserRolePipe } from './user-role.pipe';
 
 const roles = Object.values(UserRole)

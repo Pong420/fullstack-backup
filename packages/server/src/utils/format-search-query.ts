@@ -1,4 +1,4 @@
-import { escapeRegex } from './escapeRegex';
+import { escapeRegex } from './escape-regex';
 
 export type Condition = Record<string, unknown>;
 export type SearchRegex = Record<string, { $regex: RegExp }>;

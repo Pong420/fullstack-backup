@@ -5,8 +5,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
-import { MongooseExceptionFilter } from './utils/MongooseExceptionFilter';
-import { ResponseInterceptor } from './utils/ResponseInterceptor';
+import { MongooseExceptionFilter } from './utils/mongoose-exception-filter';
+import { ResponseInterceptor } from './utils/response.interceptor';
 import qs from 'qs';
 
 export { NestFastifyApplication };

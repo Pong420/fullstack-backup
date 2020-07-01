@@ -13,7 +13,7 @@ import {
   MongooseCRUDService,
   QueryDto,
   Condition
-} from './MongooseCRUDService';
+} from './mongoose-crud.service';
 import { ObjectId } from '../decorators';
 
 export { PaginateResult, QueryDto, ObjectId, Condition };
