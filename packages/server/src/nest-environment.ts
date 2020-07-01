@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Response } from 'superagent';
-import { AppModule } from './src/app.module';
-import { setupApp, fastifyAdapter, NestFastifyApplication } from './src/setup';
-import { createUser, CreateUserDto } from './test/utils/user';
+import { AppModule } from './app.module';
+import { setupApp, fastifyAdapter, NestFastifyApplication } from './setup';
+import { createUser, CreateUserDto } from '../test/utils/user';
 import NodeEnvironment from 'jest-environment-node';
 import supertest from 'supertest';
 

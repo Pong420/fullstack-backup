@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { SuperTest } from 'supertest';
 import { SuperAgentRequest, Response } from 'superagent';
-import { CreateUserDto } from './test/utils/user';
+import { CreateUserDto } from '../test/utils/user';
 
 interface Login {
   username: string;
