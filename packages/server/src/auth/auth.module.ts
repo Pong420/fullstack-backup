@@ -27,6 +27,7 @@ import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
       inject: [ConfigService]
     })
   ],
+  exports: [AuthService],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy]
 })

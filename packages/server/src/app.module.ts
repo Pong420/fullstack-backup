@@ -1,4 +1,4 @@
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { ModuleMetadata, DynamicModule } from '@nestjs/common/interfaces';
 import { ConfigFactory } from '@nestjs/config/dist/interfaces';
@@ -10,9 +10,10 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
+import { AcessGuard } from './utils/access.guard';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
-import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
 
 mongoose.set('toJSON', {
   virtuals: true, // clone '_id' to 'id'
@@ -76,6 +77,10 @@ const meta: ModuleMetadata = {
     {
       provide: APP_INTERCEPTOR,
       useClass: MongooseSerializerInterceptor
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AcessGuard
     }
   ]
 };

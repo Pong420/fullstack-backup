@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 export * from './user';
 export * from './jwt';
 export * from './refreshToken';
-export * from './login';
+export * from './auth';
 
 export interface ApiResponse<T> {
   statusCode: number;

@@ -18,7 +18,7 @@ import { useRxAsync } from 'use-rx-hooks';
 import { useBoolean } from '../hooks/useBoolean';
 import { createOpenDialog } from '../utils/openDialog';
 
-interface ConfirmDialogProps extends IDialogProps {
+export interface ConfirmDialogProps extends IDialogProps {
   children?: ReactNode;
   intent?: Intent;
   onConfirm?: () => Promise<unknown>;

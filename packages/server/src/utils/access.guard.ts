@@ -1,5 +1,5 @@
 import { from, of, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
 import {
   ExecutionContext,
@@ -9,11 +9,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { ConfigService } from '@nestjs/config';
 import { UserRole, JWTSignPayload } from '@fullstack/typings';
 import { Expose, ExposeOptions } from 'class-transformer';
+import { AuthService } from '../auth/auth.service';
 
-type AccessType = keyof typeof UserRole | 'EVERYONE' | 'SELF';
+type AccessType = keyof typeof UserRole | 'EVERYONE' | 'SELF' | 'PASSWORD';
 
 export const Access = (...access: AccessType[]): CustomDecorator<string> =>
   SetMetadata('access', access);
@@ -26,7 +26,7 @@ export const Group = (
 export class AcessGuard extends AuthGuard('jwt') {
   constructor(
     @Inject(Reflector) private reflector: Reflector,
-    @Inject(ConfigService) private readonly configService: ConfigService
+    @Inject(AuthService) private readonly authService: AuthService
   ) {
     super();
   }
@@ -48,11 +48,18 @@ export class AcessGuard extends AuthGuard('jwt') {
       typeof canActive === 'boolean' ? of(canActive) : from(canActive);
 
     return source$.pipe(
-      map(active => {
+      mergeMap<boolean, Promise<boolean>>(async active => {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
           const id: string | null = req.params?.id;
           const user: Partial<JWTSignPayload> = req.user || {};
+
+          if (access.includes('PASSWORD')) {
+            const payload = await this.authService
+              .validateUser(user.username, req.body.password)
+              .then(res => !!res);
+            return !!payload;
+          }
 
           if (access.includes('SELF') && id && id === user.user_id) return true;
 

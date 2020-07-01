@@ -36,7 +36,7 @@ export function Password({
 }: PasswordProps) {
   const [isVisible, , , toggleVisible] = useBoolean(visible);
   return (
-    <InputGroup
+    <Input
       {...props}
       autoComplete={autoComplete === 'off' ? 'new-password' : autoComplete}
       className={`password ${className}`.trim()}

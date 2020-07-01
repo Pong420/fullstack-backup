@@ -82,8 +82,8 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
     return createdCat.save();
   }
 
-  async delete(query: FilterQuery<D>): Promise<T> {
-    return this.model.findOneAndDelete(query);
+  async delete(query: FilterQuery<D>): Promise<void> {
+    await this.model.deleteOne(query);
   }
 
   async update(

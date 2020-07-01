@@ -12,3 +12,13 @@ export interface Schema$Login extends JWTSignResult {
 }
 
 export type Response$Login = ApiResponse<Schema$Login>;
+
+export interface Param$ModifyPassword {
+  password: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface Param$DeleteAccount {
+  password: string;
+}

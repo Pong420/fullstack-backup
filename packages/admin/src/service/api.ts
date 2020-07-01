@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { getJwtToken } from './auth';
 
-const authRegex = /\/auth\.*/;
-const exlcudePaths = ['register/admin'];
-const excludeRegex = new RegExp(
-  `(${exlcudePaths.join('|').replace(/\//g, '\\/')})`
+const authUrls = ['/auth/login', '/auth/register', '/auth/refresh-token'];
+const authUrlRegex = new RegExp(
+  `(${authUrls.join('|').replace(/\//g, '\\/')})`
 );
-const isAuthUrl = (url?: string) =>
-  url && authRegex.test(url) && !excludeRegex.test(url);
+
+const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
 
 export const api = axios.create({
   baseURL: '/api'

@@ -7,7 +7,9 @@ import {
   HttpStatus,
   Body,
   BadRequestException,
-  UnauthorizedException
+  UnauthorizedException,
+  Delete,
+  Patch
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole, JWTSignPayload, Schema$Login } from '@fullstack/typings';
@@ -24,6 +26,8 @@ import { throwMongoError } from '../utils/MongooseExceptionFilter';
 import { Access } from '../utils/access.guard';
 import { IsObjectId } from '../decorators';
 import { formatJWTSignPayload } from './dto/JWTSignDto';
+import { DeleteAccountDto } from './dto/delete-account.dto';
+import { ModifyUserPasswordDto } from './dto/modify-password.dto';
 
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
@@ -36,8 +40,8 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
-  @Access('ADMIN')
   @Post('register/admin')
+  @Access('ADMIN')
   registerAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
     // TODO: check admin?
     return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
@@ -146,5 +150,26 @@ export class AuthController {
       })
       .status(HttpStatus.OK)
       .send(transformResponse(HttpStatus.OK, 'OK'));
+  }
+
+  @Delete('/delete')
+  @Access('PASSWORD')
+  async deleteAccount(
+    @Req() req: FastifyRequest,
+    @Body() _deleteAccountDto: DeleteAccountDto
+  ): Promise<void> {
+    return this.userService.delete({ _id: req.user.user_id });
+  }
+
+  @Patch('/modify-password')
+  @Access('PASSWORD')
+  async modifyPassword(
+    @Req() req: FastifyRequest,
+    @Body() { newPassword }: ModifyUserPasswordDto
+  ): Promise<void> {
+    await this.userService.update(
+      { _id: req.user.user_id },
+      { password: newPassword }
+    );
   }
 }

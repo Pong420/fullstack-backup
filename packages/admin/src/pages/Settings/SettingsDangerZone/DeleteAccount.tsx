@@ -1,0 +1,56 @@
+import React from 'react';
+import { Param$DeleteAccount } from '@fullstack/typings';
+import { Password } from '../../../components/Input';
+import { DangerButton } from '../../../components/DangerButton';
+import { openConfirmDialog } from '../../../components/ConfirmDialog';
+import { createForm, FormProps, validators } from '../../../utils/form';
+import { Toaster } from '../../../utils/toaster';
+import { deleteAccount } from '../../../service';
+import { useAuthActions } from '../../../store';
+
+const { Form, FormItem, useForm } = createForm<Param$DeleteAccount>();
+
+function PasswordForm(props: FormProps<Param$DeleteAccount>) {
+  return (
+    <Form {...props}>
+      <FormItem
+        name="password"
+        label="Confirm Passwrod"
+        validators={[validators.required('Please input your password')]}
+      >
+        <Password />
+      </FormItem>
+    </Form>
+  );
+}
+
+const title = 'Delete Account';
+export function DeleteAccount() {
+  const [form] = useForm();
+  const { logout } = useAuthActions();
+  return (
+    <DangerButton
+      text={title}
+      onClick={() =>
+        openConfirmDialog({
+          title,
+          icon: 'trash',
+          intent: 'danger',
+          children: <PasswordForm form={form} />,
+          onClosed: () => form.resetFields(),
+          onConfirm: () =>
+            form.validateFields().then(payload =>
+              deleteAccount(payload)
+                .then(() => {
+                  Toaster.success({ message: 'Delete account success' });
+                  logout();
+                })
+                .catch(error =>
+                  Toaster.apiError('Delete account failure', error)
+                )
+            )
+        })
+      }
+    />
+  );
+}

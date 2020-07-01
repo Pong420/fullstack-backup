@@ -6,7 +6,9 @@ import {
   Param$CreateUser,
   Response$User,
   UserRole,
-  Schema$Login
+  Schema$Login,
+  Param$DeleteAccount,
+  Param$ModifyPassword
 } from '@fullstack/typings';
 import { defer, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
@@ -24,6 +26,12 @@ export const registerAdmin = (params: Param$CreateUser) =>
   });
 
 export const logout = () => api.post<unknown>('/auth/logout');
+
+export const deleteAccount = (data: Param$DeleteAccount) =>
+  api.delete<unknown>(`/auth/delete`, { data });
+
+export const modifyPassword = (payload: Param$ModifyPassword) =>
+  api.patch<unknown>(`/auth/modify-password`, payload);
 
 let jwtToken$: Observable<Schema$Login> | null;
 

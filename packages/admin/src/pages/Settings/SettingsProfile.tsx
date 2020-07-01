@@ -48,7 +48,7 @@ export function SettingsProfile() {
     };
   }, [profileUpdate]);
 
-  useRxAsync(getProfile, {
+  const { loading: loadingProfile } = useRxAsync(getProfile, {
     onSuccess: profileUpdate,
     onFailure: getProfileFailure
   });
@@ -74,7 +74,7 @@ export function SettingsProfile() {
           </div>
           <div className="right">
             <FormItem name="avatar">
-              <UpdateAvatar fallback={username} />
+              <UpdateAvatar fallback={loadingProfile ? undefined : username} />
             </FormItem>
           </div>
         </div>
