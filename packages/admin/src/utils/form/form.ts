@@ -8,7 +8,11 @@ import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
 import { Validator, compose as composeValidator } from './validators';
 import { NamePath, Paths, PathType, DeepPartial } from './typings';
 
-export type FormInstance<S extends {} = Store, K extends keyof S = keyof S> = {
+export type FormInstance<
+  S extends {} = Store,
+  V = S,
+  K extends keyof S = keyof S
+> = {
   getFieldValue(name: K): S[K];
   getFieldValue<T extends Paths<S>>(name: T): PathType<S, T>;
   getFieldsValue: (nameList?: NamePath<S>[]) => S;
@@ -25,13 +29,13 @@ export type FormInstance<S extends {} = Store, K extends keyof S = keyof S> = {
   resetFields: (fields?: NamePath<S>[]) => void;
   setFields: (fields: FieldData[]) => void;
   setFieldsValue: (value: DeepPartial<S>) => void;
-  validateFields: (nameList?: NamePath<K>[]) => Promise<S>;
+  validateFields: (nameList?: NamePath<K>[]) => Promise<V>;
   submit: () => void;
 };
 
 export interface FormProps<S extends {} = Store, V = S>
   extends Omit<RcFormProps, 'form' | 'onFinish' | 'onValuesChange'> {
-  form?: FormInstance<S>;
+  form?: FormInstance<S, V>;
   initialValues?: DeepPartial<V>;
   onFinish?: (values: V) => void;
   onValuesChange?: (changes: DeepPartial<S>, values: S) => void;
@@ -168,7 +172,7 @@ export function createForm<S extends {} = Store, V = S>({
       (
         control: any,
         { touched, validating, errors }: FieldData,
-        form: FormInstance<S>
+        form: FormInstance<S, V>
       ) => {
         const { getFieldsValue } = form;
 
@@ -209,7 +213,7 @@ export function createForm<S extends {} = Store, V = S>({
     );
   };
 
-  const Form = React.forwardRef<FormInstance<S>, FormProps<S, V>>(
+  const Form = React.forwardRef<FormInstance<S, V>, FormProps<S, V>>(
     (
       {
         children,
@@ -240,7 +244,7 @@ export function createForm<S extends {} = Store, V = S>({
       )
   );
 
-  const useForm: () => [FormInstance<S>] = RcUseForm as any;
+  const useForm: () => [FormInstance<S, V>] = RcUseForm as any;
 
   return {
     Form,

@@ -18,8 +18,8 @@ interface Avatar<T> {
   avatar?: T;
 }
 
-type Store = Schema & Avatar<RxFileToImageState | null>;
-type Value = Schema & Avatar<File | null>;
+type Store = Schema & Avatar<RxFileToImageState | string | null>;
+type Value = Schema & Avatar<File | string | null>;
 
 export type UserFormProps = FormProps<Store, Value>;
 export type UserFormInstance = NonNullable<FormProps<Store, Value>['form']>;
@@ -60,7 +60,11 @@ export function createUserForm(itemProps?: FormItemProps<Store>) {
       <Form
         {...props}
         beforeSubmit={({ avatar, ...payload }) => ({
-          avatar: avatar && avatar.file,
+          avatar: avatar
+            ? typeof avatar === 'string'
+              ? avatar
+              : avatar.file
+            : avatar,
           ...payload
         })}
       />

@@ -1,4 +1,7 @@
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { Module } from '@nestjs/common';
+import { ModuleMetadata, DynamicModule } from '@nestjs/common/interfaces';
+import { ConfigFactory } from '@nestjs/config/dist/interfaces';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
@@ -6,10 +9,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
-import { ModuleMetadata, DynamicModule } from '@nestjs/common/interfaces';
-import { ConfigFactory } from '@nestjs/config/dist/interfaces';
+import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
 
 mongoose.set('toJSON', {
   virtuals: true, // clone '_id' to 'id'
@@ -40,6 +43,7 @@ const configure = (factory: ConfigFactory[] = []) =>
         .valid('development', 'production', 'test')
         .default('development'),
       MONGODB_URI: Joi.string(),
+      CLOUDINARY_URL: Joi.string().default(''),
       JWT_SECRET: Joi.string().default('JWT_SECRET'),
       JWT_TOKEN_EXPIRES_IN_MINUTES: Joi.number().min(1),
       REFRESH_TOKEN_EXPIRES_IN_MINUTES: Joi.number().min(1),
@@ -63,10 +67,17 @@ const meta: ModuleMetadata = {
     }),
     UserModule,
     AuthModule,
-    RefreshTokenModule
+    RefreshTokenModule,
+    CloudinaryModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: MongooseSerializerInterceptor
+    }
+  ]
 };
 
 @Module({})

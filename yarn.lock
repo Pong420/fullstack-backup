@@ -1762,6 +1762,7 @@ __metadata:
     bcrypt: ^5.0.0
     class-transformer: ^0.2.3
     class-validator: ^0.12.2
+    cloudinary: ^1.22.0
     fastify-cookie: ^3.6.1
     fastify-multipart: ^1.0.6
     jest: ^26.1.0
@@ -5703,6 +5704,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cloudinary@npm:^1.22.0":
+  version: 1.22.0
+  resolution: "cloudinary@npm:1.22.0"
+  dependencies:
+    core-js: ^3.6.5
+    lodash: ^4.17.11
+    q: ^1.5.1
+  checksum: 993c808f2c42568bd0abff4525224cb958c25840bce276505b75bf09aeb6bcaf86f9b134196532f7165f8b52ae98b1d813259772ee0e1c3f8dc1a7471ec6bd1d
+  languageName: node
+  linkType: hard
+
 "co@npm:^4.6.0":
   version: 4.6.0
   resolution: "co@npm:4.6.0"
@@ -6113,7 +6125,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.5.0":
+"core-js@npm:^3.5.0, core-js@npm:^3.6.5":
   version: 3.6.5
   resolution: "core-js@npm:3.6.5"
   checksum: 9283348dd5be2f1d07feaf90e2336b3f00a2316e3d3c6d4f789c9a67bdd4d7b08ce1c88dca4e591340130056c6b412b0b74fae039f8e259206f1073f542e4e85
@@ -15259,7 +15271,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"q@npm:^1.1.2":
+"q@npm:^1.1.2, q@npm:^1.5.1":
   version: 1.5.1
   resolution: "q@npm:1.5.1"
   checksum: f610c1295a4f1b334affbe5333bc8c6160b907d011a62f1c6d05d4ca985535ea271fd8684e1e655b4659cc5b71f5be9ac4ccc84482d869b5a0576955598a7dca

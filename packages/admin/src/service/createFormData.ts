@@ -8,7 +8,11 @@ function append(form: FormData, key: string, data: any) {
         append(form, `${key}[${index}]`, v);
       });
     }
-  } else if (typeof data === 'object' && !(data instanceof File)) {
+  } else if (
+    typeof data === 'object' &&
+    !(data instanceof File) &&
+    data !== null
+  ) {
     for (const sub in data) {
       form.append(`${key}[${sub}]`, data[sub]);
     }

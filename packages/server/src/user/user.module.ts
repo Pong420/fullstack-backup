@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserService } from './user.service';
 import { User, UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import paginate from 'mongoose-paginate-v2';
 
 @Module({
@@ -16,7 +17,8 @@ import paginate from 'mongoose-paginate-v2';
           return schema;
         }
       }
-    ])
+    ]),
+    CloudinaryModule
   ],
   controllers: [UserController],
   providers: [UserService],

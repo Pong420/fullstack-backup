@@ -29,6 +29,7 @@
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
+    "cloudinary": "^1.22.0",
     "fastify-cookie": "^3.6.1",
     "fastify-multipart": "^1.0.6",
     "mongoose": "^5.9.19",

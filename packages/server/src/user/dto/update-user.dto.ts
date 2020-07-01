@@ -23,7 +23,7 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   password?: string;
 
   @IsOptional()
-  avatar?: Uploaded;
+  avatar?: Uploaded | string;
 
   @IsOptional()
   @IsEnum(UserRole)

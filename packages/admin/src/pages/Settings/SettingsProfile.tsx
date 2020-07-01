@@ -34,7 +34,7 @@ const updateUserReq = (...args: Parameters<typeof updateUser>) =>
 
 export function SettingsProfile() {
   const user: Partial<Schema$User> = useSelector(authUserSelector) || {};
-  const { id, username, avatar, ...initialValues } = user;
+  const { id, username, ...initialValues } = user;
   const { profileUpdate } = useAuthActions();
   const [form] = useForm();
 

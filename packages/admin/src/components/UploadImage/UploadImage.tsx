@@ -16,7 +16,7 @@ import {
   RxFileToImageState
 } from 'use-rx-hooks';
 
-type Value = RxFileToImageState | null;
+type Value = RxFileToImageState | string | null;
 
 interface Context {
   value?: Value;

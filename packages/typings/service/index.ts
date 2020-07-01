@@ -70,4 +70,4 @@ export interface Uploaded {
   path: string;
 }
 
-export type UploadFile = File | Uploaded | null;
+export type UploadFile = File | Uploaded | string | null;

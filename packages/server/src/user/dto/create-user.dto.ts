@@ -40,7 +40,7 @@ class CreateUser extends Base
   nickname?: string;
 
   @IsOptional()
-  avatar?: Uploaded;
+  avatar?: Uploaded | string;
 
   @IsEmpty()
   createdAt?: string;

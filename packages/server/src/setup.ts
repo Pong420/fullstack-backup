@@ -3,7 +3,6 @@ import multipart from 'fastify-multipart';
 import { Reflector } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import {
   FastifyAdapter,
   NestFastifyApplication
@@ -11,7 +10,6 @@ import {
 import { MongooseExceptionFilter } from './utils/MongooseExceptionFilter';
 import { ResponseInterceptor } from './utils/ResponseInterceptor';
 import { AcessGuard } from './utils/access.guard';
-import { MongooseSerializerInterceptor } from './utils/MongooseSerializerInterceptor';
 import qs from 'qs';
 
 export { NestFastifyApplication };
@@ -24,9 +22,6 @@ export async function setupApp(app: NestFastifyApplication): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new MongooseExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
-  app.useGlobalInterceptors(
-    new MongooseSerializerInterceptor(app.get(Reflector), app.get(JwtService))
-  );
   app.useGlobalGuards(
     new AcessGuard(app.get(Reflector), app.get<ConfigService>(ConfigService))
   );

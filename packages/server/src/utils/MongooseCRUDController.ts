@@ -46,7 +46,8 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
   @Patch(':id')
   async update(
     @ObjectId() id: string,
-    @Body() changes: UpdateQuery<D>
+    @Body() changes: UpdateQuery<D>,
+    ..._args: unknown[]
   ): Promise<T> {
     return this.service.update({ _id: id } as any, changes);
   }
