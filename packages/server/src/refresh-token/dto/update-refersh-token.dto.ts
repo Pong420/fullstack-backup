@@ -1,30 +1,30 @@
-import { IsString, IsEmpty } from 'class-validator';
-
+import { IsString } from 'class-validator';
+import { Exclude } from 'class-transformer';
 import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
 
 class Base {
-  @IsEmpty()
+  @Exclude()
   id?: string;
 
   @IsString()
   refreshToken: string;
 
-  @IsEmpty()
+  @Exclude()
   user_id?: string;
 
-  @IsEmpty()
+  @Exclude()
   username?: string;
 
-  @IsEmpty()
+  @Exclude()
   nickname?: string;
 
-  @IsEmpty()
+  @Exclude()
   role?: UserRole;
 
-  @IsEmpty()
+  @Exclude()
   createdAt?: string;
 
-  @IsEmpty()
+  @Exclude()
   updatedAt?: string;
 }
 

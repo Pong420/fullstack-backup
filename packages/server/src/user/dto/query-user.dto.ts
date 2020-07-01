@@ -1,10 +1,5 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  IsEmail,
-  IsEmpty
-} from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsEmail } from 'class-validator';
+import { Transform, Exclude } from 'class-transformer';
 import {
   Schema$User,
   Param$GetUsers,
@@ -12,7 +7,6 @@ import {
   Timestamp
 } from '@fullstack/typings';
 import { QueryDto } from '../../utils/MongooseCRUDService';
-import { Transform } from 'class-transformer';
 
 class Base extends QueryDto
   implements Partial<Omit<Param$GetUsers, keyof Timestamp>> {
@@ -40,10 +34,10 @@ class Base extends QueryDto
 
 class QueryUser extends Base
   implements Partial<Omit<Param$GetUsers | Schema$User, keyof Base>> {
-  @IsEmpty()
+  @Exclude()
   password?: string;
 
-  @IsEmpty()
+  @Exclude()
   avatar?: unknown;
 }
 

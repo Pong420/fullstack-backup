@@ -1,5 +1,5 @@
-import { IsString, IsEnum, IsEmpty } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsString, IsEnum } from 'class-validator';
+import { Transform, Exclude } from 'class-transformer';
 import {
   UserRole,
   Schema$RefreshToken,
@@ -27,13 +27,13 @@ class Base implements Param$CreateRefreshToken {
 class CreateRefreshToken extends Base
   implements
     Partial<Omit<Schema$RefreshToken | Param$CreateRefreshToken, keyof Base>> {
-  @IsEmpty()
+  @Exclude()
   id?: string;
 
-  @IsEmpty()
+  @Exclude()
   createdAt?: string;
 
-  @IsEmpty()
+  @Exclude()
   updatedAt?: string;
 }
 

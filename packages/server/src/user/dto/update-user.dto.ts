@@ -1,29 +1,23 @@
-import {
-  IsOptional,
-  IsString,
-  IsEnum,
-  IsEmpty,
-  IsEmail
-} from 'class-validator';
-import { Transform } from 'class-transformer';
-import { Param$UpdateUser, UserRole, Uploaded } from '@fullstack/typings';
+import { IsOptional, IsString, IsEnum, IsEmail } from 'class-validator';
+import { Transform, Exclude } from 'class-transformer';
+import { Param$UpdateUser, UserRole } from '@fullstack/typings';
 
 export class UpdateUser implements Partial<Param$UpdateUser> {
-  @IsEmpty()
+  @Exclude()
   id?: string;
 
   @IsOptional()
   @IsEmail()
   email?: string;
 
-  @IsEmpty()
+  @Exclude()
   username?: string;
 
-  @IsEmpty()
+  @Exclude()
   password?: string;
 
   @IsOptional()
-  avatar?: Uploaded | string;
+  avatar?: unknown;
 
   @IsOptional()
   @IsEnum(UserRole)
@@ -34,10 +28,10 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   @IsOptional()
   nickname?: string;
 
-  @IsEmpty()
+  @Exclude()
   createdAt?: string;
 
-  @IsEmpty()
+  @Exclude()
   updatedAt?: string;
 }
 

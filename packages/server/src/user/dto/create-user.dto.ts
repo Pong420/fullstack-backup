@@ -1,11 +1,5 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  IsEmail,
-  IsEmpty
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsString, IsOptional, IsEnum, IsEmail } from 'class-validator';
+import { Transform, Exclude } from 'class-transformer';
 import {
   Param$CreateUser,
   Schema$User,
@@ -27,7 +21,7 @@ class Base implements Param$CreateUser {
 
 class CreateUser extends Base
   implements Partial<Omit<Schema$User | Param$CreateUser, keyof Base>> {
-  @IsEmpty()
+  @Exclude()
   id?: string;
 
   @IsOptional()
@@ -42,10 +36,10 @@ class CreateUser extends Base
   @IsOptional()
   avatar?: Uploaded | string;
 
-  @IsEmpty()
+  @Exclude()
   createdAt?: string;
 
-  @IsEmpty()
+  @Exclude()
   updatedAt?: string;
 }
 

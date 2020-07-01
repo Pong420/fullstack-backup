@@ -10,7 +10,7 @@ function append(form: FormData, key: string, data: any) {
     }
   } else if (
     typeof data === 'object' &&
-    !(data instanceof File) &&
+    data instanceof File === false &&
     data !== null
   ) {
     for (const sub in data) {

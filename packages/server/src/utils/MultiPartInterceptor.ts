@@ -11,7 +11,28 @@ import {
   Type,
   mixin
 } from '@nestjs/common';
-import { Uploaded } from '@fullstack/typings';
+import { IsString } from 'class-validator';
+import { plainToClass } from 'class-transformer';
+
+export class Uploaded {
+  fieldname: string;
+
+  originalname: string;
+
+  encoding: string;
+
+  @IsString()
+  mimetype: string;
+
+  filename: string;
+
+  @IsString()
+  path: string;
+
+  constructor(payload: Partial<Uploaded>) {
+    Object.assign(this, payload);
+  }
+}
 
 export const UPLOAD_DIR = path.join(__dirname, '../../../../', '_upload');
 
@@ -48,14 +69,14 @@ export function MultiPartInterceptor(
               const buffer = crypto.pseudoRandomBytes(16);
               const hexFilename = buffer.toString('hex');
               const dest = path.join(dir, hexFilename);
-              const result: Uploaded = {
+              const result = plainToClass(Uploaded, {
                 fieldname: fieldName,
                 originalname: filename,
                 encoding: encoding,
                 mimetype: mimetype,
                 filename: hexFilename,
                 path: dest
-              };
+              });
 
               if (isArrayFormData(field)) {
                 body[fieldName] = body[fieldName] || [];

@@ -6,14 +6,8 @@ import {
   UpdateQuery,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import {
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsEmpty,
-  IsObject
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsNumber, IsOptional, IsString, IsObject } from 'class-validator';
+import { Transform, Exclude } from 'class-transformer';
 import {
   PaginateResult,
   Pagination,
@@ -52,7 +46,7 @@ class Base implements QuerySchema {
   @IsOptional()
   sort?: Pagination['sort'];
 
-  @IsEmpty()
+  @Exclude()
   condition?: Condition[];
 
   @IsOptional()

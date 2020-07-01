@@ -4,8 +4,7 @@ import {
   PaginateApiResponse,
   Pagination,
   Search,
-  DateRange,
-  UploadFile
+  DateRange
 } from './';
 
 export enum UserRole {
@@ -29,12 +28,12 @@ export interface Param$CreateUser {
   password: string;
   role?: UserRole;
   nickname?: string;
-  avatar?: UploadFile;
+  avatar?: unknown;
 }
 
 export interface Param$UpdateUser
   extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Timestamp>> {
-  avatar?: UploadFile;
+  avatar?: unknown;
 }
 
 export interface Param$User {
