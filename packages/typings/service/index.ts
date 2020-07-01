@@ -60,14 +60,3 @@ interface ApiErrorValue {
 export interface ApiError extends Omit<AxiosError, 'response'> {
   response?: AxiosResponse<ApiErrorValue>;
 }
-
-export interface Uploaded {
-  fieldname: string;
-  originalname: string;
-  encoding: string;
-  mimetype: string;
-  filename: string;
-  path: string;
-}
-
-export type UploadFile = File | Uploaded | string | null;

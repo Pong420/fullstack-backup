@@ -1,5 +1,4 @@
-import { APP_PIPE } from '@nestjs/core';
-import { Module, Scope } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserService } from './user.service';
 import { User, UserSchema } from './schemas/user.schema';
@@ -23,14 +22,7 @@ import { UserRolePipe } from './user-role.pipe';
     CloudinaryModule
   ],
   controllers: [UserController],
-  providers: [
-    UserService,
-    {
-      provide: APP_PIPE,
-      scope: Scope.REQUEST,
-      useClass: UserRolePipe
-    }
-  ],
+  providers: [UserService, UserRolePipe],
   exports: [UserService]
 })
 export class UserModule {}

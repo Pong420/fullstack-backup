@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema$User, UserRole, Uploaded } from '@fullstack/typings';
+import { Schema$User, UserRole } from '@fullstack/typings';
 import { Exclude } from 'class-transformer';
 import bcrypt from 'bcrypt';
 
@@ -35,7 +35,7 @@ export class User implements Omit<Schema$User, 'avatar'> {
   role: UserRole;
 
   @Prop({ type: String, default: null })
-  avatar: Uploaded;
+  avatar: string | null;
 
   @Prop({
     type: String,

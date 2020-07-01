@@ -11,6 +11,7 @@ import {
 import { UserRole } from '@fullstack/typings';
 import { FastifyRequest } from 'fastify';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { CloudinaryPipe } from '../cloudinary/cloudinary.pipe';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,7 +25,6 @@ import {
   ObjectId,
   Condition
 } from '../utils/MongooseCRUDController';
-import { Cloudinary } from '../cloudinary/cloudinary.decorator';
 import { UserRolePipe } from './user-role.pipe';
 
 const roles = Object.values(UserRole)
@@ -66,10 +66,9 @@ export class UserController extends MongooseCRUDController<User> {
   @Access('ADMIN', 'MANAGER')
   @UseInterceptors(MultiPartInterceptor())
   create(
-    @Body(UserRolePipe) dto: CreateUserDto,
-    @Cloudinary('avatar') [avatar]: (string | null)[]
+    @Body(UserRolePipe, CloudinaryPipe('avatar')) dto: CreateUserDto
   ): Promise<User> {
-    return this.userService.create({ ...dto, avatar });
+    return this.userService.create(dto);
   }
 
   @Patch(':id')
@@ -77,9 +76,8 @@ export class UserController extends MongooseCRUDController<User> {
   @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
-    @Body(UserRolePipe) changes: UpdateUserDto,
-    @Cloudinary('avatar') [avatar]: (string | null)[]
+    @Body(UserRolePipe, CloudinaryPipe('avatar')) changes: UpdateUserDto
   ): Promise<User> {
-    return this.userService.update({ _id: id }, { ...changes, avatar });
+    return this.userService.update({ _id: id }, changes);
   }
 }

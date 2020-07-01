@@ -1,4 +1,4 @@
-import { from, defer, of, empty } from 'rxjs';
+import { from, defer, of, empty, Observable } from 'rxjs';
 import {
   concatMap,
   tap,
@@ -9,16 +9,17 @@ import {
 } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Uploaded } from '@fullstack/typings';
 import cloudinary, {
   TransformationOptions,
   ConfigAndUrlOptions,
   UploadApiOptions,
   UploadApiResponse
 } from 'cloudinary';
+import { Uploaded } from '../utils/MultiPartInterceptor';
 import fs from 'fs';
 
 type RemovePayload = string | { public_id: string };
+type UploadResponse = UploadApiResponse | null;
 
 @Injectable()
 export class CloudinaryService {
@@ -39,26 +40,32 @@ export class CloudinaryService {
   }
 
   upload(
+    payload: Uploaded,
+    options?: UploadApiOptions
+  ): Observable<UploadResponse>;
+  upload(
+    payload: Uploaded[],
+    options?: UploadApiOptions
+  ): Observable<UploadResponse[]>;
+  upload(
     payload: Uploaded | Uploaded[],
     options?: UploadApiOptions
-  ): Promise<(UploadApiResponse | Partial<UploadApiResponse>)[]> {
-    const source$ = from(Array.isArray(payload) ? payload : [payload]);
-    return source$
-      .pipe(
-        concatMap(uploaded =>
-          of(
-            defer(() =>
-              cloudinary.v2.uploader.upload(uploaded.path, options)
-            ).pipe(
-              retry(2),
-              catchError(() => of<Partial<UploadApiResponse>>({})),
-              tap(() => fs.unlinkSync(uploaded.path))
-            )
-          )
-        ),
-        zipAll()
-      )
-      .toPromise();
+  ): Observable<UploadResponse | UploadResponse[]> {
+    const handler = (uploaded: Uploaded): Observable<UploadResponse> =>
+      defer(() => cloudinary.v2.uploader.upload(uploaded.path, options)).pipe(
+        retry(2),
+        catchError(() => of(null)),
+        tap(() => fs.unlinkSync(uploaded.path))
+      );
+
+    return Array.isArray(payload)
+      ? from(payload).pipe(
+          concatMap(uploaded =>
+            of<Observable<UploadResponse>>(handler(uploaded))
+          ),
+          zipAll()
+        )
+      : handler(payload);
   }
 
   remove(payload: RemovePayload | RemovePayload[]): void {

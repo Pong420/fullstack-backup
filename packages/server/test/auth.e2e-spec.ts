@@ -32,7 +32,7 @@ describe('AuthController (e2e)', () => {
     return cookie;
   }
 
-  function registerAdmin(dto: CreateUserDto, token: string) {
+  function registerAdmin(token: string, dto: CreateUserDto) {
     return request
       .post('/api/auth/register/admin')
       .set('Authorization', `bearer ${token}`)
@@ -42,7 +42,7 @@ describe('AuthController (e2e)', () => {
   describe('Login', () => {
     it('Login with default admin', async done => {
       // Check auth guard for registerAdmin
-      let response = await registerAdmin(mockAdmin, '');
+      let response = await registerAdmin(undefined, mockAdmin);
       expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
 
       // Check login with default admin
@@ -51,7 +51,7 @@ describe('AuthController (e2e)', () => {
       expect(response.body.data).toMatchObject({ isDefaultAc: true });
 
       // Register an admin
-      response = await registerAdmin(mockAdmin, response.body.data.token);
+      response = await registerAdmin(response.body.data.token, mockAdmin);
 
       expect(response.status).toBe(HttpStatus.CREATED);
       admin = response.body.data;
@@ -112,10 +112,10 @@ describe('AuthController (e2e)', () => {
     const token = await getToken(
       admin ? login(mockAdmin) : loginAsDefaultAdmin()
     );
-    let response = await registerAdmin(createUser(), token);
+    let response = await registerAdmin(token, createUser());
     expect(response.status).toBe(HttpStatus.CREATED);
     await delay(jwtExpires * 2);
-    response = await registerAdmin(createUser(), token);
+    response = await registerAdmin(token, createUser());
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 });

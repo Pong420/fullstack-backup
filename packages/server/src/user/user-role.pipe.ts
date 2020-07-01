@@ -12,6 +12,7 @@ export class UserRolePipe implements PipeTransform {
   async transform(value: unknown): Promise<unknown> {
     const currentRole = this.request?.user?.role;
     const targetRole = this.request.body?.role;
+
     if (typeof UserRole[targetRole] !== undefined) {
       if (currentRole >= targetRole) {
         throw new ForbiddenException();
