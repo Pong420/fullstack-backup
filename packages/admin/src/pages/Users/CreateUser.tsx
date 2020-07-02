@@ -12,8 +12,6 @@ export interface OnCreate {
 
 interface CreateUserProps extends OnCreate {}
 
-const onFailure = Toaster.apiError.bind(Toaster, 'Create user failure');
-
 const {
   Form,
   Username,
@@ -31,9 +29,35 @@ export function CreateUser({ onCreate }: CreateUserProps) {
 
   async function onConfirm() {
     const payload = await form.validateFields();
-    const response = await createUser(payload);
-    onCreate(response.data.data);
+    try {
+      const response = await createUser(payload);
+      onCreate(response.data.data);
+      Toaster.success({ message: 'Create user success' });
+    } catch (error) {
+      Toaster.apiError('Create user failure', error);
+    }
   }
+
+  const children = (
+    <Form form={form}>
+      <Username
+        autoFocus
+        validators={[
+          userValidaors.username.format,
+          userValidaors.username.required
+        ]}
+      />
+      <Password
+        validators={[
+          userValidaors.password.format,
+          userValidaors.password.required
+        ]}
+      />
+      <Nickname />
+      <Email />
+      <UserRole />
+    </Form>
+  );
 
   return (
     <ButtonPopover
@@ -44,28 +68,9 @@ export function CreateUser({ onCreate }: CreateUserProps) {
         openConfirmDialog({
           icon,
           title,
-          onFailure,
+          children,
           onConfirm,
-          onClosed: () => form.resetFields(),
-          children: (
-            <Form form={form}>
-              <Username
-                validators={[
-                  userValidaors.username.format,
-                  userValidaors.username.required
-                ]}
-              />
-              <Password
-                validators={[
-                  userValidaors.password.format,
-                  userValidaors.password.required
-                ]}
-              />
-              <Nickname />
-              <Email />
-              <UserRole />
-            </Form>
-          )
+          onClosed: () => form.resetFields()
         })
       }
     />

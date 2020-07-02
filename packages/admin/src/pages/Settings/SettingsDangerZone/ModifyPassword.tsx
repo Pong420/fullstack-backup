@@ -19,7 +19,7 @@ function ModifyPasswordForm(props: FormProps<Param$ModifyPassword>) {
         label="Old Passwrod"
         validators={[validators.required('Please input your old password')]}
       >
-        <Password />
+        <Password autoFocus />
       </FormItem>
 
       <FormItem
@@ -62,6 +62,18 @@ const title = 'Modify Password';
 export function ModifyPassword() {
   const [form] = useForm();
   const { logout } = useAuthActions();
+
+  async function onConfirm() {
+    const payload = await form.validateFields();
+    try {
+      await modifyPassword(payload);
+      Toaster.success({ message: 'Modify account success' });
+      logout();
+    } catch (error) {
+      Toaster.apiError('Modify account failure', error);
+    }
+  }
+
   return (
     <DangerButton
       text={title}
@@ -70,19 +82,9 @@ export function ModifyPassword() {
           title,
           icon: 'lock',
           intent: 'danger',
-          children: <ModifyPasswordForm form={form} />,
+          onConfirm,
           onClosed: () => form.resetFields(),
-          onConfirm: () =>
-            form.validateFields().then(payload =>
-              modifyPassword(payload)
-                .then(() => {
-                  Toaster.success({ message: 'Modify password success' });
-                  logout();
-                })
-                .catch(error =>
-                  Toaster.apiError('Modify password failure', error)
-                )
-            )
+          children: <ModifyPasswordForm form={form} />
         })
       }
     />

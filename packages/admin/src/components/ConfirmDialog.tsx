@@ -22,7 +22,6 @@ export interface ConfirmDialogProps extends IDialogProps {
   children?: ReactNode;
   intent?: Intent;
   onConfirm?: () => Promise<unknown>;
-  onFailure?: (error: any) => void;
 }
 
 interface Context {
@@ -72,13 +71,11 @@ export function ConfirmDialog({
   children,
   onClose,
   onConfirm,
-  onFailure,
   intent = 'primary',
   ...props
 }: ConfirmDialogProps) {
   const { run, loading } = useRxAsync(onConfirm || asyncFn, {
     defer: true,
-    onFailure,
     onSuccess: onClose
   });
 

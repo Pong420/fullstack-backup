@@ -21,14 +21,6 @@ const {
   useForm
 } = createUserForm();
 
-const initialValues: Store = {
-  username: '',
-  password: '',
-  confirmPassword: '',
-  email: '',
-  nickname: ''
-};
-
 const backToLogin = () => history.replace(PATHS.LOGIN);
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Register admin failure');
@@ -44,7 +36,6 @@ export function AdminRegisterForm() {
   return (
     <Form
       form={form}
-      initialValues={initialValues}
       onFinish={({ confirmPassword, ...params }) => run(params)}
     >
       <Username

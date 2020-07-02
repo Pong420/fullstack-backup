@@ -18,6 +18,10 @@ interface Avatar<T> {
   avatar?: T;
 }
 
+interface AutoFocus {
+  autoFocus?: boolean;
+}
+
 type Store = Schema & Avatar<RxFileToImageState | string | null>;
 type Value = Schema & Avatar<File | string | null>;
 
@@ -53,7 +57,7 @@ export function createUserForm(itemProps?: FormItemProps<Store>) {
   const components = createForm<Store, Value>(itemProps);
   const { Form, FormItem } = components;
 
-  type FND = FormItemProps<Store> & { deps?: undefined };
+  type FND = FormItemProps<Store> & { deps?: undefined } & AutoFocus;
 
   function UserForm(props?: UserFormProps) {
     return (
@@ -71,15 +75,15 @@ export function createUserForm(itemProps?: FormItemProps<Store>) {
     );
   }
 
-  const Username = (props?: FND) => (
+  const Username = ({ autoFocus, ...props }: FND = {}) => (
     <FormItem {...props} name="username" label="Username">
-      <Input />
+      <Input autoFocus={autoFocus} />
     </FormItem>
   );
 
-  const Password = (props?: FND) => (
+  const Password = ({ autoFocus, ...props }: FND = {}) => (
     <FormItem {...props} name="password" label="Password">
-      <PasswordInput />
+      <PasswordInput autoFocus={autoFocus} />
     </FormItem>
   );
 
@@ -113,9 +117,9 @@ export function createUserForm(itemProps?: FormItemProps<Store>) {
     </FormItem>
   );
 
-  const Nickname = () => (
+  const Nickname = ({ autoFocus }: AutoFocus = {}) => (
     <FormItem name="nickname" label="Nickname">
-      <Input />
+      <Input autoFocus={autoFocus} />
     </FormItem>
   );
 

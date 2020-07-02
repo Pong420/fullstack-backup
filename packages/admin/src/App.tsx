@@ -15,11 +15,11 @@ const Main = React.memo(() => {
   return (
     <ConfirmDialogProvider>
       <Sidebar />
-      <PrivateRoute exact path={PATHS.HOME} component={Home} />
-      <PrivateRoute path={PATHS.ORDERS} component={Orders} />
-      <PrivateRoute path={PATHS.PRODUCTS} component={Products} />
-      <PrivateRoute path={PATHS.USERS} component={Users} />
-      <PrivateRoute path={PATHS.SETTINGS} component={Settings} />
+      <Route exact path={PATHS.HOME} component={Home} />
+      <Route path={PATHS.ORDERS} component={Orders} />
+      <Route path={PATHS.PRODUCTS} component={Products} />
+      <Route path={PATHS.USERS} component={Users} />
+      <Route path={PATHS.SETTINGS} component={Settings} />
     </ConfirmDialogProvider>
   );
 });
@@ -27,7 +27,7 @@ const Main = React.memo(() => {
 const App = React.memo(() => (
   <Switch>
     <Route path={PATHS.AUTH} component={Auth} />
-    <Route path="" component={Main} />
+    <PrivateRoute path="" component={Main} />
   </Switch>
 ));
 

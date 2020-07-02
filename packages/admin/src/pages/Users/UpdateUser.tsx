@@ -14,8 +14,6 @@ interface UpdateUserProps extends OnUpdate, Partial<Schema$User> {
   id: string;
 }
 
-const onFailure = Toaster.apiError.bind(Toaster, 'Update user failure');
-
 const { Form, Nickname, Email, UserRole, useForm } = createUserForm();
 
 function UpdateUserForm({
@@ -32,7 +30,7 @@ function UpdateUserForm({
 
   return (
     <Form form={form}>
-      <Nickname />
+      <Nickname autoFocus />
       <Email />
       <UserRole />
     </Form>
@@ -46,8 +44,13 @@ export function UpdateUser({ id, onUpdate, ...user }: UpdateUserProps) {
 
   async function onConfirm() {
     const payload = await form.validateFields();
-    const response = await updateUser({ ...payload, id });
-    onUpdate(response.data.data);
+    try {
+      const response = await updateUser({ ...payload, id });
+      onUpdate(response.data.data);
+      Toaster.success({ message: 'Update user success' });
+    } catch (error) {
+      Toaster.apiError('Update user failure', error);
+    }
   }
 
   return (
@@ -58,8 +61,8 @@ export function UpdateUser({ id, onUpdate, ...user }: UpdateUserProps) {
         openConfirmDialog({
           icon,
           title,
-          onFailure,
           onConfirm,
+          onClose: () => form.resetFields(),
           children: <UpdateUserForm form={form} {...user} />
         })
       }

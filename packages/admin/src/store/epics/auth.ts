@@ -22,7 +22,7 @@ import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
-import { login, logout, getJwtToken } from '../../service';
+import { login, logout, getJwtToken, clearJwtToken } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
 type Actions = AuthActions | RouterAction;
@@ -98,7 +98,8 @@ const logoutEpic: AuthEpic = action$ => {
   );
 
   return race(logoutEvent$, logoutApi$).pipe(
-    map<unknown, Actions>(() => replace(PATHS.LOGIN))
+    map<unknown, Actions>(() => replace(PATHS.LOGIN)),
+    tap(() => clearJwtToken())
   );
 };
 

@@ -13,11 +13,19 @@ interface DeleteUserProps extends OnDelete {
   nickname: string;
 }
 
-const onFailure = Toaster.apiError.bind(Toaster, 'Delete user failure');
-
 const icon: IconName = 'trash';
 const title = 'Delete User';
 export function DeleteUser({ nickname, id, onDelete }: DeleteUserProps) {
+  async function onConfirm() {
+    try {
+      await deleteUser({ id });
+      onDelete({ id });
+      Toaster.success({ message: 'Delete user success' });
+    } catch (error) {
+      Toaster.apiError('Delete user failure', error);
+    }
+  }
+
   return (
     <ButtonPopover
       icon={icon}
@@ -27,8 +35,7 @@ export function DeleteUser({ nickname, id, onDelete }: DeleteUserProps) {
           intent: 'danger',
           icon,
           title,
-          onFailure,
-          onConfirm: () => deleteUser({ id }).then(() => onDelete({ id })),
+          onConfirm,
           children: (
             <span>
               Are you sure to delete <b>{nickname}</b>'s account? This action is

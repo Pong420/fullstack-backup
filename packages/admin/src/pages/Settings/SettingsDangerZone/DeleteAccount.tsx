@@ -18,7 +18,7 @@ function PasswordForm(props: FormProps<Param$DeleteAccount>) {
         label="Confirm Passwrod"
         validators={[validators.required('Please input your password')]}
       >
-        <Password />
+        <Password autoFocus />
       </FormItem>
     </Form>
   );
@@ -28,6 +28,18 @@ const title = 'Delete Account';
 export function DeleteAccount() {
   const [form] = useForm();
   const { logout } = useAuthActions();
+
+  async function onConfirm() {
+    const payload = await form.validateFields();
+    try {
+      await deleteAccount(payload);
+      Toaster.success({ message: 'Delete account success' });
+      logout();
+    } catch (error) {
+      Toaster.apiError('Delete account failure', error);
+    }
+  }
+
   return (
     <DangerButton
       text={title}
@@ -36,19 +48,9 @@ export function DeleteAccount() {
           title,
           icon: 'trash',
           intent: 'danger',
-          children: <PasswordForm form={form} />,
+          onConfirm,
           onClosed: () => form.resetFields(),
-          onConfirm: () =>
-            form.validateFields().then(payload =>
-              deleteAccount(payload)
-                .then(() => {
-                  Toaster.success({ message: 'Delete account success' });
-                  logout();
-                })
-                .catch(error =>
-                  Toaster.apiError('Delete account failure', error)
-                )
-            )
+          children: <PasswordForm form={form} />
         })
       }
     />
