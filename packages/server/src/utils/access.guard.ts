@@ -5,7 +5,8 @@ import {
   ExecutionContext,
   SetMetadata,
   CustomDecorator,
-  Inject
+  Inject,
+  UnauthorizedException
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
@@ -55,10 +56,14 @@ export class AcessGuard extends AuthGuard('jwt') {
           const user: Partial<JWTSignPayload> = req.user || {};
 
           if (access.includes('PASSWORD')) {
-            const payload = await this.authService
-              .validateUser(user.username, req.body.password)
-              .then(res => !!res);
-            return !!payload;
+            try {
+              const payload = await this.authService
+                .validateUser(user.username, req.body.password)
+                .then(res => !!res);
+              return !!payload;
+            } catch (error) {
+              throw new UnauthorizedException();
+            }
           }
 
           if (access.includes('SELF') && id && id === user.user_id) return true;

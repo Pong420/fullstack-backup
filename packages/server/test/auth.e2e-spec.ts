@@ -1,6 +1,7 @@
 import { Response } from 'supertest';
 import { ConfigService } from '@nestjs/config';
 import { HttpStatus } from '@nestjs/common';
+import { Param$ModifyPassword, Param$DeleteAccount } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
 import { mockAdmin } from './utils/constants';
@@ -14,6 +15,7 @@ describe('AuthController (e2e)', () => {
   const refreshTokenExpires =
     configService.get<number>('REFRESH_TOKEN_EXPIRES_IN_MINUTES') * 60 * 1000;
   let admin: User;
+  let adminToken: string;
   let refreshToken: string;
 
   jest.setTimeout(refreshTokenExpires * 4);
@@ -52,7 +54,6 @@ describe('AuthController (e2e)', () => {
 
       // Register an admin
       response = await registerAdmin(response.body.data.token, mockAdmin);
-
       expect(response.status).toBe(HttpStatus.CREATED);
       admin = response.body.data;
 
@@ -69,6 +70,8 @@ describe('AuthController (e2e)', () => {
         expect(response.status).toBe(HttpStatus.OK);
         expect(response.body.data).toMatchObject({ isDefaultAc: false });
         expect(response.body.data.password).toBeUndefined();
+
+        adminToken = response.body.data.token;
 
         validateCookies(response);
       }
@@ -117,5 +120,95 @@ describe('AuthController (e2e)', () => {
     await delay(jwtExpires * 2);
     response = await registerAdmin(token, createUser());
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+  });
+
+  describe('Modify password', () => {
+    const newPassword = 'new-password-123';
+    const modify = (token: string, params: Param$ModifyPassword) =>
+      request
+        .patch('/api/auth/modify-password')
+        .set('Authorization', `bearer ${token}`)
+        .send(params);
+    const mockUser = createUser();
+    let mockUserToken: string;
+
+    beforeAll(async () => {
+      mockUserToken = await getToken(createAndLogin(adminToken, mockUser));
+    });
+
+    it('bad request', async () => {
+      if (mockUserToken) {
+        const response = await Promise.all([
+          modify(mockUserToken, {
+            password: '',
+            newPassword: '',
+            confirmNewPassword: ''
+          }),
+          modify(mockUserToken, {
+            password: mockUser.password,
+            newPassword: '',
+            confirmNewPassword: ''
+          }),
+          // Incorrect password format
+          modify(mockUserToken, {
+            password: mockUser.password,
+            newPassword: 'q123-rewr',
+            confirmNewPassword: ''
+          }),
+          // Not equal
+          modify(mockUserToken, {
+            password: mockUser.password,
+            newPassword,
+            confirmNewPassword: 'q12345678'
+          })
+        ]);
+        for (const res of response) {
+          expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+        }
+      }
+    });
+
+    it('success', async () => {
+      if (mockUserToken) {
+        const response = await modify(mockUserToken, {
+          password: mockUser.password,
+          newPassword,
+          confirmNewPassword: newPassword
+        });
+        expect(response.status).toBe(HttpStatus.OK);
+      }
+    });
+  });
+
+  describe('Delete account', () => {
+    const deleteAccount = (token: string, params: Param$DeleteAccount) =>
+      request
+        .delete('/api/auth/delete')
+        .set('Authorization', `bearer ${token}`)
+        .send(params);
+    const mockUser = createUser();
+    let mockUserToken: string;
+    beforeAll(async () => {
+      mockUserToken = await getToken(createAndLogin(adminToken, mockUser));
+    });
+
+    it('bad request', async () => {
+      const response = await Promise.all([
+        deleteAccount(mockUserToken, { password: '' })
+      ]);
+      for (const res of response) {
+        expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      }
+    });
+
+    it('success', async () => {
+      let response = await deleteAccount(mockUserToken, {
+        password: mockUser.password
+      });
+      expect(response.status).toBe(HttpStatus.OK);
+
+      response = await login(mockUser);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    });
   });
 });

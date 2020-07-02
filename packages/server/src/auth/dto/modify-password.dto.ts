@@ -1,7 +1,7 @@
-import { ValidateIf, IsString, IsNotEmpty } from 'class-validator';
-import { Param$ModifyPassword } from '@fullstack/typings';
-import { ValidPassword } from 'src/decorators';
 import { BadRequestException } from '@nestjs/common';
+import { Param$ModifyPassword } from '@fullstack/typings';
+import { ValidateIf, IsString, IsNotEmpty } from 'class-validator';
+import { ValidPassword } from '../../decorators';
 
 export class ModifyUserPasswordDto implements Param$ModifyPassword {
   @IsString()
