@@ -78,8 +78,8 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
   ) {}
 
   async create(createDto: unknown): Promise<T> {
-    const createdCat = new this.model(createDto);
-    return createdCat.save();
+    const created = new this.model(createDto);
+    return created.save();
   }
 
   async delete(query: FilterQuery<D>): Promise<void> {

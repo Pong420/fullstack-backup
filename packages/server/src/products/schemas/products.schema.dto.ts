@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema$Product, Timestamp, ProductStatus } from '@fullstack/typings';
+import { Schema$Product, ProductStatus } from '@fullstack/typings';
 
 @Schema({
   timestamps: true,
@@ -7,7 +7,7 @@ import { Schema$Product, Timestamp, ProductStatus } from '@fullstack/typings';
     transform: (_model, { _id, ...raw }) => new Product(raw)
   }
 })
-export class Product implements Schema$Product, Timestamp {
+export class Product implements Schema$Product {
   id: string;
 
   @Prop({ type: String, required: true, unique: true, index: true })

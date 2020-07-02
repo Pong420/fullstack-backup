@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel, FilterQuery } from 'mongoose';
+import { Document, PaginateModel, FilterQuery } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { MongooseCRUDService } from '../utils/mongoose-crud.service';
-import { Document } from 'mongoose';
 
 @Injectable()
 export class UserService extends MongooseCRUDService<User> {

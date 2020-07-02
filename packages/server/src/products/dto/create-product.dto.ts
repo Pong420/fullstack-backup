@@ -1,24 +1,17 @@
-import {
-  IsString,
-  IsOptional,
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsLowercase
-} from 'class-validator';
-import { Transform, Exclude } from 'class-transformer';
+import { IsString, IsOptional, IsArray, IsNotEmpty } from 'class-validator';
+import { Exclude } from 'class-transformer';
 import { Schema$Product, ProductStatus } from '@fullstack/typings';
-import { Price, Amount, Disscount } from './constants';
+import { Price, Amount, Disscount, Status, Tags } from './products.decorators';
 
-export class Base implements Partial<Schema$Product> {
+class Base implements Partial<Schema$Product> {
   @Exclude()
   id?: undefined;
 
   @Exclude()
-  freeze: undefined;
+  freeze?: undefined;
 
   @Exclude()
-  remain: undefined;
+  remain?: undefined;
 
   @Exclude()
   createdAt?: undefined;
@@ -27,7 +20,7 @@ export class Base implements Partial<Schema$Product> {
   updatedAt?: undefined;
 }
 
-export class CreateProduct extends Base
+class CreateProduct extends Base
   implements Partial<Omit<Schema$Product, keyof Base>> {
   @IsOptional()
   @IsString()
@@ -35,16 +28,15 @@ export class CreateProduct extends Base
 
   @IsOptional()
   @IsArray()
+  // TODO:
   images?: string[];
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @Tags()
   tags?: string[];
 
   @IsOptional()
-  @IsEnum(ProductStatus)
-  @Transform(Number)
+  @Status()
   status?: ProductStatus;
 
   @IsOptional()
@@ -64,10 +56,7 @@ export class CreateProductDto extends CreateProduct
   @Amount()
   amount: number;
 
-  @IsArray()
   @IsString()
-  @IsLowercase({ each: true })
-  // TODO: test
-  @Transform(arr => arr.map((s: string) => s.toLowerCase()))
+  @IsNotEmpty()
   category: string;
 }

@@ -25,4 +25,14 @@ export interface Schema$Product extends Timestamp {
   status: ProductStatus;
 }
 
-export interface Param$GetProducts extends Pagination, Search {}
+export interface Param$GetProducts extends Pagination, Timestamp, Search {
+  name?: string;
+  // price?: number;
+  // amount?: number;
+  // freeze?: number;
+  // remain?: number;
+  category?: string;
+  // tags?: string;
+  // discount?: number;
+  status?: ProductStatus;
+}
