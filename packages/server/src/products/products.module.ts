@@ -1,19 +1,18 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
-import { UserService } from './user.service';
-import { User, UserSchema } from './schemas/user.schema';
-import { UserController } from './user.controller';
-import { UserRolePipe } from './user-role.pipe';
+import { ProductsService } from './products.service';
+import { ProductsController } from './products.controller';
+import { Product, ProductSchema } from './schemas/products.schema.dto';
 import paginate from 'mongoose-paginate-v2';
 
 @Module({
   imports: [
     MongooseModule.forFeatureAsync([
       {
-        name: User.name,
+        name: Product.name,
         useFactory: async () => {
-          const schema = UserSchema;
+          const schema = ProductSchema;
           schema.plugin(paginate);
           return schema;
         }
@@ -21,8 +20,7 @@ import paginate from 'mongoose-paginate-v2';
     ]),
     CloudinaryModule
   ],
-  controllers: [UserController],
-  providers: [UserService, UserRolePipe],
-  exports: [UserService]
+  providers: [ProductsService],
+  controllers: [ProductsController]
 })
-export class UserModule {}
+export class ProductsModule {}

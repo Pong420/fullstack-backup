@@ -4,6 +4,7 @@ export * from './user';
 export * from './jwt';
 export * from './refreshToken';
 export * from './auth';
+export * from './products';
 
 export interface ApiResponse<T> {
   statusCode: number;
