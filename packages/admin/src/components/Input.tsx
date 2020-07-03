@@ -2,7 +2,11 @@ import React from 'react';
 import {
   Button,
   InputGroup,
+  TextArea as BpTextArea,
+  NumericInput as BpNumericInput,
+  ITextAreaProps,
   IInputGroupProps,
+  INumericInputProps,
   HTMLInputProps
 } from '@blueprintjs/core';
 import { useBoolean } from '../hooks/useBoolean';
@@ -24,6 +28,39 @@ export function Input(props?: InputProps) {
       {...(props &&
         props.onChange &&
         typeof props.value === 'undefined' && { value: '' })}
+    />
+  );
+}
+
+export function TextArea(props?: ITextAreaProps) {
+  return (
+    <BpTextArea
+      fill
+      autoComplete="off"
+      {...props}
+      {...(props &&
+        props.onChange &&
+        typeof props.value === 'undefined' && { value: '' })}
+    />
+  );
+}
+
+export function NumericInput({
+  onValueChange,
+  onChange,
+  ...props
+}: INumericInputProps & { onChange?: (payload: unknown) => void } = {}) {
+  return (
+    <BpNumericInput
+      fill
+      clampValueOnBlur
+      autoComplete="off"
+      allowNumericCharactersOnly={false}
+      {...props}
+      {...(props &&
+        onChange &&
+        typeof props.value === 'undefined' && { value: '' })}
+      onValueChange={(num, raw) => onChange && onChange(isNaN(num) ? raw : num)}
     />
   );
 }

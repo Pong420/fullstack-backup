@@ -24,3 +24,100 @@
     }
   }
 }
+
+.upload-image-grid {
+  .image-grid-container {
+    @include flex($wrap: wrap);
+
+    > * {
+      $width: 32%;
+      $margin: (100% - $width * 3)/ 2;
+      width: $width;
+
+      &:nth-child(3n + 2) {
+        @include margin-x($margin);
+      }
+
+      &:nth-child(n + 4) {
+        margin-top: $margin;
+      }
+    }
+  }
+
+  .upload-grid-button {
+    border: 1px dashed;
+
+    button {
+      @include absolute(0, null, 0);
+      @include sq-dimen(100%);
+    }
+  }
+
+  .upload-grid,
+  .upload-grid-button {
+    @include relative();
+
+    &:before {
+      @include dimen(100%, 0);
+      content: '';
+      display: block;
+      padding-bottom: $ratio * 100%;
+    }
+  }
+
+  .upload-grid {
+    .upload-grid-image {
+      @include absolute(0, null, null, 0);
+      @include sq-dimen(100%);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .grid-content {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      box-shadow: $pt-elevation-shadow-0;
+      background-color: #fff;
+    }
+
+    .grid-backdrop {
+      @include absolute(0, null, 0);
+      @include animate(opacity);
+      @include flex(center, center);
+      @include sq-dimen(100%);
+      background-color: rgba(#000, 0.4);
+      opacity: 0;
+
+      svg {
+        color: #fff;
+      }
+    }
+
+    &:hover {
+      .grid-backdrop {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.preview-image-dialog.preview-image-dialog {
+  @include dimen(auto);
+  background-color: transparent;
+  border-radius: 0;
+  max-width: 1200px;
+  padding: 0;
+
+  img {
+    $color: #eee;
+    @include dimen(100%);
+    background-size: 40px 40px;
+    // prettier-ignore
+    background-image: 
+      linear-gradient(to right, $color 1px, transparent 1px),
+      linear-gradient(to bottom, $color 1px, transparent 1px);
+    background-position: center center;
+  }
+}
