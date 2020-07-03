@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { SuperTest } from 'supertest';
 import { SuperAgentRequest, Response } from 'superagent';
 import { CreateUserDto } from '../test/utils/user';
+import 'jest-extended';
 
 interface Login {
   username: string;

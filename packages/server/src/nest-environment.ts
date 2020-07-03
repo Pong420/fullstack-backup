@@ -49,7 +49,12 @@ export default class NestNodeEnvironment extends NodeEnvironment {
         payload: Response | Promise<Response>
       ): Promise<string> =>
         (payload instanceof Promise ? payload : Promise.resolve(payload)).then(
-          res => res.body.data.token
+          res => {
+            if (res.error) {
+              return Promise.reject(res.error.text);
+            }
+            return res.body.data.token;
+          }
         );
 
       const createAndLogin = async (
@@ -57,12 +62,14 @@ export default class NestNodeEnvironment extends NodeEnvironment {
         dto: Partial<CreateUserDto> = {}
       ): Promise<Response> => {
         const user = createUser(dto);
-        await request
+        const userRes = await request
           .post(`/api/user`)
           .set('Authorization', `bearer ${adminToken}`)
           .set('Content-Type', 'multipart/form-data')
           .field(user as any);
-        return login(user);
+        return userRes.error
+          ? Promise.reject(userRes.error.text) //
+          : login(user);
       };
 
       this.global.app = app;

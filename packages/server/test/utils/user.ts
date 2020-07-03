@@ -1,13 +1,7 @@
 import { CreateUserDto } from '../../src/user/dto/create-user.dto';
+import { rid } from './rid';
 
-export { CreateUserDto };
-
-export const rid = (N = 5): string => {
-  const s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.from({ length: N }, () =>
-    s.charAt(Math.floor(Math.random() * s.length))
-  ).join('');
-};
+export { rid, CreateUserDto };
 
 export const createUser = (payload?: Partial<CreateUserDto>): CreateUserDto => {
   const name = rid(8);

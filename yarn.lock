@@ -1767,6 +1767,7 @@ __metadata:
     fastify-multipart: ^1.0.6
     jest: ^26.1.0
     jest-environment-node: ^26.0.1
+    jest-extended: ^0.11.5
     mongodb-memory-server: ^6.6.1
     mongoose: ^5.9.19
     mongoose-paginate-v2: ^1.3.9
@@ -7931,7 +7932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expect@npm:^24.9.0":
+"expect@npm:^24.1.0, expect@npm:^24.9.0":
   version: 24.9.0
   resolution: "expect@npm:24.9.0"
   dependencies:
@@ -10646,6 +10647,24 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"jest-extended@npm:^0.11.5":
+  version: 0.11.5
+  resolution: "jest-extended@npm:0.11.5"
+  dependencies:
+    expect: ^24.1.0
+    jest-get-type: ^22.4.3
+    jest-matcher-utils: ^22.0.0
+  checksum: dd20b6e1fa798d2356b84468d3766d60c210c191c9accbbb34c90146a0558d74b6ef4cfa40475d5ae9768c0ef325f111104560701f75fa13e5b0e4efd17181c0
+  languageName: node
+  linkType: hard
+
+"jest-get-type@npm:^22.4.3":
+  version: 22.4.3
+  resolution: "jest-get-type@npm:22.4.3"
+  checksum: 8bc23dbe68be2ae99eb5967f6fc586798d873d2422104ce5b81dca9c9266538451b00a07507ea572181003f8ac13a041d714a347050f7ec024512a1e1666a7e7
+  languageName: node
+  linkType: hard
+
 "jest-get-type@npm:^24.9.0":
   version: 24.9.0
   resolution: "jest-get-type@npm:24.9.0"
@@ -10780,6 +10799,17 @@ fsevents@^1.2.7:
     jest-get-type: ^26.0.0
     pretty-format: ^26.1.0
   checksum: 32113e73a548c7d9c80ff4ba2e3a5a17419f4ce68439b3faf6b366bb58a359b100b91fe87e89343eb250e30bb1f483d0b676e171fa0517a9033101351a4eafaf
+  languageName: node
+  linkType: hard
+
+"jest-matcher-utils@npm:^22.0.0":
+  version: 22.4.3
+  resolution: "jest-matcher-utils@npm:22.4.3"
+  dependencies:
+    chalk: ^2.0.1
+    jest-get-type: ^22.4.3
+    pretty-format: ^22.4.3
+  checksum: 7d528179284f1c6e987eb3a7571afeee6e04cb74e395a159f83f0fcf8a91ee95f286089e60eadc0ecbdb76ea10c7cd17801e3b6cd3667adc97b880bc86827977
   languageName: node
   linkType: hard
 
@@ -15077,6 +15107,16 @@ fsevents@^1.2.7:
     renderkid: ^2.0.1
     utila: ~0.4
   checksum: dc2a92f59888eac1bd3861b439944ab50c46fcc957c3147126270f1e9e06c7bbacde1ab23ab2fc73c8f3a1961094db0878ec8a569f1d5606343a0ada7899cfc4
+  languageName: node
+  linkType: hard
+
+"pretty-format@npm:^22.4.3":
+  version: 22.4.3
+  resolution: "pretty-format@npm:22.4.3"
+  dependencies:
+    ansi-regex: ^3.0.0
+    ansi-styles: ^3.2.0
+  checksum: 9d209214d194eeda155c92f3c079c9cbea41af981d91b0085fa829684107360641640b02bfdf2fe7b38bbeeb66f6816b49939534e139b1e488533971ec014d39
   languageName: node
   linkType: hard
 

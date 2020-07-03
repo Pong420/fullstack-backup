@@ -23,7 +23,7 @@ import { Access } from '../utils/access.guard';
 import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
 
 @Controller('products')
-@Access('EVERYONE')
+@Access('ADMIN', 'MANAGER')
 export class ProductsController extends MongooseCRUDController<Product> {
   constructor(private readonly productService: ProductsService) {
     super(productService);
