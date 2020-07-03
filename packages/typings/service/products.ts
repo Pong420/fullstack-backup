@@ -1,10 +1,5 @@
 import { Search, Pagination, Timestamp } from './index';
 
-export enum ProductStatus {
-  VISIBLE,
-  HIDDEN
-}
-
 export enum ProductSuggestTypes {
   CATEGORY = 'category',
   TAG = 'tag'
@@ -22,7 +17,7 @@ export interface Schema$Product extends Timestamp {
   images: (string | null)[];
   tags: string[];
   discount: number;
-  status: ProductStatus;
+  hidden: boolean;
 }
 
 export interface Param$GetProducts extends Pagination, Timestamp, Search {
@@ -34,5 +29,5 @@ export interface Param$GetProducts extends Pagination, Timestamp, Search {
   category?: string;
   // tags?: string;
   // discount?: number;
-  status?: ProductStatus;
+  hidden?: boolean;
 }

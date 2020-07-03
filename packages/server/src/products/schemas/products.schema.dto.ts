@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Schema$Product, ProductStatus } from '@fullstack/typings';
+import { Schema$Product } from '@fullstack/typings';
 
 @Schema({
   timestamps: true,
@@ -38,8 +38,8 @@ export class Product implements Schema$Product {
   @Prop([{ type: String, lowercase: true }])
   tags: string[];
 
-  @Prop({ type: Number, default: ProductStatus.VISIBLE })
-  status: ProductStatus;
+  @Prop({ type: Boolean, default: false })
+  hidden: boolean;
 
   @Prop({ type: Number, default: 100 })
   discount: number;

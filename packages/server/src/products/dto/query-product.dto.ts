@@ -1,12 +1,11 @@
 import {
   Schema$Product,
   Param$GetProducts,
-  ProductStatus,
   Timestamp
 } from '@fullstack/typings';
 import { QueryDto } from '../../utils/mongoose-crud.service';
 import { Exclude } from 'class-transformer';
-import { Status, Disscount, Price, Amount, Tags } from './products.decorators';
+import { Hidden, Disscount, Price, Amount, Tags } from './products.decorators';
 import { IsInt, IsOptional, IsString, IsArray } from 'class-validator';
 
 class Base extends QueryDto
@@ -53,9 +52,9 @@ class QueryProduct extends Base
   @IsOptional()
   tags?: string[];
 
-  @Status()
+  @Hidden()
   @IsOptional()
-  status?: ProductStatus;
+  hidden?: boolean;
 
   @Disscount()
   @IsOptional()

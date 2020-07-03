@@ -1,7 +1,7 @@
 import { IsString, IsOptional, IsArray } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { Schema$Product, ProductStatus } from '@fullstack/typings';
-import { Price, Amount, Disscount, Status, Tags } from './products.decorators';
+import { Schema$Product } from '@fullstack/typings';
+import { Price, Amount, Disscount, Tags, Hidden } from './products.decorators';
 
 class Base implements Partial<Schema$Product> {
   @Exclude()
@@ -50,9 +50,9 @@ class UpdateProduct extends Base
   @IsOptional()
   tags?: string[];
 
-  @Status()
+  @Hidden()
   @IsOptional()
-  status?: ProductStatus;
+  hidden?: boolean;
 
   @Disscount()
   @IsOptional()

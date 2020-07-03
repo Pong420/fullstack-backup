@@ -4,15 +4,15 @@ import {
   IsString,
   IsArray,
   IsLowercase,
-  IsEnum,
+  IsBoolean,
+  IsPositive,
   Max,
   Min
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { applyDecorators } from '@nestjs/common';
-import { ProductStatus } from '@fullstack/typings';
 
-export const PRICE_MIN = 1;
+// export const PRICE_MIN = 0;
 export const AMOUNT_MIN = 1;
 export const DISCOUNT_MIN = 0;
 export const DISCOUNT_MAX = 1;
@@ -21,7 +21,7 @@ export function Price(): ReturnType<typeof applyDecorators> {
   return applyDecorators(
     //
     IsNumber(),
-    Min(PRICE_MIN),
+    IsPositive(),
     Transform(Number)
   );
 }
@@ -44,10 +44,10 @@ export function Disscount(): ReturnType<typeof applyDecorators> {
   );
 }
 
-export function Status(): ReturnType<typeof applyDecorators> {
+export function Hidden(): ReturnType<typeof applyDecorators> {
   return applyDecorators(
-    IsEnum(ProductStatus),
-    Transform(Number)
+    IsBoolean(),
+    Transform(Boolean)
     //
   );
 }
