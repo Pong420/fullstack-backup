@@ -68,14 +68,14 @@ export class CloudinaryService {
       : handler(payload);
   }
 
-  remove(payload: RemovePayload | RemovePayload[]): void {
+  remove(payload: RemovePayload | RemovePayload[]): Observable<unknown> {
     const source$ = from(Array.isArray(payload) ? payload : [payload]);
-    source$.pipe(
+    return source$.pipe(
       mergeMap(payload => {
         const public_id =
           typeof payload === 'string'
             ? /res.cloudinary.com/.test(payload)
-              ? (payload.match(/[^/\\&\?]+(?=(.\.\w{3,4})$|$)/g) || [])[0]
+              ? (payload.match(/[^/\\&\?]+(?=(.\w{3,4})$)/) || [])[0]
               : undefined
             : payload.public_id;
 
