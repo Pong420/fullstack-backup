@@ -4,9 +4,10 @@ import { PaginateResult, UserRole } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UpdateUserDto } from '../src/user/dto/update-user.dto';
-import { createUser, rid } from './utils/user';
+import { createUserDto, setupUsers, rid } from './utils/setupUsers';
+import { login, getToken } from './utils/auth';
 
-const mockUser = createUser({ role: UserRole.CLIENT });
+const mockUser = createUserDto({ role: UserRole.CLIENT });
 
 const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
   const clone = { ...payload };
@@ -18,17 +19,9 @@ const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
 
 describe('UserController (e2e)', () => {
   let user: User;
-  let adminToken: string;
-  let managerToken: string;
-  let clientToken: string;
 
   beforeAll(async () => {
-    adminToken = await getToken(loginAsDefaultAdmin());
-    clientToken = await getToken(createAndLogin(adminToken));
-    managerToken = await getToken(
-      createAndLogin(adminToken, { role: UserRole.MANAGER })
-    );
-    expect(mockUser.role).toBe(UserRole.CLIENT);
+    await setupUsers();
   });
 
   describe('(POST) Create User', () => {
@@ -56,8 +49,9 @@ describe('UserController (e2e)', () => {
         create(adminToken, omit(mockUser, 'username')),
         create(adminToken, omit(mockUser, 'email'))
       ]);
-
-      response.map(res => expect(res.status).toBe(HttpStatus.BAD_REQUEST));
+      expect(response).toSatisfyAll(
+        res => res.status === HttpStatus.BAD_REQUEST
+      );
     });
 
     it('forbidden', async () => {
@@ -75,13 +69,13 @@ describe('UserController (e2e)', () => {
         [adminToken, managerToken].map(getUsers)
       );
 
-      for (const res of response) {
-        expect(res.status).toBe(HttpStatus.OK);
-        expect(Array.isArray(res.body.data.data)).toBeTruthy();
-        for (const user of res.body.data.data) {
-          expect(user.password).toBeUndefined();
-        }
-      }
+      expect(response).toSatisfyAll(res => res.status === HttpStatus.OK);
+      expect(response).toSatisfyAll(res => Array.isArray(res.body.data.data));
+      expect(response).toSatisfyAll(res =>
+        res.body.data.data.every(
+          (user: User) => typeof user.password === 'undefined'
+        )
+      );
     });
 
     it('forbidden', async () => {
@@ -129,10 +123,10 @@ describe('UserController (e2e)', () => {
           getUser(user.id),
           getUser(user.id, mockUserToken)
         ]);
-        response.forEach(res => {
+        for (const res of response) {
           expect(res.status).toBe(HttpStatus.OK);
           expect(res.body.data).toEqual(user);
-        });
+        }
       }
     });
 
@@ -165,7 +159,6 @@ describe('UserController (e2e)', () => {
           updateUser(managerToken, { id: user.id, ...changes }),
           updateUser(mockUserToken, { id: user.id, ...changes })
         ]);
-
         for (const res of response) {
           expect(res.status).toBe(HttpStatus.OK);
           expect(res.body.data).toMatchObject(changes);
@@ -182,10 +175,9 @@ describe('UserController (e2e)', () => {
           updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
           updateUser(managerToken, { id: user.id, role: UserRole.ADMIN })
         ]);
-
-        for (const res of response) {
-          expect(res.status).toBe(HttpStatus.FORBIDDEN);
-        }
+        expect(response).toSatisfyAll(
+          res => res.status === HttpStatus.FORBIDDEN
+        );
       }
     });
   });

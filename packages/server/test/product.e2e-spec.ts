@@ -1,7 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { CreateProductDto } from '../src/products/dto/create-product.dto';
-import { rid } from './utils/user';
-import { setupUsers } from './utils/setupUsers';
+import { rid, setupUsers } from './utils/setupUsers';
 
 describe('ProductsController (e2e)', () => {
   beforeAll(async () => {

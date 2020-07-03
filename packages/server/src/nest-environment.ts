@@ -1,10 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Response } from 'superagent';
 import { AppModule } from './app.module';
 import { setupApp, fastifyAdapter, NestFastifyApplication } from './setup';
-import { createUser, CreateUserDto } from '../test/utils/user';
 import NodeEnvironment from 'jest-environment-node';
 import supertest from 'supertest';
 
@@ -41,47 +38,10 @@ export default class NestNodeEnvironment extends NodeEnvironment {
       await app.init();
       await app.getHttpAdapter().getInstance().ready();
 
-      const configService = app.get<ConfigService>(ConfigService);
       const request = supertest(app.getHttpServer());
-      const login = async (payload: Login): Promise<Response> =>
-        request.post('/api/auth/login').send(payload);
-      const getToken = (
-        payload: Response | Promise<Response>
-      ): Promise<string> =>
-        (payload instanceof Promise ? payload : Promise.resolve(payload)).then(
-          res => {
-            if (res.error) {
-              return Promise.reject(res.error.text);
-            }
-            return res.body.data.token;
-          }
-        );
-
-      const createAndLogin = async (
-        adminToken: string,
-        dto: Partial<CreateUserDto> = {}
-      ): Promise<Response> => {
-        const user = createUser(dto);
-        const userRes = await request
-          .post(`/api/user`)
-          .set('Authorization', `bearer ${adminToken}`)
-          .set('Content-Type', 'multipart/form-data')
-          .field(user as any);
-        return userRes.error
-          ? Promise.reject(userRes.error.text) //
-          : login(user);
-      };
 
       this.global.app = app;
       this.global.request = request;
-      this.global.login = login;
-      this.global.loginAsDefaultAdmin = () =>
-        login({
-          username: configService.get('DEFAULT_USERNAME'),
-          password: configService.get('DEFAULT_PASSWORD')
-        });
-      this.global.createAndLogin = createAndLogin;
-      this.global.getToken = getToken;
     } catch (error) {
       console.error(error);
       await this.mongod.stop();

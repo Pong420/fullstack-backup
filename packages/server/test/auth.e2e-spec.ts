@@ -4,9 +4,15 @@ import { HttpStatus } from '@nestjs/common';
 import { Param$ModifyPassword, Param$DeleteAccount } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
-import { mockAdmin } from './utils/constants';
 import { extractCookies } from './utils/extractCookies';
-import { CreateUserDto, createUser, rid } from './utils/user';
+import { loginAsDefaultAdmin, login, getToken } from './utils/auth';
+import { mockAdmin } from './utils/setupUsers';
+import {
+  rid,
+  registerAdmin,
+  createUserDto,
+  createAndLogin
+} from './utils/setupUsers';
 
 describe('AuthController (e2e)', () => {
   const configService = app.get<ConfigService>(ConfigService);
@@ -32,13 +38,6 @@ describe('AuthController (e2e)', () => {
     refreshToken = `${REFRESH_TOKEN_COOKIES}=${cookie.value}`;
 
     return cookie;
-  }
-
-  function registerAdmin(token: string, dto: CreateUserDto) {
-    return request
-      .post('/api/auth/register/admin')
-      .set('Authorization', `bearer ${token}`)
-      .send(dto);
   }
 
   describe('Login', () => {
@@ -115,10 +114,10 @@ describe('AuthController (e2e)', () => {
     const token = await getToken(
       admin ? login(mockAdmin) : loginAsDefaultAdmin()
     );
-    let response = await registerAdmin(token, createUser());
+    let response = await registerAdmin(token, createUserDto());
     expect(response.status).toBe(HttpStatus.CREATED);
     await delay(jwtExpires * 2);
-    response = await registerAdmin(token, createUser());
+    response = await registerAdmin(token, createUserDto());
     expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
@@ -129,7 +128,7 @@ describe('AuthController (e2e)', () => {
         .patch('/api/auth/modify-password')
         .set('Authorization', `bearer ${token}`)
         .send(params);
-    const mockUser = createUser();
+    const mockUser = createUserDto();
     let mockUserToken: string;
 
     beforeAll(async () => {
@@ -162,9 +161,9 @@ describe('AuthController (e2e)', () => {
             confirmNewPassword: 'q12345678'
           })
         ]);
-        for (const res of response) {
-          expect(res.status).toBe(HttpStatus.BAD_REQUEST);
-        }
+        expect(response).toSatisfyAll(
+          res => res.status === HttpStatus.BAD_REQUEST
+        );
       }
     });
 
@@ -186,7 +185,7 @@ describe('AuthController (e2e)', () => {
         .delete('/api/auth/delete')
         .set('Authorization', `bearer ${token}`)
         .send(params);
-    const mockUser = createUser();
+    const mockUser = createUserDto();
     let mockUserToken: string;
     beforeAll(async () => {
       mockUserToken = await getToken(createAndLogin(adminToken, mockUser));
@@ -196,18 +195,16 @@ describe('AuthController (e2e)', () => {
       const response = await Promise.all([
         deleteAccount(mockUserToken, { password: '' })
       ]);
-      for (const res of response) {
-        expect(res.status).toBe(HttpStatus.BAD_REQUEST);
-      }
+      expect(response).toSatisfyAll(
+        res => res.status === HttpStatus.BAD_REQUEST
+      );
     });
 
     it('forbidden', async () => {
       const response = await Promise.all([
         deleteAccount(mockUserToken, { password: rid(8) })
       ]);
-      for (const res of response) {
-        expect(res.status).toBe(HttpStatus.FORBIDDEN);
-      }
+      expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
     });
 
     it('success', async () => {
