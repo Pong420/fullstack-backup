@@ -1729,7 +1729,7 @@ __metadata:
     sass: ^1.26.9
     typeface-muli: ^1.1.3
     typescript: 3.9.5
-    use-rx-hooks: ^1.4.3-beta.1
+    use-rx-hooks: 1.5.0
   languageName: unknown
   linkType: soft
 
@@ -18511,14 +18511,14 @@ resolve@1.15.0:
   languageName: node
   linkType: hard
 
-"use-rx-hooks@npm:^1.4.3-beta.1":
-  version: 1.4.3
-  resolution: "use-rx-hooks@npm:1.4.3"
+"use-rx-hooks@npm:1.5.0":
+  version: 1.5.0
+  resolution: "use-rx-hooks@npm:1.5.0"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     rxjs: ">=6.5.3"
-  checksum: d07ee0864a0f4ef6836c6f1c93238f72a7de536054b8ef3b871abd7efabb1bb68694a19404eda9a7c513a5c3d383c7484b0e20ee5f70954e87997352539b31c1
+  checksum: 726045253dc1ae1862009fd34c3f6aa4b1ac79cff6aa1b3b1b802cfd2666471441743e4b17daca015b11c42e4b977529b8539a5b63ed6ecad4e63e53242e8036
   languageName: node
   linkType: hard
 

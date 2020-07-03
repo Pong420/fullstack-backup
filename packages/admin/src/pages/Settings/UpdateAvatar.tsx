@@ -1,9 +1,9 @@
 import React from 'react';
 import { Avatar, AvatarProps } from '../../components/Avatar';
-import { UploadImage, Control } from '../../components/UploadImage';
+import { UploadImage, Single } from '../../components/UploadImage';
 import { Button, Popover, Menu, MenuItem } from '@blueprintjs/core';
 
-interface Props extends AvatarProps, Control {}
+interface Props extends AvatarProps, Single {}
 
 export function UpdateAvatar({ fallback, value, onChange }: Props) {
   return (

@@ -12,30 +12,39 @@ import { map } from 'rxjs/operators';
 import {
   fromDropImageEvent,
   fromChangeEvent,
-  useRxFileToImage,
-  RxFileToImageState
+  RxFileToImageState,
+  useRxFileToImage
 } from 'use-rx-hooks';
 
-type Value = RxFileToImageState | string | null;
+export type Value = RxFileToImageState | string | null;
 
-interface Context {
-  value?: Value;
+interface Context<T> {
+  value?: T;
   upload: () => void;
 }
 
-export interface Control {
-  value?: Value;
-  onChange?: (image: Value) => void;
+export interface Control<T> {
+  value?: T;
+  onChange?: (image: T) => void;
 }
 
-export interface UploadImageProps
-  extends Control,
-    Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'onUpload'> {
-  children?: (context: Context) => ReactNode;
+export interface Single extends Control<Value> {
+  multiple?: false;
+  children?: (context: Context<Value>) => ReactNode;
+}
+
+export interface Multi extends Control<Value[]> {
+  multiple: true;
+  children?: (context: Context<Value[]>) => ReactNode;
+}
+
+export interface BaseUploadImageProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'onUpload'> {
   className?: string;
-  multiple?: boolean;
   dropArea?: boolean;
 }
+
+type UploadImageProps = BaseUploadImageProps & (Single | Multi);
 
 type UploadEvent = ChangeEvent | ClipboardEvent | DragEvent;
 
@@ -46,15 +55,14 @@ function mapEvent(event: UploadEvent) {
   return fromChangeEvent(event as ChangeEvent<HTMLInputElement>);
 }
 
+export function UploadImage(props: BaseUploadImageProps & Single): JSX.Element;
+export function UploadImage(props: BaseUploadImageProps & Multi): JSX.Element;
 export function UploadImage({
-  children,
   className = '',
   dropArea,
-  multiple,
-  value,
-  onChange,
   ...props
 }: UploadImageProps) {
+  const { multiple, children, value, onChange, ...divProps } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { source$, handleUpload, context } = useMemo(() => {
     const subject = new Subject<UploadEvent>();
@@ -73,20 +81,23 @@ export function UploadImage({
 
   useEffect(() => {
     const subscription = state$.subscribe(value => {
-      onChange && onChange(value);
+      onChange && onChange((multiple ? value : value[0]) as any);
       fileInputRef.current!.value = '';
     });
     return () => subscription.unsubscribe();
-  }, [state$, onChange]);
+  }, [state$, multiple, onChange]);
 
   return (
-    <div {...props} className={`upload ${className}`.trim()}>
-      {children && children({ value, ...context })}
+    <div {...divProps} className={`upload ${className}`.trim()}>
+      {props.children &&
+        (props.multiple
+          ? props.children({ value: props.value, ...context })
+          : props.children({ value: props.value, ...context }))}
       <input
         type="file"
         accept="images/*"
         hidden
-        multiple={multiple}
+        multiple={props.multiple}
         ref={fileInputRef}
         onChange={handleUpload}
       />
