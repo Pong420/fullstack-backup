@@ -6,7 +6,7 @@ import { ValidPassword } from '../../decorators';
 export class ModifyUserPasswordDto implements Param$ModifyPassword {
   @IsString()
   @IsNotEmpty()
-  password!: string;
+  password: string;
 
   @ValidateIf((o: ModifyUserPasswordDto) => {
     if (o.password === o.newPassword) {
@@ -17,7 +17,7 @@ export class ModifyUserPasswordDto implements Param$ModifyPassword {
     return true;
   })
   @ValidPassword()
-  newPassword!: string;
+  newPassword: string;
 
   @ValidateIf((o: ModifyUserPasswordDto) => {
     if (o.newPassword !== o.confirmNewPassword) {
@@ -29,5 +29,5 @@ export class ModifyUserPasswordDto implements Param$ModifyPassword {
   })
   @IsString()
   @IsNotEmpty()
-  confirmNewPassword!: string;
+  confirmNewPassword: string;
 }

@@ -6,7 +6,7 @@ import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
 import { mockAdmin } from './utils/constants';
 import { extractCookies } from './utils/extractCookies';
-import { CreateUserDto, createUser } from './utils/user';
+import { CreateUserDto, createUser, rid } from './utils/user';
 
 describe('AuthController (e2e)', () => {
   const configService = app.get<ConfigService>(ConfigService);
@@ -198,6 +198,15 @@ describe('AuthController (e2e)', () => {
       ]);
       for (const res of response) {
         expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      }
+    });
+
+    it('forbidden', async () => {
+      const response = await Promise.all([
+        deleteAccount(mockUserToken, { password: rid(8) })
+      ]);
+      for (const res of response) {
+        expect(res.status).toBe(HttpStatus.FORBIDDEN);
       }
     });
 
