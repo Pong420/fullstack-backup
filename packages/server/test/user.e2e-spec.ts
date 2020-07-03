@@ -33,15 +33,11 @@ describe('UserController (e2e)', () => {
 
   describe('(POST) Create User', () => {
     const create = (token: string, params?: Partial<CreateUserDto>) => {
-      const req = request
+      return request
         .post(`/api/user`)
         .set('Authorization', `bearer ${token}`)
-        .set('Content-Type', 'multipart/form-data');
-      params = { ...mockUser, ...params };
-      for (const key in params) {
-        req.field(key, params[key]);
-      }
-      return req;
+        .set('Content-Type', 'multipart/form-data')
+        .field({ ...mockUser, ...params } as any);
     };
 
     it('success', async () => {
@@ -150,15 +146,11 @@ describe('UserController (e2e)', () => {
 
   describe('(PTCH)  Update User', () => {
     const updateUser = (token: string, { id, ...changes }: UpdateUserDto) => {
-      const req = request
+      return request
         .patch(`/api/user/${id}`)
         .set('Authorization', `bearer ${token}`)
-        .set('Content-Type', 'multipart/form-data');
-
-      for (const key in changes) {
-        req.field(key, changes[key]);
-      }
-      return req;
+        .set('Content-Type', 'multipart/form-data')
+        .field(changes as any);
     };
 
     const changes: Partial<UpdateUserDto> = {
@@ -185,9 +177,9 @@ describe('UserController (e2e)', () => {
     it('forbidden', async () => {
       if (user) {
         const response = await Promise.all([
-          // updateUser(clientToken, { id: user.id, ...changes }),
-          // updateUser(clientToken, { id: user.id, role: UserRole.MANAGER }),
-          // updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
+          updateUser(clientToken, { id: user.id, ...changes }),
+          updateUser(clientToken, { id: user.id, role: UserRole.MANAGER }),
+          updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
           updateUser(managerToken, { id: user.id, role: UserRole.ADMIN })
         ]);
 

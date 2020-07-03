@@ -54,19 +54,14 @@ export default class NestNodeEnvironment extends NodeEnvironment {
 
       const createAndLogin = async (
         adminToken: string,
-        dto?: Partial<CreateUserDto>
+        dto: Partial<CreateUserDto> = {}
       ): Promise<Response> => {
         const user = createUser(dto);
-        const req = request
+        await request
           .post(`/api/user`)
           .set('Authorization', `bearer ${adminToken}`)
           .set('Content-Type', 'multipart/form-data')
-          .set('Content-Type', 'multipart/form-data');
-        dto = { ...user, ...dto };
-        for (const key in dto) {
-          req.field(key, dto[key]);
-        }
-        await req;
+          .field(user as any);
         return login(user);
       };
 
