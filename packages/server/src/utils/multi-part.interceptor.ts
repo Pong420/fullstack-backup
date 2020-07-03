@@ -58,7 +58,7 @@ export function MultiPartInterceptor(
       const http = context.switchToHttp();
       const request: FastifyRequest = http.getRequest();
 
-      if (request.isMultipart) {
+      if (request.isMultipart()) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const body: any = {};
 
@@ -95,6 +95,10 @@ export function MultiPartInterceptor(
           );
 
           mp.on('field', (field: string, value: unknown) => {
+            if (value === 'null') {
+              value = null;
+            }
+
             if (isArrayFormData(field)) {
               const fieldName: string = field.replace(isArrayFormDataRegex, '');
               const matches = field.match(/(?<=\[).*?(?=\])/g) || [];
