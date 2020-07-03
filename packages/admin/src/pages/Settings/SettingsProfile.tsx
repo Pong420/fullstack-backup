@@ -4,7 +4,7 @@ import { useRxAsync } from 'use-rx-hooks';
 import { Divider, Button } from '@blueprintjs/core';
 import { Schema$User } from '@fullstack/typings';
 import { defer } from 'rxjs';
-import { shareReplay, switchMap, map } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { SettingsSection } from './SettingsSection';
 import { UpdateAvatar } from './UpdateAvatar';
 import { createUserForm } from '../../components/UserForm';
@@ -19,8 +19,7 @@ const getProfile$ = defer(() => getJwtToken()).pipe(
     defer(() => getUserProfile({ id: user.user_id })).pipe(
       map(response => response.data.data)
     )
-  ),
-  shareReplay(1)
+  )
 );
 
 const getProfileFailure = Toaster.apiError.bind(Toaster, 'Get profile failure');
