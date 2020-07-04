@@ -95,29 +95,19 @@ export function MultiPartInterceptor(
           );
 
           mp.on('field', (field: string, value: unknown) => {
-            if (value === 'null') {
-              value = null;
-            }
+            if (value === 'null') value = null;
 
-            if (isArrayFormData(field)) {
-              const fieldName: string = field.replace(isArrayFormDataRegex, '');
-              const matches = field.match(/(?<=\[).*?(?=\])/g) || [];
+            const exists = typeof body[field] !== 'undefined';
+            if (isArrayFormData(field) || exists) {
+              field = field.replace(isArrayFormDataRegex, '');
 
-              body[fieldName] = body[fieldName] || [];
+              body[field] = Array.isArray(body[field])
+                ? body[field]
+                : exists
+                ? [body[field]]
+                : [];
 
-              matches.reduce((acc, idx, index) => {
-                if (matches.length === index + 1) {
-                  acc[idx] = value;
-                } else {
-                  acc[idx] =
-                    typeof acc[idx] === 'undefined'
-                      ? isNaN(Number(next))
-                        ? {}
-                        : []
-                      : acc[idx];
-                }
-                return acc[idx];
-              }, body[fieldName]);
+              body[field].push(value);
             } else {
               body[field] = value;
             }
