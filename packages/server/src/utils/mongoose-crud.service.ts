@@ -141,4 +141,8 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
       }
     ) as any;
   }
+
+  async clear(): Promise<void> {
+    await this.model.deleteMany({});
+  }
 }

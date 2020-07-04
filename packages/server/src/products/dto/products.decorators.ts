@@ -57,6 +57,8 @@ export function Tags(): ReturnType<typeof applyDecorators> {
     IsArray(),
     IsString({ each: true }),
     IsLowercase({ each: true }),
-    Transform(arr => arr.map((s: string) => s.toLowerCase()))
+    Transform(arr =>
+      Array.isArray(arr) ? arr.map((s: string) => s.toLowerCase()) : arr
+    )
   );
 }

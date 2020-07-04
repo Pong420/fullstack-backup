@@ -1,4 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
+import { Schema$Tags, Schema$Category } from '@fullstack/typings';
+import { ProductsService } from '../src/products/products.service';
 import { Product } from '../src/products/schemas/products.schema.dto';
 import { CreateProductDto } from '../src/products/dto/create-product.dto';
 import { UpdateProductDto } from '../src/products/dto/update-product.dto';
@@ -7,11 +9,15 @@ import superagent, { SuperAgentRequest } from 'superagent';
 import path from 'path';
 
 describe('ProductsController (e2e)', () => {
+  const productsService = app.get<ProductsService>(ProductsService);
+
   beforeAll(async () => {
     await setupUsers();
   });
 
-  function createProductDto(dto: Partial<CreateProductDto> = {}) {
+  function createProductDto(
+    dto: Partial<CreateProductDto> = {}
+  ): CreateProductDto {
     return {
       name: `e2e-product-${rid()}`,
       price: 100,
@@ -23,7 +29,7 @@ describe('ProductsController (e2e)', () => {
 
   function createProduct(
     token: string,
-    dto: Partial<CreateProductDto> = {}
+    dto: Partial<CreateProductDto> | Record<string, any> = {}
   ): SuperAgentRequest {
     return request
       .post('/api/products')
@@ -56,6 +62,18 @@ describe('ProductsController (e2e)', () => {
       .set('Authorization', `bearer ${token}`);
   }
 
+  function getTags(token: string) {
+    return request
+      .get(`/api/products/tags`)
+      .set('Authorization', `bearer ${token}`);
+  }
+
+  function getCategories(token: string) {
+    return request
+      .get(`/api/products/category`)
+      .set('Authorization', `bearer ${token}`);
+  }
+
   describe('(GET)  Get Products', () => {
     let products: Product[] = [];
     beforeAll(async () => {
@@ -71,6 +89,42 @@ describe('ProductsController (e2e)', () => {
       const response = await getProducts(adminToken);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(products.length);
+    });
+  });
+
+  describe('(GET)  Get Product Tags', () => {
+    const tags = ['1', '2', '3'];
+    beforeAll(async () => {
+      await productsService.clear();
+      await Promise.all(
+        tags.map(tag => createProduct(adminToken, { 'tags[]': [tag] }))
+      );
+    });
+
+    it('success', async () => {
+      const response = await getTags(adminToken);
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data).toIncludeSameMembers(
+        tags.map<Schema$Tags>(tag => ({ tag, total: 1 }))
+      );
+    });
+  });
+
+  describe('(GET)  Get Product Category', () => {
+    const categories = ['1', '2', '3'];
+    beforeAll(async () => {
+      await productsService.clear();
+      await Promise.all(
+        categories.map(category => createProduct(adminToken, { category }))
+      );
+    });
+
+    it('success', async () => {
+      const response = await getCategories(adminToken);
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data).toIncludeSameMembers(
+        categories.map<Schema$Category>(category => ({ category, total: 1 }))
+      );
     });
   });
 
@@ -94,6 +148,13 @@ describe('ProductsController (e2e)', () => {
         createProduct(managerToken)
       ]);
       expect(response).toSatisfyAll(res => res.status === HttpStatus.CREATED);
+    });
+
+    it('tags', async () => {
+      const tags = ['1', '2', '3'];
+      const response = await createProduct(adminToken, { tags });
+      expect(response.status).toBe(HttpStatus.CREATED);
+      expect(response.body.data.tags).toEqual(tags);
     });
 
     it('forbidden', async () => {

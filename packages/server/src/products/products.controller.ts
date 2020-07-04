@@ -21,6 +21,7 @@ import {
 } from '../utils/mongoose-crud.controller';
 import { Access } from '../utils/access.guard';
 import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
+import { Schema$Category, Schema$Tags } from '@fullstack/typings';
 
 @Controller('products')
 @Access('ADMIN', 'MANAGER')
@@ -60,5 +61,15 @@ export class ProductsController extends MongooseCRUDController<Product> {
     @Body(CloudinaryPipe('images')) changes: UpdateProductDto
   ): Promise<Product> {
     return this.productService.update({ _id: id }, changes);
+  }
+
+  @Get('/category')
+  async getCategories(): Promise<Schema$Category[]> {
+    return this.productService.categories();
+  }
+
+  @Get('/tags')
+  async getTags(): Promise<Schema$Tags[]> {
+    return this.productService.tags();
   }
 }
