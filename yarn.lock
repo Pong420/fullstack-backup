@@ -1668,6 +1668,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@blueprintjs/select@npm:^3.13.4":
+  version: 3.13.4
+  resolution: "@blueprintjs/select@npm:3.13.4"
+  dependencies:
+    "@blueprintjs/core": ^3.29.0
+    classnames: ^2.2
+    tslib: ~1.10.0
+  peerDependencies:
+    react: ^15.3.0 || 16
+    react-dom: ^15.3.0 || 16
+  checksum: 14e702a184fd318725a781d3d951210d78a95353602ef2619f7735a9d984b928c402425f9033bcf2b61b3940afafd766ce67b3e4e974525f513834d091a48eca
+  languageName: node
+  linkType: hard
+
 "@cnakazawa/watch@npm:^1.0.3":
   version: 1.0.4
   resolution: "@cnakazawa/watch@npm:1.0.4"
@@ -1700,6 +1714,7 @@ __metadata:
   dependencies:
     "@blueprintjs/core": ^3.29.0
     "@blueprintjs/datetime": ^3.18.3
+    "@blueprintjs/select": ^3.13.4
     "@fullstack/typings": "workspace:packages/typings"
     "@pong420/redux-crud": ^1.4.6
     "@types/node": ^14.0.14

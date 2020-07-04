@@ -76,5 +76,5 @@ export interface Schema$Tags {
 
 export type Response$Products = PaginateApiResponse<Schema$Product>;
 export type Response$Product = ApiResponse<Schema$Product>;
-export type Response$Category = ApiResponse<Schema$Category>;
-export type Response$Tags = ApiResponse<Schema$Tags>;
+export type Response$Category = ApiResponse<Schema$Category[]>;
+export type Response$Tags = ApiResponse<Schema$Tags[]>;

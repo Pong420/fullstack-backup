@@ -1,22 +1,28 @@
 import React from 'react';
-import { Button, Checkbox } from '@blueprintjs/core';
-import { Schema$Product } from '@fullstack/typings';
+import { Checkbox } from '@blueprintjs/core';
+import { Schema$Product, Param$CreateProduct } from '@fullstack/typings';
 import { Input, NumericInput, TextArea } from '../../components/Input';
 import { UploadImageGrid } from '../../components/UploadImage';
-import { createForm, validators } from '../../utils/form';
+import { createForm, validators, FormProps } from '../../utils/form';
+import { ProductTagsInput, ProductCategoryInput } from './ProductFormSuggest';
 
-type Schema = Partial<Schema$Product>;
+type Schema = Partial<Omit<Schema$Product, 'images'>> &
+  Param$CreateProduct & {
+    images?: unknown[];
+  };
 
-const { Form, FormItem } = createForm<Schema>();
+const { Form, FormItem, useForm } = createForm<Schema>();
 
-const initialValues: Schema = {
+const initialValues: Partial<Schema> = {
   discount: 100,
   hidden: false
 };
 
-export function ProductForm() {
+export { useForm };
+
+export function ProductForm(props: FormProps<Schema>) {
   return (
-    <Form className="product-form" initialValues={initialValues}>
+    <Form {...props} className="product-form" initialValues={initialValues}>
       <FormItem
         name="name"
         label="Name"
@@ -25,7 +31,7 @@ export function ProductForm() {
           //
         ]}
       >
-        <Input />
+        <Input autoFocus />
       </FormItem>
 
       <FormItem
@@ -34,7 +40,7 @@ export function ProductForm() {
         validators={[
           validators.required('Price cannot be empty'),
           validators.number,
-          validators.min(0, 'Price less than or equal to 0')
+          validators.min(0, 'Price cannot less than or equal to 0')
         ]}
       >
         <NumericInput min={0} stepSize={1} />
@@ -60,7 +66,7 @@ export function ProductForm() {
           //
         ]}
       >
-        <Input />
+        <ProductCategoryInput />
       </FormItem>
 
       <FormItem name="images" label="Images">
@@ -68,7 +74,7 @@ export function ProductForm() {
       </FormItem>
 
       <FormItem name="tags" label="tags">
-        <Input />
+        <ProductTagsInput />
       </FormItem>
 
       <FormItem
@@ -76,8 +82,8 @@ export function ProductForm() {
         label="Discount"
         validators={[
           validators.number,
-          validators.min(0, 'Price less than 0', true),
-          validators.max(100, 'Price greater than 100', true)
+          validators.min(0, 'Discount cannot less than 0', true),
+          validators.max(100, 'Discount cannot greater than 100', true)
         ]}
       >
         <NumericInput min={0} max={100} stepSize={1} />
@@ -91,9 +97,7 @@ export function ProductForm() {
         <Checkbox children="Hidden" alignIndicator="right" />
       </FormItem>
 
-      <Button type="submit" fill>
-        Submit
-      </Button>
+      <button type="submit" hidden />
     </Form>
   );
 }

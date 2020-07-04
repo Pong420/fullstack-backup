@@ -6,7 +6,12 @@ import {
   UpdateQuery,
   QueryFindOneAndUpdateOptions
 } from 'mongoose';
-import { IsNumber, IsOptional, IsString, IsObject } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested
+} from 'class-validator';
 import { Transform, Exclude } from 'class-transformer';
 import {
   PaginateResult,
@@ -23,12 +28,15 @@ type QuerySchema = {
   [K in keyof (Pagination & Search & Timestamp)]?: unknown;
 };
 
-const formatDateRange = (payload?: unknown) => {
+interface MongoDateRange {
+  $gte: string;
+  $lte: string;
+}
+
+const formatDateRange = (payload?: unknown): MongoDateRange | undefined => {
   if (Array.isArray(payload)) {
-    const [from, to] = payload;
-    if (from && to) {
-      return { $gte: from, $lte: to };
-    }
+    const [$gte, $lte] = payload;
+    return { $gte, $lte } as any;
   }
 };
 
@@ -54,14 +62,14 @@ class Base implements QuerySchema {
   search?: string;
 
   @IsOptional()
-  @IsObject({ each: true })
+  @ValidateNested()
   @Transform(formatDateRange)
-  createdAt?: { $gte: string; $lte: string };
+  createdAt?: MongoDateRange;
 
   @IsOptional()
-  @IsString({ each: true })
+  @ValidateNested()
   @Transform(formatDateRange)
-  updatedAt?: { $gte: string; $lte: string };
+  updatedAt?: MongoDateRange;
 }
 
 export class QueryDto extends Base
