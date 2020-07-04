@@ -47,7 +47,9 @@ export class ProductsController extends MongooseCRUDController<Product> {
 
   @Post()
   @UseInterceptors(MultiPartInterceptor())
-  create(@Body() createProductDto: CreateProductDto): Promise<Product> {
+  create(
+    @Body(CloudinaryPipe('images')) createProductDto: CreateProductDto
+  ): Promise<Product> {
     return this.productService.create(createProductDto);
   }
 

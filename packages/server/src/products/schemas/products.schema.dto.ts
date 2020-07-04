@@ -32,10 +32,10 @@ export class Product implements Schema$Product {
   @Prop({ type: String, required: true, lowercase: true })
   category: string;
 
-  @Prop([{ type: String }])
+  @Prop({ type: [String] })
   images: string[];
 
-  @Prop([{ type: String, lowercase: true }])
+  @Prop({ type: [String], lowercase: true })
   tags: string[];
 
   @Prop({ type: Boolean, default: false })
