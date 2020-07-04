@@ -25,12 +25,11 @@ describe('ProductsController (e2e)', () => {
     token: string,
     dto: Partial<CreateProductDto> = {}
   ): SuperAgentRequest {
-    const params = createProductDto(dto);
     return request
       .post('/api/products')
       .set('Authorization', `bearer ${token}`)
       .set('Content-Type', 'multipart/form-data')
-      .field(params as any);
+      .field(createProductDto(dto) as any);
   }
 
   function getProducts(token: string) {

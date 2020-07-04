@@ -9,8 +9,6 @@ import { login, getToken } from './utils/auth';
 import superagent from 'superagent';
 import path from 'path';
 
-const mockUser = createUserDto({ role: UserRole.CLIENT });
-
 const omit = <T>(payload: T, ...keys: (keyof T)[]) => {
   const clone = { ...payload };
   for (const key of keys) {
@@ -26,18 +24,18 @@ describe('UserController (e2e)', () => {
     await setupUsers();
   });
 
-  const createUser = (token: string, params: Partial<CreateUserDto> = {}) => {
+  const createUser = (token: string, dto: Partial<CreateUserDto> = {}) => {
     return request
       .post(`/api/user`)
       .set('Authorization', `bearer ${token}`)
       .set('Content-Type', 'multipart/form-data')
-      .field({ ...mockUser, ...params } as any);
+      .field(createUserDto(dto) as any);
   };
 
   const getUsers = (token: string) =>
     request.get(`/api/user`).set('Authorization', `bearer ${token}`);
 
-  const getUser = (id: string, token = adminToken) =>
+  const getUser = (token, id: string) =>
     request.get(`/api/user/${id}`).set('Authorization', `bearer ${token}`);
 
   const updateUser = (token: string, { id, ...changes }: UpdateUserDto) => {
@@ -51,40 +49,31 @@ describe('UserController (e2e)', () => {
   const deleteUser = (token: string, id: string) =>
     request.delete(`/api/user/${id}`).set('Authorization', `bearer ${token}`);
 
-  describe('(POST) Create User', () => {
-    it('success', async () => {
-      const { password, ...match } = mockUser;
-      const response = await createUser(adminToken, mockUser);
-      user = response.body.data;
-
-      expect(response.status).toBe(HttpStatus.CREATED);
-      expect(user).toMatchObject(match);
-      expect(user.password).toBeUndefined();
-    });
-
-    it('unique property', async () => {
-      const response = await Promise.all([
-        createUser(adminToken, mockUser),
-        createUser(adminToken, omit(mockUser, 'username')),
-        createUser(adminToken, omit(mockUser, 'email'))
-      ]);
-      expect(response).toSatisfyAll(
-        res => res.status === HttpStatus.BAD_REQUEST
+  describe('(GET)  Get Users', () => {
+    let users: User[] = [];
+    beforeAll(async () => {
+      const options: Partial<CreateUserDto>[] = [
+        { role: UserRole.MANAGER },
+        { role: UserRole.CLIENT }
+      ];
+      users = await Promise.all(
+        options.map(dto =>
+          createUser(adminToken, dto).then(res => res.body.data)
+        )
       );
     });
 
-    it('forbidden', async () => {
-      const response = await createUser(clientToken, mockUser);
-      expect(response.status).toBe(HttpStatus.FORBIDDEN);
-    });
-  });
-
-  describe('(GET)  Get Users', () => {
     it('success ', async () => {
       const response = await Promise.all(
         [adminToken, managerToken].map(getUsers)
       );
 
+      expect(response[0].body.data.data).toSatisfyAll(
+        (user: User) => user.role !== UserRole.ADMIN
+      );
+      expect(response[1].body.data.data).toSatisfyAll(
+        (user: User) => user.role === UserRole.CLIENT
+      );
       expect(response).toSatisfyAll(res => res.status === HttpStatus.OK);
       expect(response).toSatisfyAll(res => Array.isArray(res.body.data.data));
       expect(response).toSatisfyAll(res =>
@@ -119,7 +108,7 @@ describe('UserController (e2e)', () => {
     });
 
     it('query - unique property', async () => {
-      [{ username: mockUser.username }, { email: mockUser.email }].map(
+      [{ username: users[0].username }, { email: users[0].email }].map(
         async query => {
           const response = await getUsers(adminToken).query(query);
           expect(response.body.data.data.length).toBe(1);
@@ -129,25 +118,59 @@ describe('UserController (e2e)', () => {
   });
 
   describe('(GET)  Get User', () => {
+    let user: User;
+    const mockUser = createUserDto({ role: UserRole.CLIENT });
+    beforeAll(async () => {
+      const response = await createUser(adminToken, mockUser);
+      user = response.body.data;
+    });
+
     it('success', async () => {
-      if (user) {
-        const mockUserToken = await getToken(login(mockUser));
-        const response = await Promise.all([
-          getUser(user.id),
-          getUser(user.id, mockUserToken)
-        ]);
-        for (const res of response) {
-          expect(res.status).toBe(HttpStatus.OK);
-          expect(res.body.data).toEqual(user);
-        }
+      const mockUserToken = await getToken(login(mockUser));
+      const response = await Promise.all([
+        getUser(adminToken, user.id),
+        getUser(managerToken, user.id),
+        getUser(mockUserToken, user.id)
+      ]);
+      for (const res of response) {
+        expect(res.status).toBe(HttpStatus.OK);
+        expect(res.body.data).toEqual(user);
       }
     });
 
     it('forbidden', async () => {
-      if (user) {
-        const response = await getUser(user.id, clientToken);
-        expect(response.status).toBe(HttpStatus.FORBIDDEN);
-      }
+      const response = await getUser(clientToken, user.id);
+      expect(response.status).toBe(HttpStatus.FORBIDDEN);
+    });
+  });
+
+  describe('(POST) Create User', () => {
+    const mockUser = createUserDto();
+
+    it('success', async () => {
+      const { password, ...match } = mockUser;
+      const response = await createUser(adminToken, mockUser);
+      user = response.body.data;
+
+      expect(response.status).toBe(HttpStatus.CREATED);
+      expect(user).toMatchObject(match);
+      expect(user.password).toBeUndefined();
+    });
+
+    it('unique property', async () => {
+      const response = await Promise.all([
+        createUser(adminToken, mockUser),
+        createUser(adminToken, omit(mockUser, 'username')),
+        createUser(adminToken, omit(mockUser, 'email'))
+      ]);
+      expect(response).toSatisfyAll(
+        res => res.status === HttpStatus.BAD_REQUEST
+      );
+    });
+
+    it('forbidden', async () => {
+      const response = await createUser(clientToken, mockUser);
+      expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -155,57 +178,60 @@ describe('UserController (e2e)', () => {
     const changes: Partial<UpdateUserDto> = {
       nickname: `e2e-${rid()}`
     };
+    let user: User;
+    const mockUser = createUserDto({ role: UserRole.CLIENT });
+    beforeAll(async () => {
+      const response = await createUser(adminToken, mockUser);
+      user = response.body.data;
+    });
 
     it('suceess', async () => {
-      if (user) {
-        const mockUserToken = await getToken(login(mockUser));
-        const response = await Promise.all([
-          updateUser(adminToken, { id: user.id, ...changes }),
-          updateUser(managerToken, { id: user.id, ...changes }),
-          updateUser(mockUserToken, { id: user.id, ...changes })
-        ]);
-        for (const res of response) {
-          expect(res.status).toBe(HttpStatus.OK);
-          expect(res.body.data).toMatchObject(changes);
-          expect(res.body.data.password).toBeUndefined();
-        }
+      const mockUserToken = await getToken(login(mockUser));
+      const response = await Promise.all([
+        updateUser(adminToken, { id: user.id, ...changes }),
+        updateUser(managerToken, { id: user.id, ...changes }),
+        updateUser(mockUserToken, { id: user.id, ...changes })
+      ]);
+      for (const res of response) {
+        expect(res.status).toBe(HttpStatus.OK);
+        expect(res.body.data).toMatchObject(changes);
+        expect(res.body.data.password).toBeUndefined();
       }
     });
 
     it('forbidden', async () => {
-      if (user) {
-        const response = await Promise.all([
-          updateUser(clientToken, { id: user.id, ...changes }),
-          updateUser(clientToken, { id: user.id, role: UserRole.MANAGER }),
-          updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
-          updateUser(managerToken, { id: user.id, role: UserRole.ADMIN })
-        ]);
-        expect(response).toSatisfyAll(
-          res => res.status === HttpStatus.FORBIDDEN
-        );
-      }
+      const response = await Promise.all([
+        updateUser(clientToken, { id: user.id, ...changes }),
+        updateUser(clientToken, { id: user.id, role: UserRole.MANAGER }),
+        updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
+        updateUser(managerToken, { id: user.id, role: UserRole.ADMIN })
+      ]);
+      expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
     });
   });
 
   describe('(DEL)  Delete User', () => {
-    it('success', async () => {
-      if (user) {
-        const mockUserToken = await getToken(login(mockUser));
-        const response = await Promise.all([
-          deleteUser(mockUserToken, user.id),
-          deleteUser(adminToken, user.id)
-        ]);
-        response.forEach(res => {
-          expect(res.status).toBe(HttpStatus.OK);
-        });
-      }
+    let user: User;
+    const mockUser = createUserDto({ role: UserRole.CLIENT });
+    beforeAll(async () => {
+      const response = await createUser(adminToken, mockUser);
+      user = response.body.data;
     });
 
     it('forbidden', async () => {
-      if (user) {
-        const response = await deleteUser(clientToken, user.id);
-        expect(response.status).toBe(HttpStatus.FORBIDDEN);
-      }
+      const response = await deleteUser(clientToken, user.id);
+      expect(response.status).toBe(HttpStatus.FORBIDDEN);
+    });
+
+    it('success', async () => {
+      const mockUserToken = await getToken(login(mockUser));
+      const response = await Promise.all([
+        deleteUser(mockUserToken, user.id),
+        deleteUser(adminToken, user.id)
+      ]);
+      response.forEach(res => {
+        expect(res.status).toBe(HttpStatus.OK);
+      });
     });
   });
 
