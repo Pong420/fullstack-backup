@@ -2,6 +2,7 @@ import React from 'react';
 import { Schema$Product } from '@fullstack/typings';
 import { NewProduct } from './ProductActions/NewProduct';
 import { ProductsGridView } from './ProductsGridView';
+import { ProductFilter } from './ProductFilter';
 import { Layout } from '../../components/Layout';
 import { usePaginationLocal } from '../../hooks/usePaginationLocal';
 import { getProducts } from '../../service';
@@ -25,7 +26,15 @@ export function Products() {
   });
 
   return (
-    <Layout className="products" navbar={<NewProduct onCreate={() => {}} />}>
+    <Layout
+      className="products"
+      navbar={
+        <>
+          <NewProduct onCreate={actions.create} />
+          <ProductFilter initialValues={params} />
+        </>
+      }
+    >
       <ProductsGridView
         flag={pageNo + JSON.stringify(params)}
         products={data}

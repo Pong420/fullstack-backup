@@ -15,6 +15,13 @@
     max-width: 100%;
   }
 
+  .numeric-range-input {
+    input:focus {
+      z-index: 10;
+    }
+  }
+
+  .numeric-range-input,
   .date-range-input {
     min-width: $min-date-range-input-width;
     .#{$ns}-input-group {

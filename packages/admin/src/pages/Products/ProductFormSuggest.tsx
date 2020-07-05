@@ -43,6 +43,7 @@ const defaultProps: Omit<
   popoverProps: {
     fill: true,
     minimal: true,
+    captureDismiss: true,
     popoverClassName: 'product-suggest-popover'
   }
 };

@@ -3,10 +3,11 @@ import {
   Param$GetProducts,
   Timestamp
 } from '@fullstack/typings';
-import { QueryDto } from '../../utils/mongoose-crud.service';
 import { Exclude } from 'class-transformer';
-import { Hidden, Disscount, Price, Amount, Tags } from './products.decorators';
-import { IsInt, IsOptional, IsString, IsArray } from 'class-validator';
+import { IsOptional, IsString, IsArray } from 'class-validator';
+import { Hidden, Tags } from './products.decorators';
+import { QueryDto } from '../../utils/mongoose-crud.service';
+import { NumberRannge } from '../../decorators/range.decorator';
 
 class Base extends QueryDto
   implements Partial<Omit<Param$GetProducts, keyof Timestamp>> {
@@ -20,19 +21,19 @@ class QueryProduct extends Base
   @IsOptional()
   name?: string;
 
-  @Price()
+  @NumberRannge()
   @IsOptional()
   price?: number;
 
-  @Amount()
+  @NumberRannge()
   @IsOptional()
   amount?: number;
 
-  @IsInt()
+  @NumberRannge()
   @IsOptional()
   freeze?: undefined;
 
-  @IsInt()
+  @NumberRannge()
   @IsOptional()
   remain?: undefined;
 
@@ -48,6 +49,10 @@ class QueryProduct extends Base
   @IsOptional()
   images?: string[];
 
+  @IsString()
+  @IsOptional()
+  tag?: string;
+
   @Tags()
   @IsOptional()
   tags?: string[];
@@ -56,7 +61,7 @@ class QueryProduct extends Base
   @IsOptional()
   hidden?: boolean;
 
-  @Disscount()
+  @NumberRannge()
   @IsOptional()
   discount?: number;
 }

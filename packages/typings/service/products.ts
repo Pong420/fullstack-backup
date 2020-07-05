@@ -6,11 +6,6 @@ import {
   ApiResponse
 } from './index';
 
-export enum ProductSuggestTypes {
-  CATEGORY = 'category',
-  TAG = 'tag'
-}
-
 export interface Schema$Product extends Timestamp {
   id: string;
   name: string;
@@ -54,13 +49,14 @@ export interface Param$Product {
 
 export interface Param$GetProducts extends Pagination, Timestamp, Search {
   name?: string;
-  // price?: number;
-  // amount?: number;
-  // freeze?: number;
-  // remain?: number;
+  price?: [number, number];
+  amount?: [number, number];
+  freeze?: [number, number];
+  remain?: [number, number];
   category?: string;
-  // tags?: string;
-  // discount?: number;
+  tag?: string;
+  tags?: string[];
+  discount?: [number, number];
   hidden?: boolean;
 }
 

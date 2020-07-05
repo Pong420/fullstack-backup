@@ -32,11 +32,15 @@ export class ProductsController extends MongooseCRUDController<Product> {
 
   @Get()
   getAll(
-    @Query() { tags, ...query }: QueryProductDto
+    @Query() { tag, tags, ...query }: QueryProductDto
   ): Promise<PaginateResult<Product>> {
     const condition: Condition[] = [];
 
-    if (tags && !!tags.length) {
+    if (tag) {
+      condition.push({ tags: { $in: tag } });
+    }
+
+    if (tags && tags.length) {
       condition.push({ tags: { $in: tags } });
     }
 

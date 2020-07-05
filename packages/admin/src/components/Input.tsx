@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import {
   Button,
   InputGroup,
@@ -7,7 +7,8 @@ import {
   ITextAreaProps,
   IInputGroupProps,
   INumericInputProps,
-  HTMLInputProps
+  HTMLInputProps,
+  ControlGroup
 } from '@blueprintjs/core';
 import { useBoolean } from '../hooks/useBoolean';
 
@@ -49,7 +50,9 @@ export function NumericInput({
   onValueChange,
   onChange,
   ...props
-}: INumericInputProps & { onChange?: (payload: unknown) => void } = {}) {
+}: INumericInputProps & {
+  onChange?: (payload: number | string) => void;
+} = {}) {
   return (
     <BpNumericInput
       fill
@@ -86,5 +89,39 @@ export function Password({
         />
       }
     />
+  );
+}
+
+type Range = [string?, string?];
+interface RangeControl {
+  value?: Range;
+  onChange?: (payload: Range) => void;
+}
+export function NumericRangeInput({
+  value,
+  onChange,
+  ...props
+}: IInputGroupProps & RangeControl) {
+  const values = value || [];
+  const handleChange = onChange || (() => {});
+  return (
+    <ControlGroup className="numeric-range-input">
+      <Input
+        {...props}
+        placeholder="Greater than"
+        value={values[0]}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          handleChange([event.target.value, values[1]])
+        }
+      />
+      <Input
+        {...props}
+        placeholder="Less than"
+        value={values[1]}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          handleChange([values[0], event.target.value])
+        }
+      />
+    </ControlGroup>
   );
 }

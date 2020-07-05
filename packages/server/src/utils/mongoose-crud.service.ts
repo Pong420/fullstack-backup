@@ -21,6 +21,7 @@ import {
   Timestamp
 } from '@fullstack/typings';
 import { formatSearchQuery, Condition } from './format-search-query';
+import { DateRannge } from '../decorators/range.decorator';
 
 export { Condition };
 
@@ -32,13 +33,6 @@ interface MongoDateRange {
   $gte: string;
   $lte: string;
 }
-
-const formatDateRange = (payload?: unknown): MongoDateRange | undefined => {
-  if (Array.isArray(payload)) {
-    const [$gte, $lte] = payload;
-    return { $gte, $lte } as any;
-  }
-};
 
 class Base implements QuerySchema {
   @IsNumber()
@@ -63,12 +57,12 @@ class Base implements QuerySchema {
 
   @IsOptional()
   @ValidateNested()
-  @Transform(formatDateRange)
+  @DateRannge()
   createdAt?: MongoDateRange;
 
   @IsOptional()
   @ValidateNested()
-  @Transform(formatDateRange)
+  @DateRannge()
   updatedAt?: MongoDateRange;
 }
 
