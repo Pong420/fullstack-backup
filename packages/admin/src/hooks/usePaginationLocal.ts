@@ -20,8 +20,6 @@ interface Props<
 }
 
 const defaultPageSize = 10;
-const list = new Array(defaultPageSize).fill({});
-const ids = new Array(defaultPageSize).fill(null);
 
 export function usePaginationLocal<
   I extends Record<PropertyKey, any>,
@@ -33,7 +31,7 @@ export function usePaginationLocal<
   cache = true,
   ...props
 }: Props<I, K>) {
-  const [state, actions] = useCRUDReducer<I, K>({ key, list, ids, pageSize });
+  const [state, actions] = useCRUDReducer<I, K>({ key, pageSize });
   const onSuccessCallback = useCallback<onSuceess<I>>(
     payload => {
       actions.paginate(payload);

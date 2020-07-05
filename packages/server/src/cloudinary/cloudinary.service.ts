@@ -39,6 +39,17 @@ export class CloudinaryService {
     return cloudinary.v2.url(public_id, options);
   }
 
+  handleUpload(
+    path: string,
+    options?: UploadApiOptions
+  ): Observable<UploadResponse> {
+    return defer(() => cloudinary.v2.uploader.upload(path, options)).pipe(
+      retry(2),
+      catchError(() => of(null)),
+      tap(() => fs.unlinkSync(path))
+    );
+  }
+
   upload(
     payload: Uploaded,
     options?: UploadApiOptions
@@ -51,21 +62,16 @@ export class CloudinaryService {
     payload: Uploaded | Uploaded[],
     options?: UploadApiOptions
   ): Observable<UploadResponse | UploadResponse[]> {
-    const handler = (uploaded: Uploaded): Observable<UploadResponse> =>
-      defer(() => cloudinary.v2.uploader.upload(uploaded.path, options)).pipe(
-        retry(2),
-        catchError(() => of(null)),
-        tap(() => fs.unlinkSync(uploaded.path))
-      );
-
     return Array.isArray(payload)
       ? from(payload).pipe(
           concatMap(uploaded =>
-            of<Observable<UploadResponse>>(handler(uploaded))
+            of<Observable<UploadResponse>>(
+              this.handleUpload(uploaded.path, options)
+            )
           ),
           zipAll()
         )
-      : handler(payload);
+      : this.handleUpload(payload.path, options);
   }
 
   remove(payload: RemovePayload | RemovePayload[]): Observable<unknown> {

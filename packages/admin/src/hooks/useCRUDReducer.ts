@@ -23,7 +23,7 @@ export interface UseCRUDReducerProps<
 export function useCRUDReducer<
   I extends Record<PropertyKey, any>,
   K extends AllowedNames<I, PropertyKey> = AllowedNames<I, PropertyKey>
->({ key, ids, list, pageSize, onLocationChanged }: UseCRUDReducerProps<I, K>) {
+>({ key, pageSize, onLocationChanged }: UseCRUDReducerProps<I, K>) {
   const location = useLocation();
 
   const { actionsCreators, initialState, reducer, init } = useMemo(() => {
@@ -34,15 +34,18 @@ export function useCRUDReducer<
       paginate: ['PAGINATE', 'PAGINATE']
     });
 
+    const list = new Array(pageSize).fill({});
+    const ids = new Array(pageSize).fill(null);
+
     const [initialState, reducer] = createCRUDReducer<I, K>({
       key,
+      ids,
+      list,
       prefill: true,
       parseOptions,
       pageSize,
       actions: actionTypes,
-      onLocationChanged,
-      ids: ids || [],
-      list: list || []
+      onLocationChanged
     });
 
     // Initialize params here instead of `createCRUDReducer`,
@@ -60,7 +63,7 @@ export function useCRUDReducer<
     }
 
     return { actionsCreators, initialState, reducer, init };
-  }, [key, ids, list, pageSize, onLocationChanged]);
+  }, [key, pageSize, onLocationChanged]);
 
   const [state, dispatch] = useReducer(reducer, initialState, init);
 

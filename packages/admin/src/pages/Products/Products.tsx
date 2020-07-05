@@ -12,6 +12,7 @@ const onFailure = Toaster.apiError.bind(Toaster, 'Get products failure');
 export function Products() {
   const { data, pagination } = usePaginationLocal<Schema$Product, 'id'>({
     key: 'id',
+    pageSize: 12,
     fn: getProducts,
     onFailure
   });
