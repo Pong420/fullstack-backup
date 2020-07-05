@@ -25,9 +25,12 @@ export class Product implements Schema$Product {
   @Prop({ type: Number, default: 0 })
   freeze: number;
 
-  get remain(): number {
-    return this.amount - this.freeze;
-  }
+  @Prop({
+    default: function () {
+      return this.amount - this.freeze;
+    }
+  })
+  remain: number;
 
   @Prop({ type: String, required: true, lowercase: true })
   category: string;

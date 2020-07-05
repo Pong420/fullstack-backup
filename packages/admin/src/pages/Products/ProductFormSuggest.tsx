@@ -71,6 +71,7 @@ export function ProductCategoryInput({
   return (
     <ProductCategorySuggest
       {...typesProps}
+      fill
       className="product-types-input"
       items={data}
       defaultSelectedItem={type}
