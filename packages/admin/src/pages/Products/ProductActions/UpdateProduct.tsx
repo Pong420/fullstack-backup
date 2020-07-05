@@ -49,6 +49,7 @@ export function UpdateProduct({ id, onUpdate, ...products }: NewProductProps) {
         Toaster.success({ message: 'Update product success' });
       } catch (error) {
         Toaster.apiError('Update product failure', error);
+        throw error;
       }
     }
   }

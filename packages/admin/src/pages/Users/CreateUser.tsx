@@ -35,6 +35,7 @@ export function CreateUser({ onCreate }: CreateUserProps) {
       Toaster.success({ message: 'Create user success' });
     } catch (error) {
       Toaster.apiError('Create user failure', error);
+      throw error;
     }
   }
 

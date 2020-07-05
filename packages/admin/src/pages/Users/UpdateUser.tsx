@@ -50,6 +50,7 @@ export function UpdateUser({ id, onUpdate, ...user }: UpdateUserProps) {
       Toaster.success({ message: 'Update user success' });
     } catch (error) {
       Toaster.apiError('Update user failure', error);
+      throw error;
     }
   }
 

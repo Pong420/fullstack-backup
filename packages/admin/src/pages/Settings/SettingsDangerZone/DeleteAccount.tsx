@@ -37,6 +37,7 @@ export function DeleteAccount() {
       logout();
     } catch (error) {
       Toaster.apiError('Delete account failure', error);
+      throw error;
     }
   }
 

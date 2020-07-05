@@ -23,6 +23,7 @@ export function DeleteUser({ nickname, id, onDelete }: DeleteUserProps) {
       Toaster.success({ message: 'Delete user success' });
     } catch (error) {
       Toaster.apiError('Delete user failure', error);
+      throw error;
     }
   }
 

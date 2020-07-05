@@ -71,6 +71,7 @@ export function ModifyPassword() {
       logout();
     } catch (error) {
       Toaster.apiError('Modify account failure', error);
+      throw error;
     }
   }
 

@@ -25,6 +25,7 @@ export function NewProduct({ onCreate }: NewProductProps) {
       Toaster.success({ message: 'Create new product success' });
     } catch (error) {
       Toaster.apiError('Create new product failure', error);
+      throw error;
     }
   }
 
