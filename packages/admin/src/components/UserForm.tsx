@@ -7,6 +7,7 @@ import {
   FormProps,
   FormItemProps
 } from '../utils/form';
+import { getFile } from '../utils/getFile';
 import { Input, Password as PasswordInput } from './Input';
 import { UserRoleSelect } from './UserRoleSelect';
 
@@ -64,11 +65,7 @@ export function createUserForm(itemProps?: FormItemProps<Store>) {
       <Form
         {...props}
         beforeSubmit={({ avatar, ...payload }) => ({
-          avatar: avatar
-            ? typeof avatar === 'string'
-              ? avatar
-              : avatar.file
-            : avatar,
+          avatar: getFile(avatar),
           ...payload
         })}
       />

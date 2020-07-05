@@ -1,6 +1,6 @@
 import React from 'react';
 import { Schema$Product } from '@fullstack/typings';
-import { NewProduct } from './NewProduct';
+import { NewProduct } from './ProductActions/NewProduct';
 import { ProductsGridView } from './ProductsGridView';
 import { Layout } from '../../components/Layout';
 import { usePaginationLocal } from '../../hooks/usePaginationLocal';
@@ -10,7 +10,14 @@ import { Toaster } from '../../utils/toaster';
 const onFailure = Toaster.apiError.bind(Toaster, 'Get products failure');
 
 export function Products() {
-  const { data, pagination } = usePaginationLocal<Schema$Product, 'id'>({
+  const {
+    data,
+    pageNo,
+    pagination,
+    params,
+    actions
+    //
+  } = usePaginationLocal<Schema$Product, 'id'>({
     key: 'id',
     pageSize: 12,
     fn: getProducts,
@@ -19,7 +26,12 @@ export function Products() {
 
   return (
     <Layout className="products" navbar={<NewProduct onCreate={() => {}} />}>
-      <ProductsGridView products={data} pagination={pagination} />
+      <ProductsGridView
+        flag={pageNo + JSON.stringify(params)}
+        products={data}
+        pagination={pagination}
+        onUpdate={actions.update}
+      />
     </Layout>
   );
 }

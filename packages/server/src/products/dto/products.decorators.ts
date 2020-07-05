@@ -15,7 +15,7 @@ import { applyDecorators } from '@nestjs/common';
 // export const PRICE_MIN = 0;
 export const AMOUNT_MIN = 1;
 export const DISCOUNT_MIN = 0;
-export const DISCOUNT_MAX = 1;
+export const DISCOUNT_MAX = 100;
 
 export function Price(): ReturnType<typeof applyDecorators> {
   return applyDecorators(
@@ -38,8 +38,8 @@ export function Amount(): ReturnType<typeof applyDecorators> {
 export function Disscount(): ReturnType<typeof applyDecorators> {
   return applyDecorators(
     IsInt(),
-    Max(DISCOUNT_MIN),
-    Min(DISCOUNT_MAX),
+    Max(DISCOUNT_MAX),
+    Min(DISCOUNT_MIN),
     Transform(Number)
   );
 }

@@ -63,7 +63,7 @@ const categoryReq = () =>
     res.data.data.map(({ category }) => category)
   );
 export function ProductCategoryInput({
-  value: type,
+  value: category,
   onChange
 }: ProductCategorySuggestProps) {
   const { data = [] } = useRxAsync(categoryReq);
@@ -74,7 +74,7 @@ export function ProductCategoryInput({
       fill
       className="product-types-input"
       items={data}
-      defaultSelectedItem={type}
+      selectedItem={category}
       onItemSelect={handleChange}
       onQueryChange={handleChange}
     />

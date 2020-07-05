@@ -1,22 +1,27 @@
 import {
-  Response$Tags,
-  Response$Category,
   Param$CreateProduct,
+  Param$GetProducts,
+  Param$Product,
+  Param$UpdateProduct,
   Response$Product,
   Response$GetProducts,
-  Param$GetProducts
+  Response$Tags,
+  Response$Category
 } from '@fullstack/typings';
 import { api } from './api';
-import { defer } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { createFormData } from './createFormData';
 
 export const createProduct = (payload: Param$CreateProduct) =>
-  api.post<Response$Product>('/products', payload);
+  api.post<Response$Product>('/products', createFormData(payload));
+
+export const updateProduct = ({
+  id,
+  ...payload
+}: Param$Product & Param$UpdateProduct) =>
+  api.patch<Response$Product>(`/products/${id}`, createFormData(payload));
 
 export const getProducts = (params?: Param$GetProducts) =>
-  defer(() => api.get<Response$GetProducts>('/products', { params })).pipe(
-    delay(2000)
-  );
+  api.get<Response$GetProducts>('/products', { params });
 
 export const getProductTags = () => api.get<Response$Tags>('/products/tags');
 

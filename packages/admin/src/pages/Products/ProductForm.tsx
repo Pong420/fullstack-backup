@@ -1,15 +1,21 @@
 import React from 'react';
 import { Checkbox } from '@blueprintjs/core';
+import { RxFileToImageState } from 'use-rx-hooks';
 import { Schema$Product, Param$CreateProduct } from '@fullstack/typings';
 import { Input, NumericInput, TextArea } from '../../components/Input';
 import { UploadImageGrid } from '../../components/UploadImage';
-import { createForm, validators, FormProps } from '../../utils/form';
 import { ProductTagsInput, ProductCategoryInput } from './ProductFormSuggest';
+import {
+  createForm,
+  validators,
+  FormProps,
+  FormInstance
+} from '../../utils/form';
+import { getFile } from '../../utils/getFile';
 
-type Schema = Partial<Omit<Schema$Product, 'images'>> &
-  Param$CreateProduct & {
-    images?: unknown[];
-  };
+type Schema = Omit<Partial<Schema$Product> & Param$CreateProduct, 'images'> & {
+  images?: (RxFileToImageState | string | null)[];
+};
 
 const { Form, FormItem, useForm } = createForm<Schema>();
 
@@ -19,6 +25,15 @@ const initialValues: Partial<Schema> = {
 };
 
 export { useForm };
+
+export type ProductFormInstance = FormInstance<Schema>;
+
+export function transformProductForm({ images, ...payload }: Schema) {
+  return {
+    ...payload,
+    images: getFile(images)
+  };
+}
 
 export function ProductForm(props: FormProps<Schema>) {
   return (

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Divider, Tag } from '@blueprintjs/core';
 import { Schema$Product } from '@fullstack/typings';
-import { setSearchParam } from '../../../utils/setSearchParam';
 import { Skeleton } from '../../../components/Skeleton';
+import { UpdateProduct, OnUpdate } from '../ProductActions/UpdateProduct';
 import { getTagProps } from '../../../utils/getTagProps';
+import { setSearchParam } from '../../../utils/setSearchParam';
 
-interface Props {
+interface Props extends OnUpdate {
   product: Partial<Schema$Product>;
 }
 
@@ -24,7 +25,7 @@ function FormatPrice({
   );
 }
 
-export function ProductsGrid({ product }: Props) {
+export function ProductsGrid({ product, onUpdate }: Props) {
   const { images = [], tags = [], price, discount, category, remain } = product;
   return (
     <div className="product-grid">
@@ -55,7 +56,9 @@ export function ProductsGrid({ product }: Props) {
           </Skeleton>
         </div>
         <div>
-          <div className="product-actions">{/*  */}</div>
+          <div className="product-actions">
+            <UpdateProduct {...product} onUpdate={onUpdate} />
+          </div>
           <div className="product-tags">
             {tags.map((tag, index) => (
               <Tag
