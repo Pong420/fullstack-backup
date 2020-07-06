@@ -10,7 +10,7 @@ import { Schema$Product } from '@fullstack/typings';
 export class Product implements Schema$Product {
   id: string;
 
-  @Prop({ type: String, required: true, unique: true, index: true })
+  @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: String, default: '' })

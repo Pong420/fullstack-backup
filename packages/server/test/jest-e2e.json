@@ -10,7 +10,8 @@
   "globals": {
     "adminToken": "",
     "managerToken": "",
-    "clientToken": ""
+    "clientToken": "",
+    "products": []
   },
   "setupFilesAfterEnv": ["jest-extended"]
 }

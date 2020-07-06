@@ -13,6 +13,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { MongooseSerializerInterceptor } from './utils/mongoose-serializer.interceptor';
 import { AcessGuard } from './utils/access.guard';
 import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
 
@@ -71,7 +72,8 @@ const meta: ModuleMetadata = {
     AuthModule,
     RefreshTokenModule,
     CloudinaryModule,
-    ProductsModule
+    ProductsModule,
+    OrdersModule
   ],
   controllers: [AppController],
   providers: [

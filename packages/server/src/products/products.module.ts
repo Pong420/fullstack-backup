@@ -34,6 +34,7 @@ import paginate from 'mongoose-paginate-v2';
     ]),
     CloudinaryModule
   ],
+  exports: [ProductsService],
   providers: [ProductsService],
   controllers: [ProductsController]
 })

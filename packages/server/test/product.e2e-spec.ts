@@ -5,6 +5,7 @@ import { Product } from '../src/products/schemas/products.schema.dto';
 import { CreateProductDto } from '../src/products/dto/create-product.dto';
 import { UpdateProductDto } from '../src/products/dto/update-product.dto';
 import { rid, setupUsers } from './utils/setupUsers';
+import { createProduct } from './utils/setupProducts';
 import superagent, { SuperAgentRequest } from 'superagent';
 import path from 'path';
 import qs from 'qs';
@@ -15,29 +16,6 @@ describe('ProductsController (e2e)', () => {
   beforeAll(async () => {
     await setupUsers();
   });
-
-  function createProductDto(
-    dto: Partial<CreateProductDto> = {}
-  ): CreateProductDto {
-    return {
-      name: `e2e-product-${rid()}`,
-      price: 100,
-      amount: 100,
-      category: rid(8),
-      ...dto
-    };
-  }
-
-  function createProduct(
-    token: string,
-    dto: Partial<CreateProductDto> | Record<string, any> = {}
-  ): SuperAgentRequest {
-    return request
-      .post('/api/products')
-      .set('Authorization', `bearer ${token}`)
-      .set('Content-Type', 'multipart/form-data')
-      .field(createProductDto(dto) as any);
-  }
 
   function getProducts(token: string, params: Record<string, any> = {}) {
     return request
