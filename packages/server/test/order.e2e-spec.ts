@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { CreateOrderDto } from '../src/orders/dto/create-order.dto';
-import { setupUsers } from './utils/setupUsers';
+import { setupUsers, rid } from './utils/setupUsers';
 import { setupProducts } from './utils/setupProducts';
 import { SuperAgentRequest } from 'superagent';
 
 describe('OrdersController (e2e)', () => {
   beforeAll(async () => {
     await setupUsers();
-    await setupProducts([{}]);
+    await setupProducts([{}, {}, {}]);
   });
 
   function createOrder(token: string, dto: CreateOrderDto): SuperAgentRequest {
@@ -22,8 +22,27 @@ describe('OrdersController (e2e)', () => {
       const response = await createOrder(adminToken, {
         products: products.map(({ id }) => ({ id, amount: 1 }))
       });
-
       expect(response.status).toBe(HttpStatus.CREATED);
+    });
+
+    it('bad request', async () => {
+      const response = await Promise.all([
+        createOrder(adminToken, {
+          products: products.map(({ id, amount }) => ({
+            id,
+            amount: amount + 1
+          }))
+        }),
+        createOrder(adminToken, {
+          products: products.map(({ id }) => ({ id, amount: undefined }))
+        }),
+        createOrder(adminToken, {
+          products: [{ id: rid(), amount: 1 }]
+        })
+      ]);
+      expect(response).toSatisfyAll(
+        res => res.status === HttpStatus.BAD_REQUEST
+      );
     });
   });
 

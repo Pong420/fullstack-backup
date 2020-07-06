@@ -2,11 +2,13 @@ import {
   Inject,
   PipeTransform,
   BadRequestException,
-  HttpException
+  HttpException,
+  HttpStatus
 } from '@nestjs/common';
 import { ProductsService } from 'src/products/products.service';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { Order } from '../schema/order.schema';
+import { handleMongoError } from 'src/utils/mongoose-exception-filter';
 
 export class ProductsPipe implements PipeTransform {
   constructor(
@@ -28,25 +30,26 @@ export class ProductsPipe implements PipeTransform {
           map: {} as Record<string, number>
         }
       );
-      try {
-        const result = await this.productsService.findAll({
-          _id: { $in: query }
+
+      const result = await this.productsService
+        .findAll({ _id: { $in: query } })
+        .catch(error => {
+          const [status, message] = handleMongoError(error);
+          throw new HttpException(message, HttpStatus[status]);
         });
 
-        if (result.length) {
-          return {
-            ...rest,
-            products: result.map(payload => ({
-              ...payload.toJSON(),
-              amount: map[payload.id]
-            }))
-          };
-        }
-      } catch (error) {
-        throw new HttpException(
-          `Get product failure, ${error.message}`,
-          error.code
-        );
+      if (result.length) {
+        return {
+          ...rest,
+          products: result.map(model => {
+            const product = model.toJSON();
+            const amount = map[product.id];
+            if (product.remain >= amount) {
+              return { ...product, amount };
+            }
+            throw new BadRequestException(`${product.name} out of stock `);
+          })
+        };
       }
     }
     throw new BadRequestException('No product provided');

@@ -35,7 +35,7 @@ class UpdateOrder extends Base
   @IsOptional()
   @IsEnum(OrderStatus)
   @Transform(Number)
-  status?: OrderStatus;
+  status: OrderStatus;
 }
 
 export class UpdateOrderDto extends UpdateOrder

@@ -33,7 +33,6 @@ interface CreateOrder {
 
 export interface Param$CreateOrder {
   products: CreateOrder[];
-  user: string;
 }
 
 export interface Param$UpdateOrder {

@@ -10,6 +10,5 @@ export class OrdersService extends MongooseCRUDService<Order> {
     @InjectModel(Order.name) orderModel: PaginateModel<Order & Document>
   ) {
     super(orderModel);
-    this.clear();
   }
 }

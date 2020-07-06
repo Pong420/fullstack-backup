@@ -71,4 +71,18 @@ export class ProductsService extends MongooseCRUDService<Product> {
         total: 1
       });
   }
+
+  async frezze(id: string, amount: number): Promise<Product> {
+    return this.productModel.findOneAndUpdate(
+      { _id: id },
+      { $inc: { frezze: amount } }
+    );
+  }
+
+  async sold(id: string, amount: number): Promise<Product> {
+    return this.productModel.findOneAndUpdate(
+      { _id: id },
+      { $inc: { frezze: amount, amount } }
+    );
+  }
 }

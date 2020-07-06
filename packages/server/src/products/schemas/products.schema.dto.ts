@@ -16,13 +16,13 @@ export class Product implements Schema$Product {
   @Prop({ type: String, default: '' })
   description: string;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, min: 0 })
   price: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, min: 0 })
   amount: number;
 
-  @Prop({ type: Number, default: 0 })
+  @Prop({ type: Number, default: 0, min: 0 })
   freeze: number;
 
   @Prop({
