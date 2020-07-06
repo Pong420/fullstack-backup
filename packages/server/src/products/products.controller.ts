@@ -37,7 +37,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
     const condition: Condition[] = [];
 
     if (tag) {
-      condition.push({ tags: { $in: tag } });
+      condition.push({ tags: { $in: [tag] } });
     }
 
     if (tags && tags.length) {

@@ -1,5 +1,4 @@
 import {
-  Search,
   Pagination,
   Timestamp,
   PaginateApiResponse,
@@ -47,7 +46,7 @@ export interface Param$Product {
   id: string;
 }
 
-export interface Param$GetProducts extends Pagination, Timestamp, Search {
+export interface Param$GetProducts extends Pagination, Partial<Timestamp> {
   name?: string;
   price?: [number, number];
   amount?: [number, number];

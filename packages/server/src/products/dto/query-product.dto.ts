@@ -4,7 +4,7 @@ import {
   Timestamp
 } from '@fullstack/typings';
 import { Exclude } from 'class-transformer';
-import { IsOptional, IsString, IsArray } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Hidden, Tags } from './products.decorators';
 import { QueryDto } from '../../utils/mongoose-crud.service';
 import { NumberRannge } from '../../decorators/range.decorator';
@@ -13,6 +13,9 @@ class Base extends QueryDto
   implements Partial<Omit<Param$GetProducts, keyof Timestamp>> {
   @Exclude()
   id?: undefined;
+
+  @Exclude()
+  images?: undefined;
 }
 
 class QueryProduct extends Base
@@ -44,10 +47,6 @@ class QueryProduct extends Base
   @IsString()
   @IsOptional()
   description?: string;
-
-  @IsArray()
-  @IsOptional()
-  images?: string[];
 
   @IsString()
   @IsOptional()

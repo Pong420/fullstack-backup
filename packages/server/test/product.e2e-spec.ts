@@ -7,6 +7,7 @@ import { UpdateProductDto } from '../src/products/dto/update-product.dto';
 import { rid, setupUsers } from './utils/setupUsers';
 import superagent, { SuperAgentRequest } from 'superagent';
 import path from 'path';
+import qs from 'qs';
 
 describe('ProductsController (e2e)', () => {
   const productsService = app.get<ProductsService>(ProductsService);
@@ -38,8 +39,11 @@ describe('ProductsController (e2e)', () => {
       .field(createProductDto(dto) as any);
   }
 
-  function getProducts(token: string) {
-    return request.get(`/api/products`).set('Authorization', `bearer ${token}`);
+  function getProducts(token: string, params: Record<string, any> = {}) {
+    return request
+      .get(`/api/products`)
+      .set('Authorization', `bearer ${token}`)
+      .query(qs.stringify(params));
   }
 
   function getProduct(token: string, id: string) {
@@ -76,8 +80,13 @@ describe('ProductsController (e2e)', () => {
 
   describe('(GET)  Get Products', () => {
     let products: Product[] = [];
+    const tags = [rid(), rid()];
     beforeAll(async () => {
-      const options: Partial<CreateProductDto>[] = [{}];
+      const options: Partial<CreateProductDto | Record<string, any>>[] = [
+        {},
+        { tags: [tags[0]] },
+        { tags: [tags[1]] }
+      ];
       products = await Promise.all(
         options.map(dto =>
           createProduct(adminToken, dto).then(res => res.body.data)
@@ -89,6 +98,18 @@ describe('ProductsController (e2e)', () => {
       const response = await getProducts(adminToken);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(products.length);
+    });
+
+    it.each([
+      [0, [rid()]],
+      [1, [tags[0]]],
+      [1, [tags[1]]],
+      [2, [...tags]],
+      [3, []]
+    ])('query - tags %s', async (expected, query) => {
+      const response = await getProducts(adminToken, { tags: query });
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data.data.length).toBe(expected);
     });
   });
 
@@ -207,7 +228,7 @@ describe('ProductsController (e2e)', () => {
     });
   });
 
-  test.skip('cloudinary image should be removed', async () => {
+  test('cloudinary image should be removed', async () => {
     jest.setTimeout(60 * 1000);
 
     const key: keyof Product = 'images';

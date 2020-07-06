@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsArray, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsArray,
+  IsNotEmpty,
+  IsObject
+} from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { Schema$Product } from '@fullstack/typings';
 import { Price, Amount, Disscount, Hidden, Tags } from './products.decorators';
@@ -28,7 +34,7 @@ class CreateProduct extends Base
 
   @IsOptional()
   @IsArray()
-  // TODO:
+  @IsObject({ each: true })
   images?: string[];
 
   @IsOptional()

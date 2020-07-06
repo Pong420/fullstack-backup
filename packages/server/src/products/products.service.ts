@@ -3,10 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Schema$Tags, Schema$Category } from '@fullstack/typings';
 import { Document, PaginateModel, Aggregate } from 'mongoose';
 import { Product } from './schemas/products.schema.dto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MongooseCRUDService } from '../utils/mongoose-crud.service';
 import fs from 'fs';
 import path from 'path';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService extends MongooseCRUDService<Product> {
