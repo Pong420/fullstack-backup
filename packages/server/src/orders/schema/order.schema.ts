@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
+import { Type } from 'class-transformer';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { Schema$Order, OrderStatus } from '@fullstack/typings';
-import { User } from '../../user/schemas/user.schema';
 import { OrderProduct } from './order-product';
 import { OrderUser } from './order-user';
-import { Type } from 'class-transformer';
-import { Group } from 'src/utils/access.guard';
+import { User } from '../../user/schemas/user.schema';
+import { Group } from '../../utils/access.guard';
 
 @Schema({
   timestamps: true,

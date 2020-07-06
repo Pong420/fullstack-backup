@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema$Product } from '@fullstack/typings';
+import { Group } from 'src/utils/access.guard';
 
 @Schema({
   timestamps: true,
@@ -20,12 +21,15 @@ export class Product implements Schema$Product {
   price: number;
 
   @Prop({ type: Number, required: true, min: 0 })
+  @Group(['ADMIN', 'MANAGER'])
   amount: number;
 
   @Prop({ type: Number, default: 0, min: 0 })
+  @Group(['ADMIN', 'MANAGER'])
   freeze: number;
 
   @Prop({
+    type: Number,
     default: function () {
       return this.amount - this.freeze;
     }
@@ -47,6 +51,7 @@ export class Product implements Schema$Product {
   @Prop({ type: Number, default: 100 })
   discount: number;
 
+  @Group(['ADMIN', 'MANAGER'])
   createdAt: string;
 
   updatedAt: string;
