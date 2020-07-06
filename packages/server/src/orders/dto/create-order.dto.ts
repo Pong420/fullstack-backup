@@ -20,7 +20,7 @@ class ProductField implements Field {
   amount: number;
 }
 
-class Base implements Partial<Schema$Order & Param$CreateOrder> {
+class Excluded implements Partial<Schema$Order> {
   @Exclude()
   id?: undefined;
 
@@ -37,8 +37,8 @@ class Base implements Partial<Schema$Order & Param$CreateOrder> {
   updatedAt?: undefined;
 }
 
-class CreateOrder extends Base
-  implements Partial<Omit<Param$CreateOrder, keyof Base>> {
+class CreateOrder extends Excluded
+  implements Partial<Omit<Param$CreateOrder, keyof Excluded>> {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductField)

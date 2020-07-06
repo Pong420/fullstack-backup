@@ -1,32 +1,38 @@
 import { IsString } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
+import {
+  DTOExcluded,
+  Schema$RefreshToken,
+  Param$CreateRefreshToken
+} from '@fullstack/typings';
 
-class Base {
+type Schema = Schema$RefreshToken & Param$CreateRefreshToken;
+
+class Excluded implements DTOExcluded<Schema> {
   @Exclude()
-  id?: string;
-
-  @IsString()
-  refreshToken: string;
-
-  @Exclude()
-  user_id?: string;
-
-  @Exclude()
-  username?: string;
+  id?: undefined;
 
   @Exclude()
-  nickname?: string;
+  user_id?: undefined;
 
   @Exclude()
-  role?: UserRole;
+  username?: undefined;
 
   @Exclude()
-  createdAt?: string;
+  nickname?: undefined;
 
   @Exclude()
-  updatedAt?: string;
+  role?: undefined;
+
+  @Exclude()
+  createdAt?: undefined;
+
+  @Exclude()
+  updatedAt?: undefined;
 }
 
-export class UpdateRefreshTokenDto extends Base
-  implements Required<Omit<Schema$RefreshToken, keyof Base>> {}
+export class UpdateRefreshTokenDto extends Excluded
+  implements Required<Omit<Schema$RefreshToken, keyof Excluded>> {
+  @IsString()
+  refreshToken: string;
+}

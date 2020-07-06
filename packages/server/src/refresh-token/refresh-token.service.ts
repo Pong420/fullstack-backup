@@ -9,7 +9,6 @@ import {
 } from 'mongoose';
 import { MongooseCRUDService } from '../utils/mongoose-crud.service';
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto';
-import { UpdateRefreshTokenDto } from './dto/update-refersh-token.dto';
 import { RefreshToken } from './schemas/refreshToken.schema';
 
 @Injectable()
@@ -46,7 +45,7 @@ export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
 
   update(
     query: FilterQuery<RefreshToken>,
-    changes: UpdateRefreshTokenDto,
+    changes: Partial<RefreshToken>,
     options?: QueryFindOneAndUpdateOptions
   ): Promise<RefreshToken> {
     return super.update(query, changes, options);

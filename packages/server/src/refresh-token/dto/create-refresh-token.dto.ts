@@ -3,10 +3,30 @@ import { Transform, Exclude } from 'class-transformer';
 import {
   UserRole,
   Schema$RefreshToken,
-  Param$CreateRefreshToken
+  Param$CreateRefreshToken,
+  DTOExcluded
 } from '@fullstack/typings';
 
-class Base implements Param$CreateRefreshToken {
+type Schema = Schema$RefreshToken & Param$CreateRefreshToken;
+
+class Excluded
+  implements DTOExcluded<Schema$RefreshToken, Param$CreateRefreshToken> {
+  @Exclude()
+  id?: string;
+
+  @Exclude()
+  createdAt?: string;
+
+  @Exclude()
+  updatedAt?: string;
+}
+
+class CreateRefreshToken extends Excluded
+  implements
+    Partial<Omit<Schema, keyof Excluded | keyof CreateRefreshTokenDto>> {}
+
+export class CreateRefreshTokenDto extends CreateRefreshToken
+  implements Required<Omit<Schema, keyof CreateRefreshToken>> {
   @IsString()
   user_id: string;
 
@@ -23,25 +43,3 @@ class Base implements Param$CreateRefreshToken {
   @IsString()
   refreshToken: string;
 }
-
-class CreateRefreshToken extends Base
-  implements
-    Partial<Omit<Schema$RefreshToken | Param$CreateRefreshToken, keyof Base>> {
-  @Exclude()
-  id?: string;
-
-  @Exclude()
-  createdAt?: string;
-
-  @Exclude()
-  updatedAt?: string;
-}
-
-export class CreateRefreshTokenDto extends CreateRefreshToken
-  implements
-    Required<
-      Omit<
-        Schema$RefreshToken & Param$CreateRefreshToken,
-        keyof CreateRefreshToken
-      >
-    > {}

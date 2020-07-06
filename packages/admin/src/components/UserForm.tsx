@@ -1,5 +1,5 @@
 import React from 'react';
-import { Param$UpdateUser } from '@fullstack/typings';
+import { Schema$User } from '@fullstack/typings';
 import { RxFileToImageState } from 'use-rx-hooks';
 import {
   createForm,
@@ -11,7 +11,7 @@ import { getFile } from '../utils/getFile';
 import { Input, Password as PasswordInput } from './Input';
 import { UserRoleSelect } from './UserRoleSelect';
 
-interface Schema extends Required<Omit<Param$UpdateUser, 'avatar'>> {
+interface Schema extends Required<Omit<Schema$User, 'id' | 'avatar'>> {
   confirmPassword: string;
 }
 

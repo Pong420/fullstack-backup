@@ -1,9 +1,13 @@
 import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { Schema$Product } from '@fullstack/typings';
+import {
+  Schema$Product,
+  Param$CreateOrder,
+  DTOExcluded
+} from '@fullstack/typings';
 import { Price, Amount, Disscount, Hidden, Tags } from './products.decorators';
 
-class Base implements Partial<Schema$Product> {
+class Excluded implements DTOExcluded<Schema$Product & Param$CreateOrder> {
   @Exclude()
   id?: undefined;
 
@@ -20,8 +24,8 @@ class Base implements Partial<Schema$Product> {
   updatedAt?: undefined;
 }
 
-class CreateProduct extends Base
-  implements Partial<Omit<Schema$Product, keyof Base>> {
+class CreateProduct extends Excluded
+  implements Partial<Omit<Schema$Product, keyof Excluded>> {
   @IsOptional()
   @IsString()
   description?: string;

@@ -9,7 +9,7 @@ import { Hidden, Tags } from './products.decorators';
 import { QueryDto } from '../../utils/mongoose-crud.service';
 import { NumberRannge } from '../../decorators/range.decorator';
 
-class Base extends QueryDto
+class Excluded extends QueryDto
   implements Partial<Omit<Param$GetProducts, keyof Timestamp>> {
   @Exclude()
   id?: undefined;
@@ -18,8 +18,8 @@ class Base extends QueryDto
   images?: undefined;
 }
 
-class QueryProduct extends Base
-  implements Partial<Omit<Param$GetProducts | Schema$Product, keyof Base>> {
+class QueryProduct extends Excluded
+  implements Partial<Omit<Param$GetProducts | Schema$Product, keyof Excluded>> {
   @IsString()
   @IsOptional()
   name?: string;

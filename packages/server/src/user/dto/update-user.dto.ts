@@ -1,14 +1,15 @@
 import { IsOptional, IsString, IsEnum, IsEmail } from 'class-validator';
 import { Transform, Exclude } from 'class-transformer';
-import { Param$UpdateUser, UserRole } from '@fullstack/typings';
+import {
+  Param$UpdateUser,
+  UserRole,
+  Schema$User,
+  DTOExcluded
+} from '@fullstack/typings';
 
-export class UpdateUser implements Partial<Param$UpdateUser> {
+class Excluded implements DTOExcluded<Schema$User, Param$UpdateUser> {
   @Exclude()
   id?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
 
   @Exclude()
   username?: string;
@@ -16,8 +17,21 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   @Exclude()
   password?: string;
 
+  @Exclude()
+  createdAt?: string;
+
+  @Exclude()
+  updatedAt?: string;
+}
+
+class UpdateUser extends Excluded
+  implements Partial<Omit<Schema$User & Param$UpdateUser, keyof Excluded>> {
   @IsOptional()
-  avatar?: unknown;
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  avatar?: string;
 
   @IsOptional()
   @IsEnum(UserRole)
@@ -27,12 +41,6 @@ export class UpdateUser implements Partial<Param$UpdateUser> {
   @IsString()
   @IsOptional()
   nickname?: string;
-
-  @Exclude()
-  createdAt?: string;
-
-  @Exclude()
-  updatedAt?: string;
 }
 
 export class UpdateUserDto extends UpdateUser

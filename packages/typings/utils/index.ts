@@ -14,3 +14,10 @@ export type SubType<Base, Condition> = Pick<
 >;
 
 export type ValueOf<T> = T[keyof T];
+
+export type DTOExcluded<
+  T extends Record<string, any>,
+  P extends Record<string, any> = Record<string, any>
+> = {
+  [K in Exclude<keyof T, keyof P>]?: unknown;
+};

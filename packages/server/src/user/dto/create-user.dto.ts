@@ -1,24 +1,26 @@
 import { IsString, IsOptional, IsEnum, IsEmail } from 'class-validator';
 import { Transform, Exclude } from 'class-transformer';
-import { Param$CreateUser, Schema$User, UserRole } from '@fullstack/typings';
+import {
+  Param$CreateUser,
+  Schema$User,
+  UserRole,
+  DTOExcluded
+} from '@fullstack/typings';
 import { ValidUsername, ValidPassword } from '../../decorators';
 
-class Base implements Param$CreateUser {
-  @ValidUsername()
-  username: string;
-
-  @ValidPassword()
-  password: string;
-
-  @IsEmail()
-  email: string;
-}
-
-class CreateUser extends Base
-  implements Partial<Omit<Schema$User | Param$CreateUser, keyof Base>> {
+class Excluded implements DTOExcluded<Schema$User, Param$CreateUser> {
   @Exclude()
   id?: string;
 
+  @Exclude()
+  createdAt?: string;
+
+  @Exclude()
+  updatedAt?: string;
+}
+
+class CreateUser extends Excluded
+  implements Partial<Omit<Schema$User | Param$CreateUser, keyof Excluded>> {
   @IsOptional()
   @IsEnum(UserRole)
   @Transform(Number)
@@ -30,13 +32,16 @@ class CreateUser extends Base
 
   @IsOptional()
   avatar?: unknown;
-
-  @Exclude()
-  createdAt?: string;
-
-  @Exclude()
-  updatedAt?: string;
 }
 
 export class CreateUserDto extends CreateUser
-  implements Required<Omit<Schema$User & Param$CreateUser, keyof CreateUser>> {}
+  implements Required<Omit<Schema$User & Param$CreateUser, keyof CreateUser>> {
+  @ValidUsername()
+  username: string;
+
+  @ValidPassword()
+  password: string;
+
+  @IsEmail()
+  email: string;
+}

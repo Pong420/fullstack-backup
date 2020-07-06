@@ -4,12 +4,21 @@ import {
   Schema$User,
   Param$GetUsers,
   UserRole,
-  Timestamp
+  DTOExcluded
 } from '@fullstack/typings';
 import { QueryDto } from '../../utils/mongoose-crud.service';
 
-class Base extends QueryDto
-  implements Partial<Omit<Param$GetUsers, keyof Timestamp>> {
+class Excluded extends QueryDto
+  implements DTOExcluded<Schema$User, Param$GetUsers> {
+  @Exclude()
+  password?: string;
+
+  @Exclude()
+  avatar?: string;
+}
+
+class QueryUser extends Excluded
+  implements Partial<Omit<Param$GetUsers | Schema$User, keyof Excluded>> {
   @IsOptional()
   @IsString()
   id?: string;
@@ -30,15 +39,6 @@ class Base extends QueryDto
   @IsEnum(UserRole)
   @Transform(Number)
   role?: UserRole;
-}
-
-class QueryUser extends Base
-  implements Partial<Omit<Param$GetUsers | Schema$User, keyof Base>> {
-  @Exclude()
-  password?: string;
-
-  @Exclude()
-  avatar?: unknown;
 }
 
 export class QueryUserDto extends QueryUser

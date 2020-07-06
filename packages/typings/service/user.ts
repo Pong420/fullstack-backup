@@ -32,7 +32,7 @@ export interface Param$CreateUser {
 }
 
 export interface Param$UpdateUser
-  extends Partial<Omit<Schema$User, 'id' | 'avatar' | keyof Timestamp>> {
+  extends Partial<Pick<Schema$User, 'email' | 'role' | 'nickname'>> {
   avatar?: unknown;
 }
 

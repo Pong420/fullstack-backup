@@ -1,16 +1,15 @@
 import {
   Param$UpdateOrder,
   OrderStatus,
-  Schema$Order
+  Schema$Order,
+  DTOExcluded
 } from '@fullstack/typings';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Transform, Exclude } from 'class-transformer';
 
-type ShoudBeExcluded = {
-  [K in Exclude<keyof Schema$Order, keyof Param$UpdateOrder>]?: unknown;
-};
+type Schema = Schema$Order & Param$UpdateOrder;
 
-class Base implements ShoudBeExcluded {
+class Excluded implements DTOExcluded<Schema$Order, Param$UpdateOrder> {
   @Exclude()
   id?: undefined;
 
@@ -30,13 +29,13 @@ class Base implements ShoudBeExcluded {
   updatedAt?: undefined;
 }
 
-class UpdateOrder extends Base
-  implements Partial<Omit<Param$UpdateOrder, keyof Base>> {
+class UpdateOrder extends Excluded
+  implements Partial<Omit<Schema, keyof Excluded | keyof UpdateOrderDto>> {}
+
+export class UpdateOrderDto extends UpdateOrder
+  implements Required<Omit<Schema, keyof UpdateOrder>> {
   @IsOptional()
   @IsEnum(OrderStatus)
   @Transform(Number)
   status: OrderStatus;
 }
-
-export class UpdateOrderDto extends UpdateOrder
-  implements Required<Omit<Param$UpdateOrder, keyof UpdateOrder>> {}

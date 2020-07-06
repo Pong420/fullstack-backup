@@ -90,7 +90,7 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
 
   async update(
     query: FilterQuery<D>,
-    changes: UpdateQuery<unknown>,
+    changes: UpdateQuery<D>,
     options?: QueryFindOneAndUpdateOptions
   ): Promise<T> {
     return this.model.findOneAndUpdate(query, changes, {
