@@ -20,6 +20,9 @@ export const updateProduct = ({
 }: Param$Product & Param$UpdateProduct) =>
   api.patch<Response$Product>(`/products/${id}`, createFormData(payload));
 
+export const deleteProduct = ({ id }: Param$Product) =>
+  api.delete<unknown>(`/products/${id}`);
+
 export const getProducts = (params?: Param$GetProducts) =>
   api.get<Response$GetProducts>('/products', { params });
 

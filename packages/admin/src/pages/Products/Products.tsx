@@ -40,6 +40,7 @@ export function Products() {
         products={data}
         pagination={pagination}
         onUpdate={actions.update}
+        onDelete={actions.delete}
       />
     </Layout>
   );

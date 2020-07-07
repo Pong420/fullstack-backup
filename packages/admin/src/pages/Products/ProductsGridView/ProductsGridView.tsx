@@ -3,9 +3,10 @@ import { Card } from '@blueprintjs/core';
 import { Schema$Product } from '@fullstack/typings';
 import { Pagination, PaginationProps } from '../../../components/Pagination';
 import { OnUpdate } from '../ProductActions/UpdateProduct';
+import { OnDelete } from '../ProductActions/DeleteProduct';
 import { ProductsGrid } from './ProductsGrid';
 
-interface Props extends OnUpdate {
+interface Props extends OnUpdate, OnDelete {
   products: Partial<Schema$Product>[];
   pagination: PaginationProps;
   flag?: unknown;
@@ -15,7 +16,8 @@ export function ProductsGridView({
   flag,
   products,
   pagination,
-  onUpdate
+  onUpdate,
+  onDelete
 }: Props) {
   useEffect(() => {
     document.body.scrollTop = 0;
@@ -29,6 +31,7 @@ export function ProductsGridView({
             key={product.id || Math.random()}
             product={product}
             onUpdate={onUpdate}
+            onDelete={onDelete}
           />
         ))}
       </div>

@@ -11,9 +11,11 @@ export function CloudinaryPipe(fieldName?: string): Type<PipeTransform> {
 
     async transform(body: Record<string, unknown>): Promise<unknown> {
       const value = body[fieldName];
-      body[fieldName] = await (Array.isArray(value)
-        ? Promise.all(value.map(this.upload.bind(this)))
-        : this.upload(value));
+      if (typeof value !== 'undefined') {
+        body[fieldName] = await (Array.isArray(value)
+          ? Promise.all(value.map(this.upload.bind(this)))
+          : this.upload(value));
+      }
       return body;
     }
 

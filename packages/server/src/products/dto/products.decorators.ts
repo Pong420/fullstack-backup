@@ -47,7 +47,7 @@ export function Disscount(): ReturnType<typeof applyDecorators> {
 export function Hidden(): ReturnType<typeof applyDecorators> {
   return applyDecorators(
     IsBoolean(),
-    Transform(Boolean)
+    Transform(JSON.parse)
     //
   );
 }

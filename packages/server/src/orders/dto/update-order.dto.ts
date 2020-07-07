@@ -14,9 +14,6 @@ class Excluded implements DTOExcluded<Schema$Order, Param$UpdateOrder> {
   id?: undefined;
 
   @Exclude()
-  prodcut?: undefined;
-
-  @Exclude()
   user?: undefined;
 
   @Exclude()

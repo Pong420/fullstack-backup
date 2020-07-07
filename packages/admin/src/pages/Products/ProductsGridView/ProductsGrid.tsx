@@ -4,10 +4,12 @@ import { Schema$Product } from '@fullstack/typings';
 import { Skeleton } from '../../../components/Skeleton';
 import { Image } from '../../../components/Image';
 import { UpdateProduct, OnUpdate } from '../ProductActions/UpdateProduct';
+import { DeleteProduct, OnDelete } from '../ProductActions/DeleteProduct';
+import { HiddenProduct } from '../ProductActions/HiddenProduct';
 import { getTagProps } from '../../../utils/getTagProps';
 import { setSearchParam } from '../../../utils/setSearchParam';
 
-interface Props extends OnUpdate {
+interface Props extends OnUpdate, OnDelete {
   product: Partial<Schema$Product>;
 }
 
@@ -26,12 +28,14 @@ function FormatPrice({
   );
 }
 
-export function ProductsGrid({ product, onUpdate }: Props) {
+export function ProductsGrid({ product, onUpdate, onDelete }: Props) {
   const { images = [], tags = [], price, discount, category, remain } = product;
   return (
     <div className="product-grid">
       <Skeleton className="product-grid-image">
-        {<Image src={images[0]} size={400} thumbnal background />}
+        {Array.isArray(images) && (
+          <Image src={images[0]} size={400} thumbnal background />
+        )}
       </Skeleton>
       <Divider />
       <div className="caption">
@@ -59,6 +63,8 @@ export function ProductsGrid({ product, onUpdate }: Props) {
         <div>
           <div className="product-actions">
             <UpdateProduct {...product} onUpdate={onUpdate} />
+            <DeleteProduct {...product} onDelete={onDelete} />
+            <HiddenProduct {...product} onUpdate={onUpdate} />
           </div>
           <div className="product-tags">
             {tags.map((tag, index) => (
