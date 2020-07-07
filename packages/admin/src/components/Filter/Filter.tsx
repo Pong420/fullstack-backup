@@ -5,7 +5,7 @@ import { DateRangeInput } from '@blueprintjs/datetime';
 import { Timestamp } from '@fullstack/typings';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { createForm, FormProps, FormItemProps } from '../../utils/form';
-import { setSearchParam } from '../../utils/setSearchParam';
+import { setSearchParam, hasQuery } from '../../utils/setSearchParam';
 import { useBoolean } from '../../hooks/useBoolean';
 import { Input } from '../Input';
 import dayjs from 'dayjs';
@@ -83,7 +83,7 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
     const [modifiers, setModifiers] = useState<IPopoverProps['modifiers']>();
     const buttonRef = useRef<HTMLButtonElement>(null);
     const localtion = useLocation();
-    const hasQuery = !!localtion.search.slice(1);
+    const filtered = hasQuery(localtion);
 
     useEffect(() => {
       function handler() {
@@ -120,7 +120,7 @@ export function createFilter<T>(itemProps?: FormItemProps<T>) {
         content={<FilterContent {...props} onFinish={close} />}
       >
         <ButtonPopover
-          icon={hasQuery ? 'filter-keep' : 'filter'}
+          icon={filtered ? 'filter-keep' : 'filter'}
           content="Filter"
           onClick={open}
           elementRef={buttonRef}

@@ -1,9 +1,14 @@
 import { history } from '../store';
+import { Location } from 'history';
 import qs, { IParseOptions, IStringifyOptions } from 'qs';
 
 interface Options {
   parseOptions?: IParseOptions;
   stringifyOptions?: IStringifyOptions;
+}
+
+export function hasQuery(localtion: Location) {
+  return !/(^$|^pageNo=\d+$)/.test(localtion.search.slice(1));
 }
 
 function createSetSearchParam({
