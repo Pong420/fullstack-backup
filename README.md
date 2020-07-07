@@ -10,9 +10,34 @@ A project for learning fullstack develop
   - [x] settings
   - [x] products
   - [ ] orders
-- **Admin Panel**: Create-React-App + Blueprintjs **[WIP]** [[Preview](https://pong-fullstack.herokuapp.com/guest-registration)]
+- **Admin Panel**: Create-React-App + Blueprintjs **[WIP]**
   <img src="./screenshot/admin-products.png">
   <img src="./screenshot/admin-users.png">
   <img src="./screenshot/admin-settings.png">
 - **Frontend**: NextJS
 - **Apps**: React Native
+
+## Development
+
+Start local mongodb `mongodb://localhost:27017/` <br />
+or create a `.env` / `.env.local` file under `packages/server` and add
+
+```
+MONGODB_URI=mongodb://YOUR_MONGODB_URL
+```
+
+then
+
+```
+yarn dev
+```
+
+### image upload
+
+Currently, images are upload to [Cloudinary](https://cloudinary.com/), <br />
+if you are heroku user, you may enable [Cloudinary Add-ons](https://elements.heroku.com/addons/cloudinary).
+To setup `Cloudinary`, create a `.env.local` file under `packages/server` and add
+
+```
+CLOUDINARY_URL = cloudinary://xxxx:xxx@xxx
+```
