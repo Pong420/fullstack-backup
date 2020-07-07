@@ -33,7 +33,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
   }
 
   @Get()
-  @Access('ADMIN', 'MANAGER', 'CLIENT')
+  @Access('ADMIN', 'MANAGER', 'CLIENT', 'GUEST')
   getAll(
     @Query() { tag, tags, hidden, ...query }: QueryProductDto,
     @Req() req: FastifyRequest

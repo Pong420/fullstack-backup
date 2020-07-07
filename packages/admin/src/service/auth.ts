@@ -25,6 +25,12 @@ export const registerAdmin = (params: Param$CreateUser) =>
     role: UserRole.ADMIN
   });
 
+export const registerGuest = (params: Param$CreateUser) =>
+  api.post<Response$User>('/auth/register/guest', {
+    ...params,
+    role: UserRole.GUEST
+  });
+
 export const logout = () => api.post<unknown>('/auth/logout');
 
 export const deleteAccount = (data: Param$DeleteAccount) =>

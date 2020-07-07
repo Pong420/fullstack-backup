@@ -1,16 +1,11 @@
 import React from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { Button } from '@blueprintjs/core';
-import { Param$CreateUser } from '@fullstack/typings';
 import { createUserForm, userValidaors } from '../../../components/UserForm';
 import { registerAdmin } from '../../../service';
 import { history } from '../../../store';
 import { PATHS } from '../../../constants';
 import { Toaster } from '../../../utils/toaster';
-
-interface Store extends Omit<Param$CreateUser, 'avatar'> {
-  confirmPassword: string;
-}
 
 const {
   Form,
@@ -25,7 +20,7 @@ const backToLogin = () => history.replace(PATHS.LOGIN);
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Register admin failure');
 
-export function AdminRegisterForm() {
+export function AdminRegistrationForm() {
   const [form] = useForm();
   const { run, loading } = useRxAsync(registerAdmin, {
     defer: true,

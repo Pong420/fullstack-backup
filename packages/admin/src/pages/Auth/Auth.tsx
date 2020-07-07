@@ -3,7 +3,8 @@ import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom';
 import { PATHS } from '../../constants';
 import { CardWithLogo } from './CardWithLogo';
 import { LoginForm } from './Form/LoginForm';
-import { AdminRegisterForm } from './Form/AdminRegisterForm';
+import { AdminRegistrationForm } from './Form/AdminRegistrationForm';
+import { GuestRegistrationForm } from './Form/GuestRegistrationForm';
 
 interface IRoute {
   title: string;
@@ -20,7 +21,12 @@ const routes: IRoute[] = [
   {
     title: 'ADMIN REGISTRATION',
     path: PATHS.ADMIN_REGISTRATION,
-    component: AdminRegisterForm
+    component: AdminRegistrationForm
+  },
+  {
+    title: 'GUEST REGISTRATION',
+    path: PATHS.GUEST_REGISTRATION,
+    component: GuestRegistrationForm
   }
 ];
 

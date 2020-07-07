@@ -10,7 +10,8 @@ import {
 export enum UserRole {
   ADMIN,
   MANAGER,
-  CLIENT
+  CLIENT,
+  GUEST = 9999
 }
 
 export interface Param$GetUsers extends Pagination, Search {

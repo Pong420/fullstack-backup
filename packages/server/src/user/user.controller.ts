@@ -42,20 +42,25 @@ export class UserController extends MongooseCRUDController<User> {
   }
 
   @Get()
-  @Access('ADMIN', 'MANAGER')
+  @Access('ADMIN', 'MANAGER', 'GUEST')
   getAll(
     @Query() query: QueryUserDto,
     @Req() req: FastifyRequest
   ): Promise<PaginateResult<User>> {
     const { user } = req;
+
     const condition: Condition[] = user
       ? [
           {
-            $or: roles.filter(({ role }) => role > user.role)
+            $or:
+              user.role === UserRole.GUEST
+                ? [{ role: UserRole.CLIENT }]
+                : roles.filter(({ role }) => role > user.role)
           },
           { $nor: [{ username: req.user.username }] } // Exclude self
         ]
       : undefined;
+
     return this.userService.paginate({
       ...query,
       condition

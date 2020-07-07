@@ -40,6 +40,12 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
+  @Post('register/guest')
+  @Access('EVERYONE')
+  registerGuest(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
+  }
+
   @Post('register/admin')
   @Access('ADMIN')
   registerAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {

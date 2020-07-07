@@ -34,7 +34,7 @@ export class Product implements Schema$Product {
       return this.amount - this.freeze;
     }
   })
-  @Group(['ADMIN', 'MANAGER'])
+  @Group(['ADMIN', 'MANAGER', 'GUEST'])
   remain: number;
 
   @Prop({ type: String, required: true, lowercase: true })
