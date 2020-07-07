@@ -69,9 +69,6 @@
     .upload-grid-image {
       @include absolute(0, null, null, 0);
       @include sq-dimen(100%);
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
     }
 
     .grid-content {

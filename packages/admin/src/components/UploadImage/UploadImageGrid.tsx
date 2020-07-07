@@ -1,6 +1,7 @@
 import React from 'react';
-import { UploadImage, Value } from './UploadImage';
 import { Button, Dialog } from '@blueprintjs/core';
+import { UploadImage, Value } from './UploadImage';
+import { Image } from '../Image';
 import { useBoolean } from '../../hooks/useBoolean';
 
 interface Control {
@@ -18,13 +19,16 @@ function UploadGrid({ payload, onRemove }: GridProps) {
   const url = typeof payload === 'string' ? payload : payload && payload.url;
 
   if (url !== null) {
-    const image = <img src={url} alt="" />;
+    const image = <Image src={url} size={1200} />;
 
     return (
       <div className="upload-grid">
-        <div
+        <Image
           className="upload-grid-image"
-          style={{ backgroundImage: `url(${url})` }}
+          src={url}
+          size={400}
+          thumbnal
+          background
         />
         <div className="grid-backdrop">
           <Button minimal icon="eye-open" onClick={openDialog} />

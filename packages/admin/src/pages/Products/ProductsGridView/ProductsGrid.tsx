@@ -2,6 +2,7 @@ import React from 'react';
 import { Divider, Tag } from '@blueprintjs/core';
 import { Schema$Product } from '@fullstack/typings';
 import { Skeleton } from '../../../components/Skeleton';
+import { Image } from '../../../components/Image';
 import { UpdateProduct, OnUpdate } from '../ProductActions/UpdateProduct';
 import { getTagProps } from '../../../utils/getTagProps';
 import { setSearchParam } from '../../../utils/setSearchParam';
@@ -30,7 +31,7 @@ export function ProductsGrid({ product, onUpdate }: Props) {
   return (
     <div className="product-grid">
       <Skeleton className="product-grid-image">
-        {images[0] && <div style={{ backgroundImage: `url(${images[0]})` }} />}
+        {<Image src={images[0]} size={400} thumbnal background />}
       </Skeleton>
       <Divider />
       <div className="caption">

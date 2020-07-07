@@ -1,0 +1,10 @@
+div.image {
+  background-repeat: no-repeat;
+  background-color: #eee;
+  background-size: cover;
+  &:before {
+    content: '';
+    display: block;
+    padding-bottom: #{$ratio * 100} + '%';
+  }
+}

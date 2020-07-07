@@ -15,16 +15,6 @@
     @include dimen(100%);
     @include relative();
     box-shadow: $pt-elevation-shadow-1;
-    &:before {
-      content: '';
-      display: block;
-      padding-bottom: #{$ratio * 100} + '%';
-    }
-    > div {
-      @include absolute(0, null, null 0);
-      @include sq-dimen(100%);
-      background-size: cover;
-    }
   }
 
   .#{$ns}-divider {
