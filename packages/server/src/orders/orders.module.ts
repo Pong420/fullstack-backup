@@ -7,6 +7,8 @@ import { OrderSchema, Order } from './schema/order.schema';
 import { AttachUserPipe } from './pipe/attach-user.pipe';
 import { ProductsPipe } from './pipe/products.pipe';
 import { ProductsModule } from '../products/products.module';
+import autopopulate from 'mongoose-autopopulate';
+import paginate from 'mongoose-paginate-v2';
 
 @Module({
   imports: [
@@ -15,8 +17,8 @@ import { ProductsModule } from '../products/products.module';
         name: Order.name,
         useFactory: async () => {
           const schema = OrderSchema as Schema<Order>;
-          schema.plugin(require('mongoose-autopopulate'));
-          schema.plugin(require('mongoose-paginate-v2'));
+          schema.plugin(autopopulate);
+          schema.plugin(paginate);
           return schema;
         }
       }

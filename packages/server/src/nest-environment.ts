@@ -31,7 +31,7 @@ export default class NestNodeEnvironment extends NodeEnvironment {
       }).compile();
 
       const app = moduleFixture.createNestApplication<NestFastifyApplication>(
-        fastifyAdapter
+        fastifyAdapter()
       );
 
       await setupApp(app);

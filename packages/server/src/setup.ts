@@ -11,9 +11,10 @@ import qs from 'qs';
 
 export { NestFastifyApplication };
 
-export const fastifyAdapter = new FastifyAdapter({
-  querystringParser: qs.parse
-});
+export const fastifyAdapter = (): FastifyAdapter =>
+  new FastifyAdapter({
+    querystringParser: qs.parse
+  });
 
 export async function setupApp(app: NestFastifyApplication): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

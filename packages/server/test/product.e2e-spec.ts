@@ -181,7 +181,7 @@ describe('ProductsController (e2e)', () => {
     });
   });
 
-  describe('(PTCH)  Update User', () => {
+  describe('(PTCH)  Update Product', () => {
     let product: Product;
     const newName = 'e2e-name';
     beforeAll(async () => {
