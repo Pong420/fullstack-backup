@@ -1724,6 +1724,7 @@ __metadata:
     "@types/react-redux": ^7.1.9
     "@types/react-router-dom": ^5.1.5
     "@types/react-table": ^7
+    "@types/rimraf": ^3
     axios: ^0.19.2
     connected-react-router: ^6.8.0
     dayjs: ^1.8.28
@@ -1740,6 +1741,7 @@ __metadata:
     react-table: ^7.2.1
     redux: ^4.0.5
     redux-observable: ^1.2.0
+    rimraf: ^3.0.2
     rxjs: ^6.5.5
     sass: ^1.26.9
     typeface-muli: ^1.1.3
@@ -1763,6 +1765,7 @@ __metadata:
     "@nestjs/passport": ^7.0.0
     "@nestjs/platform-fastify": ^7.2.0
     "@nestjs/schematics": ^7.0.1
+    "@nestjs/serve-static": ^2.1.3
     "@nestjs/testing": ^7.2.0
     "@types/bcrypt": ^3.0.0
     "@types/hapi__joi": ^17
@@ -1781,6 +1784,7 @@ __metadata:
     cloudinary: ^1.22.0
     fastify-cookie: ^3.6.1
     fastify-multipart: ^1.0.6
+    fastify-static: ^2.7.0
     jest: ^26.1.0
     jest-environment-node: ^26.0.1
     jest-extended: ^0.11.5
@@ -2457,6 +2461,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/serve-static@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@nestjs/serve-static@npm:2.1.3"
+  dependencies:
+    path-to-regexp: 0.1.7
+  peerDependencies:
+    "@nestjs/common": ^6.0.0 || ^7.0.0
+    "@nestjs/core": ^6.0.0 || ^7.0.0
+  checksum: 331171d67b8d043a47138d840bf7b169e7650cd43fa8142e290a1f5819c0388ebf6fb831b5f354baeca433a663e793ec3f0ca033d8e4b307f79a4d65f3fd0d74
+  languageName: node
+  linkType: hard
+
 "@nestjs/testing@npm:^7.2.0":
   version: 7.2.0
   resolution: "@nestjs/testing@npm:7.2.0"
@@ -2847,6 +2863,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/glob@npm:*":
+  version: 7.1.3
+  resolution: "@types/glob@npm:7.1.3"
+  dependencies:
+    "@types/minimatch": "*"
+    "@types/node": "*"
+  checksum: 633bf1dda9a30899b233ed6b97c75cdd59f2ee856a12240c85474ce6889e26b3b3520b62de56f6bb61824af0ef51b311a0cae305f27ba0de8ddc4898a3673d42
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:^7.1.1":
   version: 7.1.2
   resolution: "@types/glob@npm:7.1.2"
@@ -3188,6 +3214,16 @@ __metadata:
     "@types/prop-types": "*"
     csstype: ^2.2.0
   checksum: d9fc63c96f926a246a2f1e3f0fa42895f0047fef1e8f5f7c1e68ce043792b72502c73478ba473e2371e9c4771b25b3910969d959d43e9ee4e7809950be62d4e2
+  languageName: node
+  linkType: hard
+
+"@types/rimraf@npm:^3":
+  version: 3.0.0
+  resolution: "@types/rimraf@npm:3.0.0"
+  dependencies:
+    "@types/glob": "*"
+    "@types/node": "*"
+  checksum: 00a00a430f838ddafdbc17386f08d928b1ae7aeada84d112f4369a7a89b4d47c1bb6849688f1d6ee404a08338ab52a80c742f0c3040d63ccc2aaec04bd1009f5
   languageName: node
   linkType: hard
 
@@ -8212,6 +8248,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fastify-static@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "fastify-static@npm:2.7.0"
+  dependencies:
+    fastify-plugin: ^1.6.0
+    glob: ^7.1.4
+    readable-stream: ^3.4.0
+    send: ^0.16.0
+  checksum: 15219271b822e601be39b706f22ac5de1c5354592bc7c22b4d1031721d2dd19b795c6ccef82e3d93a3f97b9b72c0a1dad1e302e9af2f5303d8a6eaf672d99538
+  languageName: node
+  linkType: hard
+
 "fastify@npm:2.14.1":
   version: 2.14.1
   resolution: "fastify@npm:2.14.1"
@@ -12463,6 +12511,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"mime@npm:1.4.1":
+  version: 1.4.1
+  resolution: "mime@npm:1.4.1"
+  bin:
+    mime: cli.js
+  checksum: 01f74d90a2d91c919436958c4af940d145e00a3b7c57f98cc65f1a70dbecd02fb41c6b74ac5433ae9fe787f1841aaaed412bce259a848b5fc76fc66c0c2a6381
+  languageName: node
+  linkType: hard
+
 "mime@npm:1.6.0, mime@npm:^1.4.1":
   version: 1.6.0
   resolution: "mime@npm:1.6.0"
@@ -15440,7 +15497,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"range-parser@npm:^1.2.1, range-parser@npm:~1.2.1":
+"range-parser@npm:^1.2.1, range-parser@npm:~1.2.0, range-parser@npm:~1.2.1":
   version: 1.2.1
   resolution: "range-parser@npm:1.2.1"
   checksum: 05074f5b23dbdc24acdae9821dd684fbc9c0d770cdaa4469ab529d8e0fc1338aa33561a4c7c14a1f9bdcb3b5e9a3770e5a80318258a72289a7ef05fcda72a707
@@ -16681,6 +16738,27 @@ resolve@1.15.0:
   languageName: node
   linkType: hard
 
+"send@npm:^0.16.0":
+  version: 0.16.2
+  resolution: "send@npm:0.16.2"
+  dependencies:
+    debug: 2.6.9
+    depd: ~1.1.2
+    destroy: ~1.0.4
+    encodeurl: ~1.0.2
+    escape-html: ~1.0.3
+    etag: ~1.8.1
+    fresh: 0.5.2
+    http-errors: ~1.6.2
+    mime: 1.4.1
+    ms: 2.0.0
+    on-finished: ~2.3.0
+    range-parser: ~1.2.0
+    statuses: ~1.4.0
+  checksum: 0b3b98fd0d933687bafb45552bb9798aa030475c1c7e8a0da1cc97fd92b2dff7b728b41721405335b23d86d31c73300716d3c803075e3e92117f16e9eca84824
+  languageName: node
+  linkType: hard
+
 "serialize-javascript@npm:^2.1.2":
   version: 2.1.2
   resolution: "serialize-javascript@npm:2.1.2"
@@ -17278,6 +17356,13 @@ resolve@1.15.0:
   version: 1.5.0
   resolution: "statuses@npm:1.5.0"
   checksum: 57735269bf231176a60deb80f6d60214cb4a87663b0937e79497afe9aebe2597f8377fd28893f4d1776205f18dd0b927774a26b72051411ac5108e9e2dfc77d2
+  languageName: node
+  linkType: hard
+
+"statuses@npm:~1.4.0":
+  version: 1.4.0
+  resolution: "statuses@npm:1.4.0"
+  checksum: f90d393f771ee85a756826d117b37af0057bf0506e00c13139486c1e5275e21e5c043654a0b7f773342eac194a1087c937da1dd199bb461e81a1eff781ad2558
   languageName: node
   linkType: hard
 

@@ -4,6 +4,7 @@ import { ModuleMetadata, DynamicModule } from '@nestjs/common/interfaces';
 import { ConfigFactory } from '@nestjs/config/dist/interfaces';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -16,6 +17,7 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
+import path from 'path';
 
 mongoose.set('toJSON', {
   virtuals: true, // clone '_id' to 'id'
@@ -34,8 +36,7 @@ const configure = (factory: ConfigFactory[] = []) =>
     load: [
       () => ({
         MONGODB_URI: 'mongodb://localhost:27017/fullstack',
-        // FIXME:
-        JWT_TOKEN_EXPIRES_IN_MINUTES: 1,
+        JWT_TOKEN_EXPIRES_IN_MINUTES: 15,
         REFRESH_TOKEN_EXPIRES_IN_MINUTES: 7 * 24 * 60
       }),
       ...factory
@@ -67,6 +68,9 @@ const meta: ModuleMetadata = {
         useCreateIndex: true,
         useUnifiedTopology: true
       })
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, 'admin')
     }),
     UserModule,
     AuthModule,

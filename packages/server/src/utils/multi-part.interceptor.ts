@@ -34,11 +34,7 @@ export class Uploaded {
   }
 }
 
-export const UPLOAD_DIR = path.join(__dirname, '../../../../', '_upload');
-
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR);
-}
+export const UPLOAD_DIR = path.join(__dirname, '../../../', '_upload');
 
 const isArrayFormDataRegex = /\[.*\]/;
 const isArrayFormData = (key: string) => isArrayFormDataRegex.test(key);

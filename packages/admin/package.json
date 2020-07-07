@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && yarn move",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.ts?(x)'",
     "component": "node scripts/component.js",
     "redux": "node scripts/redux.js",
-    "get": "node scripts/type.js"
+    "get": "node scripts/type.js",
+    "move": "rimraf ../../dist/src/admin && mv build ../../dist/src/admin || move build ../../dist/src/admin"
   },
   "devDependencies": {
     "@types/node": "^14.0.14",
@@ -20,8 +21,10 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-table": "^7",
+    "@types/rimraf": "^3",
     "jest": "24.9.0",
     "pong-react-scripts": "^3.4.0",
+    "rimraf": "^3.0.2",
     "sass": "^1.26.9",
     "typescript": "3.9.5"
   },

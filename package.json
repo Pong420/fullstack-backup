@@ -6,11 +6,14 @@
   "repository": "https://github.com/Pong420/fullstack.git",
   "author": "Pong <samfunghp@gmail.com>",
   "scripts": {
+    "start": "node ./dist/src/main.js",
     "admin": "yarn workspace @fullstack/admin",
     "server": "yarn workspace @fullstack/server",
     "typings": "yarn workspace @fullstack/typings",
-    "dev": "yarn workspaces foreach -pi run dev ",
-    "postinstall": "yarn typings build"
+    "dev": "yarn workspaces foreach -pi run dev",
+    "build": "yarn workspaces foreach -pi run build",
+    "postinstall": "yarn typings build",
+    "heroku-postbuild": "yarn build --exclude @fulltasck/app"
   },
   "workspaces": [
     "packages/*"
