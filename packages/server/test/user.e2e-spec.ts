@@ -2,10 +2,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpStatus } from '@nestjs/common';
 import { PaginateResult, UserRole } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
-import { CreateUserDto } from '../src/user/dto/create-user.dto';
-import { UpdateUserDto } from '../src/user/dto/update-user.dto';
-import { createUserDto, setupUsers, rid } from './utils/setupUsers';
-import { login, getToken } from './utils/auth';
+import { setupUsers } from './utils/setupUsers';
+import { login, getToken } from './service/auth';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  createUserDto,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUsers,
+  getUser
+} from './service/users';
+import { rid } from './utils/rid';
 import superagent from 'superagent';
 import path from 'path';
 
@@ -24,31 +33,6 @@ describe('UserController (e2e)', () => {
     await setupUsers();
   });
 
-  const createUser = (token: string, dto: Partial<CreateUserDto> = {}) => {
-    return request
-      .post(`/api/user`)
-      .set('Authorization', `bearer ${token}`)
-      .set('Content-Type', 'multipart/form-data')
-      .field(createUserDto(dto) as any);
-  };
-
-  const getUsers = (token: string) =>
-    request.get(`/api/user`).set('Authorization', `bearer ${token}`);
-
-  const getUser = (token, id: string) =>
-    request.get(`/api/user/${id}`).set('Authorization', `bearer ${token}`);
-
-  const updateUser = (token: string, { id, ...changes }: UpdateUserDto) => {
-    return request
-      .patch(`/api/user/${id}`)
-      .set('Authorization', `bearer ${token}`)
-      .set('Content-Type', 'multipart/form-data')
-      .field((changes || {}) as any);
-  };
-
-  const deleteUser = (token: string, id: string) =>
-    request.delete(`/api/user/${id}`).set('Authorization', `bearer ${token}`);
-
   describe('(GET)  Get Users', () => {
     let users: User[] = [];
     beforeAll(async () => {
@@ -65,7 +49,7 @@ describe('UserController (e2e)', () => {
 
     it('success ', async () => {
       const response = await Promise.all(
-        [adminToken, managerToken].map(getUsers)
+        [adminToken, managerToken].map(token => getUsers(token))
       );
 
       expect(response[0].body.data.data).toSatisfyAll(

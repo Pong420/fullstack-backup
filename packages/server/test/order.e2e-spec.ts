@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { CreateOrderDto } from '../src/orders/dto/create-order.dto';
-import { setupUsers, rid } from './utils/setupUsers';
+import { rid } from './utils/rid';
+import { setupUsers } from './utils/setupUsers';
 import { setupProducts } from './utils/setupProducts';
 import { SuperAgentRequest } from 'superagent';
 

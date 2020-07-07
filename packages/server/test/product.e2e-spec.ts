@@ -2,13 +2,21 @@ import { HttpStatus } from '@nestjs/common';
 import { Schema$Tags, Schema$Category } from '@fullstack/typings';
 import { ProductsService } from '../src/products/products.service';
 import { Product } from '../src/products/schemas/products.schema.dto';
-import { CreateProductDto } from '../src/products/dto/create-product.dto';
-import { UpdateProductDto } from '../src/products/dto/update-product.dto';
-import { rid, setupUsers } from './utils/setupUsers';
-import { createProduct, setupProducts } from './utils/setupProducts';
+import { setupUsers } from './utils/setupUsers';
+import { setupProducts } from './utils/setupProducts';
+import {
+  CreateProductDto,
+  createProduct,
+  updaeProduct,
+  deleteProduct,
+  getProducts,
+  getProduct,
+  getTags,
+  getCategories
+} from './service/products';
+import { rid } from './utils/rid';
 import superagent, { SuperAgentRequest } from 'superagent';
 import path from 'path';
-import qs from 'qs';
 
 describe('ProductsController (e2e)', () => {
   const productsService = app.get<ProductsService>(ProductsService);
@@ -16,45 +24,6 @@ describe('ProductsController (e2e)', () => {
   beforeAll(async () => {
     await setupUsers();
   });
-
-  function getProducts(token: string, params: Record<string, any> = {}) {
-    return request
-      .get(`/api/products`)
-      .set('Authorization', `bearer ${token}`)
-      .query(qs.stringify(params));
-  }
-
-  function getProduct(token: string, id: string) {
-    return request
-      .get(`/api/products/${id}`)
-      .set('Authorization', `bearer ${token}`);
-  }
-
-  function updaeProduct(token: string, id: string, changes: UpdateProductDto) {
-    return request
-      .patch(`/api/products/${id}`)
-      .set('Authorization', `bearer ${token}`)
-      .set('Content-Type', 'multipart/form-data')
-      .field((changes || {}) as any);
-  }
-
-  function deleteProduct(token: string, id: string) {
-    return request
-      .delete(`/api/products/${id}`)
-      .set('Authorization', `bearer ${token}`);
-  }
-
-  function getTags(token: string) {
-    return request
-      .get(`/api/products/tags`)
-      .set('Authorization', `bearer ${token}`);
-  }
-
-  function getCategories(token: string) {
-    return request
-      .get(`/api/products/category`)
-      .set('Authorization', `bearer ${token}`);
-  }
 
   describe('(GET)  Get Products', () => {
     const tags = [rid(), rid()];

@@ -1,18 +1,23 @@
 import { Response } from 'supertest';
 import { ConfigService } from '@nestjs/config';
 import { HttpStatus } from '@nestjs/common';
-import { Param$ModifyPassword, Param$DeleteAccount } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
 import { REFRESH_TOKEN_COOKIES } from '../src/auth/auth.controller';
 import { extractCookies } from './utils/extractCookies';
-import { loginAsDefaultAdmin, login, getToken } from './utils/auth';
 import { mockAdmin } from './utils/setupUsers';
+import { rid } from './utils/rid';
 import {
-  rid,
+  loginAsDefaultAdmin,
+  login,
+  getToken,
   registerAdmin,
-  createUserDto,
-  createAndLogin
-} from './utils/setupUsers';
+  createAndLogin,
+  refreshToken,
+  logout,
+  modifyPassword,
+  deleteAccount
+} from './service/auth';
+import { createUserDto } from './service/users';
 
 describe('AuthController (e2e)', () => {
   const configService = app.get<ConfigService>(ConfigService);
@@ -22,7 +27,7 @@ describe('AuthController (e2e)', () => {
     configService.get<number>('REFRESH_TOKEN_EXPIRES_IN_MINUTES') * 60 * 1000;
   let admin: User;
   let adminToken: string;
-  let refreshToken: string;
+  let _refreshToken_: string;
 
   jest.setTimeout(refreshTokenExpires * 4);
 
@@ -35,7 +40,7 @@ describe('AuthController (e2e)', () => {
     expect(cookie.flag['Max-Age']).toBe(String(refreshTokenExpires));
     expect(cookie.flag['HttpOnly']).toBeTruthy();
 
-    refreshToken = `${REFRESH_TOKEN_COOKIES}=${cookie.value}`;
+    _refreshToken_ = `${REFRESH_TOKEN_COOKIES}=${cookie.value}`;
 
     return cookie;
   }
@@ -79,15 +84,9 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('Refresh Token', () => {
-    const run = () =>
-      request
-        .post('/api/auth/refresh-token')
-        .set('Cookie', [refreshToken])
-        .send();
-
     it('Refresh', async () => {
       if (refreshToken) {
-        const response = await run();
+        const response = await refreshToken(_refreshToken_);
         expect(response.status).toBe(HttpStatus.OK);
         validateCookies(response);
       }
@@ -96,14 +95,14 @@ describe('AuthController (e2e)', () => {
     it.skip('Expires', async () => {
       if (refreshToken) {
         await delay(refreshTokenExpires * 2);
-        const response = await run();
+        const response = await refreshToken(_refreshToken_);
         expect(response.status).toBe(HttpStatus.BAD_REQUEST);
       }
     });
   });
 
   it('Logout', async () => {
-    const response = await request.post('/api/auth/logout');
+    const response = await logout();
     expect(response.status).toBe(HttpStatus.OK);
     const cookies = extractCookies(response.header);
     const cookie = cookies[REFRESH_TOKEN_COOKIES];
@@ -123,11 +122,6 @@ describe('AuthController (e2e)', () => {
 
   describe('Modify password', () => {
     const newPassword = 'new-password-123';
-    const modify = (token: string, params: Param$ModifyPassword) =>
-      request
-        .patch('/api/auth/modify-password')
-        .set('Authorization', `bearer ${token}`)
-        .send(params);
     const mockUser = createUserDto();
     let mockUserToken: string;
 
@@ -138,24 +132,24 @@ describe('AuthController (e2e)', () => {
     it('bad request', async () => {
       if (mockUserToken) {
         const response = await Promise.all([
-          modify(mockUserToken, {
+          modifyPassword(mockUserToken, {
             password: '',
             newPassword: '',
             confirmNewPassword: ''
           }),
-          modify(mockUserToken, {
+          modifyPassword(mockUserToken, {
             password: mockUser.password,
             newPassword: '',
             confirmNewPassword: ''
           }),
           // Incorrect password format
-          modify(mockUserToken, {
+          modifyPassword(mockUserToken, {
             password: mockUser.password,
             newPassword: 'q123-rewr',
             confirmNewPassword: ''
           }),
           // Not equal
-          modify(mockUserToken, {
+          modifyPassword(mockUserToken, {
             password: mockUser.password,
             newPassword,
             confirmNewPassword: 'q12345678'
@@ -169,7 +163,7 @@ describe('AuthController (e2e)', () => {
 
     it('success', async () => {
       if (mockUserToken) {
-        const response = await modify(mockUserToken, {
+        const response = await modifyPassword(mockUserToken, {
           password: mockUser.password,
           newPassword,
           confirmNewPassword: newPassword
@@ -180,11 +174,6 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('Delete account', () => {
-    const deleteAccount = (token: string, params: Param$DeleteAccount) =>
-      request
-        .delete('/api/auth/delete')
-        .set('Authorization', `bearer ${token}`)
-        .send(params);
     const mockUser = createUserDto();
     let mockUserToken: string;
     beforeAll(async () => {
