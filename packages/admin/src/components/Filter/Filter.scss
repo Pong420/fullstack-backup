@@ -2,7 +2,7 @@
   $padding: 15px;
   $popover-max-width: calc(100vw - #{$sidebar-width} - #{$padding * 2});
 
-  .#{$ns}-popover-content {
+  > .#{$ns}-popover-content {
     padding: $padding;
     max-width: $popover-max-width;
     @media only screen and (min-width: $max-width) {

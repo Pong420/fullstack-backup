@@ -44,7 +44,7 @@ const defaultProps: Omit<
     fill: true,
     minimal: true,
     captureDismiss: true,
-    popoverClassName: 'product-suggest-popover'
+    usePortal: false
   }
 };
 
@@ -69,6 +69,7 @@ export function ProductCategoryInput({
 }: ProductCategorySuggestProps) {
   const { data = [] } = useRxAsync(categoryReq);
   const handleChange = onChange || nil;
+
   return (
     <ProductCategorySuggest
       {...typesProps}
@@ -91,7 +92,6 @@ const tagProps: Omit<
   createNewItemFromQuery: transform,
   tagRenderer: transform
 };
-
 const tagsReq = () =>
   getProductTags().then(res => res.data.data.map(({ tag }) => tag));
 export function ProductTagsInput({

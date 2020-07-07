@@ -9,3 +9,22 @@
     min-height: 100%;
   }
 }
+
+.product-tags-input,
+.product-types-input {
+  @include relative();
+  .#{$ns}-transition-container,
+  .#{$ns}-popover {
+    @include dimen(100%);
+  }
+
+  .bp3-popover-content.bp3-popover-content {
+    padding: 0;
+  }
+
+  .#{$ns}-menu.#{$ns}-menu {
+    @include dimen(100%);
+    max-width: none;
+    padding: 5px;
+  }
+}

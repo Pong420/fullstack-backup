@@ -1,10 +1,3 @@
-.product-suggest-popover {
-  .#{$ns}-menu {
-    max-width: none;
-    width: 450px;
-  }
-}
-
 .products-grid-view {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
