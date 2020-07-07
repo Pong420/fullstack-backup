@@ -66,10 +66,7 @@ export const Toaster = {
       className: 'api-error-toaster',
       icon: 'error',
       intent: Intent.DANGER,
-      message: renderMessage(
-        prefix || (error.response && error.response.data.error) || 'Error',
-        getErrorMessage(error)
-      )
+      message: renderMessage(prefix || 'Error', getErrorMessage(error))
     });
   }
 };

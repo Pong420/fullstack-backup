@@ -60,5 +60,5 @@ interface ApiErrorValue {
 }
 
 export interface ApiError extends Omit<AxiosError, 'response'> {
-  response?: AxiosResponse<ApiErrorValue>;
+  response?: AxiosResponse<ApiErrorValue | string>;
 }
