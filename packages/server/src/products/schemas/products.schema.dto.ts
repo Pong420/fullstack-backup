@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema$Product } from '@fullstack/typings';
-import { Group } from 'src/utils/access.guard';
+import { Group } from '../../utils/access.guard';
 
 @Schema({
   timestamps: true,
@@ -34,6 +34,7 @@ export class Product implements Schema$Product {
       return this.amount - this.freeze;
     }
   })
+  @Group(['ADMIN', 'MANAGER'])
   remain: number;
 
   @Prop({ type: String, required: true, lowercase: true })
@@ -46,6 +47,7 @@ export class Product implements Schema$Product {
   tags: string[];
 
   @Prop({ type: Boolean, default: false })
+  @Group(['ADMIN', 'MANAGER'])
   hidden: boolean;
 
   @Prop({ type: Number, default: 100 })

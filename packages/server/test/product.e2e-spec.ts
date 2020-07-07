@@ -5,7 +5,7 @@ import { Product } from '../src/products/schemas/products.schema.dto';
 import { CreateProductDto } from '../src/products/dto/create-product.dto';
 import { UpdateProductDto } from '../src/products/dto/update-product.dto';
 import { rid, setupUsers } from './utils/setupUsers';
-import { createProduct } from './utils/setupProducts';
+import { createProduct, setupProducts } from './utils/setupProducts';
 import superagent, { SuperAgentRequest } from 'superagent';
 import path from 'path';
 import qs from 'qs';
@@ -57,19 +57,15 @@ describe('ProductsController (e2e)', () => {
   }
 
   describe('(GET)  Get Products', () => {
-    let products: Product[] = [];
     const tags = [rid(), rid()];
+    const options: Partial<CreateProductDto | Record<string, any>>[] = [
+      {},
+      { tags: [tags[0]] },
+      { tags: [tags[1]] },
+      { hidden: true }
+    ];
     beforeAll(async () => {
-      const options: Partial<CreateProductDto | Record<string, any>>[] = [
-        {},
-        { tags: [tags[0]] },
-        { tags: [tags[1]] }
-      ];
-      products = await Promise.all(
-        options.map(dto =>
-          createProduct(adminToken, dto).then(res => res.body.data)
-        )
-      );
+      await setupProducts(options);
     });
 
     it('success', async () => {
@@ -83,11 +79,34 @@ describe('ProductsController (e2e)', () => {
       [1, [tags[0]]],
       [1, [tags[1]]],
       [2, [...tags]],
-      [3, []]
+      [options.length, []]
     ])('query - tags %s', async (expected, query) => {
       const response = await getProducts(adminToken, { tags: query });
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(expected);
+    });
+
+    it('client should not find freeze/amount/remain of the product', async () => {
+      const response = await getProducts(clientToken);
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data.data).toSatisfyAll(
+        product =>
+          typeof product.frezze === 'undefined' &&
+          typeof product.amount === 'undefined' &&
+          typeof product.remain === 'undefined'
+      );
+    });
+
+    it('client should not find hidden product', async () => {
+      const hiddenProducts = products.filter(({ hidden }) => hidden);
+      const response = await getProducts(clientToken);
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data.data).toSatisfyAll(
+        product => typeof product.hidden === 'undefined'
+      );
+      expect(response.body.data.data.length).toBe(
+        products.length - hiddenProducts.length
+      );
     });
   });
 

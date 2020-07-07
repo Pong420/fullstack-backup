@@ -113,8 +113,8 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
     return this.model.find(query).exec();
   }
 
-  paginate(
-    query?: QueryDto,
+  paginate<Query extends QueryDto>(
+    query?: Query,
     options: PaginateOptions = {}
   ): Promise<PaginateResult<T>> {
     const {

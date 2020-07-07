@@ -5,10 +5,10 @@ import {
   HttpException,
   HttpStatus
 } from '@nestjs/common';
-import { ProductsService } from 'src/products/products.service';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { Order } from '../schema/order.schema';
-import { handleMongoError } from 'src/utils/mongoose-exception-filter';
+import { ProductsService } from '../../products/products.service';
+import { handleMongoError } from '../../utils/mongoose-exception-filter';
 
 export class ProductsPipe implements PipeTransform {
   constructor(

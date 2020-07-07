@@ -5,8 +5,10 @@ import {
   Get,
   Query,
   Patch,
-  UseInterceptors
+  UseInterceptors,
+  Req
 } from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
 import { Product } from './schemas/products.schema.dto';
 import { ProductsService } from './products.service';
 import { CloudinaryPipe } from '../cloudinary/cloudinary.pipe';
@@ -21,7 +23,7 @@ import {
 } from '../utils/mongoose-crud.controller';
 import { Access } from '../utils/access.guard';
 import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
-import { Schema$Category, Schema$Tags } from '@fullstack/typings';
+import { Schema$Category, Schema$Tags, UserRole } from '@fullstack/typings';
 
 @Controller('products')
 @Access('ADMIN', 'MANAGER')
@@ -31,8 +33,10 @@ export class ProductsController extends MongooseCRUDController<Product> {
   }
 
   @Get()
+  @Access('ADMIN', 'MANAGER', 'CLIENT')
   getAll(
-    @Query() { tag, tags, ...query }: QueryProductDto
+    @Query() { tag, tags, hidden, ...query }: QueryProductDto,
+    @Req() req: FastifyRequest
   ): Promise<PaginateResult<Product>> {
     const condition: Condition[] = [];
 
@@ -44,8 +48,14 @@ export class ProductsController extends MongooseCRUDController<Product> {
       condition.push({ tags: { $in: tags } });
     }
 
+    const extra: QueryProductDto = {
+      hidden: req.user.role === UserRole.CLIENT ? false : hidden
+    };
+
     return this.productService.paginate({
       ...query,
+      // remove undefined
+      ...JSON.parse(JSON.stringify(extra)),
       condition
     });
   }

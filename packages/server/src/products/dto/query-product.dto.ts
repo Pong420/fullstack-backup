@@ -8,6 +8,7 @@ import { IsOptional, IsString } from 'class-validator';
 import { Hidden, Tags } from './products.decorators';
 import { QueryDto } from '../../utils/mongoose-crud.service';
 import { NumberRannge } from '../../decorators/range.decorator';
+import { Group } from '../../utils/access.guard';
 
 class Excluded extends QueryDto
   implements Partial<Omit<Param$GetProducts, keyof Timestamp>> {
@@ -58,6 +59,7 @@ class QueryProduct extends Excluded
 
   @Hidden()
   @IsOptional()
+  @Group(['ADMIN', 'MANAGER'])
   hidden?: boolean;
 
   @NumberRannge()
