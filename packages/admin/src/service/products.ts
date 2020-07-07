@@ -8,11 +8,12 @@ import {
   Response$Tags,
   Response$Category
 } from '@fullstack/typings';
+import { paths } from '@fullstack/common/constants';
 import { api } from './api';
 import { createFormData } from './createFormData';
 
 export const createProduct = (payload: Param$CreateProduct) =>
-  api.post<Response$Product>('/products', createFormData(payload));
+  api.post<Response$Product>(paths.create_product, createFormData(payload));
 
 export const updateProduct = ({
   id,

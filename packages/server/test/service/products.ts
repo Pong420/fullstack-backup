@@ -1,10 +1,11 @@
 import { SuperAgentRequest } from 'superagent';
+import { paths } from '@fullstack/common/constants';
 import { CreateProductDto } from '../../src/products/dto/create-product.dto';
 import { UpdateProductDto } from '../../src/products/dto/update-product.dto';
 import { rid } from '../utils/rid';
 import qs from 'qs';
 
-const prefix = '/api/products';
+const prefix = '/api';
 
 export { CreateProductDto, UpdateProductDto };
 
@@ -25,7 +26,7 @@ export function createProduct(
   dto: Partial<CreateProductDto> | Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .post('/api/products')
+    .post(`${prefix}${paths.create_product}`)
     .set('Authorization', `bearer ${token}`)
     .set('Content-Type', 'multipart/form-data')
     .field(createProductDto(dto) as any);
@@ -36,13 +37,15 @@ export function getProducts(
   query: Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .get(`${prefix}`)
+    .get(`${prefix}${paths.get_products}`)
     .set('Authorization', `bearer ${token}`)
     .query(qs.stringify(query));
 }
 
 export function getProduct(token: string, id: string): SuperAgentRequest {
-  return request.get(`${prefix}/${id}`).set('Authorization', `bearer ${token}`);
+  return request
+    .get(`${prefix}${paths.get_product.generatePath({ id })}`)
+    .set('Authorization', `bearer ${token}`);
 }
 
 export function updaeProduct(
@@ -51,7 +54,7 @@ export function updaeProduct(
   changes: UpdateProductDto
 ): SuperAgentRequest {
   return request
-    .patch(`${prefix}/${id}`)
+    .patch(`${prefix}${paths.update_product.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`)
     .set('Content-Type', 'multipart/form-data')
     .field((changes || {}) as any);
@@ -59,16 +62,18 @@ export function updaeProduct(
 
 export function deleteProduct(token: string, id: string): SuperAgentRequest {
   return request
-    .delete(`${prefix}/${id}`)
+    .delete(`${prefix}${paths.delete_product.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`);
 }
 
 export function getTags(token: string): SuperAgentRequest {
-  return request.get(`${prefix}/tags`).set('Authorization', `bearer ${token}`);
+  return request
+    .get(`${prefix}${paths.get_tags}`)
+    .set('Authorization', `bearer ${token}`);
 }
 
 export function getCategories(token: string): SuperAgentRequest {
   return request
-    .get(`${prefix}/category`)
+    .get(`${prefix}${paths.get_category}`)
     .set('Authorization', `bearer ${token}`);
 }

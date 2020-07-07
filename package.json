@@ -9,10 +9,11 @@
     "start": "node ./dist/src/main.js",
     "admin": "yarn workspace @fullstack/admin",
     "server": "yarn workspace @fullstack/server",
+    "common": "yarn workspace @fullstack/common",
     "typings": "yarn workspace @fullstack/typings",
     "dev": "yarn workspaces foreach -pi run dev",
     "build": "yarn workspaces foreach -pi run build",
-    "postinstall": "yarn typings build",
+    "postinstall": "yarn workspaces foreach -pi run postinstall",
     "heroku-postbuild": "yarn build --exclude @fulltasck/app"
   },
   "workspaces": [

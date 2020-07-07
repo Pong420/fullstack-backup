@@ -1,10 +1,11 @@
 import { SuperAgentRequest } from 'superagent';
+import { paths } from '@fullstack/common/constants';
 import { CreateUserDto } from '../../src/user/dto/create-user.dto';
 import { UpdateUserDto } from '../../src/user/dto/update-user.dto';
 import { rid } from '../utils/rid';
 import qs from 'qs';
 
-const prefix = '/api/user';
+const prefix = '/api';
 
 export { CreateUserDto, UpdateUserDto };
 
@@ -25,7 +26,7 @@ export function createUser(
   dto: Partial<CreateUserDto> = {}
 ): SuperAgentRequest {
   return request
-    .post(`${prefix}`)
+    .post(`${prefix}${paths.create_user}`)
     .set('Authorization', `bearer ${token}`)
     .set('Content-Type', 'multipart/form-data')
     .field(createUserDto(dto) as any);
@@ -36,13 +37,15 @@ export function getUsers(
   query: Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .get(`${prefix}`)
+    .get(`${prefix}${paths.get_users}`)
     .set('Authorization', `bearer ${token}`)
     .query(qs.stringify(query));
 }
 
 export function getUser(token: string, id: string): SuperAgentRequest {
-  return request.get(`${prefix}/${id}`).set('Authorization', `bearer ${token}`);
+  return request
+    .get(`${prefix}${paths.get_user.generatePath({ id })}`)
+    .set('Authorization', `bearer ${token}`);
 }
 
 export function updateUser(
@@ -50,7 +53,7 @@ export function updateUser(
   { id, ...changes }: UpdateUserDto
 ): SuperAgentRequest {
   return request
-    .patch(`${prefix}/${id}`)
+    .patch(`${prefix}${paths.update_user.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`)
     .set('Content-Type', 'multipart/form-data')
     .field((changes || {}) as any);
@@ -58,6 +61,6 @@ export function updateUser(
 
 export function deleteUser(token: string, id: string): SuperAgentRequest {
   return request
-    .delete(`${prefix}/${id}`)
+    .delete(`${prefix}${paths.delete_user.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`);
 }

@@ -1,4 +1,3 @@
-import { api } from './api';
 import {
   Param$Login,
   Response$Login,
@@ -10,34 +9,36 @@ import {
   Param$DeleteAccount,
   Param$ModifyPassword
 } from '@fullstack/typings';
+import { paths } from '@fullstack/common/constants';
 import { defer, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { api } from './api';
 
 export const login = (params: Param$Login) =>
-  api.post<Response$Login>('/auth/login', params);
+  api.post<Response$Login>(paths.login, params);
 
 export const refreshToken = () =>
-  api.post<Response$RefreshToken>('/auth/refresh-token', {});
+  api.post<Response$RefreshToken>(paths.refresh_token, {});
 
 export const registerAdmin = (params: Param$CreateUser) =>
-  api.post<Response$User>('/auth/register/admin', {
+  api.post<Response$User>(paths.admin_registration, {
     ...params,
     role: UserRole.ADMIN
   });
 
 export const registerGuest = (params: Param$CreateUser) =>
-  api.post<Response$User>('/auth/register/guest', {
+  api.post<Response$User>(paths.guest_registration, {
     ...params,
     role: UserRole.GUEST
   });
 
-export const logout = () => api.post<unknown>('/auth/logout');
+export const logout = () => api.post<unknown>(paths.logout);
 
 export const deleteAccount = (data: Param$DeleteAccount) =>
-  api.delete<unknown>(`/auth/delete`, { data });
+  api.delete<unknown>(paths.delete_account, { data });
 
 export const modifyPassword = (payload: Param$ModifyPassword) =>
-  api.patch<unknown>(`/auth/modify-password`, payload);
+  api.patch<unknown>(paths.modify_password, payload);
 
 let jwtToken$: Observable<Schema$Login> | null;
 

@@ -32,6 +32,7 @@
     "@blueprintjs/core": "^3.29.0",
     "@blueprintjs/datetime": "^3.18.3",
     "@blueprintjs/select": "^3.13.4",
+    "@fullstack/common": "workspace:packages/common",
     "@fullstack/typings": "workspace:packages/typings",
     "@pong420/redux-crud": "^1.4.6",
     "axios": "^0.19.2",

@@ -1,7 +1,14 @@
 import axios from 'axios';
+import { paths } from '@fullstack/common/constants';
 import { getJwtToken } from './auth';
 
-const authUrls = ['/auth/login', '/auth/register', '/auth/refresh-token'];
+const authUrls = [
+  paths.login,
+  paths.registration,
+  paths.refresh_token,
+  paths.admin_registration,
+  paths.guest_registration
+];
 const authUrlRegex = new RegExp(
   `(${authUrls.join('|').replace(/\//g, '\\/')})`
 );
@@ -9,7 +16,7 @@ const authUrlRegex = new RegExp(
 const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
 
 export const api = axios.create({
-  baseURL: '/api'
+  baseURL: paths.base_url
 });
 
 api.interceptors.request.use(async config => {

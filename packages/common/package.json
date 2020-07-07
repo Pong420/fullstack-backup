@@ -1,5 +1,5 @@
 {
-  "name": "@fullstack/typings",
+  "name": "@fullstack/common",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,6 +11,9 @@
     "postinstall": "yarn build"
   },
   "devDependencies": {
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "path-to-regexp": "^6.1.0"
   }
 }

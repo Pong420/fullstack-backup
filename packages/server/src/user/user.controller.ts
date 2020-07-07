@@ -9,6 +9,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { UserRole } from '@fullstack/typings';
+import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CloudinaryPipe } from '../cloudinary/cloudinary.pipe';
@@ -31,7 +32,7 @@ const roles = Object.values(UserRole)
   .filter((v): v is number => !isNaN(Number(v)))
   .map(role => ({ role }));
 
-@Controller('user')
+@Controller(paths.user.prefix)
 @Access('ADMIN', 'MANAGER', 'SELF')
 export class UserController extends MongooseCRUDController<User> {
   constructor(
@@ -41,7 +42,7 @@ export class UserController extends MongooseCRUDController<User> {
     super(userService);
   }
 
-  @Get()
+  @Get(paths.user.get_users)
   @Access('ADMIN', 'MANAGER', 'GUEST')
   getAll(
     @Query() query: QueryUserDto,
@@ -67,7 +68,7 @@ export class UserController extends MongooseCRUDController<User> {
     });
   }
 
-  @Post()
+  @Post(paths.user.create_user)
   @Access('ADMIN', 'MANAGER')
   @UseInterceptors(MultiPartInterceptor())
   create(
@@ -76,7 +77,7 @@ export class UserController extends MongooseCRUDController<User> {
     return this.userService.create(dto);
   }
 
-  @Patch(':id')
+  @Patch(paths.user.update_user)
   @Access('ADMIN', 'MANAGER', 'SELF')
   @UseInterceptors(MultiPartInterceptor())
   async update(

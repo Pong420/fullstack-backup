@@ -1,0 +1,39 @@
+{
+  "base_url": "/api",
+  "auth": {
+    "prefix": "/auth",
+    "login": "/login",
+    "logout": "/logout",
+    "registration": "/register",
+    "admin_registration": "/register/admin",
+    "guest_registration": "/register/guest",
+    "refresh_token": "/refresh-token",
+    "modify_password": "/modify-password",
+    "delete_account": "/delete-account"
+  },
+  "user": {
+    "prefix": "/user",
+    "create_user": "",
+    "get_users": "",
+    "get_user": "/:id?",
+    "update_user": "/:id",
+    "delete_user": "/:id"
+  },
+  "products": {
+    "prefix": "/products",
+    "create_product": "",
+    "get_products": "",
+    "get_product": "/:id",
+    "update_product": "/:id",
+    "delete_product": "/:id",
+    "get_category": "/category",
+    "get_tags": "/tags"
+  },
+  "order": {
+    "prefix": "/orders",
+    "get_orders": "",
+    "create_order": "",
+    "update_order": "/:id",
+    "delete_order": "/:id"
+  }
+}

@@ -3,10 +3,11 @@ import {
   Post,
   Body,
   Patch,
-  BadRequestException,
-  Req
+  Req,
+  BadRequestException
 } from '@nestjs/common';
 import { OrderStatus, UserRole } from '@fullstack/typings';
+import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
 import { Order } from './schema/order.schema';
 import { OrdersService } from './orders.service';
@@ -18,7 +19,7 @@ import { ProductsService } from '../products/products.service';
 import { ObjectId } from '../utils/mongoose-crud.controller';
 import { Access } from '../utils/access.guard';
 
-@Controller('orders')
+@Controller(paths.order.prefix)
 @Access('ADMIN', 'MANAGER')
 export class OrdersController {
   constructor(
@@ -26,7 +27,7 @@ export class OrdersController {
     private readonly productsService: ProductsService
   ) {}
 
-  @Post()
+  @Post(paths.order.create_order)
   @Access('ADMIN', 'MANAGER', 'CLIENT')
   async create(
     @Body(AttachUserPipe, ProductsPipe) createOrderDto: CreateOrderDto
@@ -40,7 +41,7 @@ export class OrdersController {
     return order;
   }
 
-  @Patch(':id')
+  @Patch(paths.order.update_order)
   @Access('ADMIN', 'MANAGER', 'SELF')
   async update(
     @ObjectId() id: string,

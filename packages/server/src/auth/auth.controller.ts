@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole, JWTSignPayload, Schema$Login } from '@fullstack/typings';
+import { paths } from '@fullstack/common/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './auth.service';
@@ -32,7 +33,7 @@ import { ModifyUserPasswordDto } from './dto/modify-password.dto';
 export const REFRESH_TOKEN_COOKIES = 'fullstack_refresh_token';
 
 @Access('EVERYONE')
-@Controller('auth')
+@Controller(paths.auth.prefix)
 export class AuthController {
   constructor(
     private readonly userService: UserService,
@@ -40,25 +41,25 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService
   ) {}
 
-  @Post('register/guest')
+  @Post(paths.auth.guest_registration)
   @Access('EVERYONE')
   registerGuest(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create({ ...createUserDto, role: UserRole.GUEST });
   }
 
-  @Post('register/admin')
+  @Post(paths.auth.admin_registration)
   @Access('ADMIN')
   registerAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
     // TODO: check admin?
     return this.userService.create({ ...createUserDto, role: UserRole.ADMIN });
   }
 
-  @Post('register')
+  @Post(paths.auth.registration)
   register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create({ ...createUserDto, role: UserRole.CLIENT });
   }
 
-  @Post('login')
+  @Post(paths.auth.login)
   @UseGuards(AuthGuard('local'))
   async login(
     @Req() req: FastifyRequest,
@@ -94,7 +95,7 @@ export class AuthController {
       );
   }
 
-  @Post('refresh-token')
+  @Post(paths.auth.refresh_token)
   async refreshToken(
     @Req() req: FastifyRequest,
     @Res() reply: FastifyReply
@@ -143,7 +144,7 @@ export class AuthController {
       .send(new UnauthorizedException());
   }
 
-  @Post('logout')
+  @Post(paths.auth.logout)
   async logout(
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply
@@ -158,7 +159,7 @@ export class AuthController {
       .send(transformResponse(HttpStatus.OK, 'OK'));
   }
 
-  @Delete('/delete')
+  @Delete(paths.auth.delete_account)
   @Access('PASSWORD')
   async deleteAccount(
     @Req() req: FastifyRequest,
@@ -167,7 +168,7 @@ export class AuthController {
     return this.userService.delete({ _id: req.user.user_id });
   }
 
-  @Patch('/modify-password')
+  @Patch(paths.auth.modify_password)
   @Access('PASSWORD')
   async modifyPassword(
     @Req() req: FastifyRequest,

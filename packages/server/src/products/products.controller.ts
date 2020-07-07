@@ -8,6 +8,7 @@ import {
   UseInterceptors,
   Req
 } from '@nestjs/common';
+import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
 import { Product } from './schemas/products.schema.dto';
 import { ProductsService } from './products.service';
@@ -25,7 +26,7 @@ import { Access } from '../utils/access.guard';
 import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
 import { Schema$Category, Schema$Tags, UserRole } from '@fullstack/typings';
 
-@Controller('products')
+@Controller(paths.products.prefix)
 @Access('ADMIN', 'MANAGER')
 export class ProductsController extends MongooseCRUDController<Product> {
   constructor(private readonly productService: ProductsService) {
@@ -60,7 +61,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
     });
   }
 
-  @Post()
+  @Post(paths.products.create_product)
   @UseInterceptors(MultiPartInterceptor())
   create(
     @Body(CloudinaryPipe('images')) createProductDto: CreateProductDto
@@ -68,7 +69,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
     return this.productService.create(createProductDto);
   }
 
-  @Patch(':id')
+  @Patch(paths.products.update_product)
   @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
@@ -77,12 +78,12 @@ export class ProductsController extends MongooseCRUDController<Product> {
     return this.productService.update({ _id: id }, changes);
   }
 
-  @Get('/category')
+  @Get(paths.products.get_category)
   async getCategories(): Promise<Schema$Category[]> {
     return this.productService.categories();
   }
 
-  @Get('/tags')
+  @Get(paths.products.get_tags)
   async getTags(): Promise<Schema$Tags[]> {
     return this.productService.tags();
   }

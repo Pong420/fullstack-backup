@@ -1715,6 +1715,7 @@ __metadata:
     "@blueprintjs/core": ^3.29.0
     "@blueprintjs/datetime": ^3.18.3
     "@blueprintjs/select": ^3.13.4
+    "@fullstack/common": "workspace:packages/common"
     "@fullstack/typings": "workspace:packages/typings"
     "@pong420/redux-crud": ^1.4.6
     "@types/node": ^14.0.14
@@ -1750,10 +1751,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@fullstack/common@workspace:packages/common":
+  version: 0.0.0-use.local
+  resolution: "@fullstack/common@workspace:packages/common"
+  dependencies:
+    path-to-regexp: ^6.1.0
+    typescript: ^3.9.6
+  languageName: unknown
+  linkType: soft
+
 "@fullstack/server@workspace:packages/server":
   version: 0.0.0-use.local
   resolution: "@fullstack/server@workspace:packages/server"
   dependencies:
+    "@fullstack/common": "workspace:packages/common"
     "@fullstack/typings": "workspace:packages/typings"
     "@hapi/joi": ^17.1.1
     "@nestjs/cli": ^7.4.0
@@ -14048,6 +14059,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"path-to-regexp@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "path-to-regexp@npm:6.1.0"
+  checksum: 88a62b77d43b1b18f51dfa787695decac364443c6595e06fa82faf66e1104c861c1f2f6d4ac58a505cd9042996823c69369fe412a5183b48a9346dda564a7bf2
+  languageName: node
+  linkType: hard
+
 "path-type@npm:^2.0.0":
   version: 2.0.0
   resolution: "path-type@npm:2.0.0"
@@ -18429,6 +18447,16 @@ resolve@1.15.0:
   languageName: node
   linkType: hard
 
+typescript@^3.9.6:
+  version: 3.9.6
+  resolution: "typescript@npm:3.9.6"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 75d8e3610ca435b0feaa3eb714ef3aa9060ec72621da3c62c45ceee1d8d0ddcbd8ff2a816de2d24ab28dcd2249953edb640d34595d59e491656156da4c2903fc
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@3.9.5#builtin<compat/typescript>, typescript@patch:typescript@^3.6.4#builtin<compat/typescript>, typescript@patch:typescript@^3.9.5#builtin<compat/typescript>":
   version: 3.9.5
   resolution: "typescript@patch:typescript@npm%3A3.9.5#builtin<compat/typescript>::version=3.9.5&hash=64df9d"
@@ -18436,6 +18464,16 @@ resolve@1.15.0:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 5849aa7c2d887b4d0b289530b45690fc26e606ea3719cf958dbb7f531ca1b968895bbef89b21ecb3903d5039fb047ebf6a0047ba147123060cbe1940ce5c91be
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^3.9.6#builtin<compat/typescript>":
+  version: 3.9.6
+  resolution: "typescript@patch:typescript@npm%3A3.9.6#builtin<compat/typescript>::version=3.9.6&hash=64df9d"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 74cb55c847841e1aeea9c78bdf0156cf6ba311eb353e555ba70cb6df120e9b4c4a7feff2a153f04fda3d6b7124496fd4d444be62f3d2d448e77c667ea5beaa0b
   languageName: node
   linkType: hard
 
