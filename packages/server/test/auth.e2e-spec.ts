@@ -59,6 +59,7 @@ describe('AuthController (e2e)', () => {
       // Register an admin
       response = await registerAdmin(response.body.data.token, mockAdmin);
       expect(response.status).toBe(HttpStatus.CREATED);
+      expect(response.body.data.password).toBeUndefined();
       admin = response.body.data;
 
       // Default account will be disabled

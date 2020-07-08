@@ -85,7 +85,7 @@ describe('ProductsController (e2e)', () => {
     beforeAll(async () => {
       await productsService.clear();
       await Promise.all(
-        tags.map(tag => createProduct(adminToken, { 'tags[]': [tag] }))
+        tags.map(tag => createProduct(adminToken, { tags: [tag] }))
       );
     });
 
