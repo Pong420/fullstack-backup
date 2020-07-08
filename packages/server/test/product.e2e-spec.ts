@@ -7,15 +7,16 @@ import { setupProducts } from './utils/setupProducts';
 import {
   CreateProductDto,
   createProduct,
-  updaeProduct,
+  updateProduct,
   deleteProduct,
   getProducts,
   getProduct,
   getTags,
   getCategories
 } from './service/products';
+import { cloudinarySign, cloudinaryUpload } from './service/cloudinary';
 import { rid } from './utils/rid';
-import superagent, { SuperAgentRequest } from 'superagent';
+import superagent from 'superagent';
 import path from 'path';
 
 describe('ProductsController (e2e)', () => {
@@ -159,7 +160,7 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('suceess', async () => {
-      const response = await updaeProduct(adminToken, product.id, {
+      const response = await updateProduct(adminToken, product.id, {
         name: newName
       });
       expect(response.status).toBe(HttpStatus.OK);
@@ -167,7 +168,7 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('forbidden', async () => {
-      const response = await updaeProduct(clientToken, product.id, {
+      const response = await updateProduct(clientToken, product.id, {
         name: newName
       });
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
@@ -194,33 +195,46 @@ describe('ProductsController (e2e)', () => {
     });
   });
 
-  test('cloudinary image should be removed', async () => {
+  test.skip('cloudinary image should be removed', async () => {
     jest.setTimeout(60 * 1000);
 
-    const key: keyof Product = 'images';
-    const attach = (req: SuperAgentRequest) =>
-      req.attach(`${key}[]`, path.resolve(__dirname, './utils/1x1.png'));
+    const signPayload = await cloudinarySign(adminToken);
 
-    let response = await attach(createProduct(adminToken));
-    const product: Product = response.body.data;
+    let response = await createProduct(adminToken);
+    let product: Product = response.body.data;
 
-    expect(product.images[0]).toContain('cloudinary');
+    const update = async () =>
+      updateProduct(adminToken, product.id, {
+        images: [
+          await cloudinaryUpload({
+            ...signPayload,
+            file: path.resolve(__dirname, './utils/1x1.png')
+          }).then(res => res.secure_url)
+        ]
+      });
 
     // test case
     const actions = [
-      //
+      // replace
+      () => update(),
+      // remove
+      () => updateProduct(adminToken, product.id, { images: [] }),
+      // delete
       () => deleteProduct(adminToken, product.id)
     ];
 
     for (const action of actions) {
-      response = await action();
+      response = await update();
+      product = response.body.data;
 
+      expect(product.images).toSatisfyAll(url => /cloudinary/.test(url));
+
+      response = await action();
       const responseArr = await Promise.all(
         product.images.map(url =>
           superagent.get(url).catch(response => response)
         )
       );
-
       expect(responseArr).toSatisfyAll(
         res => res.status === HttpStatus.NOT_FOUND
       );

@@ -189,9 +189,7 @@ export class AuthController {
 
   @Post(paths.auth.cloudinary_sign)
   @Access('ADMIN', 'MANAGER', 'CLIENT', 'GUEST')
-  async cloudinarySign(): Promise<Schema$CloudinarySign> {
-    const signature = this.cloudinaryService.sign();
-    const timestamp = Math.floor(+new Date() / 1000);
-    return { signature, timestamp };
+  cloudinarySign(): Schema$CloudinarySign {
+    return this.cloudinaryService.sign();
   }
 }

@@ -28,8 +28,7 @@ export function createUser(
   return request
     .post(`${prefix}${paths.create_user}`)
     .set('Authorization', `bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data')
-    .field(createUserDto(dto) as any);
+    .send(createUserDto(dto) as any);
 }
 
 export function getUsers(
@@ -55,8 +54,7 @@ export function updateUser(
   return request
     .patch(`${prefix}${paths.update_user.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data')
-    .field((changes || {}) as any);
+    .send((changes || {}) as any);
 }
 
 export function deleteUser(token: string, id: string): SuperAgentRequest {

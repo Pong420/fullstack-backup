@@ -28,8 +28,7 @@ export function createProduct(
   return request
     .post(`${prefix}${paths.create_product}`)
     .set('Authorization', `bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data')
-    .field(createProductDto(dto) as any);
+    .send(createProductDto(dto) as any);
 }
 
 export function getProducts(
@@ -48,7 +47,7 @@ export function getProduct(token: string, id: string): SuperAgentRequest {
     .set('Authorization', `bearer ${token}`);
 }
 
-export function updaeProduct(
+export function updateProduct(
   token: string,
   id: string,
   changes: UpdateProductDto
@@ -56,8 +55,7 @@ export function updaeProduct(
   return request
     .patch(`${prefix}${paths.update_product.generatePath({ id })}`)
     .set('Authorization', `bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data')
-    .field((changes || {}) as any);
+    .send((changes || {}) as any);
 }
 
 export function deleteProduct(token: string, id: string): SuperAgentRequest {

@@ -9,6 +9,7 @@ import {
 } from 'rxjs/operators';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Schema$CloudinarySign } from '@fullstack/typings';
 import cloudinary, {
   TransformationOptions,
   ConfigAndUrlOptions,
@@ -26,17 +27,21 @@ export class CloudinaryService {
   api_secret: string;
 
   constructor(private readonly configService: ConfigService) {
-    const [api_key, api_secret, cloud_name] = this.configService
-      .get<string>('CLOUDINARY_URL')
-      .replace('cloudinary://', '')
-      .split(/:|@/);
+    const [api_key, api_secret, cloud_name] = this.parseCloudinaryURL();
 
     this.api_secret = api_secret;
 
     cloudinary.v2.config({ api_key, api_secret, cloud_name });
   }
 
-  sign(): string {
+  parseCloudinaryURL(): string[] {
+    return this.configService
+      .get<string>('CLOUDINARY_URL')
+      .replace('cloudinary://', '')
+      .split(/:|@/);
+  }
+
+  sign(): Schema$CloudinarySign {
     const timestamp = Math.round(+new Date() / 1000);
 
     if (!this.api_secret) {
@@ -45,7 +50,13 @@ export class CloudinaryService {
       );
     }
 
-    return cloudinary.v2.utils.api_sign_request({ timestamp }, this.api_secret);
+    return {
+      timestamp,
+      signature: cloudinary.v2.utils.api_sign_request(
+        { timestamp },
+        this.api_secret
+      )
+    };
   }
 
   getImageUrl(

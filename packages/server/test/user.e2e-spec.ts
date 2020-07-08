@@ -4,6 +4,7 @@ import { PaginateResult, UserRole } from '@fullstack/typings';
 import { User } from '../src/user/schemas/user.schema';
 import { setupUsers } from './utils/setupUsers';
 import { login, getToken } from './service/auth';
+import { cloudinarySign, cloudinaryUpload } from './service/cloudinary';
 import {
   CreateUserDto,
   UpdateUserDto,
@@ -224,16 +225,26 @@ describe('UserController (e2e)', () => {
 
     let response = await createUser(adminToken, createUserDto());
     let user: User = response.body.data;
-    const attach = () =>
-      updateUser(adminToken, { id: user.id }).attach(
-        'avatar',
-        path.resolve(__dirname, './utils/1x1.png')
-      );
+    const signPayload = await cloudinarySign(adminToken);
+
+    const attach = async () => {
+      const uploaded = await cloudinaryUpload({
+        ...signPayload,
+        file: path.resolve(__dirname, './utils/1x1.png')
+      });
+      return updateUser(adminToken, {
+        id: user.id,
+        avatar: uploaded.secure_url
+      });
+    };
 
     // test case
     const actions = [
+      // replace
       () => attach(),
-      () => updateUser(adminToken, { id: user.id, avatar: 'null' }),
+      // remove
+      () => updateUser(adminToken, { id: user.id, avatar: null }),
+      // delete
       () => deleteUser(adminToken, user.id)
     ];
 
