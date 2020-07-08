@@ -11,9 +11,9 @@
     "server": "yarn workspace @fullstack/server",
     "common": "yarn workspace @fullstack/common",
     "typings": "yarn workspace @fullstack/typings",
-    "dev": "yarn workspaces foreach -pi run dev",
-    "build": "yarn workspaces foreach -pi run build",
-    "postinstall": "yarn workspaces foreach -pi run postinstall",
+    "dev": "lerna run dev --stream --parallel",
+    "build": "rimraf dist && lerna run build --stream",
+    "postinstall": "lerna run postinstall --stream --parallel",
     "heroku-postbuild": "yarn build --exclude @fulltasck/app"
   },
   "workspaces": [
@@ -32,6 +32,7 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
     "husky": "^4.2.5",
+    "lerna": "^3.22.1",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2"
