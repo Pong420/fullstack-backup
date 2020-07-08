@@ -14,7 +14,7 @@
     "dev": "lerna run dev --stream --parallel",
     "build": "rimraf dist && lerna run build --stream",
     "postinstall": "lerna run postinstall --stream --parallel",
-    "heroku-postbuild": "yarn build --exclude @fulltasck/app"
+    "heroku-postbuild": "yarn build --ignore @fullstack/app"
   },
   "workspaces": [
     "packages/*"
