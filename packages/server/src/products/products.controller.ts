@@ -1,18 +1,8 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Query,
-  Patch,
-  UseInterceptors,
-  Req
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Patch, Req } from '@nestjs/common';
 import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
 import { Product } from './schemas/products.schema.dto';
 import { ProductsService } from './products.service';
-import { CloudinaryPipe } from '../cloudinary/cloudinary.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { QueryProductDto } from './dto/query-product.dto';
@@ -23,7 +13,6 @@ import {
   ObjectId
 } from '../utils/mongoose-crud.controller';
 import { Access } from '../utils/access.guard';
-import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
 import { Schema$Category, Schema$Tags, UserRole } from '@fullstack/typings';
 
 @Controller(paths.products.prefix)
@@ -62,18 +51,14 @@ export class ProductsController extends MongooseCRUDController<Product> {
   }
 
   @Post(paths.products.create_product)
-  @UseInterceptors(MultiPartInterceptor())
-  create(
-    @Body(CloudinaryPipe('images')) createProductDto: CreateProductDto
-  ): Promise<Product> {
+  create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productService.create(createProductDto);
   }
 
   @Patch(paths.products.update_product)
-  @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
-    @Body(CloudinaryPipe('images')) changes: UpdateProductDto
+    @Body() changes: UpdateProductDto
   ): Promise<Product> {
     return this.productService.update({ _id: id }, changes);
   }

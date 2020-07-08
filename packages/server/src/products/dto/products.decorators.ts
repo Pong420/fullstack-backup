@@ -64,3 +64,11 @@ export function Tags(): ReturnType<typeof applyDecorators> {
     )
   );
 }
+export function Images(): ReturnType<typeof applyDecorators> {
+  return applyDecorators(
+    IsArray(),
+    IsString({ each: true }),
+    IsLowercase({ each: true }),
+    Transform(arr => (Array.isArray(arr) ? arr : [arr]).filter(Boolean))
+  );
+}

@@ -1,11 +1,18 @@
-import { IsString, IsOptional, IsArray } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import {
   Schema$Product,
   DTOExcluded,
   Param$UpdateProduct
 } from '@fullstack/typings';
-import { Price, Amount, Disscount, Tags, Hidden } from './products.decorators';
+import {
+  Price,
+  Amount,
+  Disscount,
+  Tags,
+  Hidden,
+  Images
+} from './products.decorators';
 
 class Excluded implements DTOExcluded<Schema$Product, Param$UpdateProduct> {
   @Exclude()
@@ -46,7 +53,7 @@ class UpdateProduct extends Excluded
   @IsOptional()
   description?: string;
 
-  @IsArray()
+  @Images()
   @IsOptional()
   images?: string[];
 

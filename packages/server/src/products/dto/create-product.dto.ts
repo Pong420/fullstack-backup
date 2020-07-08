@@ -5,7 +5,14 @@ import {
   Param$CreateOrder,
   DTOExcluded
 } from '@fullstack/typings';
-import { Price, Amount, Disscount, Hidden, Tags } from './products.decorators';
+import {
+  Price,
+  Amount,
+  Disscount,
+  Hidden,
+  Tags,
+  Images
+} from './products.decorators';
 
 class Excluded implements DTOExcluded<Schema$Product & Param$CreateOrder> {
   @Exclude()
@@ -31,6 +38,7 @@ class CreateProduct extends Excluded
   description?: string;
 
   @IsOptional()
+  @Images()
   images?: string[];
 
   @IsOptional()

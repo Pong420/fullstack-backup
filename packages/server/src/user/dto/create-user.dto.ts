@@ -31,7 +31,8 @@ class CreateUser extends Excluded
   nickname?: string;
 
   @IsOptional()
-  avatar?: unknown;
+  @IsString()
+  avatar?: string;
 }
 
 export class CreateUserDto extends CreateUser

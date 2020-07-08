@@ -30,7 +30,7 @@ export class ProductsService extends MongooseCRUDService<Product> {
       data.images = await Promise.all(
         data.images.map(image =>
           this.cloudinaryService
-            .handleUpload(path.resolve(stub, 'images', image))
+            .upload(path.resolve(stub, 'images', image))
             .toPromise()
             .then(res => res.secure_url)
         )

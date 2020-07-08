@@ -31,7 +31,8 @@ class UpdateUser extends Excluded
   email?: string;
 
   @IsOptional()
-  avatar?: string;
+  @IsString()
+  avatar?: string | null;
 
   @IsOptional()
   @IsEnum(UserRole)

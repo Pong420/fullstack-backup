@@ -31,8 +31,7 @@ import paginate from 'mongoose-paginate-v2';
           return schema;
         }
       }
-    ]),
-    CloudinaryModule
+    ])
   ],
   controllers: [UserController],
   providers: [UserService, UserRolePipe],

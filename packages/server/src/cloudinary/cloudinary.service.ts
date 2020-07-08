@@ -7,7 +7,7 @@ import {
   zipAll,
   mergeMap
 } from 'rxjs/operators';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import cloudinary, {
   TransformationOptions,
@@ -23,13 +23,29 @@ type UploadResponse = UploadApiResponse | null;
 
 @Injectable()
 export class CloudinaryService {
+  api_secret: string;
+
   constructor(private readonly configService: ConfigService) {
     const [api_key, api_secret, cloud_name] = this.configService
       .get<string>('CLOUDINARY_URL')
       .replace('cloudinary://', '')
       .split(/:|@/);
 
+    this.api_secret = api_secret;
+
     cloudinary.v2.config({ api_key, api_secret, cloud_name });
+  }
+
+  sign(): string {
+    const timestamp = Math.round(+new Date() / 1000);
+
+    if (!this.api_secret) {
+      throw new InternalServerErrorException(
+        'CLOUDINARY_URL is not configured'
+      );
+    }
+
+    return cloudinary.v2.utils.api_sign_request({ timestamp }, this.api_secret);
   }
 
   getImageUrl(
@@ -39,10 +55,7 @@ export class CloudinaryService {
     return cloudinary.v2.url(public_id, options);
   }
 
-  handleUpload(
-    path: string,
-    options?: UploadApiOptions
-  ): Observable<UploadResponse> {
+  upload(path: string, options?: UploadApiOptions): Observable<UploadResponse> {
     return defer(() => cloudinary.v2.uploader.upload(path, options)).pipe(
       retry(2),
       catchError(() => of(null)),
@@ -50,28 +63,26 @@ export class CloudinaryService {
     );
   }
 
-  upload(
+  handleUploaded(
     payload: Uploaded,
     options?: UploadApiOptions
   ): Observable<UploadResponse>;
-  upload(
+  handleUploaded(
     payload: Uploaded[],
     options?: UploadApiOptions
   ): Observable<UploadResponse[]>;
-  upload(
+  handleUploaded(
     payload: Uploaded | Uploaded[],
     options?: UploadApiOptions
   ): Observable<UploadResponse | UploadResponse[]> {
     return Array.isArray(payload)
       ? from(payload).pipe(
           concatMap(uploaded =>
-            of<Observable<UploadResponse>>(
-              this.handleUpload(uploaded.path, options)
-            )
+            of<Observable<UploadResponse>>(this.upload(uploaded.path, options))
           ),
           zipAll()
         )
-      : this.handleUpload(payload.path, options);
+      : this.upload(payload.path, options);
   }
 
   remove(payload: RemovePayload | RemovePayload[]): Observable<unknown> {

@@ -19,6 +19,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '../user/schemas/user.schema';
 import { RefreshToken } from '../refresh-token/schemas/refreshToken.schema';
@@ -38,7 +39,8 @@ export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-    private readonly refreshTokenService: RefreshTokenService
+    private readonly refreshTokenService: RefreshTokenService,
+    private readonly cloudinaryService: CloudinaryService
   ) {}
 
   @Post(paths.auth.guest_registration)
@@ -178,5 +180,11 @@ export class AuthController {
       { _id: req.user.user_id },
       { password: newPassword }
     );
+  }
+
+  @Post(paths.auth.cloudinary_sign)
+  @Access('ADMIN', 'MANAGER', 'CLIENT', 'GUEST')
+  async cloudinarySign(): Promise<string> {
+    return this.cloudinaryService.sign();
   }
 }

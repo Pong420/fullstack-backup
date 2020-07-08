@@ -1,25 +1,13 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Query,
-  Patch,
-  Req,
-  UseInterceptors
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Patch, Req } from '@nestjs/common';
 import { UserRole } from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
-import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { CloudinaryPipe } from '../cloudinary/cloudinary.pipe';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Access } from '../utils/access.guard';
-import { MultiPartInterceptor } from '../utils/multi-part.interceptor';
 import {
   MongooseCRUDController,
   PaginateResult,
@@ -35,10 +23,7 @@ const roles = Object.values(UserRole)
 @Controller(paths.user.prefix)
 @Access('ADMIN', 'MANAGER', 'SELF')
 export class UserController extends MongooseCRUDController<User> {
-  constructor(
-    private readonly userService: UserService,
-    private readonly cloudinaryService: CloudinaryService
-  ) {
+  constructor(private readonly userService: UserService) {
     super(userService);
   }
 
@@ -70,19 +55,15 @@ export class UserController extends MongooseCRUDController<User> {
 
   @Post(paths.user.create_user)
   @Access('ADMIN', 'MANAGER')
-  @UseInterceptors(MultiPartInterceptor())
-  create(
-    @Body(UserRolePipe, CloudinaryPipe('avatar')) dto: CreateUserDto
-  ): Promise<User> {
+  create(@Body(UserRolePipe) dto: CreateUserDto): Promise<User> {
     return this.userService.create(dto);
   }
 
   @Patch(paths.user.update_user)
   @Access('ADMIN', 'MANAGER', 'SELF')
-  @UseInterceptors(MultiPartInterceptor())
   async update(
     @ObjectId() id: string,
-    @Body(UserRolePipe, CloudinaryPipe('avatar')) changes: UpdateUserDto
+    @Body(UserRolePipe) changes: UpdateUserDto
   ): Promise<User> {
     return this.userService.update({ _id: id }, changes);
   }

@@ -22,7 +22,7 @@ export function CloudinaryPipe(fieldName?: string): Type<PipeTransform> {
     async upload(value: unknown) {
       if (value && typeof value === 'object' && 'path' in value) {
         return this.cloudinaryService
-          .upload(value as Uploaded)
+          .handleUploaded(value as Uploaded)
           .toPromise()
           .then(response => response.secure_url);
       }
