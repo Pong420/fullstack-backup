@@ -13,7 +13,6 @@ const authUrls = [
   paths.login,
   paths.registration,
   paths.refresh_token,
-  paths.admin_registration,
   paths.guest_registration
 ];
 const authUrlRegex = new RegExp(
