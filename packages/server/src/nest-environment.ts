@@ -34,7 +34,8 @@ export default class NestNodeEnvironment extends NodeEnvironment {
         fastifyAdapter()
       );
 
-      await setupApp(app);
+      setupApp(app);
+
       await app.init();
       await app.getHttpAdapter().getInstance().ready();
 

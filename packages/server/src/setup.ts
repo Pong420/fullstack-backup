@@ -17,7 +17,7 @@ export const fastifyAdapter = (): FastifyAdapter =>
     querystringParser: qs.parse
   });
 
-export async function setupApp(app: NestFastifyApplication): Promise<void> {
+export function setupApp(app: NestFastifyApplication): void {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new MongooseExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
