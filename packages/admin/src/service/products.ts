@@ -10,16 +10,17 @@ import {
 } from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
 import { api } from './api';
-import { createFormData } from './createFormData';
+
+const image: keyof Param$CreateProduct & keyof Param$UpdateProduct = 'images';
 
 export const createProduct = (payload: Param$CreateProduct) =>
-  api.post<Response$Product>(paths.create_product, createFormData(payload));
+  api.post<Response$Product>(paths.create_product, payload, { image });
 
 export const updateProduct = ({
   id,
   ...payload
 }: Param$Product & Param$UpdateProduct) =>
-  api.patch<Response$Product>(`/products/${id}`, createFormData(payload));
+  api.patch<Response$Product>(`/products/${id}`, payload, { image });
 
 export const deleteProduct = ({ id }: Param$Product) =>
   api.delete<unknown>(`/products/${id}`);

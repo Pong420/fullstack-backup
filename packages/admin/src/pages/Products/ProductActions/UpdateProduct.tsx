@@ -3,12 +3,7 @@ import { Schema$Product, Param$Product } from '@fullstack/typings';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../../components/ButtonPopover';
 import { Toaster } from '../../../utils/toaster';
-import {
-  ProductForm,
-  ProductFormInstance,
-  useForm,
-  transformProductForm
-} from '../ProductForm';
+import { ProductForm, ProductFormInstance, useForm } from '../ProductForm';
 import { updateProduct } from '../../../service';
 
 export interface OnUpdate {
@@ -41,10 +36,7 @@ export function UpdateProduct({ id, onUpdate, ...products }: NewProductProps) {
     if (id) {
       const payload = await form.validateFields();
       try {
-        const response = await updateProduct({
-          id,
-          ...transformProductForm(payload)
-        });
+        const response = await updateProduct({ id, ...payload });
         onUpdate(response.data.data);
         Toaster.success({ message: 'Update product success' });
       } catch (error) {

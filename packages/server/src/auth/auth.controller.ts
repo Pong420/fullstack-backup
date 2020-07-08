@@ -12,7 +12,12 @@ import {
   Patch
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UserRole, JWTSignPayload, Schema$Login } from '@fullstack/typings';
+import {
+  UserRole,
+  JWTSignPayload,
+  Schema$Login,
+  Schema$CloudinarySign
+} from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { FastifyRequest, FastifyReply } from 'fastify';
@@ -184,7 +189,9 @@ export class AuthController {
 
   @Post(paths.auth.cloudinary_sign)
   @Access('ADMIN', 'MANAGER', 'CLIENT', 'GUEST')
-  async cloudinarySign(): Promise<string> {
-    return this.cloudinaryService.sign();
+  async cloudinarySign(): Promise<Schema$CloudinarySign> {
+    const signature = this.cloudinaryService.sign();
+    const timestamp = Math.floor(+new Date() / 1000);
+    return { signature, timestamp };
   }
 }

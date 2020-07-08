@@ -40,6 +40,8 @@ export const deleteAccount = (data: Param$DeleteAccount) =>
 export const modifyPassword = (payload: Param$ModifyPassword) =>
   api.patch<unknown>(paths.modify_password, payload);
 
+// ---------
+
 let jwtToken$: Observable<Schema$Login> | null;
 
 export function clearJwtToken() {

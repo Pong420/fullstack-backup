@@ -22,3 +22,20 @@ export interface Param$ModifyPassword {
 export interface Param$DeleteAccount {
   password: string;
 }
+
+export interface Schema$CloudinarySign {
+  signature: string;
+  timestamp: number; // unix time
+}
+
+export type Response$CloudinarySign = ApiResponse<Schema$CloudinarySign>;
+
+export interface Param$CloudinaryUpload extends Schema$CloudinarySign {
+  file: File | string;
+  api_key?: string;
+  eager?: string;
+}
+
+export interface Response$CloudinaryUpload {
+  secure_url: string;
+}

@@ -36,8 +36,15 @@ yarn dev
 
 Currently, images are upload to [Cloudinary](https://cloudinary.com/), <br />
 if you are heroku user, you may enable [Cloudinary Add-ons](https://elements.heroku.com/addons/cloudinary).
-To setup `Cloudinary`, create a `.env.local` file under `packages/server` and add
+create a `.env.local` file under `packages/server` and add
 
 ```
-CLOUDINARY_URL = cloudinary://xxxx:xxx@xxx
+CLOUDINARY_URL = cloudinary://<api_key>:<api_secret>@<cloud_name>
+```
+
+create a `.env.local` file under `packages/admin` and add
+
+```
+REACT_APP_CLOUDINARY_CLOUD_NAME = <cloud_name>
+REACT_APP_CLOUDINARY_API_KEY = <api_key>
 ```

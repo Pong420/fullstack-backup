@@ -11,7 +11,6 @@ import {
   FormProps,
   FormInstance
 } from '../../utils/form';
-import { getFile } from '../../utils/getFile';
 
 type Schema = Omit<Partial<Schema$Product> & Param$CreateProduct, 'images'> & {
   images?: (RxFileToImageState | string | null)[];
@@ -27,13 +26,6 @@ const initialValues: Partial<Schema> = {
 export { useForm };
 
 export type ProductFormInstance = FormInstance<Schema>;
-
-export function transformProductForm({ images, ...payload }: Schema) {
-  return {
-    ...payload,
-    images: getFile(images)
-  };
-}
 
 export function ProductForm(props: FormProps<Schema>) {
   return (

@@ -7,27 +7,20 @@ import {
   FormProps,
   FormItemProps
 } from '../utils/form';
-import { getFile } from '../utils/getFile';
 import { Input, Password as PasswordInput } from './Input';
 import { UserRoleSelect } from './UserRoleSelect';
 
 interface Schema extends Required<Omit<Schema$User, 'id' | 'avatar'>> {
   confirmPassword: string;
-}
-
-interface Avatar<T> {
-  avatar?: T;
+  avatar: RxFileToImageState | string | null;
 }
 
 interface AutoFocus {
   autoFocus?: boolean;
 }
 
-type Store = Schema & Avatar<RxFileToImageState | string | null>;
-type Value = Schema & Avatar<File | string | null>;
-
-export type UserFormProps = FormProps<Store, Value>;
-export type UserFormInstance = NonNullable<FormProps<Store, Value>['form']>;
+export type UserFormProps = FormProps<Schema>;
+export type UserFormInstance = NonNullable<FormProps<Schema>['form']>;
 
 export const userValidaors = {
   username: {
@@ -54,22 +47,14 @@ export const userValidaors = {
   }
 };
 
-export function createUserForm(itemProps?: FormItemProps<Store>) {
-  const components = createForm<Store, Value>(itemProps);
+export function createUserForm(itemProps?: FormItemProps<Schema>) {
+  const components = createForm<Schema>(itemProps);
   const { Form, FormItem } = components;
 
-  type FND = FormItemProps<Store> & { deps?: undefined } & AutoFocus;
+  type FND = FormItemProps<Schema> & { deps?: undefined } & AutoFocus;
 
   function UserForm(props?: UserFormProps) {
-    return (
-      <Form
-        {...props}
-        beforeSubmit={({ avatar, ...payload }) => ({
-          avatar: getFile(avatar),
-          ...payload
-        })}
-      />
-    );
+    return <Form {...props} />;
   }
 
   const Username = ({ autoFocus, ...props }: FND = {}) => (

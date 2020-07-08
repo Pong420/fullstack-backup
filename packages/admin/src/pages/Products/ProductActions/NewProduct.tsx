@@ -4,7 +4,7 @@ import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../../components/ButtonPopover';
 import { Toaster } from '../../../utils/toaster';
 import { createProduct } from '../../../service';
-import { ProductForm, useForm, transformProductForm } from '../ProductForm';
+import { ProductForm, useForm } from '../ProductForm';
 
 export interface OnCreate {
   onCreate: (payload: Schema$Product) => void;
@@ -20,7 +20,7 @@ export function NewProduct({ onCreate }: NewProductProps) {
   async function onConfirm() {
     const payload = await form.validateFields();
     try {
-      const response = await createProduct(transformProductForm(payload));
+      const response = await createProduct(payload);
       onCreate(response.data.data);
       Toaster.success({ message: 'Create new product success' });
     } catch (error) {
