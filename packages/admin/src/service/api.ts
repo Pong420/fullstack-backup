@@ -16,7 +16,7 @@ const authUrls = [
   paths.guest_registration
 ];
 const authUrlRegex = new RegExp(
-  `(${authUrls.join('|').replace(/\//g, '\\/')})`
+  `(${authUrls.join('|').replace(/\//g, '\\/')})$`
 );
 
 const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
