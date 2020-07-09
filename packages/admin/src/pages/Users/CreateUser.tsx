@@ -49,9 +49,11 @@ export function CreateUser({ onCreate }: CreateUserProps) {
         ]}
       />
       <Password
-        validators={[
+        deps={['username']}
+        validators={({ username }) => [
+          userValidaors.password.required,
           userValidaors.password.format,
-          userValidaors.password.required
+          userValidaors.password.equalToUsername(username)
         ]}
       />
       <Nickname />

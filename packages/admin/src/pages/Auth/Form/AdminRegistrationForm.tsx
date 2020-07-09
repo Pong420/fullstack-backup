@@ -41,9 +41,11 @@ export function AdminRegistrationForm() {
       />
 
       <Password
-        validators={[
+        deps={['username']}
+        validators={({ username }) => [
           userValidaors.password.required,
-          userValidaors.password.format
+          userValidaors.password.format,
+          userValidaors.password.equalToUsername(username)
         ]}
       />
 
