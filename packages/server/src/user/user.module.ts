@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 import { User, UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
 import { UserRolePipe } from './user-role.pipe';
-import { Model, Schema, Document } from 'mongoose';
+import { Model, Schema, Document, Query } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
 
 @Module({
@@ -17,17 +17,23 @@ import paginate from 'mongoose-paginate-v2';
         inject: [CloudinaryService],
         name: User.name,
         useFactory: async (cloudinaryService: CloudinaryService) => {
-          const schema = UserSchema as Schema<User>;
-          async function removeImageFromCloudinary() {
+          async function removeImageFromCloudinary(this: Query<unknown>) {
             const model: Model<User & Document> = (this as any).model;
-            const pre = await model.findOne(this.getQuery());
-            if (pre.avatar) {
-              await cloudinaryService.remove(pre.avatar).toPromise();
+            const current = await model.findOne(this.getQuery());
+            if (current.avatar) {
+              await cloudinaryService.remove(current.avatar).toPromise();
             }
           }
+
+          const schema = UserSchema as Schema<User>;
           schema.plugin(paginate);
           schema.pre('deleteOne', removeImageFromCloudinary);
-          schema.pre('findOneAndUpdate', removeImageFromCloudinary);
+          schema.pre('findOneAndUpdate', async function () {
+            const update: Partial<User> = this.getUpdate();
+            if (update.avatar) {
+              await removeImageFromCloudinary.call(this);
+            }
+          });
           return schema;
         }
       }
