@@ -43,6 +43,9 @@ class CreateOrder extends Excluded
   @ValidateNested({ each: true })
   @Type(() => ProductField)
   products: ProductField[];
+
+  @IsString()
+  address: string;
 }
 
 export class CreateOrderDto extends CreateOrder

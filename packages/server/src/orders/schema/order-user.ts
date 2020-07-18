@@ -16,6 +16,9 @@ class ShouldBeExcluded implements Omit<Schema$User, keyof Schema$OrderUser> {
 
   @Exclude()
   updatedAt: undefined;
+
+  @Exclude()
+  address: undefined;
 }
 
 export class OrderUser extends ShouldBeExcluded implements Schema$OrderUser {

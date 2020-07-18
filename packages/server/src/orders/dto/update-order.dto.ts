@@ -4,7 +4,7 @@ import {
   Schema$Order,
   DTOExcluded
 } from '@fullstack/typings';
-import { IsEnum, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Transform, Exclude } from 'class-transformer';
 
 type Schema = Schema$Order & Param$UpdateOrder;
@@ -35,4 +35,8 @@ export class UpdateOrderDto extends UpdateOrder
   @IsEnum(OrderStatus)
   @Transform(Number)
   status: OrderStatus;
+
+  @IsOptional()
+  @IsString()
+  address: string;
 }

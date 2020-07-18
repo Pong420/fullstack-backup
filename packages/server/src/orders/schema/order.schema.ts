@@ -33,6 +33,9 @@ export class Order implements Schema$Order {
   @Prop({ default: OrderStatus.PENDING })
   status: OrderStatus;
 
+  @Prop({ type: String })
+  address: string;
+
   createdAt: string;
 
   updatedAt: string;

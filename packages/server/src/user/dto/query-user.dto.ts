@@ -15,6 +15,9 @@ class Excluded extends QueryDto
 
   @Exclude()
   avatar?: string;
+
+  @Exclude()
+  address?: string;
 }
 
 class QueryUser extends Excluded

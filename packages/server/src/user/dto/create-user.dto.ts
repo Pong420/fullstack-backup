@@ -31,6 +31,11 @@ class CreateUser extends Excluded
   nickname?: string;
 
   @IsOptional()
+  @IsString({ each: true })
+  @Transform(payload => (Array.isArray(payload) ? payload : [payload]))
+  address?: string[] | null;
+
+  @IsOptional()
   @IsString()
   avatar?: string;
 }

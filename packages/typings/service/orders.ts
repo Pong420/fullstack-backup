@@ -10,6 +10,16 @@ export enum OrderStatus {
   DONE
 }
 
+interface CreateOrder {
+  id: string;
+  amount: number;
+}
+
+export interface Param$CreateOrder {
+  products: CreateOrder[];
+  address: string;
+}
+
 export interface Schema$OrderProduct
   extends Pick<
     Schema$Product,
@@ -19,20 +29,13 @@ export interface Schema$OrderProduct
 export interface Schema$OrderUser
   extends Pick<Schema$User, 'id' | 'nickname' | 'username' | 'email'> {}
 
-export interface Schema$Order extends Timestamp {
+export interface Schema$Order
+  extends Timestamp,
+    Omit<Param$CreateOrder, 'products'> {
   id: string;
   products: Schema$OrderProduct[];
   user: Schema$OrderUser;
   status: OrderStatus;
-}
-
-interface CreateOrder {
-  id: string;
-  amount: number;
-}
-
-export interface Param$CreateOrder {
-  products: CreateOrder[];
 }
 
 export interface Param$UpdateOrder {

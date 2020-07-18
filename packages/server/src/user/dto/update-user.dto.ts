@@ -42,6 +42,11 @@ class UpdateUser extends Excluded
   @IsString()
   @IsOptional()
   nickname?: string;
+
+  @IsOptional()
+  @IsString({ each: true })
+  @Transform(payload => (Array.isArray(payload) ? payload : [payload]))
+  address?: string[] | null;
 }
 
 export class UpdateUserDto extends UpdateUser
