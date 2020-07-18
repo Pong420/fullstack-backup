@@ -99,7 +99,7 @@ describe('OrdersController (e2e)', () => {
         getProduct(adminToken, product.id).then(res => res.body.data)
       ).resolves.toMatchObject({
         amount: totalAmount - amount,
-        // remain: totalAmount - amount,
+        remain: totalAmount - amount,
         freeze: 0
       });
     });

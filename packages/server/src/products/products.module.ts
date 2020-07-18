@@ -8,7 +8,7 @@ import { ProductsController } from './products.controller';
 import { Product, ProductSchema } from './schemas/products.schema.dto';
 import paginate from 'mongoose-paginate-v2';
 
-type Update = Partial<Product> & { $inc?: Partial<Product> };
+type Changes = Partial<Product> & { $inc?: Partial<Product> };
 
 @Module({
   imports: [
@@ -30,22 +30,22 @@ type Update = Partial<Product> & { $inc?: Partial<Product> };
           schema.plugin(paginate);
           schema.pre('deleteOne', removeImageFromCloudinary);
           schema.pre('findOneAndUpdate', async function () {
-            const update: Update = this.getUpdate();
-            if (update.images) {
+            const update: Changes = this.getUpdate();
+            if (update?.images) {
               await removeImageFromCloudinary.call(this);
             }
           });
           schema.pre('findOneAndUpdate', async function () {
-            const update: Update = this.getUpdate();
-            if (typeof update.freeze === 'number' || update.$inc?.freeze) {
+            const changes: Changes = this.getUpdate();
+            if (typeof changes?.freeze === 'number' || changes?.$inc?.freeze) {
               const model: Model<Product & Document> = (this as any).model;
               const product = await model.findOne(this.getQuery());
               if (
                 product &&
                 product.remain <
                   Math.max(
-                    update.freeze || 0,
-                    update.$inc.freeze || 0 + product.freeze
+                    changes.freeze || 0,
+                    changes.$inc.freeze || 0 + product.freeze
                   )
               ) {
                 throw new BadRequestException(`${product.name} out of stock `);

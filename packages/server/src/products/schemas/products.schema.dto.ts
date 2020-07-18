@@ -28,12 +28,6 @@ export class Product implements Schema$Product {
   @Group(['ADMIN', 'MANAGER'])
   freeze: number;
 
-  @Prop({
-    type: Number,
-    default: function () {
-      return this.amount - this.freeze;
-    }
-  })
   @Group(['ADMIN', 'MANAGER', 'GUEST'])
   remain: number;
 
@@ -68,3 +62,8 @@ export class Product implements Schema$Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+const remain: keyof Product = 'remain';
+ProductSchema.virtual(remain).get(function () {
+  return this.amount - this.freeze;
+});

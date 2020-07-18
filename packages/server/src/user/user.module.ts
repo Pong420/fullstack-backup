@@ -19,9 +19,9 @@ import paginate from 'mongoose-paginate-v2';
         useFactory: async (cloudinaryService: CloudinaryService) => {
           async function removeImageFromCloudinary(this: Query<unknown>) {
             const model: Model<User & Document> = (this as any).model;
-            const current = await model.findOne(this.getQuery());
-            if (current.avatar) {
-              await cloudinaryService.remove(current.avatar).toPromise();
+            const user = await model.findOne(this.getQuery());
+            if (user?.avatar) {
+              await cloudinaryService.remove(user.avatar).toPromise();
             }
           }
 
@@ -29,8 +29,8 @@ import paginate from 'mongoose-paginate-v2';
           schema.plugin(paginate);
           schema.pre('deleteOne', removeImageFromCloudinary);
           schema.pre('findOneAndUpdate', async function () {
-            const update: Partial<User> = this.getUpdate();
-            if (update.avatar) {
+            const changes: Partial<User> = this.getUpdate();
+            if (changes?.avatar) {
               await removeImageFromCloudinary.call(this);
             }
           });
