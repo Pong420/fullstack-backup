@@ -12,6 +12,7 @@
     "postinstall": "yarn build"
   },
   "devDependencies": {
+    "axios": "^0.19.2",
     "typescript": "^3.9.5"
   }
 }

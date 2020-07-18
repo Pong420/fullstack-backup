@@ -3,12 +3,12 @@ import {
   Param$CloudinaryUpload,
   Response$CloudinaryUpload
 } from '@fullstack/typings';
-import { paths } from '../constants';
 import { from, defer, of, pipe, Observable } from 'rxjs';
 import { filter, map, zipAll, mergeMap, retry } from 'rxjs/operators';
 import { RxFileToImageState } from 'use-rx-hooks';
 import { api } from './api';
 import { createFormData } from './createFormData';
+import { paths } from '../constants';
 import axios from 'axios';
 
 // https://cloudinary.com/documentation/upload_images#uploading_with_a_direct_call_to_the_rest_api
