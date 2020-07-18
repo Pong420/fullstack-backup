@@ -3,7 +3,7 @@ import {
   Param$CloudinaryUpload,
   Response$CloudinaryUpload
 } from '@fullstack/typings';
-import { paths } from '@fullstack/common/constants';
+import { paths } from '../constants';
 import { from, defer, of, pipe, Observable } from 'rxjs';
 import { filter, map, zipAll, mergeMap, retry } from 'rxjs/operators';
 import { RxFileToImageState } from 'use-rx-hooks';

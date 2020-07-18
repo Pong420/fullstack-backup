@@ -1,15 +1,19 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useRxAsync } from 'use-rx-hooks';
-import { Divider, Button } from '@blueprintjs/core';
-import { Schema$User } from '@fullstack/typings';
 import { defer } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { Divider, Button } from '@blueprintjs/core';
+import { Schema$User } from '@fullstack/typings';
+import {
+  getUserProfile,
+  getJwtToken,
+  updateUser
+} from '@fullstack/common/service';
 import { SettingsSection } from './SettingsSection';
 import { UpdateAvatar } from './UpdateAvatar';
 import { createUserForm } from '../../components/UserForm';
 import { authUserSelector, useAuthActions } from '../../store';
-import { getUserProfile, getJwtToken, updateUser } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
 const { UserForm, FormItem, Nickname, Email, useForm } = createUserForm();

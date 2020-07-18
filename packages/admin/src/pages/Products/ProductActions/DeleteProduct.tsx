@@ -1,8 +1,8 @@
 import React from 'react';
 import { IconName } from '@blueprintjs/core';
+import { deleteProduct } from '@fullstack/common/service';
 import { ButtonPopover } from '../../../components/ButtonPopover';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
-import { deleteProduct } from '../../../service';
 import { Toaster } from '../../../utils/toaster';
 
 export interface OnDelete {

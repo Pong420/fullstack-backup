@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { Schema$User, Param$User } from '@fullstack/typings';
+import { updateUser } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { createUserForm, UserFormInstance } from '../../components/UserForm';
 import { Toaster } from '../../utils/toaster';
-import { updateUser } from '../../service';
 
 export interface OnUpdate {
   onUpdate: (payload: Param$User & Partial<Schema$User>) => void;

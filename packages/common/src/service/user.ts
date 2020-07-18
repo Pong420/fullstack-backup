@@ -6,7 +6,7 @@ import {
   Response$User,
   Param$CreateUser
 } from '@fullstack/typings';
-import { paths } from '@fullstack/common/constants';
+import { paths } from '../constants';
 import { api } from './api';
 
 const image: keyof Param$CreateUser & keyof Param$UpdateUser = 'avatar';

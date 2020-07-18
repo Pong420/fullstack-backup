@@ -39,3 +39,4 @@ stub
 
 packages/common/utils
 packages/common/constants
+packages/common/service

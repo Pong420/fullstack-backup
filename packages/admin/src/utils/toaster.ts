@@ -10,7 +10,7 @@ import {
   Toaster as BpToaster
 } from '@blueprintjs/core';
 import { ApiError } from '@fullstack/typings';
-import { getErrorMessage } from '../service';
+import { getErrorMessage } from '@fullstack/common/service';
 
 const props: IToasterProps = {
   position: Position.TOP_RIGHT

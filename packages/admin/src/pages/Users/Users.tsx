@@ -1,13 +1,13 @@
 import React from 'react';
 import { Card } from '@blueprintjs/core';
 import { Schema$User, Param$GetUsers } from '@fullstack/typings';
+import { getUsers } from '@fullstack/common/service';
 import { Layout } from '../../components/Layout';
 import { createFilter } from '../../components/Filter';
 import { UserRoleSelect } from '../../components/UserRoleSelect';
 import { CreateUser } from './CreateUser';
 import { UserTable } from './UserTable';
 import { usePaginationLocal } from '../../hooks/usePaginationLocal';
-import { getUsers } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Get users failure');

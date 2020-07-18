@@ -8,7 +8,10 @@ import {
   IMultiSelectProps
 } from '@blueprintjs/select';
 import { IPopoverProps } from '@blueprintjs/core';
-import { getProductTags, getProductCategories } from '../../service';
+import {
+  getProductTags,
+  getProductCategories
+} from '@fullstack/common/service';
 import { getTagProps } from '../../utils/getTagProps';
 import {
   itemPredicate,

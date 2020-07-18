@@ -1,8 +1,8 @@
 import React from 'react';
+import { deleteUser } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { Toaster } from '../../utils/toaster';
-import { deleteUser } from '../../service';
 
 export interface OnDelete {
   onDelete: ({ id }: { id: string }) => void;

@@ -21,7 +21,7 @@ function append(form: FormData, key: string, data: any) {
   }
 }
 
-export function createFormData<T extends object>(params: T) {
+export function createFormData<T extends Record<string, unknown>>(params: T) {
   const form = new FormData();
   Object.entries(params).forEach(([key, data]) => {
     append(form, key, data);

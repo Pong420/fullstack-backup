@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { Schema$Product, Param$Product } from '@fullstack/typings';
+import { updateProduct } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../../components/ButtonPopover';
 import { Toaster } from '../../../utils/toaster';
 import { ProductForm, ProductFormInstance, useForm } from '../ProductForm';
-import { updateProduct } from '../../../service';
 
 export interface OnUpdate {
   onUpdate: (payload: Param$Product & Partial<Schema$Product>) => void;

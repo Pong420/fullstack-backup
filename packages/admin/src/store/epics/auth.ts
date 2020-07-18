@@ -18,11 +18,16 @@ import {
 } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
+import {
+  login,
+  logout,
+  getJwtToken,
+  clearJwtToken
+} from '@fullstack/common/service';
 import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
 import { PATHS } from '../../constants';
-import { login, logout, getJwtToken, clearJwtToken } from '../../service';
 import { Toaster } from '../../utils/toaster';
 
 type Actions = AuthActions | RouterAction;

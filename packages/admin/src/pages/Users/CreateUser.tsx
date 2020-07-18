@@ -1,10 +1,10 @@
 import React from 'react';
 import { Schema$User } from '@fullstack/typings';
+import { createUser } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../components/ButtonPopover';
 import { createUserForm, userValidaors } from '../../components/UserForm';
 import { Toaster } from '../../utils/toaster';
-import { createUser } from '../../service';
 
 export interface OnCreate {
   onCreate: (payload: Schema$User) => void;

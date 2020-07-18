@@ -9,9 +9,9 @@ import {
   Param$DeleteAccount,
   Param$ModifyPassword
 } from '@fullstack/typings';
-import { paths } from '@fullstack/common/constants';
 import { defer, Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { paths } from '../constants';
 import { api } from './api';
 
 export const login = (params: Param$Login) =>

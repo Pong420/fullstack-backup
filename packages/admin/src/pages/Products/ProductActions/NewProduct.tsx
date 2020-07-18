@@ -1,9 +1,9 @@
 import React from 'react';
 import { Schema$Product } from '@fullstack/typings';
+import { createProduct } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../../components/ButtonPopover';
 import { Toaster } from '../../../utils/toaster';
-import { createProduct } from '../../../service';
 import { ProductForm, useForm } from '../ProductForm';
 
 export interface OnCreate {

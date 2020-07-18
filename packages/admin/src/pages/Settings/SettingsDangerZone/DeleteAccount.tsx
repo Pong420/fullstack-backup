@@ -1,11 +1,11 @@
 import React from 'react';
 import { Param$DeleteAccount } from '@fullstack/typings';
+import { deleteAccount } from '@fullstack/common/service';
 import { Password } from '../../../components/Input';
 import { DangerButton } from '../../../components/DangerButton';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { createForm, FormProps, validators } from '../../../utils/form';
 import { Toaster } from '../../../utils/toaster';
-import { deleteAccount } from '../../../service';
 import { useAuthActions } from '../../../store';
 
 const { Form, FormItem, useForm } = createForm<Param$DeleteAccount>();

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { paths } from '@fullstack/common/constants';
+import { paths } from '../constants';
 import { getJwtToken } from './auth';
 import { handleCloudinaryUpload } from './cloudinary';
 
@@ -27,7 +27,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(async config => {
   if (!isAuthUrl(config.url)) {
-    let { token } = await getJwtToken().toPromise();
+    const { token } = await getJwtToken().toPromise();
     config.headers['Authorization'] = 'bearer ' + token;
   }
   return config;

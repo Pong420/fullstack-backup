@@ -8,7 +8,7 @@ import {
   Response$Tags,
   Response$Category
 } from '@fullstack/typings';
-import { paths } from '@fullstack/common/constants';
+import { paths } from '../constants';
 import { api } from './api';
 
 const image: keyof Param$CreateProduct & keyof Param$UpdateProduct = 'images';

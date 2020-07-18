@@ -1,11 +1,11 @@
 import React from 'react';
 import { Param$ModifyPassword } from '@fullstack/typings';
+import { modifyPassword } from '@fullstack/common/service';
 import { Password } from '../../../components/Input';
 import { DangerButton } from '../../../components/DangerButton';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { createForm, FormProps, validators } from '../../../utils/form';
 import { Toaster } from '../../../utils/toaster';
-import { modifyPassword } from '../../../service';
 import { userValidaors } from '../../../components/UserForm';
 import { useAuthActions } from '../../../store';
 
