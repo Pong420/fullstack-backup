@@ -47,7 +47,7 @@ const configure = (factory: ConfigFactory[] = []) =>
         .valid('development', 'production', 'test')
         .default('development'),
       MONGODB_URI: Joi.string(),
-      CLOUDINARY_URL: Joi.string().default(''),
+      CLOUDINARY_URL: Joi.string().allow('').default(''),
       JWT_SECRET: Joi.string().default('JWT_SECRET'),
       JWT_TOKEN_EXPIRES_IN_MINUTES: Joi.number().min(1),
       REFRESH_TOKEN_EXPIRES_IN_MINUTES: Joi.number().min(1),
