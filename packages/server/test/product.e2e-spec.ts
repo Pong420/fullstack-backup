@@ -61,7 +61,7 @@ describe('ProductsController (e2e)', () => {
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).toSatisfyAll(
         product =>
-          typeof product.frezze === 'undefined' &&
+          typeof product.freeze === 'undefined' &&
           typeof product.amount === 'undefined' &&
           typeof product.remain === 'undefined'
       );

@@ -27,16 +27,16 @@ class Excluded implements DTOExcluded<Schema$Order, Param$UpdateOrder> {
 }
 
 class UpdateOrder extends Excluded
-  implements Partial<Omit<Schema, keyof Excluded | keyof UpdateOrderDto>> {}
-
-export class UpdateOrderDto extends UpdateOrder
-  implements Required<Omit<Schema, keyof UpdateOrder>> {
+  implements Partial<Omit<Schema, keyof Excluded | keyof UpdateOrderDto>> {
   @IsOptional()
   @IsEnum(OrderStatus)
   @Transform(Number)
-  status: OrderStatus;
+  status?: OrderStatus;
 
   @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 }
+
+export class UpdateOrderDto extends UpdateOrder
+  implements Required<Omit<Schema, keyof UpdateOrder>> {}

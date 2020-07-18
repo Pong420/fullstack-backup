@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Schema$Tags, Schema$Category } from '@fullstack/typings';
 import { Document, PaginateModel, Aggregate } from 'mongoose';
@@ -72,17 +72,14 @@ export class ProductsService extends MongooseCRUDService<Product> {
       });
   }
 
-  async frezze(id: string, amount: number): Promise<Product> {
-    return this.productModel.findOneAndUpdate(
-      { _id: id },
-      { $inc: { frezze: amount } }
-    );
+  async freeze(id: string, amount: number): Promise<Product> {
+    return this.update({ _id: id }, { $inc: { freeze: amount } });
   }
 
   async sold(id: string, amount: number): Promise<Product> {
-    return this.productModel.findOneAndUpdate(
-      { _id: id },
-      { $inc: { frezze: amount, amount } }
-    );
+    if (amount >= 0) {
+      throw new InternalServerErrorException('Amount should not be positive');
+    }
+    return this.update({ _id: id }, { $inc: { freeze: amount, amount } });
   }
 }

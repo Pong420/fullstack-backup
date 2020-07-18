@@ -93,10 +93,12 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
     changes: UpdateQuery<D>,
     options?: QueryFindOneAndUpdateOptions
   ): Promise<T> {
-    return this.model.findOneAndUpdate(query, changes, {
-      ...options,
-      new: true
-    });
+    return this.model
+      .findOneAndUpdate(query, changes, {
+        ...options,
+        new: true
+      })
+      .then(model => model.toJSON());
   }
 
   async findOne(

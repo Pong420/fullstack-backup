@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, BadRequestException } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Model, Document, Query } from 'mongoose';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
@@ -7,6 +7,8 @@ import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { Product, ProductSchema } from './schemas/products.schema.dto';
 import paginate from 'mongoose-paginate-v2';
+
+type Update = Partial<Product> & { $inc?: Partial<Product> };
 
 @Module({
   imports: [
@@ -18,9 +20,9 @@ import paginate from 'mongoose-paginate-v2';
         useFactory: async (cloudinaryService: CloudinaryService) => {
           async function removeImageFromCloudinary(this: Query<any>) {
             const model: Model<Product & Document> = (this as any).model;
-            const current = await model.findOne(this.getQuery());
-            if (current.images && current.images.length) {
-              await cloudinaryService.remove(current.images).toPromise();
+            const product = await model.findOne(this.getQuery());
+            if (product?.images?.length) {
+              await cloudinaryService.remove(product.images).toPromise();
             }
           }
 
@@ -28,9 +30,26 @@ import paginate from 'mongoose-paginate-v2';
           schema.plugin(paginate);
           schema.pre('deleteOne', removeImageFromCloudinary);
           schema.pre('findOneAndUpdate', async function () {
-            const update: Partial<Product> = this.getUpdate();
+            const update: Update = this.getUpdate();
             if (update.images) {
               await removeImageFromCloudinary.call(this);
+            }
+          });
+          schema.pre('findOneAndUpdate', async function () {
+            const update: Update = this.getUpdate();
+            if (typeof update.freeze === 'number' || update.$inc?.freeze) {
+              const model: Model<Product & Document> = (this as any).model;
+              const product = await model.findOne(this.getQuery());
+              if (
+                product &&
+                product.remain <
+                  Math.max(
+                    update.freeze || 0,
+                    update.$inc.freeze || 0 + product.freeze
+                  )
+              ) {
+                throw new BadRequestException(`${product.name} out of stock `);
+              }
             }
           });
           return schema;

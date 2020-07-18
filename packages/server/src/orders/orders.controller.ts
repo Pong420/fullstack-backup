@@ -4,7 +4,7 @@ import {
   Body,
   Patch,
   Req,
-  BadRequestException
+  ForbiddenException
 } from '@nestjs/common';
 import { OrderStatus, UserRole } from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
@@ -33,36 +33,34 @@ export class OrdersController {
     @Body(AttachUserPipe, ProductsPipe) createOrderDto: CreateOrderDto
   ): Promise<Order> {
     const order = await this.orderService.create(createOrderDto);
-    await Promise.all(
-      order.products.map(({ id, amount }) =>
-        this.productsService.frezze(id, amount)
-      )
-    );
     return order;
   }
 
   @Patch(paths.order.update_order)
-  @Access('ADMIN', 'MANAGER', 'SELF')
+  @Access('ADMIN', 'MANAGER', 'CLIENT')
   async update(
     @ObjectId() id: string,
-    @Body() { status }: UpdateOrderDto,
-    @Req() req: FastifyRequest
+    @Body() changes: UpdateOrderDto,
+    @Req() { user }: FastifyRequest
   ): Promise<Order> {
-    const role = req.user.role;
-
-    if (status === OrderStatus.CACNELED) {
+    if (user.role === UserRole.CLIENT) {
       const order = await this.orderService.findOne({ id });
-      if (order.status !== OrderStatus.PENDING && role === UserRole.CLIENT) {
-        throw new BadRequestException('Order cannot be cacnel');
+      if (
+        order.user.id !== user.user_id ||
+        order.status !== OrderStatus.PENDING || // client update order only if the status is pending
+        (typeof changes.status !== 'undefined' &&
+          changes.status !== OrderStatus.CACNELED)
+      ) {
+        throw new ForbiddenException('Permission Denied');
       }
     }
 
-    const order = await this.orderService.update({ _id: id }, { status });
+    const order = await this.orderService.update({ _id: id }, changes);
 
     if (order.status === OrderStatus.CACNELED) {
       await Promise.all(
         order.products.map(({ id, amount }) =>
-          this.productsService.frezze(id, amount * -1)
+          this.productsService.freeze(id, amount * -1)
         )
       );
     }
