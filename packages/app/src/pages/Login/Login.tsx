@@ -1,33 +1,34 @@
 import React from 'react';
 import {
-  StyleSheet,
   SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
-  View
+  View,
+  Platform
 } from 'react-native';
-import { flex, dimen } from '../../styles';
+import { dimen } from '../../styles';
 import { Logo } from '../../components/Logo';
+import { LoginForm } from './LoginForm';
 
 export function Login() {
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled
+    >
       <SafeAreaView style={dimen('100%')}>
         <ScrollView
           keyboardShouldPersistTaps="never"
-          contentContainerStyle={{ width: '100%', flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          <Logo style={{ marginTop: 50 }} />
-          <View style={{ padding: 20, flex: 1 }}></View>
+          <View style={{ padding: 20, flexGrow: 1, justifyContent: 'center' }}>
+            <Logo size={90} />
+          </View>
+          <View style={{ padding: 20, flexGrow: 1 }}>
+            <LoginForm />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...flex({ alignItems: 'flex-start', justifyContent: 'center' }),
-    backgroundColor: '#fff'
-  }
-});

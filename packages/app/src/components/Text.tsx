@@ -7,7 +7,7 @@ import {
 
 export const fonts = {
   // prettier-ignore
-  'muli': require('../assets/font/ink-painting.ttf'),
+  'muli': require('../assets/font/muli.ttf'),
   'ink-painting': require('../assets/font/ink-painting.ttf')
 };
 
@@ -24,7 +24,7 @@ export interface TextProps extends RnTextProps, FontStyle {
 }
 
 function createText(fontFamily: FontFamily) {
-  return function Text({ style, fontSize, ...props }: TextProps) {
+  return function Text({ style, fontSize = 16, ...props }: TextProps) {
     return <RnText {...props} style={{ fontFamily, fontSize, ...style }} />;
   };
 }
