@@ -9,14 +9,14 @@ const { Form, FormItem, useForm } = createForm<Param$Login>();
 
 interface Props {
   loading?: boolean;
-  onSubmit: (params: Param$Login) => void;
+  onSubmit?: (payload: Param$Login) => void;
 }
 
 export function LoginForm({ loading, onSubmit }: Props) {
   const [form] = useForm();
 
   return (
-    <View style={{ flex: 1, justifyContent: 'space-between' }}>
+    <View style={{ flexGrow: 1, justifyContent: 'space-between' }}>
       <Form form={form} onFinish={onSubmit}>
         <FormItem
           name="username"
