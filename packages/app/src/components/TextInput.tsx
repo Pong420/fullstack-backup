@@ -86,6 +86,9 @@ export function TextInput({
           }}
           onChangeText={onChange}
           {...props}
+          {...(props &&
+            onChange &&
+            typeof props.value === 'undefined' && { value: '' })}
         />
         <View style={{ padding: 5 }}>{rightElement}</View>
       </View>

@@ -4,6 +4,7 @@ import { Param$Login } from '@fullstack/typings';
 import { createForm, validators } from '../../utils/form';
 import { Button } from '../../components/Button';
 import { TextInput } from '../../components/TextInput';
+import { Password } from '../../components/Password';
 
 const { Form, FormItem, useForm } = createForm<Param$Login>();
 
@@ -23,7 +24,7 @@ export function LoginForm({ loading, onSubmit }: Props) {
           label="Username"
           validators={[validators.required('Please input username')]}
         >
-          <TextInput />
+          <TextInput textContentType="username" autoCompleteType="username" />
         </FormItem>
 
         <FormItem
@@ -31,7 +32,7 @@ export function LoginForm({ loading, onSubmit }: Props) {
           label="Password"
           validators={[validators.required('Please input password')]}
         >
-          <TextInput />
+          <Password />
         </FormItem>
       </Form>
       <View>
@@ -41,7 +42,6 @@ export function LoginForm({ loading, onSubmit }: Props) {
           loading={loading}
           onPress={form.submit}
         />
-        <Button title="Register" style={{ marginTop: 10 }} />
       </View>
     </View>
   );
