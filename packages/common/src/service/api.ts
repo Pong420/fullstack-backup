@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { paths } from '../constants';
 import { getJwtToken } from './auth';
-import { handleCloudinaryUpload } from './cloudinary';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -29,20 +28,6 @@ api.interceptors.request.use(async config => {
   if (!isAuthUrl(config.url)) {
     const { token } = await getJwtToken().toPromise();
     config.headers['Authorization'] = 'bearer ' + token;
-  }
-  return config;
-});
-
-api.interceptors.request.use(async config => {
-  const { image } = config;
-  if (image && config.data[image]) {
-    try {
-      config.data[image] = await handleCloudinaryUpload(
-        config.data[image]
-      ).toPromise();
-    } catch (error) {
-      throw new Error('Image upload failure');
-    }
   }
   return config;
 });

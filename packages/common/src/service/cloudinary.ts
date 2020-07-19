@@ -13,6 +13,20 @@ import axios from 'axios';
 
 // https://cloudinary.com/documentation/upload_images#uploading_with_a_direct_call_to_the_rest_api
 
+api.interceptors.request.use(async config => {
+  const { image } = config;
+  if (image && config.data[image]) {
+    try {
+      config.data[image] = await handleCloudinaryUpload(
+        config.data[image]
+      ).toPromise();
+    } catch (error) {
+      throw new Error('Image upload failure');
+    }
+  }
+  return config;
+});
+
 export const cloudinarySign = () =>
   api
     .post<Response$CloudinarySign>(paths.cloudinary_sign)
