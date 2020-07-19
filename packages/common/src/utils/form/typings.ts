@@ -37,7 +37,7 @@ export type Paths<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends any[] // for array
   ? [number]
-  : T extends object
+  : T extends Record<PropertyKey, unknown>
   ? {
       [K in keyof T]-?: K extends keyof T[K] & keyof ValueOf<T[K]>
         ? (keyof T)[] // this turn [string, string, string] into string[]
@@ -51,9 +51,9 @@ export type Paths<T, D extends number = 10> = [D] extends [never]
     }[keyof T]
   : [];
 
-export type DeepPartial<T> = T extends Function
+export type DeepPartial<T> = T extends () => void
   ? T
-  : T extends object
+  : T extends Record<PropertyKey, unknown>
   ? { [P in keyof T]?: DeepPartial<T[P]> }
   : T;
 
@@ -82,16 +82,3 @@ export interface Control<T = any> {
   value?: T;
   onChange?: (value: T) => void;
 }
-
-// for debug purpose
-type T = {
-  a: {
-    b: {
-      c: [1, 2, 3];
-    };
-  };
-};
-type T1 = NamePath<Record<number | string, any>>;
-type T2 = NamePath<Record<string, any>>;
-type T3 = NamePath<T>;
-type T4 = DeepPartial<T>;

@@ -6,8 +6,14 @@ import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
 import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
 import { View, ViewStyle } from 'react-native';
-import { Validator, compose as composeValidator } from './validators';
-import { NamePath, Paths, PathType, DeepPartial } from './typings';
+import {
+  NamePath,
+  Paths,
+  PathType,
+  DeepPartial,
+  Validator,
+  compose as composeValidator
+} from '@fullstack/common/utils/form';
 import { Text, TextProps } from '../../components/Text';
 
 export type FormInstance<

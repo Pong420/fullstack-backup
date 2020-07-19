@@ -3,7 +3,7 @@ import { Schema$User } from '@fullstack/typings';
 import { createUser } from '@fullstack/common/service';
 import { openConfirmDialog } from '../../components/ConfirmDialog';
 import { ButtonPopover, IconName } from '../../components/ButtonPopover';
-import { createUserForm, userValidaors } from '../../components/UserForm';
+import { createUserForm, userValidators } from '../../components/UserForm';
 import { Toaster } from '../../utils/toaster';
 
 export interface OnCreate {
@@ -44,16 +44,16 @@ export function CreateUser({ onCreate }: CreateUserProps) {
       <Username
         autoFocus
         validators={[
-          userValidaors.username.format,
-          userValidaors.username.required
+          userValidators.username.format,
+          userValidators.username.required
         ]}
       />
       <Password
         deps={['username']}
         validators={({ username }) => [
-          userValidaors.password.required,
-          userValidaors.password.format,
-          userValidaors.password.equalToUsername(username)
+          userValidators.password.required,
+          userValidators.password.format,
+          userValidators.password.equalToUsername(username)
         ]}
       />
       <Nickname />

@@ -22,7 +22,7 @@ export function LoginForm({ loading, onSubmit }: Props) {
         <FormItem
           name="username"
           label="Username"
-          validators={[validators.required('Please input username')]}
+          validators={[validators.username.required]}
         >
           <TextInput textContentType="username" autoCompleteType="username" />
         </FormItem>
@@ -30,7 +30,7 @@ export function LoginForm({ loading, onSubmit }: Props) {
         <FormItem
           name="password"
           label="Password"
-          validators={[validators.required('Please input password')]}
+          validators={[validators.password.required]}
         >
           <Password />
         </FormItem>

@@ -6,7 +6,7 @@ import { DangerButton } from '../../../components/DangerButton';
 import { openConfirmDialog } from '../../../components/ConfirmDialog';
 import { createForm, FormProps, validators } from '../../../utils/form';
 import { Toaster } from '../../../utils/toaster';
-import { userValidaors } from '../../../components/UserForm';
+import { userValidators } from '../../../components/UserForm';
 import { useAuthActions } from '../../../store';
 
 const { Form, FormItem, useForm } = createForm<Param$ModifyPassword>();
@@ -29,7 +29,7 @@ function ModifyPasswordForm(props: FormProps<Param$ModifyPassword>) {
         validators={({ password }) => {
           return [
             validators.required('Please input new password'),
-            userValidaors.password.format,
+            userValidators.password.format,
             validators.shouldNotBeEqual(
               password,
               'The new password should not be equal to the old password'

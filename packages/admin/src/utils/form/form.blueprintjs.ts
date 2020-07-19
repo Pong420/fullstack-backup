@@ -5,9 +5,15 @@ import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
 import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
-import { Validator, compose as composeValidator } from './validators';
-import { NamePath, Paths, PathType, DeepPartial } from './typings';
 import { FormGroup, IFormGroupProps } from '@blueprintjs/core';
+import {
+  NamePath,
+  Paths,
+  PathType,
+  DeepPartial,
+  Validator,
+  compose as composeValidator
+} from '@fullstack/common/utils/form';
 
 export type FormInstance<
   S extends {} = Store,

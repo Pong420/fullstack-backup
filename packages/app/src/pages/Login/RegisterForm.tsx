@@ -1,21 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Param$CreateUser } from '@fullstack/typings';
-import {
-  USERNAME_MIN_LENGTH,
-  USERNAME_MIN_LENGTH_MESSAGE,
-  USERNAME_MAX_LENGTH,
-  USERNAME_MAX_LENGTH_MESSAGE,
-  USERNAME_REGEX,
-  USERNAME_REGEX_MESSAGE,
-  PASSWORD_EUQAL_TO_USERNAME,
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_MIN_LENGTH_MESSAGE,
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MAX_LENGTH_MESSAGE,
-  PASSWORD_REGEX,
-  PASSWORD_REGEX_MESSAGE
-} from '@fullstack/common/constants';
 import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
@@ -40,16 +25,8 @@ export function RegisterForm({ loading, onSubmit }: Props) {
           name="username"
           label="Username"
           validators={[
-            validators.required('Please input username'),
-            validators.minLength(
-              USERNAME_MIN_LENGTH,
-              USERNAME_MIN_LENGTH_MESSAGE
-            ),
-            validators.maxLength(
-              USERNAME_MAX_LENGTH,
-              USERNAME_MAX_LENGTH_MESSAGE
-            ),
-            validators.regex(USERNAME_REGEX, USERNAME_REGEX_MESSAGE)
+            validators.username.required,
+            validators.username.format
           ]}
         >
           <TextInput textContentType="username" autoCompleteType="username" />
@@ -60,17 +37,9 @@ export function RegisterForm({ loading, onSubmit }: Props) {
           label="Password"
           deps={['username']}
           validators={({ username }) => [
-            validators.required('Please input password'),
-            validators.minLength(
-              PASSWORD_MIN_LENGTH,
-              PASSWORD_MIN_LENGTH_MESSAGE
-            ),
-            validators.maxLength(
-              PASSWORD_MAX_LENGTH,
-              PASSWORD_MAX_LENGTH_MESSAGE
-            ),
-            validators.regex(PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE),
-            validators.shouldNotBeEqual(username, PASSWORD_EUQAL_TO_USERNAME)
+            validators.password.required,
+            validators.password.format,
+            validators.password.equalToUsername(username)
           ]}
         >
           <Password textContentType="newPassword" />

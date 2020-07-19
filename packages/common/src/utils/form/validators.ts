@@ -1,3 +1,19 @@
+import {
+  USERNAME_MIN_LENGTH,
+  USERNAME_MIN_LENGTH_MESSAGE,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MAX_LENGTH_MESSAGE,
+  USERNAME_REGEX,
+  USERNAME_REGEX_MESSAGE,
+  PASSWORD_EUQAL_TO_USERNAME,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH_MESSAGE,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH_MESSAGE,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_MESSAGE
+} from '../../constants';
+
 export type Validator = (rule: any, value: any) => Promise<void>;
 
 export const compose = (validators: Array<Validator | null>): Validator => {
@@ -30,9 +46,10 @@ export const number: Validator = (_, value) =>
     ? Promise.resolve()
     : Promise.reject('Plase input number only');
 
-export const integer = (
-  msg: string = 'Plase input integer only'
-): Validator => (_, value) =>
+export const integer = (msg = 'Plase input integer only'): Validator => (
+  _,
+  value
+) =>
   value === '' || /^(-)?\d*$/.test(value)
     ? Promise.resolve()
     : Promise.reject(msg);
@@ -93,4 +110,24 @@ export const shouldNotBeEqual = (val: any, msg: string): Validator => (
 export const regex = (regex: RegExp, msg: string): Validator => (_, value) => {
   const valid = typeof value === 'string' ? regex.test(value) : false;
   return valid ? Promise.resolve() : Promise.reject(msg);
+};
+
+export const username = {
+  required: required('Please input username'),
+  format: compose([
+    minLength(USERNAME_MIN_LENGTH, USERNAME_MIN_LENGTH_MESSAGE),
+    maxLength(USERNAME_MAX_LENGTH, USERNAME_MAX_LENGTH_MESSAGE),
+    regex(USERNAME_REGEX, USERNAME_REGEX_MESSAGE)
+  ])
+};
+
+export const password = {
+  required: required('Please input password'),
+  format: compose([
+    minLength(PASSWORD_MIN_LENGTH, PASSWORD_MIN_LENGTH_MESSAGE),
+    maxLength(PASSWORD_MAX_LENGTH, PASSWORD_MAX_LENGTH_MESSAGE),
+    regex(PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE)
+  ]),
+  equalToUsername: (username: string) =>
+    shouldNotBeEqual(username, PASSWORD_EUQAL_TO_USERNAME)
 };

@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useRxAsync } from 'use-rx-hooks';
 import { Button } from '@blueprintjs/core';
 import { registerGuest } from '@fullstack/common/service';
-import { createUserForm, userValidaors } from '../../../components/UserForm';
+import { createUserForm, userValidators } from '../../../components/UserForm';
 import { history } from '../../../store';
 import { PATHS } from '../../../constants';
 import { Toaster } from '../../../utils/toaster';
@@ -36,17 +36,17 @@ export function GuestRegistrationForm({ history }: RouteComponentProps) {
     >
       <Username
         validators={[
-          userValidaors.username.required,
-          userValidaors.username.format
+          userValidators.username.required,
+          userValidators.username.format
         ]}
       />
 
       <Password
         deps={['username']}
         validators={({ username }) => [
-          userValidaors.password.required,
-          userValidaors.password.format,
-          userValidaors.password.equalToUsername(username)
+          userValidators.password.required,
+          userValidators.password.format,
+          userValidators.password.equalToUsername(username)
         ]}
       />
 

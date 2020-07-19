@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button } from '@blueprintjs/core';
-import { createUserForm, userValidaors } from '../../../components/UserForm';
+import { createUserForm, userValidators } from '../../../components/UserForm';
 import { useAuthActions, loginStatusSelector } from '../../../store';
 import { PATHS } from '../../../constants';
 
@@ -14,9 +14,9 @@ export function LoginForm({ history }: RouteComponentProps) {
 
   return (
     <Form onFinish={authorize}>
-      <Username validators={[userValidaors.username.required]} />
+      <Username validators={[userValidators.username.required]} />
 
-      <Password validators={[userValidaors.password.required]} />
+      <Password validators={[userValidators.password.required]} />
 
       <Button fill type="submit" intent="primary" loading={loading}>
         Login
