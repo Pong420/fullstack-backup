@@ -82,7 +82,7 @@ function Header() {
 const iconSize = 26;
 const iconColor = '#182026';
 const workingInProgress = () =>
-  toaster.warn({
+  toaster.info({
     message: 'This feature is working in progress'
   });
 function Item({ title, icon: Icon, onPress }: Omit<typeof DATA[number], 'id'>) {

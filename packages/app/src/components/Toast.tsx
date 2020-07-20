@@ -1,11 +1,17 @@
-import React, { useState, useRef, useEffect, ReactNode } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ReactNode,
+  useLayoutEffect
+} from 'react';
 import { Animated, View, SafeAreaView } from 'react-native';
 import { Subject } from 'rxjs';
 import { Feather } from '@expo/vector-icons';
 import { Bold, Text } from './Text';
-import { paddingX, paddingY, marginX, marginY } from '../styles';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface Theme {
   color?: string;
@@ -39,6 +45,11 @@ export const toaster = {
     iconName: 'check',
     title: 'Success'
   }),
+  info: createToster({
+    color: '#2965CC',
+    iconName: 'info',
+    title: 'Info'
+  }),
   warn: createToster({
     color: '#D9822B',
     iconName: 'alert-octagon',
@@ -61,7 +72,6 @@ export function ToastContainer() {
     const subscription = subject.subscribe(props => {
       setToasters(p => [props, ...p]);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -90,32 +100,30 @@ export function Toast({
   message
 }: ToastProps) {
   const trans = useRef(new Animated.Value(0));
-  const close = useRef(new Animated.Value(1));
-  const onclose = useRef(onClose);
+  const closeAnim = useRef(new Animated.Value(1));
+  const close = useRef(() =>
+    Animated.timing(closeAnim.current, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start(() => onClose())
+  );
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      Animated.timing(close.current, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true
-      }).start(() => onclose.current());
-    }, 3000);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     Animated.spring(trans.current, {
       toValue: 1,
       useNativeDriver: true
     }).start();
+
+    const timeout = setTimeout(close.current, 3000);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <Animated.View
       style={{
         flex: 1,
-        opacity: close.current,
+        opacity: closeAnim.current,
         transform: [
           {
             translateY: trans.current.interpolate({
@@ -126,10 +134,11 @@ export function Toast({
         ]
       }}
     >
-      <View
+      <TouchableWithoutFeedback
+        onPress={close.current}
         style={{
-          ...marginX(20),
-          ...marginY(5),
+          marginHorizontal: 20,
+          marginVertical: 5,
           backgroundColor: '#fff',
           flexDirection: 'row',
           shadowColor: '#000',
@@ -151,8 +160,7 @@ export function Toast({
         />
         <View
           style={{
-            ...paddingX(15),
-            ...paddingY(15),
+            padding: 15,
             flexGrow: 1,
             flexDirection: 'row'
           }}
@@ -161,12 +169,14 @@ export function Toast({
             name={iconName || ''}
             color={color}
             size={iconSize}
-            style={{ marginTop: 5 }}
+            style={{ marginTop: 3 }}
           />
-          <View style={{ flexGrow: 1, ...paddingX(15) }}>
-            <Bold>{title}</Bold>
+          <View style={{ flexGrow: 1, paddingHorizontal: 10 }}>
+            <Bold fontSize={16}>{title}</Bold>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ flex: 1, flexWrap: 'wrap' }}>{message}</Text>
+              <Text fontSize={14} style={{ flex: 1, flexWrap: 'wrap' }}>
+                {message}
+              </Text>
             </View>
           </View>
           <Feather
@@ -177,7 +187,7 @@ export function Toast({
             onPress={onClose}
           />
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Animated.View>
   );
 }
