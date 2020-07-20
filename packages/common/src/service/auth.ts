@@ -20,6 +20,12 @@ export const login = (params: Param$Login) =>
 export const refreshToken = () =>
   api.post<Response$RefreshToken>(paths.refresh_token, {});
 
+export const register = (params: Param$CreateUser) =>
+  api.post<Response$User>(paths.registration, {
+    ...params,
+    role: UserRole.CLIENT
+  });
+
 export const registerAdmin = (params: Param$CreateUser) =>
   api.post<Response$User>(paths.admin_registration, {
     ...params,
@@ -66,3 +72,23 @@ export function getJwtToken() {
     })
   );
 }
+
+const authUrls = [
+  paths.login,
+  paths.refresh_token,
+  paths.registration,
+  paths.guest_registration
+];
+const authUrlRegex = new RegExp(
+  `(${authUrls.join('|').replace(/\//g, '\\/')})$`
+);
+
+const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
+
+api.interceptors.request.use(async config => {
+  if (!isAuthUrl(config.url)) {
+    const { token } = await getJwtToken().toPromise();
+    config.headers['Authorization'] = 'bearer ' + token;
+  }
+  return config;
+});

@@ -57,7 +57,7 @@ export function RegisterForm({ loading, onSubmit }: Props) {
             )
           ]}
         >
-          <Password textContentType={undefined} />
+          <Password textContentType="newPassword" />
         </FormItem>
 
         <FormItem

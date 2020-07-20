@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,24 +6,41 @@ import {
   View,
   Platform
 } from 'react-native';
+import { useRxAsync } from 'use-rx-hooks';
 import { dimen, marginY } from '../../styles';
 import { Logo } from '../../components/Logo';
 import { Button } from '../../components/Button';
+import { toaster } from '../../components/Toast';
 import { useBoolean } from '../../hooks/useBoolean';
 import { useAuth } from '../../hooks/useAuth';
+import { register } from '../../service';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 
+const onRegistrationFailure = toaster.apiError.bind(
+  toaster,
+  'Registration failure'
+);
+
 export function Login() {
-  const [isLogin, , , toggleRegister] = useBoolean(true);
-  const { authorize } = useAuth();
+  const [isLogin, backToLogin, , toggleRegister] = useBoolean(true);
+  const { loginStatus, authorize } = useAuth();
+  const onSuccess = useRef(() => {
+    backToLogin();
+    toaster.success({ message: 'Registration success' });
+  });
+  const registration = useRxAsync(register, {
+    defer: true,
+    onSuccess: onSuccess.current,
+    onFailure: onRegistrationFailure
+  });
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled
     >
-      <SafeAreaView style={dimen('100%')}>
+      <SafeAreaView style={{ ...dimen('100%'), backgroundColor: '#fff' }}>
         <ScrollView
           alwaysBounceVertical={false}
           keyboardShouldPersistTaps="handled"
@@ -32,7 +49,17 @@ export function Login() {
           <Logo size={90} style={marginY(50)} />
 
           <View style={{ padding: 20, flexGrow: 1 }}>
-            {isLogin ? <LoginForm onSubmit={authorize} /> : <RegisterForm />}
+            {isLogin ? (
+              <LoginForm
+                loading={loginStatus === 'loading'}
+                onSubmit={authorize}
+              />
+            ) : (
+              <RegisterForm
+                loading={registration.loading}
+                onSubmit={registration.run}
+              />
+            )}
             <Button
               onPress={toggleRegister}
               style={{ marginTop: 15 }}
