@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { Login } from './src/pages/Login';
 import { fonts } from './src/components/Text';
+import { ToastContainer } from './src/components/Toast';
 
 export default function () {
   let [fontsLoaded] = useFonts(fonts);
@@ -12,6 +13,7 @@ export default function () {
       <>
         <StatusBar style="auto" />
         <Login />
+        <ToastContainer />
       </>
     );
   }

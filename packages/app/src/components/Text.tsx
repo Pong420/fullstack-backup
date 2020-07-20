@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Text as RnText,
   TextProps as RnTextProps,
@@ -20,7 +20,7 @@ type FontStyle = {
 export interface TextProps extends RnTextProps, FontStyle {
   fontSize?: number;
   style?: TextStyle & FontStyle;
-  children?: string | number;
+  children?: ReactNode;
 }
 
 function createText(fontFamily: FontFamily) {
