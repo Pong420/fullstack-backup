@@ -8,6 +8,7 @@ import { enableScreens } from 'react-native-screens';
 import { Feather } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Login } from './src/pages/Login';
+import { User } from './src/pages/User';
 import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
 import { AuthProvider, useAuth } from './src/hooks/useAuth';
@@ -46,18 +47,19 @@ function MainStack() {
   return (
     <NavigationContainer theme={theme}>
       <Tab.Navigator
+        initialRouteName="User"
         tabBarOptions={{
           showLabel: false,
           style: {
             height: 90,
             elevation: 8,
-            borderTopWidth: 0,
-            shadowColor: '#eee',
+            shadowColor: '#ddd',
             shadowOffset: {
-              width: 0,
-              height: -1
+              width: 1,
+              height: 1
             },
-            shadowOpacity: 1
+            shadowOpacity: 0.5,
+            shadowRadius: 1
           },
           tabStyle: {
             padding: 5
@@ -83,7 +85,7 @@ function MainStack() {
         <Tab.Screen name="Compass" component={Temp} />
         <Tab.Screen name="Favourite" component={Temp} />
         <Tab.Screen name="Cart" component={Temp} />
-        <Tab.Screen name="User" component={Temp} />
+        <Tab.Screen name="User" component={User} options={{ title: 'User' }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
