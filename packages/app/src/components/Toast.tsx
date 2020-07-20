@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, ReactNode } from 'react';
 import { Animated, View, SafeAreaView } from 'react-native';
 import { Subject } from 'rxjs';
 import { Feather } from '@expo/vector-icons';
-import { Text } from './Text';
+import { Bold, Text } from './Text';
 import { paddingX, paddingY, marginX, marginY } from '../styles';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
@@ -164,7 +164,7 @@ export function Toast({
             style={{ marginTop: 5 }}
           />
           <View style={{ flexGrow: 1, ...paddingX(15) }}>
-            <Text>{title}</Text>
+            <Bold>{title}</Bold>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ flex: 1, flexWrap: 'wrap' }}>{message}</Text>
             </View>

@@ -14,7 +14,7 @@ import {
   Validator,
   compose as composeValidator
 } from '@fullstack/common/utils/form';
-import { Text, TextProps } from '../../components/Text';
+import { SemiBold, Text, TextProps } from '../../components/Text';
 
 export type FormInstance<
   S extends {} = Store,
@@ -179,7 +179,7 @@ export function createForm<S extends {} = Store, V = S>({
           View,
           { style: { marginBottom: 10, ...style } },
           React.createElement(
-            Text,
+            SemiBold,
             {
               style: {
                 marginBottom: 2,

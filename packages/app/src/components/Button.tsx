@@ -7,7 +7,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Text } from './Text';
+import { SemiBold } from './Text';
 import { paddingX } from '../styles';
 
 export interface ButtonProps extends TouchableHighlightProps {
@@ -96,7 +96,7 @@ export function Button({
           {loading ? (
             <ActivityIndicator />
           ) : (
-            <Text
+            <SemiBold
               style={{
                 fontSize: 16,
                 opacity: disabled ? 0.5 : 1,
@@ -107,7 +107,7 @@ export function Button({
               }}
             >
               {title}
-            </Text>
+            </SemiBold>
           )}
         </LinearGradientWrapper>
       </View>
