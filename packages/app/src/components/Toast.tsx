@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { Feather } from '@expo/vector-icons';
 import { Text } from './Text';
 import { paddingX, paddingY, marginX, marginY } from '../styles';
+import { ApiError } from '@fullstack/typings';
+import { getErrorMessage } from '@fullstack/common/service';
 
 interface Theme {
   color?: string;
@@ -46,7 +48,10 @@ export const toaster = {
     color: '#DB3737',
     iconName: 'x-octagon',
     title: 'Error'
-  })
+  }),
+  apiError: (title = 'Error', error: ApiError) => {
+    toaster.error({ title, message: getErrorMessage(error) });
+  }
 };
 
 export function ToastContainer() {
