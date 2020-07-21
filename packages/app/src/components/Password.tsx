@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableHighlight } from 'react-native';
+import { View, TouchableHighlight, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { TextInput, TextInputProps } from './TextInput';
 import { useBoolean } from '../hooks/useBoolean';
@@ -15,17 +15,10 @@ export function Password({ visible, ...props }: Props) {
     <TextInput
       textContentType="password"
       autoCompleteType="password"
-      {...props}
       secureTextEntry={secureTextEntry}
       rightElement={
         <TouchableHighlight onPress={toggle} underlayColor="transparent">
-          <View
-            style={{
-              ...dimen(30),
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
+          <View style={styles.view}>
             <Feather
               name={secureTextEntry ? 'eye-off' : 'eye'}
               onPress={toggle}
@@ -34,6 +27,15 @@ export function Password({ visible, ...props }: Props) {
           </View>
         </TouchableHighlight>
       }
+      {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  view: {
+    ...dimen(30),
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+});

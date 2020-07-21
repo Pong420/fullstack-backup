@@ -2,37 +2,28 @@ import { ViewStyle } from 'react-native';
 
 type Size = ViewStyle['width'] | ViewStyle['height'];
 
-export function dimen(width: Size, height?: Size) {
+export function dimen(width: Size, height?: Size): ViewStyle {
   return {
     width,
     height: height || width
   };
 }
 
-export function paddingX(value: ViewStyle['padding']): ViewStyle {
-  return {
-    paddingLeft: value,
-    paddingRight: value
-  };
+interface ShadowOffset {
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
 }
 
-export function paddingY(value: ViewStyle['padding']): ViewStyle {
+export function shadow({
+  shadowOffsetX = 0,
+  shadowOffsetY = 0,
+  ...styles
+}: ViewStyle & ShadowOffset): ViewStyle {
   return {
-    paddingTop: value,
-    paddingBottom: value
-  };
-}
-
-export function marginX(value: ViewStyle['margin']): ViewStyle {
-  return {
-    marginLeft: value,
-    marginRight: value
-  };
-}
-
-export function marginY(value: ViewStyle['margin']): ViewStyle {
-  return {
-    marginTop: value,
-    marginBottom: value
+    shadowOffset: { width: shadowOffsetX, height: shadowOffsetY },
+    shadowOpacity: 0.5,
+    elevation: 1,
+    shadowRadius: 1,
+    ...styles
   };
 }

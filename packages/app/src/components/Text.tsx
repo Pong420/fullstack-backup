@@ -2,7 +2,9 @@ import React, { ReactNode } from 'react';
 import {
   Text as RnText,
   TextProps as RnTextProps,
-  TextStyle
+  TextStyle,
+  View,
+  ViewStyle
 } from 'react-native';
 
 export const fonts = {
@@ -35,3 +37,13 @@ export const Text = createText('muli');
 export const Bold = createText('muli-bold');
 export const SemiBold = createText('muli-semi-bold');
 export const InkPainting = createText('ink-painting');
+
+const textWrapViewStyle: ViewStyle = { flexDirection: 'row' };
+const textWrapStyle: ViewStyle = { flex: 1, flexWrap: 'wrap' };
+export function TextWrap(props: TextProps) {
+  return (
+    <View style={textWrapViewStyle}>
+      <Text {...props} style={textWrapStyle} />
+    </View>
+  );
+}

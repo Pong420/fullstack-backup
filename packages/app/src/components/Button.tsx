@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SemiBold } from './Text';
-import { paddingX } from '../styles';
+import { shadow } from '../styles';
 
 export interface ButtonProps extends TouchableHighlightProps {
   intent?: keyof typeof themes;
@@ -67,50 +67,40 @@ export function Button({
       disabled={active}
       underlayColor={ghost ? '#ddd' : undefined}
     >
-      <View
+      <LinearGradientWrapper
+        colors={active || ghost ? undefined : theme.gradient}
         style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 44,
+          paddingHorizontal: 15,
           borderWidth: 1,
           borderColor: intent === 'NONE' ? '#ddd' : theme.backgroundColor,
-          ...(!ghost && {
-            backgroundColor: active ? undefined : theme.backgroundColor,
-            shadowColor: theme.shadowColor,
-            shadowOffset: {
-              width: 0,
-              height: 0.25
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 1,
-            elevation: 1
-          })
+          ...(!ghost &&
+            shadow({
+              backgroundColor: theme.backgroundColor,
+              shadowColor: theme.shadowColor,
+              shadowOffsetY: 0.25
+            }))
         }}
       >
-        <LinearGradientWrapper
-          colors={active || ghost ? undefined : theme.gradient}
-          style={{
-            ...paddingX(15),
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 44
-          }}
-        >
-          {loading ? (
-            <ActivityIndicator />
-          ) : (
-            <SemiBold
-              style={{
-                fontSize: 16,
-                opacity: disabled ? 0.5 : 1,
-                color:
-                  ghost && intent !== 'NONE'
-                    ? theme.backgroundColor
-                    : theme.textColor
-              }}
-            >
-              {title}
-            </SemiBold>
-          )}
-        </LinearGradientWrapper>
-      </View>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <SemiBold
+            style={{
+              fontSize: 16,
+              opacity: disabled ? 0.5 : 1,
+              color:
+                ghost && intent !== 'NONE'
+                  ? theme.backgroundColor
+                  : theme.textColor
+            }}
+          >
+            {title}
+          </SemiBold>
+        )}
+      </LinearGradientWrapper>
     </TouchableHighlight>
   );
 }

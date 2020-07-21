@@ -5,13 +5,19 @@ import React, {
   ReactNode,
   useLayoutEffect
 } from 'react';
-import { Animated, View, SafeAreaView } from 'react-native';
+import {
+  Animated,
+  View,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+  StyleSheet
+} from 'react-native';
 import { Subject } from 'rxjs';
 import { Feather } from '@expo/vector-icons';
-import { Bold, Text } from './Text';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Bold, TextWrap } from './Text';
+import { shadow } from '../styles';
 
 interface Theme {
   color?: string;
@@ -134,60 +140,58 @@ export function Toast({
         ]
       }}
     >
-      <TouchableWithoutFeedback
-        onPress={close.current}
-        style={{
-          marginHorizontal: 20,
-          marginVertical: 5,
-          backgroundColor: '#fff',
-          flexDirection: 'row',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1
-          },
-          shadowOpacity: 0.5,
-          shadowRadius: 1,
-          elevation: 1
-        }}
-      >
-        <View
-          style={{
-            width: 5,
-            height: '100%',
-            backgroundColor: color
-          }}
-        />
-        <View
-          style={{
-            padding: 15,
-            flexGrow: 1,
-            flexDirection: 'row'
-          }}
-        >
-          <Feather
-            name={iconName || ''}
-            color={color}
-            size={iconSize}
-            style={{ marginTop: 3 }}
-          />
-          <View style={{ flexGrow: 1, paddingHorizontal: 10 }}>
-            <Bold fontSize={16}>{title}</Bold>
-            <View style={{ flexDirection: 'row' }}>
-              <Text fontSize={14} style={{ flex: 1, flexWrap: 'wrap' }}>
-                {message}
-              </Text>
+      <TouchableWithoutFeedback onPress={close.current}>
+        <View style={styles.container}>
+          <View style={{ ...styles.indicator, backgroundColor: color }} />
+          <View style={styles.body}>
+            <Feather
+              name={iconName || ''}
+              color={color}
+              size={iconSize}
+              style={styles.icon}
+            />
+            <View style={styles.content}>
+              <Bold fontSize={16}>{title}</Bold>
+              <TextWrap>{message}</TextWrap>
             </View>
+
+            <Feather
+              name="x"
+              color="#182026"
+              size={iconSize}
+              style={styles.closeIcon}
+              onPress={onClose}
+            />
           </View>
-          <Feather
-            name="x"
-            color="#182026"
-            size={iconSize}
-            style={{ alignSelf: 'center' }}
-            onPress={onClose}
-          />
         </View>
       </TouchableWithoutFeedback>
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 20,
+    marginVertical: 5,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    ...shadow({
+      shadowColor: '#000',
+      shadowOffsetY: 1
+    })
+  },
+  indicator: {
+    width: 5,
+    height: '100%'
+  },
+  body: {
+    padding: 15,
+    flexGrow: 1,
+    flexDirection: 'row'
+  },
+  icon: { marginTop: 3 },
+  content: { flexGrow: 1, paddingHorizontal: 10 },
+  closeIcon: { alignSelf: 'center' },
+  flexRow: { flexDirection: 'row' },
+  wrapTextStyle: { flex: 1, flexWrap: 'wrap' }
+});

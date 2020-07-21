@@ -7,7 +7,7 @@ import {
   Platform
 } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
-import { dimen, marginY } from '../../styles';
+import { dimen } from '../../styles';
 import { Logo } from '../../components/Logo';
 import { Button } from '../../components/Button';
 import { toaster } from '../../components/Toast';
@@ -46,7 +46,7 @@ export function Login() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          <Logo size={90} style={marginY(50)} />
+          <Logo size={90} style={{ marginVertical: 50 }} />
 
           <View style={{ padding: 20, flexGrow: 1 }}>
             {isLogin ? (

@@ -12,6 +12,7 @@ import { User } from './src/pages/User';
 import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
 import { AuthProvider, useAuth } from './src/hooks/useAuth';
+import { shadow } from './src/styles';
 
 enableScreens();
 
@@ -52,14 +53,14 @@ function MainStack() {
           showLabel: false,
           style: {
             height: 90,
-            elevation: 8,
-            shadowColor: '#ddd',
-            shadowOffset: {
-              width: 1,
-              height: 1
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 1
+            ...shadow({
+              shadowColor: '#ddd',
+              shadowOffset: {
+                width: 1,
+                height: 1
+              },
+              shadowOpacity: 0.5
+            })
           },
           tabStyle: {
             padding: 5

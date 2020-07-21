@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Bold, SemiBold } from '../../components/Text';
-import { paddingX, paddingY, dimen } from '../../styles';
 import { useAuth } from '../../hooks/useAuth';
-import Languages from '../../assets/languages.svg';
 import { toaster } from '../../components/Toast';
+import Languages from '../../assets/languages.svg';
 
 const githubUrl = 'https://github.com/Pong420/fullstack';
 
@@ -53,7 +52,7 @@ const DATA = [
           if (supported) {
             return Linking.openURL(githubUrl);
           }
-          throw new Error("Don't know how to open URI");
+          throw new Error('Open external URI is not supported');
         })
         .catch(error => toaster.apiError('Open url failure', error))
   }
@@ -67,8 +66,8 @@ function Header() {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        ...paddingX(20),
-        ...paddingY(30)
+        paddingHorizontal: 20,
+        paddingVertical: 30
       }}
     >
       <Bold fontSize={24}>Hi, {user?.nickname}</Bold>
@@ -94,7 +93,7 @@ function Item({ title, icon: Icon, onPress }: Omit<typeof DATA[number], 'id'>) {
       {typeof Icon === 'string' ? (
         <Feather name={Icon} size={iconSize} color={iconColor} />
       ) : (
-        <Icon {...dimen(iconSize)} color={iconColor} />
+        <Icon width={iconSize} height={iconSize} color={iconColor} />
       )}
       <Text style={styles.title}>{title}</Text>
       <Feather name="chevron-right" size={iconSize} color="#666" />

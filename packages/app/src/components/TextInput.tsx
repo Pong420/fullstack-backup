@@ -6,6 +6,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { useBoolean } from '../hooks/useBoolean';
+import { shadow } from '../styles';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   onChange?: (value: string) => void;
@@ -54,18 +55,8 @@ export function TextInput({
           shadowColor: danger.light
         }),
         ...(focused || hasError
-          ? {
-              shadowOpacity: 0.5,
-              shadowRadius: 1,
-              shadowOffset: {
-                width: 0,
-                height: 2
-              },
-              elevation: 1
-            }
-          : {
-              borderColor: '#fff'
-            })
+          ? shadow({ shadowRadius: 1, shadowOffsetY: 2 })
+          : { borderColor: '#fff' })
       }}
     >
       <View
