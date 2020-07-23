@@ -1,26 +1,37 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Param$CreateUser } from '@fullstack/typings';
 import { createForm, validators } from '../../utils/form';
+import { Button } from '../../components/Button';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
-import { Button } from '../../components/Button';
+import { createAuthPage, AuthFormProps } from './AuthPage';
 
-type Fields = Required<Param$CreateUser & { confirmPassword: string }>;
+type Schema = Required<Param$CreateUser & { confirmPassword: string }>;
 
-const { Form, FormItem, useForm } = createForm<Fields>();
+const { Form, FormItem, useForm } = createForm<Schema>();
 
-interface Props {
-  loading?: boolean;
-  onSubmit?: (params: Param$CreateUser) => void;
-}
-
-export function RegisterForm({ loading, onSubmit }: Props) {
+export function RegistrationForm({ loading, onSubmit }: AuthFormProps) {
   const [form] = useForm();
 
   return (
-    <View style={{ flex: 1, justifyContent: 'space-between' }}>
+    <View style={styles.container}>
       <Form form={form} onFinish={onSubmit}>
+        <FormItem
+          name="email"
+          label="Email"
+          validators={[
+            validators.required('Please input an email')
+            // TODO: validation
+          ]}
+        >
+          <TextInput
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            autoCompleteType="email"
+          />
+        </FormItem>
+
         <FormItem
           name="username"
           label="Username"
@@ -59,21 +70,6 @@ export function RegisterForm({ loading, onSubmit }: Props) {
         >
           <Password textContentType="newPassword" />
         </FormItem>
-
-        <FormItem
-          name="email"
-          label="Email"
-          validators={[
-            validators.required('Please input an email')
-            // TODO: validation
-          ]}
-        >
-          <TextInput
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoCompleteType="email"
-          />
-        </FormItem>
       </Form>
       <View>
         <Button
@@ -86,3 +82,12 @@ export function RegisterForm({ loading, onSubmit }: Props) {
     </View>
   );
 }
+
+export const Registration = createAuthPage({
+  title: 'Register',
+  form: RegistrationForm
+});
+
+const styles = StyleSheet.create({
+  container: { flexGrow: 1, justifyContent: 'space-between' }
+});

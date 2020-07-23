@@ -83,6 +83,11 @@ function Footer() {
         intent="DARK"
         onPress={() => navigation.navigate('Login')}
       />
+      <Button
+        title="Register"
+        style={styles.register}
+        onPress={() => navigation.navigate('Registration')}
+      />
     </View>
   );
 }
@@ -177,5 +182,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 15,
     flex: 1
-  }
+  },
+  register: { marginTop: 15 }
 });

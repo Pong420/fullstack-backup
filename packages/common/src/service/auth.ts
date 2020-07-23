@@ -1,5 +1,5 @@
 import {
-  Param$Authenticated,
+  Param$Login,
   Response$Authenticated,
   Response$RefreshToken,
   Param$CreateUser,
@@ -14,7 +14,7 @@ import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { paths } from '../constants';
 import { api } from './api';
 
-export const login = (params: Param$Authenticated) =>
+export const login = (params: Param$Login) =>
   api.post<Response$Authenticated>(paths.login, params);
 
 export const refreshToken = () =>

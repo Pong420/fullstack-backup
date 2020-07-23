@@ -1,23 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Param$Login } from '@fullstack/typings';
 import { createForm, validators } from '../../utils/form';
 import { Button } from '../../components/Button';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
+import { createAuthPage, AuthFormProps } from './AuthPage';
 
 const { Form, FormItem, useForm } = createForm<Param$Login>();
 
-interface Props {
-  loading?: boolean;
-  onSubmit?: (payload: Param$Login) => void;
-}
-
-export function LoginForm({ loading, onSubmit }: Props) {
+export function LoginForm({ loading, onSubmit }: AuthFormProps) {
   const [form] = useForm();
 
   return (
-    <View style={{ flexGrow: 1, justifyContent: 'space-between' }}>
+    <View style={styles.container}>
       <Form form={form} onFinish={onSubmit}>
         <FormItem
           name="username"
@@ -39,10 +35,19 @@ export function LoginForm({ loading, onSubmit }: Props) {
         <Button
           title="Login"
           intent="DARK"
-          loading={loading}
           onPress={form.submit}
+          loading={loading}
         />
       </View>
     </View>
   );
 }
+
+export const Login = createAuthPage({
+  title: 'Login',
+  form: LoginForm
+});
+
+const styles = StyleSheet.create({
+  container: { flexGrow: 1, justifyContent: 'space-between' }
+});

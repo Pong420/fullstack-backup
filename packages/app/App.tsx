@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { enableScreens } from 'react-native-screens';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { Login } from './src/pages/Login';
+import { Login, Registration } from './src/pages/Auth';
 import { Main } from './src/Main';
 import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
@@ -31,12 +31,9 @@ function App() {
       <NavigationContainer theme={theme}>
         <StatusBar style="auto" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="Main"
-            component={Main}
-            // options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Registration" component={Registration} />
         </Stack.Navigator>
         <ToastContainer />
       </NavigationContainer>

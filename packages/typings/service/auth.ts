@@ -1,7 +1,7 @@
 import { JWTSignResult, JWTSignPayload } from './jwt';
 import { ApiResponse } from './index';
 
-export interface Param$Authenticated {
+export interface Param$Login {
   username: string;
   password: string;
 }

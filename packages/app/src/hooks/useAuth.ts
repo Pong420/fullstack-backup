@@ -7,14 +7,15 @@ import React, {
 } from 'react';
 import {
   JWTSignPayload,
-  Param$Authenticated,
+  Param$Login,
   Schema$User,
-  Param$RefreshToken
+  Param$CreateUser
 } from '@fullstack/typings';
 import { defer, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { login, logout, getJwtToken } from '../service';
 import { toaster } from '../components/Toast';
+import { register } from '@fullstack/common/service';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
@@ -30,15 +31,17 @@ export interface NotLoggedIn {
 
 type State = LoggedIn | NotLoggedIn;
 
+type AuthorizePayload = Param$Login | Param$CreateUser;
+
 type Actions =
-  | { type: 'AUTHORIZE'; payload?: Param$Authenticated | Param$RefreshToken }
+  | { type: 'AUTHORIZE' }
   | { type: 'AUTHORIZE_SUCCESS'; payload: LoggedIn['user'] }
   | { type: 'AUTH_FAILURE' }
   | { type: 'LOGOUT' }
   | { type: 'PROFILE_UPDATE'; payload: Partial<Schema$User> };
 
 export type IAuthContext = State & {
-  authorize: (payload?: Param$Authenticated) => void;
+  authorize: (payload?: AuthorizePayload) => void;
   logout: () => void;
 };
 
@@ -96,15 +99,32 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
   const { loginStatus } = state;
 
   const authContext = React.useMemo<IAuthContext>(() => {
-    const authorize$ = (payload?: Param$Authenticated) =>
+    const login$ = (payload: Param$Login) =>
+      defer(() => login(payload)).pipe(
+        map(res => res.data.data),
+        catchError(error => {
+          toaster.apiError('Login failure', error);
+          return throwError(error);
+        })
+      );
+
+    const authorize$ = (payload?: AuthorizePayload) =>
       payload
-        ? defer(() => login(payload)).pipe(
-            map(res => res.data.data),
-            catchError(error => {
-              toaster.apiError('Login failure', error);
-              return throwError(error);
-            })
-          )
+        ? 'email' in payload
+          ? defer(() => register(payload)).pipe(
+              switchMap(() => {
+                toaster.success({ message: 'Registration Success' });
+                return login$({
+                  username: payload.username,
+                  password: payload.password
+                });
+              }),
+              catchError(error => {
+                toaster.apiError('Registration failure', error);
+                return throwError(error);
+              })
+            )
+          : login$(payload)
         : getJwtToken();
 
     return {
@@ -118,7 +138,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
           .catch(error => toaster.apiError('Logout failure', error));
       },
       authorize: payload => {
-        dispatch({ type: 'AUTHORIZE', payload });
+        dispatch({ type: 'AUTHORIZE' });
         authorize$(payload).subscribe(
           ({ user }) => dispatch({ type: 'AUTHORIZE_SUCCESS', payload: user }),
           () => dispatch({ type: 'AUTH_FAILURE' })
