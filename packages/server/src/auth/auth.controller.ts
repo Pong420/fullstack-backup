@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   UserRole,
   JWTSignPayload,
-  Schema$Login,
+  Schema$Authenticated,
   Schema$CloudinarySign
 } from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
@@ -94,7 +94,7 @@ export class AuthController {
       )
       .status(HttpStatus.OK)
       .send(
-        transformResponse<Schema$Login>(HttpStatus.OK, {
+        transformResponse<Schema$Authenticated>(HttpStatus.OK, {
           ...signPayload,
           user,
           isDefaultAc: !IsObjectId(user.user_id)
@@ -133,7 +133,7 @@ export class AuthController {
           )
           .status(HttpStatus.OK)
           .send(
-            transformResponse<Schema$Login>(HttpStatus.OK, {
+            transformResponse<Schema$Authenticated>(HttpStatus.OK, {
               ...signResult,
               isDefaultAc: false,
               user: formatJWTSignPayload(refreshTokenJson)

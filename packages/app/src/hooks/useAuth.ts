@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {
   JWTSignPayload,
-  Param$Login,
+  Param$Authenticated,
   Schema$User,
   Param$RefreshToken
 } from '@fullstack/typings';
@@ -31,14 +31,14 @@ export interface NotLoggedIn {
 type State = LoggedIn | NotLoggedIn;
 
 type Actions =
-  | { type: 'AUTHORIZE'; payload?: Param$Login | Param$RefreshToken }
+  | { type: 'AUTHORIZE'; payload?: Param$Authenticated | Param$RefreshToken }
   | { type: 'AUTHORIZE_SUCCESS'; payload: LoggedIn['user'] }
   | { type: 'AUTH_FAILURE' }
   | { type: 'LOGOUT' }
   | { type: 'PROFILE_UPDATE'; payload: Partial<Schema$User> };
 
-type IAuthContext = State & {
-  authorize: (payload?: Param$Login) => void;
+export type IAuthContext = State & {
+  authorize: (payload?: Param$Authenticated) => void;
   logout: () => void;
 };
 
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
   const { loginStatus } = state;
 
   const authContext = React.useMemo<IAuthContext>(() => {
-    const authorize$ = (payload?: Param$Login) =>
+    const authorize$ = (payload?: Param$Authenticated) =>
       payload
         ? defer(() => login(payload)).pipe(
             map(res => res.data.data),

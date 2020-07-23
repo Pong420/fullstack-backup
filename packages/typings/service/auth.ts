@@ -1,17 +1,17 @@
 import { JWTSignResult, JWTSignPayload } from './jwt';
 import { ApiResponse } from './index';
 
-export interface Param$Login {
+export interface Param$Authenticated {
   username: string;
   password: string;
 }
 
-export interface Schema$Login extends JWTSignResult {
+export interface Schema$Authenticated extends JWTSignResult {
   user: JWTSignPayload;
   isDefaultAc: boolean;
 }
 
-export type Response$Login = ApiResponse<Schema$Login>;
+export type Response$Authenticated = ApiResponse<Schema$Authenticated>;
 
 export interface Param$ModifyPassword {
   password: string;

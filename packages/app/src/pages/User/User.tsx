@@ -5,33 +5,38 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  StatusBar,
   ListRenderItem,
   Linking,
   TouchableOpacity
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Bold, SemiBold } from '../../components/Text';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth, IAuthContext } from '../../hooks/useAuth';
 import { toaster } from '../../components/Toast';
+import { Button } from '../../components/Button';
 import Languages from '../../assets/languages.svg';
 
 const githubUrl = 'https://github.com/Pong420/fullstack';
 
 const DATA = [
   {
+    auth: true,
     icon: 'user',
     title: 'Personal Information'
   },
   {
+    auth: true,
     icon: 'lock',
     title: 'Change Password'
   },
   {
+    auth: true,
     icon: 'file-text',
     title: 'My Orders'
   },
   {
+    auth: true,
     icon: 'map-pin',
     title: 'Delivery Address'
   },
@@ -58,22 +63,26 @@ const DATA = [
   }
 ];
 
-function Header() {
-  const { user, logout } = useAuth();
+function Header({ user, logout }: Pick<IAuthContext, 'user' | 'logout'>) {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        paddingHorizontal: 20,
-        paddingVertical: 30
-      }}
-    >
+    <View style={styles.header}>
       <Bold fontSize={24}>Hi, {user?.nickname}</Bold>
       <SemiBold fontSize={18} onPress={logout}>
         Logout
       </SemiBold>
+    </View>
+  );
+}
+
+function Footer() {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.footer}>
+      <Button
+        title="Login"
+        intent="DARK"
+        onPress={() => navigation.navigate('Login')}
+      />
     </View>
   );
 }
@@ -84,7 +93,18 @@ const workingInProgress = () =>
   toaster.info({
     message: 'This feature is working in progress'
   });
-function Item({ title, icon: Icon, onPress }: Omit<typeof DATA[number], 'id'>) {
+function Item({
+  title,
+  icon: Icon,
+  onPress,
+  auth
+}: Omit<typeof DATA[number], 'id'>) {
+  const { loginStatus } = useAuth();
+
+  if (auth && loginStatus !== 'loggedIn') {
+    return null;
+  }
+
   return (
     <TouchableOpacity
       style={styles.item}
@@ -106,24 +126,44 @@ const renderItem: ListRenderItem<typeof DATA[number]> = ({ item }) => (
 );
 
 export function User() {
+  const { loginStatus, user, logout } = useAuth();
+  const loggedIn = loginStatus === 'loggedIn';
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={DATA}
-        ListHeaderComponent={Header}
-        renderItem={renderItem}
-        alwaysBounceVertical={false}
-        bounces={false}
-        keyExtractor={item => item.title}
-      />
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.grow}>
+        <FlatList
+          style={styles.list}
+          data={DATA}
+          ListHeaderComponent={
+            loggedIn ? <Header user={user} logout={logout} /> : null
+          }
+          renderItem={renderItem}
+          alwaysBounceVertical={false}
+          bounces={false}
+          keyExtractor={item => item.title}
+        />
+      </SafeAreaView>
+      {!loggedIn && <Footer />}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0
+  grow: { flexGrow: 1 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    paddingBottom: 30
+  },
+  list: {
+    paddingTop: 30
+  },
+  footer: {
+    flexGrow: 0,
+    paddingHorizontal: 15,
+    paddingBottom: 30
   },
   item: {
     flexDirection: 'row',

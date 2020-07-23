@@ -1,6 +1,6 @@
 import { Timestamp, ApiResponse } from './index';
 import { JWTSignPayload } from './jwt';
-import { Schema$Login } from './auth';
+import { Schema$Authenticated } from './auth';
 
 export interface Param$CreateRefreshToken extends JWTSignPayload {
   refreshToken: string;
@@ -12,4 +12,4 @@ export interface Schema$RefreshToken
   id: string;
 }
 
-export type Response$RefreshToken = ApiResponse<Schema$Login>;
+export type Response$RefreshToken = ApiResponse<Schema$Authenticated>;

@@ -1,11 +1,11 @@
 import {
-  Param$Login,
-  Response$Login,
+  Param$Authenticated,
+  Response$Authenticated,
   Response$RefreshToken,
   Param$CreateUser,
   Response$User,
   UserRole,
-  Schema$Login,
+  Schema$Authenticated,
   Param$DeleteAccount,
   Param$ModifyPassword
 } from '@fullstack/typings';
@@ -14,8 +14,8 @@ import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { paths } from '../constants';
 import { api } from './api';
 
-export const login = (params: Param$Login) =>
-  api.post<Response$Login>(paths.login, params);
+export const login = (params: Param$Authenticated) =>
+  api.post<Response$Authenticated>(paths.login, params);
 
 export const refreshToken = () =>
   api.post<Response$RefreshToken>(paths.refresh_token, {});
@@ -48,13 +48,13 @@ export const modifyPassword = (payload: Param$ModifyPassword) =>
 
 // ---------
 
-let jwtToken$: Observable<Schema$Login> | null;
+let jwtToken$: Observable<Schema$Authenticated> | null;
 
 export function clearJwtToken() {
   jwtToken$ = null;
 }
 
-const refreshToken$ = (): Observable<Schema$Login> =>
+const refreshToken$ = (): Observable<Schema$Authenticated> =>
   defer(() => refreshToken()).pipe(
     map(res => res.data.data),
     shareReplay(1)

@@ -1,4 +1,8 @@
-import { JWTSignPayload, Param$Login, Schema$User } from '@fullstack/typings';
+import {
+  JWTSignPayload,
+  Param$Authenticated,
+  Schema$User
+} from '@fullstack/typings';
 import { UnionCRUDActions } from '@pong420/redux-crud';
 import { useActions, ActionsMap } from '../../hooks/useActions';
 
@@ -22,7 +26,7 @@ export const AuthActionTypes = {
   PROFILE_UPDATE: 'PROFILE_UPDATE' as const
 };
 
-function authorize(payload?: Param$Login) {
+function authorize(payload?: Param$Authenticated) {
   return {
     type: AuthActionTypes.AUTHORIZE,
     payload
