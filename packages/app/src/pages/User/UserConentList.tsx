@@ -24,7 +24,8 @@ const DATA = [
   {
     auth: true,
     icon: 'user',
-    title: 'Personal Information'
+    title: 'Personal Information',
+    onPress: () => navigate('ValidPassword')
   },
   {
     auth: true,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 20,
+    paddingVertical: 15,
     marginBottom: 15
   },
   title: {

@@ -5,7 +5,10 @@ import {
   ScrollView as DefaultScrollView,
   KeyboardAvoidingView as DefaultKeyboardAvoidingView,
   ScrollViewProps,
-  KeyboardAvoidingViewProps
+  KeyboardAvoidingViewProps,
+  TouchableWithoutFeedback as DefaultTouchableWithoutFeedback,
+  TouchableWithoutFeedbackProps,
+  Keyboard
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { ReactNode } from 'react';
@@ -28,6 +31,14 @@ export function ScrollView({
         styles.scrollViewContent
       )}
     />
+  );
+}
+
+export function TouchableWithoutFeedback(
+  props: TouchableWithoutFeedbackProps & ChildProps
+) {
+  return (
+    <DefaultTouchableWithoutFeedback {...props} onPress={Keyboard.dismiss} />
   );
 }
 

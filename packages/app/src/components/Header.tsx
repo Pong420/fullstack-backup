@@ -26,7 +26,7 @@ const iconSize = 32;
 export function Header({ title }: HeaderProps) {
   const { goBack } = useNavigation();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.header}>
       <TouchableNativeFeedback onPress={goBack}>
         <View style={styles.goBack}>
           <Feather name="chevron-left" size={iconSize} />
@@ -40,7 +40,7 @@ export function Header({ title }: HeaderProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: '#fff' },
+  header: { backgroundColor: '#fff' },
   goBack: {
     flexDirection: 'row',
     marginTop: 15,

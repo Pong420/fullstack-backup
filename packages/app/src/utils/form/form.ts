@@ -5,7 +5,16 @@ import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
 import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
-import { View, ViewStyle } from 'react-native';
+import {
+  View,
+  ViewStyle,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+  StyleSheet
+} from 'react-native';
 import {
   NamePath,
   Paths,
@@ -49,6 +58,7 @@ export interface FormProps<S extends {} = Store, V = S>
   onValuesChange?: (changes: DeepPartial<S>, values: S) => void;
   transoformInitialValues?: (payload: DeepPartial<V>) => DeepPartial<S>;
   beforeSubmit?: (payload: S) => V;
+  keyboardViewProps?: KeyboardAvoidingViewProps;
 }
 
 type OmititedRcFieldProps = Omit<
@@ -217,28 +227,44 @@ export function createForm<S extends {} = Store, V = S>({
         beforeSubmit,
         initialValues,
         transoformInitialValues,
+        keyboardViewProps,
         ...props
       },
       ref
-    ) =>
-      React.createElement(
-        RcForm,
+    ) => {
+      return React.createElement(
+        KeyboardAvoidingView,
         {
-          ...props,
-          ref,
-          initialValues:
-            initialValues && transoformInitialValues
-              ? transoformInitialValues(initialValues)
-              : initialValues,
-          onFinish:
-            onFinish &&
-            ((store: any) => {
-              onFinish(beforeSubmit ? beforeSubmit(store) : store);
-            }),
-          component: View
-        } as any,
-        children
-      )
+          ...keyboardViewProps,
+          style: StyleSheet.compose(keyboardViewProps?.style || {}, {
+            flex: 1
+          }),
+          behavior: Platform.OS === 'ios' ? 'padding' : 'height'
+        },
+        React.createElement(
+          TouchableWithoutFeedback,
+          { onPress: Keyboard.dismiss },
+          React.createElement(
+            RcForm,
+            {
+              ...props,
+              ref,
+              initialValues:
+                initialValues && transoformInitialValues
+                  ? transoformInitialValues(initialValues)
+                  : initialValues,
+              onFinish:
+                onFinish &&
+                ((store: any) => {
+                  onFinish(beforeSubmit ? beforeSubmit(store) : store);
+                }),
+              component: View
+            } as any,
+            children
+          )
+        )
+      );
+    }
   );
 
   const useForm: () => [FormInstance<S, V>] = RcUseForm as any;
