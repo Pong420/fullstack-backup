@@ -1,17 +1,14 @@
 import React from 'react';
-import { Param$CreateUser } from '@fullstack/typings';
 import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
-import { createAuthPage, AuthFormProps } from './AuthPage';
+import { createAuthPage, Param$Registration } from './AuthPage';
 
-type Schema = Required<Param$CreateUser & { confirmPassword: string }>;
+const { FormItem } = createForm<Param$Registration>();
 
-const { Form, FormItem } = createForm<Schema>();
-
-export function RegistrationForm(props: AuthFormProps<Schema>) {
+export function RegistrationForm() {
   return (
-    <Form {...props}>
+    <>
       <FormItem
         name="email"
         label="Email"
@@ -62,11 +59,11 @@ export function RegistrationForm(props: AuthFormProps<Schema>) {
       >
         <Password textContentType="newPassword" />
       </FormItem>
-    </Form>
+    </>
   );
 }
 
 export const Registration = createAuthPage({
   title: 'Register',
-  form: RegistrationForm
+  content: RegistrationForm
 });

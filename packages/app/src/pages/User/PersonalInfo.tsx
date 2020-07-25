@@ -1,19 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
 import { Text, SemiBold } from '../../components/Text';
-import { Button } from '../../components/Button';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
-import { navigate } from '../../utils/navigation';
 
 interface ItemProps {
   label: string;
   value: string;
   edit?: string;
 }
-
-const Stack = createStackNavigator();
 
 function Item({ label, value, edit }: ItemProps) {
   return (
@@ -33,15 +28,7 @@ function Item({ label, value, edit }: ItemProps) {
   );
 }
 
-function AuthScreen() {
-  return (
-    <View>
-      <Button title="Test" onPress={() => navigate('ContentScreen')}></Button>
-    </View>
-  );
-}
-
-function MainStackScreen() {
+export function PersonalInfo() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -51,15 +38,6 @@ function MainStackScreen() {
         <Item label="Email address" value="s********@gamil.com" />
       </View>
     </View>
-  );
-}
-
-export function PersonalInfo() {
-  return (
-    <Stack.Navigator mode="modal" headerMode="screen">
-      <Stack.Screen name="MainStackScreen" component={MainStackScreen} />
-      <Stack.Screen name="AuthScreen" component={AuthScreen} />
-    </Stack.Navigator>
   );
 }
 

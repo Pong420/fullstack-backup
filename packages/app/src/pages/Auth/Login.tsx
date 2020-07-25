@@ -1,15 +1,14 @@
 import React from 'react';
-import { Param$Login } from '@fullstack/typings';
 import { createForm, validators } from '../../utils/form';
 import { TextInput } from '../../components/TextInput';
 import { Password } from '../../components/Password';
-import { createAuthPage, AuthFormProps } from './AuthPage';
+import { createAuthPage, Param$Login } from './AuthPage';
 
-const { Form, FormItem } = createForm<Param$Login>();
+const { FormItem } = createForm<Param$Login>();
 
-export function LoginForm(props: AuthFormProps<Param$Login>) {
+export function LoginForm() {
   return (
-    <Form {...props}>
+    <>
       <FormItem
         name="username"
         label="Username"
@@ -25,11 +24,11 @@ export function LoginForm(props: AuthFormProps<Param$Login>) {
       >
         <Password />
       </FormItem>
-    </Form>
+    </>
   );
 }
 
 export const Login = createAuthPage<Param$Login>({
   title: 'Login',
-  form: LoginForm
+  content: LoginForm
 });

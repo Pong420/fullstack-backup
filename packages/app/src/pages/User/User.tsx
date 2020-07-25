@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   createStackNavigator,
   StackNavigationOptions,
@@ -7,38 +7,28 @@ import {
 import { UserConentList } from './UserConentList';
 import { PersonalInfo } from './PersonalInfo';
 import { ChangePassword } from './ChangePassword';
-import { headerScreenOptions } from '../../components/Header';
 import { ValidPassword } from '../../components/ValidPassword';
 import { Login, Registration } from '../Auth';
-import { useRef } from 'react';
+import { Paths } from './constants';
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
 
-const mainScreenOptions: StackNavigationOptions = {
-  ...headerScreenOptions
+const screenOptions: StackNavigationOptions = {
+  headerShown: false
 };
 
 function MainStackScreen() {
   return (
-    <MainStack.Navigator screenOptions={mainScreenOptions} headerMode="screen">
+    <MainStack.Navigator screenOptions={screenOptions} headerMode="screen">
+      <MainStack.Screen name={Paths.User} component={UserConentList} />
+      <MainStack.Screen name={Paths.PeronsalInfo} component={PersonalInfo} />
       <MainStack.Screen
-        name="User"
-        component={UserConentList}
-        options={{ headerShown: false }}
-      />
-      <MainStack.Screen
-        name="Personal Info"
-        component={PersonalInfo}
-        options={{ title: 'Personal Information' }}
-      />
-      <MainStack.Screen
-        name="Change Password"
+        name={Paths.ChangePassword}
         component={ChangePassword}
-        options={{ title: 'Change Password' }}
       />
-      <MainStack.Screen name="Login" component={Login} />
-      <MainStack.Screen name="Registration" component={Registration} />
+      <MainStack.Screen name={Paths.Login} component={Login} />
+      <MainStack.Screen name={Paths.Registration} component={Registration} />
     </MainStack.Navigator>
   );
 }
@@ -46,7 +36,7 @@ function MainStackScreen() {
 function ValidPasswordModal({
   navigation
 }: StackScreenProps<Record<string, undefined>>) {
-  const onSuccess = useRef(() => navigation.navigate('Personal Info'));
+  const onSuccess = useRef(() => navigation.navigate(Paths.PeronsalInfo));
   return <ValidPassword onSuccess={onSuccess.current} />;
 }
 
@@ -55,10 +45,13 @@ export function User() {
     <RootStack.Navigator
       mode="modal"
       headerMode="screen"
-      screenOptions={{ headerShown: false }}
+      screenOptions={screenOptions}
     >
       <RootStack.Screen name="Main" component={MainStackScreen} />
-      <RootStack.Screen name="ValidPassword" component={ValidPasswordModal} />
+      <RootStack.Screen
+        name={Paths.VaildatePassword}
+        component={ValidPasswordModal}
+      />
     </RootStack.Navigator>
   );
 }

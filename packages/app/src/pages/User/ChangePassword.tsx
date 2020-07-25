@@ -1,15 +1,12 @@
 import React, { useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
+import { Header } from '../../components/Header';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
 import { toaster } from '../../components/Toast';
-import {
-  KeyboardAvoidingView,
-  ScrollView
-} from '../../components/KeyboardAvoidingView';
 import { createForm, validators } from '../../utils/form';
 import { useAuth } from '../../hooks/useAuth';
 import { modifyPassword } from '../../service';
@@ -39,35 +36,55 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
   });
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <Form form={form} onFinish={run}>
-          <FormItem
-            label="Current Password"
-            name="password"
-            validators={validators.oldPassword}
-          >
-            <Password />
-          </FormItem>
+    <Form style={styles.container} form={form} onFinish={run}>
+      <Header title="Chnage Password" />
+      <ScrollView
+        bounces={false}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        <FormItem
+          label="Current Password"
+          name="password"
+          validators={validators.oldPassword}
+        >
+          <Password />
+        </FormItem>
 
-          <FormItem
-            label="New Password"
-            name="newPassword"
-            deps={['password']}
-            validators={validators.newPassword}
-          >
-            <Password />
-          </FormItem>
+        <FormItem
+          label="New Password"
+          name="newPassword"
+          deps={['password']}
+          validators={validators.newPassword}
+        >
+          <Password />
+        </FormItem>
 
-          <FormItem
-            label="Confirm New Password"
-            name="confirmNewPassword"
-            deps={['newPassword']}
-            validators={validators.confirmNewPassword}
-          >
-            <Password />
-          </FormItem>
-        </Form>
+        <FormItem
+          label="Confirm New Password"
+          name="confirmNewPassword"
+          deps={['newPassword']}
+          validators={validators.confirmNewPassword}
+        >
+          <Password />
+        </FormItem>
+
+        <FormItem
+          label="Confirm New Password"
+          name="confirmNewPassword"
+          deps={['newPassword']}
+          validators={validators.confirmNewPassword}
+        >
+          <Password />
+        </FormItem>
+
+        <FormItem
+          label="Confirm New Password"
+          name="confirmNewPassword"
+          deps={['newPassword']}
+          validators={validators.confirmNewPassword}
+        >
+          <Password />
+        </FormItem>
       </ScrollView>
 
       <View style={styles.buttonContainer}>
@@ -78,7 +95,7 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
           onPress={form.submit}
         />
       </View>
-    </KeyboardAvoidingView>
+    </Form>
   );
 }
 
