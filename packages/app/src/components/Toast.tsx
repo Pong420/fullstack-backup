@@ -177,7 +177,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     ...shadow({
       shadowColor: '#000',
-      shadowOffsetY: 1
+      shadowOffsetY: 3,
+      shadowOpacity: 0.23,
+      shadowRadius: 2.62,
+
+      elevation: 4
     })
   },
   indicator: {

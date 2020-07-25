@@ -4,7 +4,8 @@ import {
   TouchableHighlightProps,
   View,
   ActivityIndicator,
-  ViewStyle
+  ViewStyle,
+  StyleSheet
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SemiBold } from './Text';
@@ -23,19 +24,25 @@ const themes = {
     gradient: ['hsla(0,0%,100%,.8)', 'hsla(0,0%,100%,0)'],
     textColor: '#182026',
     shadowColor: 'rgba(16,22,26,.3)',
-    backgroundColor: '#f5f8fa'
+    backgroundColor: '#f5f8fa',
+    underlayColor: undefined,
+    activeOpacity: undefined
   },
   PRIMARY: {
     gradient: ['hsla(0,0%,100%,.1)', 'hsla(0,0%,100%,0)'],
     textColor: '#fff',
     shadowColor: 'rgba(16,22,26,1)',
-    backgroundColor: '#137cbd'
+    backgroundColor: '#137cbd',
+    underlayColor: '#eee',
+    activeOpacity: undefined
   },
   DARK: {
-    gradient: ['hsla(0,0%,20%,.8)', 'hsla(0,0%,20%,0)'],
+    gradient: undefined,
     textColor: '#fff',
     shadowColor: '#000',
-    backgroundColor: '#182026'
+    backgroundColor: '#182026',
+    underlayColor: '#ddd',
+    activeOpacity: 0.6
   }
 };
 
@@ -56,6 +63,7 @@ export function Button({
   ghost,
   loading,
   intent = 'NONE',
+  style,
   ...props
 }: ButtonProps) {
   const theme = themes[intent];
@@ -65,22 +73,29 @@ export function Button({
     <TouchableHighlight
       {...props}
       disabled={active}
-      underlayColor={ghost ? '#ddd' : undefined}
+      underlayColor={ghost ? '#ddd' : theme.underlayColor}
+      activeOpacity={theme.activeOpacity}
+      style={StyleSheet.compose(style, {
+        borderWidth: 1,
+        borderRadius: 3,
+        borderColor: intent === 'NONE' ? '#ddd' : theme.backgroundColor
+      })}
     >
       <LinearGradientWrapper
         colors={active || ghost ? undefined : theme.gradient}
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          height: 44,
           paddingHorizontal: 15,
-          borderWidth: 1,
-          borderColor: intent === 'NONE' ? '#ddd' : theme.backgroundColor,
+          height: 44,
           ...(!ghost &&
             shadow({
               backgroundColor: theme.backgroundColor,
               shadowColor: theme.shadowColor,
-              shadowOffsetY: 0.25
+              shadowOffsetY: 2,
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5
             }))
         }}
       >
