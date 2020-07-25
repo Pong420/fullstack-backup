@@ -15,16 +15,16 @@ export interface NotLoggedIn {
 }
 
 export const AuthActionTypes = {
-  AUTHORIZE: 'AUTHORIZE' as const,
-  SCCUESS: 'AUTH_SUCCESS' as const,
-  FAILURE: 'AUTH_FAILURE' as const,
+  AUTHENTICATE: 'AUTHENTICATE' as const,
+  SCCUESS: 'AUTHENTICATE_SUCCESS' as const,
+  FAILURE: 'AUTHENTICATE_FAILURE' as const,
   LOGOUT: 'LOGOUT' as const,
   PROFILE_UPDATE: 'PROFILE_UPDATE' as const
 };
 
-function authorize(payload?: Param$Login) {
+function authenticate(payload?: Param$Login) {
   return {
-    type: AuthActionTypes.AUTHORIZE,
+    type: AuthActionTypes.AUTHENTICATE,
     payload
   };
 }
@@ -56,7 +56,7 @@ export function profileUpdate(user: Partial<Schema$User>) {
 }
 
 const actions = {
-  authorize,
+  authenticate,
   authSuccess,
   authFailure,
   logout,

@@ -9,11 +9,11 @@ import { PATHS } from '../../../constants';
 const { Form, Username, Password } = createUserForm();
 
 export function LoginForm({ history }: RouteComponentProps) {
-  const { authorize } = useAuthActions();
+  const { authenticate } = useAuthActions();
   const loading = useSelector(loginStatusSelector) === 'loading';
 
   return (
-    <Form onFinish={authorize}>
+    <Form onFinish={authenticate}>
       <Username validators={[userValidators.username.required]} />
 
       <Password validators={[userValidators.password.required]} />

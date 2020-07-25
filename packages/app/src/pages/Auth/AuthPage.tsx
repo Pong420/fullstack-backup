@@ -15,7 +15,7 @@ import { useAuth, IAuthContext } from '../../hooks/useAuth';
 
 export interface AuthFormProps {
   loading?: boolean;
-  onSubmit: IAuthContext['authorize'];
+  onSubmit: IAuthContext['authenticate'];
 }
 
 interface Props {
@@ -26,7 +26,7 @@ interface Props {
 export function createAuthPage({ title, form: Form }: Props) {
   return function () {
     const navigation = useNavigation();
-    const { loginStatus, authorize } = useAuth();
+    const { loginStatus, authenticate } = useAuth();
 
     loginStatus === 'loggedIn' && navigation.goBack();
 
@@ -47,7 +47,7 @@ export function createAuthPage({ title, form: Form }: Props) {
 
             <View style={styles.footer}>
               <View style={styles.grow}>
-                <Form onSubmit={authorize} />
+                <Form onSubmit={authenticate} />
               </View>
               <Button
                 onPress={navigation.goBack}

@@ -44,7 +44,9 @@ function isLocation(object?: any): object is Location {
 
 const loginEpic: AuthEpic = (action$, state$) =>
   action$.pipe(
-    ofType<Actions, AuthActionMap['AUTHORIZE']>(AuthActionTypes.AUTHORIZE),
+    ofType<Actions, AuthActionMap['AUTHENTICATE']>(
+      AuthActionTypes.AUTHENTICATE
+    ),
     switchMap(action => {
       const request$ = action.payload
         ? from(login(action.payload)).pipe(

@@ -18,12 +18,12 @@ interface PrivateRouteProps extends Omit<RouteProps, 'render'> {
 }
 
 const PrivateRouteConent = ({ children, location }: ContentProps) => {
-  const { authorize } = useAuthActions();
+  const { authenticate } = useAuthActions();
   const loginStatus = useSelector(loginStatusSelector);
 
   useEffect(() => {
-    loginStatus === 'unknown' && authorize();
-  }, [authorize, loginStatus]);
+    loginStatus === 'unknown' && authenticate();
+  }, [authenticate, loginStatus]);
 
   switch (loginStatus) {
     case 'unknown':

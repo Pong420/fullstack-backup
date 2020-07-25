@@ -17,7 +17,7 @@ export default function (
   action: AuthActions
 ): State {
   switch (action.type) {
-    case AuthActionTypes.AUTHORIZE:
+    case AuthActionTypes.AUTHENTICATE:
       return {
         ...state,
         user: null,

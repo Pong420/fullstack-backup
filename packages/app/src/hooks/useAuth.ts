@@ -31,17 +31,17 @@ export interface NotLoggedIn {
 
 type State = LoggedIn | NotLoggedIn;
 
-type AuthorizePayload = Param$Login | Param$CreateUser;
+type AuthenticatePayload = Param$Login | Param$CreateUser;
 
 type Actions =
-  | { type: 'AUTHORIZE' }
-  | { type: 'AUTHORIZE_SUCCESS'; payload: LoggedIn['user'] }
-  | { type: 'AUTH_FAILURE' }
+  | { type: 'AUTHENTICATE' }
+  | { type: 'AUTHENTICATE_SUCCESS'; payload: LoggedIn['user'] }
+  | { type: 'AUTHENTICATE_FAILURE' }
   | { type: 'LOGOUT' }
   | { type: 'PROFILE_UPDATE'; payload: Partial<Schema$User> };
 
 export type IAuthContext = State & {
-  authorize: (payload?: AuthorizePayload) => void;
+  authenticate: (payload?: AuthenticatePayload) => void;
   logout: () => void;
 };
 
@@ -60,19 +60,19 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
   const [state, dispatch] = React.useReducer<Reducer<State, Actions>>(
     (prevState, action) => {
       switch (action.type) {
-        case 'AUTHORIZE':
+        case 'AUTHENTICATE':
           return {
             ...prevState,
             user: null,
             loginStatus: 'loading'
           };
-        case 'AUTHORIZE_SUCCESS':
+        case 'AUTHENTICATE_SUCCESS':
           return {
             ...prevState,
             user: action.payload,
             loginStatus: 'loggedIn'
           };
-        case 'AUTH_FAILURE':
+        case 'AUTHENTICATE_FAILURE':
         case 'LOGOUT':
           return {
             ...prevState,
@@ -108,7 +108,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
         })
       );
 
-    const authorize$ = (payload?: AuthorizePayload) =>
+    const authenticate$ = (payload?: AuthenticatePayload) =>
       payload
         ? 'email' in payload
           ? defer(() => register(payload)).pipe(
@@ -137,23 +137,24 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
           })
           .catch(error => toaster.apiError('Logout failure', error));
       },
-      authorize: payload => {
-        dispatch({ type: 'AUTHORIZE' });
-        authorize$(payload).subscribe(
-          ({ user }) => dispatch({ type: 'AUTHORIZE_SUCCESS', payload: user }),
-          () => dispatch({ type: 'AUTH_FAILURE' })
+      authenticate: payload => {
+        dispatch({ type: 'AUTHENTICATE' });
+        authenticate$(payload).subscribe(
+          ({ user }) =>
+            dispatch({ type: 'AUTHENTICATE_SUCCESS', payload: user }),
+          () => dispatch({ type: 'AUTHENTICATE_FAILURE' })
         );
       }
     };
   }, [state]);
 
-  const { authorize } = authContext;
+  const { authenticate } = authContext;
 
   useEffect(() => {
     if (loginStatus === 'unknown') {
-      authorize();
+      authenticate();
     }
-  }, [loginStatus, authorize]);
+  }, [loginStatus, authenticate]);
 
   return React.createElement<ProviderProps<IAuthContext>>(
     AuthContext.Provider,
