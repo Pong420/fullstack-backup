@@ -23,7 +23,7 @@ export function User() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ChangePassword"
+        name="Change Password"
         component={ChangePassword}
         options={{ title: 'Change Password' }}
       />

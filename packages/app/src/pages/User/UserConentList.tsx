@@ -30,7 +30,7 @@ const DATA = [
     auth: true,
     icon: 'lock',
     title: 'Change Password',
-    onPress: () => navigate('ChangePassword')
+    onPress: () => navigate('Change Password')
   },
   {
     auth: true,
@@ -69,7 +69,7 @@ function Header({ user, logout }: Pick<IAuthContext, 'user' | 'logout'>) {
   return (
     <View style={styles.header}>
       <Bold fontSize={24}>Hi, {user?.nickname}</Bold>
-      <SemiBold fontSize={18} onPress={logout}>
+      <SemiBold fontSize={18} onPress={() => logout()}>
         Logout
       </SemiBold>
     </View>
@@ -86,7 +86,9 @@ function Footer() {
         onPress={() => navigation.navigate('Login')}
       />
       <Button
+        ghost
         title="Register"
+        intent="DARK"
         style={styles.register}
         onPress={() => navigation.navigate('Registration')}
       />
@@ -155,29 +157,27 @@ export function UserConentList() {
   );
 }
 
+const containerPadding = 24;
 const styles = StyleSheet.create({
   grow: { flexGrow: 1 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    paddingBottom: 30
+    marginBottom: 30
   },
   list: {
-    paddingTop: 30
+    padding: containerPadding
   },
   footer: {
     flexGrow: 0,
-    paddingHorizontal: 15,
-    paddingBottom: 30
+    padding: containerPadding
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 20,
-    marginHorizontal: 20,
     marginBottom: 15
   },
   title: {

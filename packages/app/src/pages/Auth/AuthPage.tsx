@@ -43,6 +43,7 @@ export function createAuthPage<T>({ title, form: Form }: Props<T>) {
             <Button
               intent="DARK"
               title={title}
+              onPress={form.submit}
               loading={loginStatus === 'loading'}
             />
           </View>
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   buttonContainer: {
-    padding: contianerPadding,
-    backgroundColor: '#fff'
+    padding: contianerPadding
   }
 });

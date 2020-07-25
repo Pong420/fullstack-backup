@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
   container: { backgroundColor: '#fff' },
   goBack: {
     flexDirection: 'row',
-    paddingVertical: 20,
+    marginTop: 15,
+    marginBottom: 20,
     paddingHorizontal: 15,
     alignSelf: 'flex-start'
   },
