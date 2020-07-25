@@ -6,6 +6,7 @@ import {
 import { UserConentList } from './UserConentList';
 import { ChangePassword } from './ChangePassword';
 import { headerScreenOptions } from '../../components/Header';
+import { Login, Registration } from '../Auth';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,8 @@ export function User() {
         component={ChangePassword}
         options={{ title: 'Change Password' }}
       />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Registration" component={Registration} />
     </Stack.Navigator>
   );
 }

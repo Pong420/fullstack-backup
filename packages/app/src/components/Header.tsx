@@ -3,7 +3,6 @@ import {
   TouchableNativeFeedback,
   StyleSheet,
   View,
-  ViewProps,
   SafeAreaView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -11,28 +10,23 @@ import { StackNavigationOptions } from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
 import { SemiBold } from './Text';
 
-export interface HeaderProps extends Pick<ViewProps, 'onLayout'> {
+export interface HeaderProps {
   title: ReactNode;
 }
 
 export const headerScreenOptions: StackNavigationOptions = {
   header: ({ scene }) => {
     const { options } = scene.descriptor;
-    const title =
-      options.headerTitle !== undefined
-        ? options.headerTitle
-        : options.title !== undefined
-        ? options.title
-        : scene.route.name;
+    const title = options.title || 'Go Back';
     return <Header title={title} />;
   }
 };
 
 const iconSize = 32;
-export function Header({ title, onLayout }: HeaderProps) {
+export function Header({ title }: HeaderProps) {
   const { goBack } = useNavigation();
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayout}>
+    <SafeAreaView style={styles.container}>
       <TouchableNativeFeedback onPress={goBack}>
         <View style={styles.goBack}>
           <Feather name="chevron-left" size={iconSize} />
@@ -50,10 +44,10 @@ const styles = StyleSheet.create({
   goBack: {
     flexDirection: 'row',
     paddingVertical: 20,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    alignSelf: 'flex-start'
   },
   text: {
-    marginLeft: 10,
     lineHeight: iconSize
   }
 });

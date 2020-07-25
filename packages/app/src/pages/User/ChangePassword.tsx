@@ -1,17 +1,15 @@
 import React, { useRef } from 'react';
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView
-} from 'react-native';
-import { useHeaderHeight, StackScreenProps } from '@react-navigation/stack';
+import { View, StyleSheet } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
 import { toaster } from '../../components/Toast';
+import {
+  KeyboardAvoidingView,
+  ScrollView
+} from '../../components/KeyboardAvoidingView';
 import { createForm, validators } from '../../utils/form';
 import { useAuth } from '../../hooks/useAuth';
 import { modifyPassword } from '../../service';
@@ -40,72 +38,56 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
     onFailure
   });
 
-  const headerHeight = useHeaderHeight();
-
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-      keyboardVerticalOffset={headerHeight}
-    >
-      <ScrollView
-        alwaysBounceVertical={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.container}
-      >
-        <View style={styles.inner}>
-          <View style={styles.form}>
-            <Form form={form} onFinish={run}>
-              <FormItem
-                label="Current Password"
-                name="password"
-                validators={validators.oldPassword}
-              >
-                <Password />
-              </FormItem>
+    <KeyboardAvoidingView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <Form form={form} onFinish={run}>
+          <FormItem
+            label="Current Password"
+            name="password"
+            validators={validators.oldPassword}
+          >
+            <Password />
+          </FormItem>
 
-              <FormItem
-                label="New Password"
-                name="newPassword"
-                deps={['password']}
-                validators={validators.newPassword}
-              >
-                <Password />
-              </FormItem>
+          <FormItem
+            label="New Password"
+            name="newPassword"
+            deps={['password']}
+            validators={validators.newPassword}
+          >
+            <Password />
+          </FormItem>
 
-              <FormItem
-                label="Confirm New Password"
-                name="confirmNewPassword"
-                deps={['newPassword']}
-                validators={validators.confirmNewPassword}
-              >
-                <Password />
-              </FormItem>
-            </Form>
-          </View>
-
-          <Button
-            intent="DARK"
-            title="Confirm"
-            loading={loading}
-            onPress={form.submit}
-          />
-        </View>
+          <FormItem
+            label="Confirm New Password"
+            name="confirmNewPassword"
+            deps={['newPassword']}
+            validators={validators.confirmNewPassword}
+          >
+            <Password />
+          </FormItem>
+        </Form>
       </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          intent="DARK"
+          title="Confirm"
+          loading={loading}
+          onPress={form.submit}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
 
+const contianerPadding = 24;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  inner: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'space-around'
-  },
-  form: {
-    flexGrow: 1
+  container: { flex: 1, paddingTop: contianerPadding },
+  scrollViewContent: { paddingHorizontal: contianerPadding },
+  buttonContainer: {
+    padding: contianerPadding,
+    backgroundColor: '#fff'
   }
 });

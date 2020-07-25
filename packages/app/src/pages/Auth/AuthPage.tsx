@@ -1,85 +1,68 @@
 import React, { ComponentType } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  KeyboardAvoidingView,
-  View,
-  Platform,
-  StyleSheet,
-  TouchableWithoutFeedback
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
-import { dimen } from '../../styles';
-import { SemiBold, InkPainting } from '../../components/Text';
+import { InkPainting } from '../../components/Text';
+import { Button } from '../../components/Button';
+import {
+  KeyboardAvoidingView,
+  ScrollView
+} from '../../components/KeyboardAvoidingView';
 import { useAuth, IAuthContext } from '../../hooks/useAuth';
+import { createForm, FormProps } from '../../utils/form';
 
-export interface AuthFormProps {
-  loading?: boolean;
-  onSubmit: IAuthContext['authenticate'];
+export interface AuthFormProps<T> extends Omit<FormProps<T>, 'onFinish'> {
+  onFinish: IAuthContext['authenticate'];
 }
 
-interface Props {
+interface Props<T> {
   title: string;
-  form: ComponentType<AuthFormProps>;
+  form: ComponentType<AuthFormProps<T>>;
 }
 
-export function createAuthPage({ title, form: Form }: Props) {
+export function createAuthPage<T>({ title, form: Form }: Props<T>) {
+  const { useForm } = createForm<T>();
+
   return function () {
     const navigation = useNavigation();
     const { loginStatus, authenticate } = useAuth();
+    const [form] = useForm();
 
     loginStatus === 'loggedIn' && navigation.goBack();
 
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        enabled
-      >
-        <SafeAreaView style={styles.container}>
-          <ScrollView
-            alwaysBounceVertical={false}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.grow}
-          >
-            <TouchableWithoutFeedback onPress={navigation.goBack}>
-              <View style={styles.goback}>
-                <Feather name="chevron-left" size={24} />
-                <SemiBold fontSize={16} style={{ lineHeight: 24 }}>
-                  Go Back
-                </SemiBold>
-              </View>
-            </TouchableWithoutFeedback>
-
+      <KeyboardAvoidingView>
+        <View style={styles.container}>
+          <ScrollView style={styles.scrollViewContent}>
             <View style={styles.logo}>
               <InkPainting fontSize={70}>{title}</InkPainting>
             </View>
 
-            <View style={styles.footer}>
-              <View style={styles.grow}>
-                <Form onSubmit={authenticate} />
-              </View>
-            </View>
+            <Form form={form} onFinish={authenticate} />
           </ScrollView>
-        </SafeAreaView>
+          <View style={styles.buttonContainer}>
+            <Button
+              intent="DARK"
+              title={title}
+              loading={loginStatus === 'loading'}
+            />
+          </View>
+        </View>
       </KeyboardAvoidingView>
     );
   };
 }
 
+const contianerPadding = 24;
 const styles = StyleSheet.create({
-  container: { ...dimen('100%'), backgroundColor: '#fff' },
+  container: { flex: 1 },
+  scrollViewContent: { paddingHorizontal: contianerPadding },
   logo: {
-    marginVertical: 50,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginVertical: 20
   },
-  grow: { flexGrow: 1 },
-  footer: { padding: 20, flexGrow: 1 },
-  goback: {
-    flexDirection: 'row',
-    marginTop: 15,
-    marginLeft: 15,
-    marginBottom: 15
+  buttonContainer: {
+    padding: contianerPadding,
+    backgroundColor: '#fff'
   }
 });
