@@ -10,6 +10,7 @@ import { Main } from './src/Main';
 import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
 import { AuthProvider } from './src/hooks/useAuth';
+import { navigationRef } from './src/utils/navigation';
 
 enableScreens();
 
@@ -28,7 +29,7 @@ function App() {
   const [fontsLoaded] = useFonts(fonts);
   if (fontsLoaded) {
     return (
-      <NavigationContainer theme={theme}>
+      <NavigationContainer theme={theme} ref={navigationRef}>
         <StatusBar style="auto" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Main" component={Main} />

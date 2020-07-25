@@ -40,9 +40,13 @@ type Actions =
   | { type: 'LOGOUT' }
   | { type: 'PROFILE_UPDATE'; payload: Partial<Schema$User> };
 
+export interface LogoutOptions {
+  slient?: boolean;
+}
+
 export type IAuthContext = State & {
   authenticate: (payload?: AuthenticatePayload) => void;
-  logout: () => void;
+  logout: (options?: LogoutOptions) => void;
 };
 
 const initialState: State = {
@@ -131,10 +135,12 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
 
     return {
       ...state,
-      logout: () => {
+      logout: options => {
         logout()
           .then(() => {
-            toaster.success({ message: 'Logout success' });
+            if (options?.slient !== true) {
+              toaster.success({ message: 'Logout success' });
+            }
             dispatch({ type: 'LOGOUT' });
           })
           .catch(error => toaster.apiError('Logout failure', error));

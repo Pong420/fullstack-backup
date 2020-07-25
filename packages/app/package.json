@@ -30,7 +30,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-web": "~0.11.7",
     "rxjs": "^6.6.0",
-    "use-rx-async": "^1.1.5"
+    "use-rx-hooks": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

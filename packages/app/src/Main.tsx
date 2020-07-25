@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 import React from 'react';
 import { SafeAreaView, Text, TouchableHighlight } from 'react-native';
 import { Feather } from '@expo/vector-icons';

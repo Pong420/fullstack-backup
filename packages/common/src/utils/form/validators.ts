@@ -131,3 +131,25 @@ export const password = {
   equalToUsername: (username: string) =>
     shouldNotBeEqual(username, PASSWORD_EUQAL_TO_USERNAME)
 };
+
+export const oldPassword = [required('Please input your old password')];
+
+export const newPassword = ({ password }: { password: string }) => [
+  required('Please input new password'),
+  shouldNotBeEqual(
+    password,
+    'The new password should not be equal to the old password'
+  )
+];
+
+export const confirmNewPassword = ({
+  newPassword
+}: {
+  newPassword: string;
+}) => [
+  required('Please input the new password again'),
+  shouldBeEqual(
+    newPassword,
+    'Confirm new password is not equal to the above new password'
+  )
+];
