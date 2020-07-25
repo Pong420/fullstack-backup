@@ -29,7 +29,12 @@ export interface TextProps extends RnTextProps, FontStyle {
 
 function createText(fontFamily: FontFamily) {
   return function Text({ style, fontSize = 16, ...props }: TextProps) {
-    return <RnText {...props} style={{ fontFamily, fontSize, ...style }} />;
+    return (
+      <RnText
+        {...props}
+        style={{ fontFamily, fontSize, color: '#182026', ...style }}
+      />
+    );
   };
 }
 

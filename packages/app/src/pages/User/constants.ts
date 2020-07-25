@@ -11,7 +11,9 @@ export enum Paths {
   ChangePassword = 'Change Password',
   Login = 'Login',
   Registration = 'Registration',
-  VaildatePassword = 'VaildatePassword'
+  VaildatePassword = 'VaildatePassword',
+  NewNickName = 'New NickName',
+  NewEmail = 'New Email Address'
 }
 
 export const DATA = [

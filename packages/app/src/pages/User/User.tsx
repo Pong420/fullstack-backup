@@ -1,13 +1,16 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   createStackNavigator,
-  StackNavigationOptions,
-  StackScreenProps
+  StackNavigationOptions
 } from '@react-navigation/stack';
 import { UserConentList } from './UserConentList';
-import { PersonalInfo } from './PersonalInfo';
+import {
+  PersonalInfo,
+  NewEmailModal,
+  NewNickNameModal,
+  ValidPasswordModal
+} from './PersonalInfo';
 import { ChangePassword } from './ChangePassword';
-import { ValidPassword } from '../../components/ValidPassword';
 import { Login, Registration } from '../Auth';
 import { Paths } from './constants';
 
@@ -33,13 +36,6 @@ function MainStackScreen() {
   );
 }
 
-function ValidPasswordModal({
-  navigation
-}: StackScreenProps<Record<string, undefined>>) {
-  const onSuccess = useRef(() => navigation.navigate(Paths.PeronsalInfo));
-  return <ValidPassword onSuccess={onSuccess.current} />;
-}
-
 export function User() {
   return (
     <RootStack.Navigator
@@ -52,6 +48,8 @@ export function User() {
         name={Paths.VaildatePassword}
         component={ValidPasswordModal}
       />
+      <RootStack.Screen name={Paths.NewNickName} component={NewNickNameModal} />
+      <RootStack.Screen name={Paths.NewEmail} component={NewEmailModal} />
     </RootStack.Navigator>
   );
 }

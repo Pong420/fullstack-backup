@@ -6,7 +6,7 @@ import { Password } from './Password';
 import { Button } from './Button';
 import { toaster } from './Toast';
 import { Modal } from './Modal';
-import { createForm } from '../utils/form';
+import { createForm, FormProps } from '../utils/form';
 import { useAuth } from '../hooks/useAuth';
 import { login } from '../service';
 
@@ -14,25 +14,27 @@ interface Props {
   onSuccess: () => void;
 }
 
-const { Form, FormItem, useForm } = createForm<Param$Login>();
+export const { Form, FormItem, useForm } = createForm<Param$Login>();
 
 const onFailure = toaster.apiError.bind(toaster, 'Validation Failure');
 
-export function ValidPassword({ onSuccess }: Props) {
+export function ValidPasswordContent({
+  loading,
+  form,
+  onFinish,
+  ...props
+}: FormProps<Param$Login> & { loading?: boolean }) {
   const { user } = useAuth();
-  const { run, loading } = useRxAsync(login, {
-    defer: true,
-    onSuccess,
-    onFailure
-  });
-  const [form] = useForm();
 
   return (
     <Modal title="Enter your password">
       <Form
+        {...props}
         form={form}
         style={styles.content}
-        onFinish={payload => run({ ...payload, username: user!.username })}
+        onFinish={payload =>
+          onFinish && onFinish({ ...payload, username: user!.username })
+        }
       >
         <FormItem label="Password" name="password">
           <Password />
@@ -42,11 +44,22 @@ export function ValidPassword({ onSuccess }: Props) {
           intent="DARK"
           title="Confirm"
           loading={loading}
-          onPress={form.submit}
+          onPress={form?.submit}
         />
       </Form>
     </Modal>
   );
+}
+
+export function ValidPassword({ onSuccess }: Props) {
+  const { run, loading } = useRxAsync(login, {
+    defer: true,
+    onSuccess,
+    onFailure
+  });
+  const [form] = useForm();
+
+  return <ValidPasswordContent form={form} loading={loading} onFinish={run} />;
 }
 
 const containerPadding = 24;

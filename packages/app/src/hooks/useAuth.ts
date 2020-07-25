@@ -47,6 +47,7 @@ export interface LogoutOptions {
 export type IAuthContext = State & {
   authenticate: (payload?: AuthenticatePayload) => void;
   logout: (options?: LogoutOptions) => void;
+  updateProfile: (payload: Partial<Schema$User>) => void;
 };
 
 const initialState: State = {
@@ -135,6 +136,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
 
     return {
       ...state,
+      updateProfile: payload => dispatch({ type: 'PROFILE_UPDATE', payload }),
       logout: options => {
         logout()
           .then(() => {
