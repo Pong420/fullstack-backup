@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
@@ -7,6 +7,7 @@ import { Header } from '../../components/Header';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
 import { toaster } from '../../components/Toast';
+import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingViewFooter';
 import { createForm, validators } from '../../utils/form';
 import { useAuth } from '../../hooks/useAuth';
 import { modifyPassword } from '../../service';
@@ -67,34 +68,16 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
         >
           <Password />
         </FormItem>
-
-        <FormItem
-          label="Confirm New Password"
-          name="confirmNewPassword"
-          deps={['newPassword']}
-          validators={validators.confirmNewPassword}
-        >
-          <Password />
-        </FormItem>
-
-        <FormItem
-          label="Confirm New Password"
-          name="confirmNewPassword"
-          deps={['newPassword']}
-          validators={validators.confirmNewPassword}
-        >
-          <Password />
-        </FormItem>
       </ScrollView>
 
-      <View style={styles.buttonContainer}>
+      <KeyboardAvoidingViewFooter style={styles.buttonContainer}>
         <Button
           intent="DARK"
           title="Confirm"
           loading={loading}
           onPress={form.submit}
         />
-      </View>
+      </KeyboardAvoidingViewFooter>
     </Form>
   );
 }

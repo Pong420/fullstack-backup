@@ -4,6 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Header } from '../../components/Header';
 import { InkPainting } from '../../components/Text';
 import { Button } from '../../components/Button';
+import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingViewFooter';
 import { useAuth } from '../../hooks/useAuth';
 import { createForm } from '../../utils/form';
 import { Param$Login, Param$CreateUser } from '@fullstack/typings';
@@ -42,14 +43,14 @@ export function createAuthPage<T extends Schema>({
 
           <Content />
         </ScrollView>
-        <View style={styles.buttonContainer}>
+        <KeyboardAvoidingViewFooter style={styles.buttonContainer}>
           <Button
             intent="DARK"
             title={title}
             onPress={form.submit}
             loading={loginStatus === 'loading'}
           />
-        </View>
+        </KeyboardAvoidingViewFooter>
       </Form>
     );
   };
