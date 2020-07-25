@@ -5,12 +5,13 @@ import {
   KeyboardAvoidingView,
   View,
   Platform,
-  StyleSheet
+  StyleSheet,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import { dimen } from '../../styles';
-import { Button } from '../../components/Button';
-import { InkPainting } from '../../components/Text';
+import { SemiBold, InkPainting } from '../../components/Text';
 import { useAuth, IAuthContext } from '../../hooks/useAuth';
 
 export interface AuthFormProps {
@@ -41,6 +42,15 @@ export function createAuthPage({ title, form: Form }: Props) {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.grow}
           >
+            <TouchableWithoutFeedback onPress={navigation.goBack}>
+              <View style={styles.goback}>
+                <Feather name="chevron-left" size={24} />
+                <SemiBold fontSize={16} style={{ lineHeight: 24 }}>
+                  Go Back
+                </SemiBold>
+              </View>
+            </TouchableWithoutFeedback>
+
             <View style={styles.logo}>
               <InkPainting fontSize={70}>{title}</InkPainting>
             </View>
@@ -49,11 +59,6 @@ export function createAuthPage({ title, form: Form }: Props) {
               <View style={styles.grow}>
                 <Form onSubmit={authenticate} />
               </View>
-              <Button
-                onPress={navigation.goBack}
-                style={styles.goback}
-                title="Go Back"
-              />
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -71,5 +76,10 @@ const styles = StyleSheet.create({
   },
   grow: { flexGrow: 1 },
   footer: { padding: 20, flexGrow: 1 },
-  goback: { marginTop: 15 }
+  goback: {
+    flexDirection: 'row',
+    marginTop: 15,
+    marginLeft: 15,
+    marginBottom: 15
+  }
 });
