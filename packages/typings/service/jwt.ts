@@ -9,7 +9,7 @@ export interface JWTSignPayload {
 
 export interface JWTSignResult {
   token: string;
-  expiry: Date;
+  expiry: Date | string;
 }
 
 export interface ValidatePayload extends JWTSignPayload {

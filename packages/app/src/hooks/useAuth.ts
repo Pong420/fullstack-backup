@@ -11,11 +11,11 @@ import {
   Schema$User,
   Param$CreateUser
 } from '@fullstack/typings';
+import AsyncStorage from '@react-native-community/async-storage';
 import { defer, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
-import { login, logout, getJwtToken } from '../service';
+import { login, logout, register, getJwtToken } from '../service';
 import { toaster } from '../components/Toast';
-import { register } from '@fullstack/common/service';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
@@ -55,6 +55,8 @@ const AuthContext = React.createContext({} as IAuthContext);
 export function useAuth() {
   return useContext(AuthContext);
 }
+
+const StorageKey = 'Auto_Authentication';
 
 export function AuthProvider({ children }: { children?: ReactNode }) {
   const [state, dispatch] = React.useReducer<Reducer<State, Actions>>(
@@ -140,8 +142,13 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
       authenticate: payload => {
         dispatch({ type: 'AUTHENTICATE' });
         authenticate$(payload).subscribe(
-          ({ user }) =>
-            dispatch({ type: 'AUTHENTICATE_SUCCESS', payload: user }),
+          ({ user, expiry }) => {
+            dispatch({ type: 'AUTHENTICATE_SUCCESS', payload: user });
+            AsyncStorage.setItem(
+              StorageKey,
+              expiry instanceof Date ? expiry.toISOString() : expiry
+            );
+          },
           () => dispatch({ type: 'AUTHENTICATE_FAILURE' })
         );
       }
@@ -151,10 +158,13 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
   const { authenticate } = authContext;
 
   useEffect(() => {
-    if (loginStatus === 'unknown') {
-      authenticate();
-    }
-  }, [loginStatus, authenticate]);
+    const subscription = defer(() =>
+      AsyncStorage.getItem(StorageKey)
+    ).subscribe(
+      expiry => loginStatus === 'unknown' && expiry && authenticate()
+    );
+    return () => subscription.unsubscribe();
+  }, [loginStatus, authenticate, dispatch]);
 
   return React.createElement<ProviderProps<IAuthContext>>(
     AuthContext.Provider,
