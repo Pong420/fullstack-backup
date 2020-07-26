@@ -1,5 +1,5 @@
-import { Schema$Address, Param$CreateAddress } from '@fullstack/typings';
-import { IsString, ArrayNotEmpty, IsOptional } from 'class-validator';
+import { Schema$Address, Param$CreateAddress, Area } from '@fullstack/typings';
+import { IsString, ArrayNotEmpty, IsOptional, IsEnum } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 class Excluded implements Partial<Schema$Address> {
@@ -18,9 +18,9 @@ class Excluded implements Partial<Schema$Address> {
 
 class CreateAddress extends Excluded
   implements Partial<Omit<Param$CreateAddress, keyof Excluded>> {
-  @IsString()
+  @IsEnum(Area)
   @IsOptional()
-  area?: string;
+  area?: Area;
 }
 
 export class CreateAddressDto extends CreateAddress

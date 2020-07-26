@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { paths } from '@fullstack/common/constants';
-import { Schema$Address, UserRole } from '@fullstack/typings';
+import { Schema$Address, UserRole, Area } from '@fullstack/typings';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { ObjectId } from '../decorators';
@@ -36,7 +36,10 @@ export class AddressController {
   createAddress(
     @Body(AttachUserPipe) createAddress: CreateAddressDto
   ): Promise<Schema$Address> {
-    return this.addressService.create({ ...createAddress, area: 'Hong Kong' });
+    return this.addressService.create({
+      ...createAddress,
+      area: Area.HongKong
+    });
   }
 
   @Patch(paths.address.update_address)

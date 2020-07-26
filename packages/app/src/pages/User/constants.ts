@@ -9,6 +9,7 @@ export enum Paths {
   User = 'User',
   PeronsalInfo = 'Personal Information',
   ChangePassword = 'Change Password',
+  DeliveryAddress = 'Delivery Address',
   Login = 'Login',
   Registration = 'Registration',
   VaildatePassword = 'VaildatePassword',
@@ -37,7 +38,8 @@ export const DATA = [
   {
     auth: true,
     icon: 'map-pin',
-    title: 'Delivery Address'
+    title: 'Delivery Address',
+    onPress: () => navigate(Paths.DeliveryAddress)
   },
   {
     icon: 'message-circle',

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import { Schema$Address } from '@fullstack/typings';
+import { Schema$Address, Area } from '@fullstack/typings';
 import { User } from '../../user/schemas/user.schema';
 import { Group } from '../../utils/access.guard';
 
@@ -22,7 +22,7 @@ export class Address implements Schema$Address {
   user: string;
 
   @Prop({ type: String, required: true })
-  area: string;
+  area: Area;
 
   @Prop({ type: [String], required: true })
   address: string[];
