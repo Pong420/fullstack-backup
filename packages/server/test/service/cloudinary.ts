@@ -13,7 +13,7 @@ export async function cloudinarySign(
   token: string
 ): Promise<Schema$CloudinarySign> {
   const response = await request
-    .post(`${paths.base_url}${paths.cloudinary_sign}`)
+    .post(paths.cloudinary_sign)
     .set('Authorization', `bearer ${token}`)
     .send();
 

@@ -9,10 +9,8 @@ interface Login {
   password: string;
 }
 
-const prefix = '/api';
-
 export async function login(payload: Login): Promise<Response> {
-  return request.post(`${prefix}${paths.login}`).send(payload);
+  return request.post(paths.login).send(payload);
 }
 
 export async function getToken(
@@ -41,7 +39,7 @@ export function registerAdmin(
   dto: CreateUserDto
 ): SuperAgentRequest {
   return request
-    .post(`${prefix}${paths.admin_registration}`)
+    .post(paths.admin_registration)
     .set('Authorization', `bearer ${token}`)
     .send(dto);
 }
@@ -58,13 +56,10 @@ export async function createAndLogin(
 }
 
 export function refreshToken(token: string): SuperAgentRequest {
-  return request
-    .post(`${prefix}${paths.refresh_token}`)
-    .set('Cookie', [token])
-    .send();
+  return request.post(paths.refresh_token).set('Cookie', [token]).send();
 }
 export function logout(): SuperAgentRequest {
-  return request.post(`${prefix}${paths.logout}`);
+  return request.post(paths.logout);
 }
 
 export function modifyPassword(
@@ -72,7 +67,7 @@ export function modifyPassword(
   params: Param$ModifyPassword
 ): SuperAgentRequest {
   return request
-    .patch(`${prefix}${paths.modify_password}`)
+    .patch(paths.modify_password)
     .set('Authorization', `bearer ${token}`)
     .send(params);
 }
@@ -82,7 +77,7 @@ export function deleteAccount(
   params: Param$DeleteAccount
 ): SuperAgentRequest {
   return request
-    .delete(`${prefix}${paths.delete_account}`)
+    .delete(paths.delete_account)
     .set('Authorization', `bearer ${token}`)
     .send(params);
 }

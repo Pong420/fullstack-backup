@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { paths } from '@fullstack/common/constants';
 import { AppModule } from './app.module';
 import { setupApp, fastifyAdapter, NestFastifyApplication } from './setup';
 import rateLimit from 'fastify-rate-limit';
@@ -13,6 +14,8 @@ async function bootstrap() {
   const PORT = Number(process.env.PORT || 3000);
 
   setupApp(app);
+
+  app.setGlobalPrefix(paths.base_url);
 
   app.register(helmet);
   app.register(rateLimit, {

@@ -5,8 +5,6 @@ import { UpdateProductDto } from '../../src/products/dto/update-product.dto';
 import { rid } from '../utils/rid';
 import qs from 'qs';
 
-const prefix = '/api';
-
 export { CreateProductDto, UpdateProductDto };
 
 export function createProductDto(
@@ -26,7 +24,7 @@ export function createProduct(
   dto: Partial<CreateProductDto> | Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .post(`${prefix}${paths.create_product}`)
+    .post(paths.create_product)
     .set('Authorization', `bearer ${token}`)
     .send(createProductDto(dto) as any);
 }
@@ -36,14 +34,14 @@ export function getProducts(
   query: Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .get(`${prefix}${paths.get_products}`)
+    .get(paths.get_products)
     .set('Authorization', `bearer ${token}`)
     .query(qs.stringify(query));
 }
 
 export function getProduct(token: string, id: string): SuperAgentRequest {
   return request
-    .get(`${prefix}${paths.get_product.generatePath({ id })}`)
+    .get(paths.get_product.generatePath({ id }))
     .set('Authorization', `bearer ${token}`);
 }
 
@@ -53,25 +51,23 @@ export function updateProduct(
   changes: UpdateProductDto
 ): SuperAgentRequest {
   return request
-    .patch(`${prefix}${paths.update_product.generatePath({ id })}`)
+    .patch(paths.update_product.generatePath({ id }))
     .set('Authorization', `bearer ${token}`)
     .send((changes || {}) as any);
 }
 
 export function deleteProduct(token: string, id: string): SuperAgentRequest {
   return request
-    .delete(`${prefix}${paths.delete_product.generatePath({ id })}`)
+    .delete(paths.delete_product.generatePath({ id }))
     .set('Authorization', `bearer ${token}`);
 }
 
 export function getTags(token: string): SuperAgentRequest {
-  return request
-    .get(`${prefix}${paths.get_tags}`)
-    .set('Authorization', `bearer ${token}`);
+  return request.get(paths.get_tags).set('Authorization', `bearer ${token}`);
 }
 
 export function getCategories(token: string): SuperAgentRequest {
   return request
-    .get(`${prefix}${paths.get_category}`)
+    .get(paths.get_category)
     .set('Authorization', `bearer ${token}`);
 }

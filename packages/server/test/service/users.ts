@@ -5,8 +5,6 @@ import { UpdateUserDto } from '../../src/user/dto/update-user.dto';
 import { rid } from '../utils/rid';
 import qs from 'qs';
 
-const prefix = '/api';
-
 export { CreateUserDto, UpdateUserDto };
 
 export const createUserDto = (
@@ -26,7 +24,7 @@ export function createUser(
   dto: Partial<CreateUserDto> = {}
 ): SuperAgentRequest {
   return request
-    .post(`${prefix}${paths.create_user}`)
+    .post(paths.create_user)
     .set('Authorization', `bearer ${token}`)
     .send(createUserDto(dto) as any);
 }
@@ -36,14 +34,14 @@ export function getUsers(
   query: Record<string, any> = {}
 ): SuperAgentRequest {
   return request
-    .get(`${prefix}${paths.get_users}`)
+    .get(paths.get_users)
     .set('Authorization', `bearer ${token}`)
     .query(qs.stringify(query));
 }
 
 export function getUser(token: string, id: string): SuperAgentRequest {
   return request
-    .get(`${prefix}${paths.get_user.generatePath({ id })}`)
+    .get(paths.get_user.generatePath({ id }))
     .set('Authorization', `bearer ${token}`);
 }
 
@@ -52,13 +50,13 @@ export function updateUser(
   { id, ...changes }: UpdateUserDto
 ): SuperAgentRequest {
   return request
-    .patch(`${prefix}${paths.update_user.generatePath({ id })}`)
+    .patch(paths.update_user.generatePath({ id }))
     .set('Authorization', `bearer ${token}`)
     .send((changes || {}) as any);
 }
 
 export function deleteUser(token: string, id: string): SuperAgentRequest {
   return request
-    .delete(`${prefix}${paths.delete_user.generatePath({ id })}`)
+    .delete(paths.delete_user.generatePath({ id }))
     .set('Authorization', `bearer ${token}`);
 }

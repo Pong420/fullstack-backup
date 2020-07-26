@@ -1,7 +1,6 @@
 import cookieParser from 'fastify-cookie';
 import multipart from 'fastify-multipart';
 import { ValidationPipe } from '@nestjs/common';
-import { paths } from '@fullstack/common/constants';
 import {
   FastifyAdapter,
   NestFastifyApplication
@@ -21,7 +20,6 @@ export function setupApp(app: NestFastifyApplication): void {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new MongooseExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
-  app.setGlobalPrefix(paths.base_url);
   app.register(cookieParser);
   app.register(multipart);
 }

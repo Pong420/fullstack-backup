@@ -8,7 +8,7 @@ export function createOrder(
   dto: CreateOrderDto
 ): SuperAgentRequest {
   return request
-    .post(`${paths.base_url}${paths.create_order}`)
+    .post(paths.create_order)
     .set('Authorization', `bearer ${token}`)
     .send(dto);
 }
@@ -19,7 +19,7 @@ export function updateOrder(
   changes: UpdateOrderDto
 ): SuperAgentRequest {
   return request
-    .patch(`${paths.base_url}${paths.update_order.generatePath({ id })}`)
+    .patch(paths.update_order.generatePath({ id }))
     .set('Authorization', `bearer ${token}`)
     .send(changes);
 }
