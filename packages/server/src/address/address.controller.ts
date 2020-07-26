@@ -36,7 +36,7 @@ export class AddressController {
   createAddress(
     @Body(AttachUserPipe) createAddress: CreateAddressDto
   ): Promise<Schema$Address> {
-    return this.addressService.create(createAddress);
+    return this.addressService.create({ ...createAddress, area: 'Hong Kong' });
   }
 
   @Patch(paths.address.update_address)
@@ -45,12 +45,12 @@ export class AddressController {
     @Req() req: FastifyRequest,
     @Body() updateAddress: UpdateAddressDto
   ): Promise<Schema$Address> {
-    const user_id =
-      req.user.role === UserRole.CLIENT ? req.user.user_id : undefined;
-    return this.addressService.update(
-      { _id: id, user: user_id },
-      updateAddress
-    );
+    const user =
+      req.user.role === UserRole.CLIENT
+        ? { user: req.user.user_id }
+        : undefined;
+
+    return this.addressService.update({ _id: id, ...user }, updateAddress);
   }
 
   @Delete(paths.address.delete_address)

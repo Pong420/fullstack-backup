@@ -6,7 +6,7 @@ export interface Param$Address {
 
 export interface Param$CreateAddress {
   user?: string;
-  area: string;
+  area?: string;
   address: string[];
 }
 

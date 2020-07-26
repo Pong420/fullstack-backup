@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { Schema$Address } from '@fullstack/typings';
 import { User } from '../../user/schemas/user.schema';
+import { Group } from '../../utils/access.guard';
 
 @Schema({
   timestamps: true,
@@ -17,6 +18,7 @@ export class Address implements Schema$Address {
     ref: User.name,
     required: true
   })
+  @Group(['ADMIN', 'MANAGER', 'GUEST'])
   user: string;
 
   @Prop({ type: String, required: true })

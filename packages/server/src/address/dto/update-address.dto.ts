@@ -3,7 +3,7 @@ import {
   Schema$Address,
   DTOExcluded
 } from '@fullstack/typings';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, ArrayNotEmpty } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 type Schema = Schema$Address & Param$UpdateAddress;
@@ -28,6 +28,7 @@ class Excluded implements DTOExcluded<Schema$Address, Param$UpdateAddress> {
 class UpdateAddress extends Excluded
   implements Partial<Omit<Schema, keyof Excluded | keyof UpdateAddressDto>> {
   @IsOptional()
+  @ArrayNotEmpty()
   @IsString({ each: true })
   address?: string[];
 }
