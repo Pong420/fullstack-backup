@@ -32,9 +32,18 @@
   },
   "order": {
     "prefix": "/orders",
+    "get_order": "/:id",
     "get_orders": "",
     "create_order": "",
     "update_order": "/:id",
     "delete_order": "/:id"
+  },
+  "address": {
+    "prefix": "/address",
+    "get_address": "/:id",
+    "get_addresses": "",
+    "create_address": "",
+    "update_address": "/:id",
+    "delete_address": "/:id"
   }
 }

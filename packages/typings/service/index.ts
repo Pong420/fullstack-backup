@@ -6,6 +6,7 @@ export * from './refreshToken';
 export * from './auth';
 export * from './products';
 export * from './orders';
+export * from './address';
 
 export interface ApiResponse<T> {
   statusCode: number;

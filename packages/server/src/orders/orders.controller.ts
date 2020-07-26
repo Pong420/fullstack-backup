@@ -13,9 +13,9 @@ import { Order } from './schema/order.schema';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { AttachUserPipe } from './pipe/attach-user.pipe';
 import { ProductsPipe } from './pipe/products.pipe';
 import { ProductsService } from '../products/products.service';
+import { AttachUserPipe } from '../utils/attach-user.pipe';
 import { ObjectId } from '../utils/mongoose-crud.controller';
 import { Access } from '../utils/access.guard';
 

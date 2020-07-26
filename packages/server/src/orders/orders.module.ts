@@ -4,9 +4,9 @@ import { Schema } from 'mongoose';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { OrderSchema, Order } from './schema/order.schema';
-import { AttachUserPipe } from './pipe/attach-user.pipe';
 import { ProductsPipe } from './pipe/products.pipe';
 import { ProductsModule } from '../products/products.module';
+import { AttachUserPipe } from '../utils/attach-user.pipe';
 import autopopulate from 'mongoose-autopopulate';
 import paginate from 'mongoose-paginate-v2';
 

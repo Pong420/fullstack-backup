@@ -53,7 +53,7 @@ export class AcessGuard extends AuthGuard('jwt') {
       mergeMap<boolean, Promise<boolean>>(async active => {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
-          const id: string | null = req.params?.id;
+          const user_id: string | null = req.body?.user_id || req.params?.id;
           const user: Partial<JWTSignPayload> = req.user || {};
 
           if (access.includes('PASSWORD')) {
@@ -73,7 +73,8 @@ export class AcessGuard extends AuthGuard('jwt') {
             }
           }
 
-          if (access.includes('SELF') && id && id === user.user_id) return true;
+          if (access.includes('SELF') && user_id && user_id === user.user_id)
+            return true;
 
           return access.length
             ? access.includes(UserRole[user.role] as AccessType)
