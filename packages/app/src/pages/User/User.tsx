@@ -11,6 +11,7 @@ import {
   ValidPasswordModal
 } from './PersonalInfo';
 import { ChangePassword } from './ChangePassword';
+import { DeliveryAddress } from './DeliveryAddress';
 import { Login, Registration } from '../Auth';
 import { Paths } from './constants';
 
@@ -29,6 +30,10 @@ function MainStackScreen() {
       <MainStack.Screen
         name={Paths.ChangePassword}
         component={ChangePassword}
+      />
+      <MainStack.Screen
+        name={Paths.DeliveryAddress}
+        component={DeliveryAddress}
       />
       <MainStack.Screen name={Paths.Login} component={Login} />
       <MainStack.Screen name={Paths.Registration} component={Registration} />

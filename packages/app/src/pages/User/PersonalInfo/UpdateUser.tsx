@@ -40,7 +40,7 @@ function createModal({ title, content, prefix }: Create) {
     const [form] = useForm();
 
     return (
-      <Modal title={title}>
+      <Modal title={title} onClose={navigation.goBack}>
         <Form
           style={styles.content}
           form={form}

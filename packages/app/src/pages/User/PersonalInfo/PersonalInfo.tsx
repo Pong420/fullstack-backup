@@ -62,11 +62,11 @@ export function PersonalInfo({
   );
 }
 
-const contianerPadding = 24;
+const containerPadding = 24;
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: contianerPadding, paddingTop: 0 },
+  container: { flex: 1, padding: containerPadding, paddingTop: 0 },
   card: {
-    padding: contianerPadding,
+    padding: containerPadding,
     borderRadius: 3,
     backgroundColor: '#fff',
     shadowColor: '#000',

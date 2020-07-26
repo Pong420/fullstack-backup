@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$Login } from '@fullstack/typings';
+import { useNavigation } from '@react-navigation/native';
 import { Password } from './Password';
 import { Button } from './Button';
 import { toaster } from './Toast';
@@ -25,9 +26,10 @@ export function ValidPasswordContent({
   ...props
 }: FormProps<Param$Login> & { loading?: boolean }) {
   const { user } = useAuth();
+  const { goBack } = useNavigation();
 
   return (
-    <Modal title="Enter your password">
+    <Modal title="Enter your password" onClose={goBack}>
       <Form
         {...props}
         form={form}

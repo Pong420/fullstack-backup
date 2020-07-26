@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 import { TouchableNativeFeedback, StyleSheet, View } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { SemiBold } from './Text';
 
 export interface ModalHeaderProps {
   title: ReactNode;
+  onClose?: () => void;
 }
 
 export interface ModalProps extends ModalHeaderProps {
@@ -14,12 +14,10 @@ export interface ModalProps extends ModalHeaderProps {
 }
 
 const iconSize = 22;
-export function ModalHeader({ title }: ModalHeaderProps) {
-  const { goBack } = useNavigation();
-  const { top } = useSafeArea();
+export function ModalHeader({ title, onClose }: ModalHeaderProps) {
   return (
-    <View style={{ marginTop: top }}>
-      <TouchableNativeFeedback onPress={goBack}>
+    <View>
+      <TouchableNativeFeedback onPress={onClose}>
         <View style={styles.goBack}>
           <SemiBold fontSize={16} style={styles.text}>
             {title}
@@ -31,10 +29,11 @@ export function ModalHeader({ title }: ModalHeaderProps) {
   );
 }
 
-export function Modal({ title, children }: ModalProps) {
+export function Modal({ title, children, onClose }: ModalProps) {
+  const insets = useSafeArea();
   return (
-    <View style={styles.container}>
-      <ModalHeader title={title} />
+    <View style={{ ...styles.container, paddingTop: insets.top }}>
+      <ModalHeader title={title} onClose={onClose} />
       {children}
     </View>
   );

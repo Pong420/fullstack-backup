@@ -19,11 +19,11 @@ export interface Param$UpdateAddress {
   address: string[];
 }
 
-export interface Schema$Address
-  extends Timestamp,
-    Param$Address,
-    Param$CreateAddress {
-  user: string;
+export interface Schema$Address extends Timestamp {
+  id: string;
+  user?: string;
+  area: Area;
+  address: string[];
 }
 
 export type Response$GetAddresses = ApiResponse<Schema$Address[]>;

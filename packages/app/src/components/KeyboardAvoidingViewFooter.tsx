@@ -9,7 +9,7 @@ interface Props extends ViewProps {
 
 export function KeyboardAvoidingViewFooter({
   style,
-  shadowColor = '#ddd5',
+  shadowColor = '#ddd',
   ...props
 }: Props) {
   const visbile = useKeyboard();

@@ -32,7 +32,7 @@ export const DATA = [
   },
   {
     auth: true,
-    icon: 'file-text',
+    icon: 'package',
     title: 'My Orders'
   },
   {

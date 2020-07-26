@@ -13,6 +13,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   hasError?: boolean;
   intent?: keyof typeof themes;
   rightElement?: ReactElement<{ [x: string]: any; style: ViewStyle }>;
+  border?: 'bottom' | 'default' | 'none';
 }
 
 const themes = {
@@ -26,63 +27,75 @@ const themes = {
   }
 };
 
-const danger = themes['DANGER'];
 const height = 40;
 
-export function TextInput({
-  onChange,
-  style,
-  hasError,
-  intent = 'PRIMARY',
-  rightElement,
-  ...props
-}: TextInputProps) {
-  const [focused, onFocus, onBlur] = useBoolean();
-  const theme = themes[hasError ? 'DANGER' : intent];
+export function createTextInput(defaultProps?: TextInputProps) {
+  return function TextInput(_props: TextInputProps) {
+    const {
+      onChange,
+      style,
+      hasError,
+      rightElement,
+      border = 'default',
+      intent = 'PRIMARY',
+      ...props
+    } = { ...defaultProps, ..._props };
+    const [focused, onFocus, onBlur] = useBoolean();
+    const theme = themes[hasError ? 'DANGER' : intent];
 
-  return (
-    <View
-      style={{
-        padding: 1,
-        borderWidth: 1,
-        borderRadius: 3,
-        ...(focused && {
-          borderColor: theme.light,
-          shadowColor: theme.light
-        }),
-        ...(hasError && {
-          borderColor: danger.light,
-          shadowColor: danger.light
-        }),
-        ...(focused || hasError
-          ? shadow({ shadowRadius: 1, shadowOffsetY: 2 })
-          : { borderColor: '#fff' })
-      }}
-    >
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: hasError ? danger.dark : focused ? theme.dark : '#ddd',
-          flexDirection: 'row'
-        }}
-      >
-        <RNTextInput
-          autoCapitalize="none"
-          onBlur={onBlur}
-          onFocus={onFocus}
+    const defaultOuterStyle = {
+      padding: 1,
+      borderWidth: 1,
+      borderRadius: 3,
+      ...(focused || hasError
+        ? shadow({
+            shadowRadius: 1,
+            shadowOffsetY: 2,
+            shadowColor: theme.light,
+            borderColor: theme.light
+          })
+        : { borderColor: '#fff' })
+    };
+
+    return (
+      <View style={border === 'default' ? defaultOuterStyle : undefined}>
+        <View
           style={{
-            flex: 1,
-            padding: 10,
-            height
+            flexDirection: 'row',
+            alignItems: 'center',
+            ...(border === 'default'
+              ? { borderWidth: 1 }
+              : border === 'bottom'
+              ? { borderBottomWidth: 1 }
+              : {}),
+            borderColor: hasError || focused ? theme.dark : '#ddd'
           }}
-          onChangeText={onChange}
-          {...props}
-          {...(props &&
-            onChange &&
-            typeof props.value === 'undefined' && { value: '' })}
-        />
-        <View style={{ padding: 5 }}>{rightElement}</View>
+        >
+          <RNTextInput
+            autoCapitalize="none"
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onChangeText={onChange}
+            style={{
+              height,
+              flex: 1,
+              padding: border === 'default' ? 10 : 3,
+              color:
+                border === 'bottom' && (hasError || focused)
+                  ? theme.dark
+                  : '#182026'
+            }}
+            {...props}
+            {...(props &&
+              typeof props.value === 'undefined' &&
+              onChange && { value: '' })}
+            placeholderTextColor="#8a9ba8"
+          />
+          {rightElement}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 }
+
+export const TextInput = createTextInput();

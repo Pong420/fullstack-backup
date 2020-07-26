@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   text: {
-    lineHeight: iconSize
+    lineHeight: iconSize - 2
   }
 });
