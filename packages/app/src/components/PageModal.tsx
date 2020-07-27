@@ -17,19 +17,22 @@ const iconSize = 22;
 export function ModalHeader({ title, onClose }: ModalHeaderProps) {
   return (
     <View>
-      <TouchableNativeFeedback onPress={onClose}>
-        <View style={styles.goBack}>
-          <SemiBold fontSize={16} style={styles.text}>
-            {title}
-          </SemiBold>
+      <View style={styles.goBack}>
+        <SemiBold fontSize={16} style={styles.text}>
+          {title}
+        </SemiBold>
+        <TouchableNativeFeedback onPress={onClose}>
           <Feather name="x" size={iconSize} />
-        </View>
-      </TouchableNativeFeedback>
+        </TouchableNativeFeedback>
+      </View>
     </View>
   );
 }
 
-export function Modal({ title, children, onClose }: ModalProps) {
+export function PageModal({ title, children, onClose }: ModalProps) {
+  // Not sure the reason,
+  // `SafeAreaView` delay the slide up animation of modal button
+  // So `useSafeArea` instead
   const insets = useSafeArea();
   return (
     <View style={{ ...styles.container, paddingTop: insets.top }}>

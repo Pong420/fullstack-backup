@@ -20,13 +20,15 @@ export function KeyboardAvoidingViewFooter({
         style,
         visbile
           ? {
-              shadowColor,
+              backgroundColor: '#fff',
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
-                height: -4
+                height: -1
               },
-              shadowOpacity: 1,
-              elevation: 1
+              shadowOpacity: 0.15,
+              shadowRadius: 10,
+              elevation: 5
             }
           : {}
       )}

@@ -14,13 +14,12 @@ export function useKeyboard() {
       setVisible(false);
     };
 
-    const show = 'keyboardDidShow';
+    const show = 'keyboardWillShow';
     const hide = 'keyboardWillHide';
 
     Keyboard.addListener(show, _keyboardDidShow);
     Keyboard.addListener(hide, _keyboardDidHide);
 
-    // cleanup function
     return () => {
       Keyboard.removeListener(show, _keyboardDidShow);
       Keyboard.removeListener(hide, _keyboardDidHide);

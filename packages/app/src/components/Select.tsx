@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { TextInput } from './TextInput';
 import { useBoolean } from '../hooks/useBoolean';
-import { ModalHeader } from './Modal';
+import { ModalHeader } from './PageModal';
 import {
   TouchableNativeFeedback,
   TouchableWithoutFeedback

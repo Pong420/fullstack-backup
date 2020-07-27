@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Param$UpdateUser, Schema$User } from '@fullstack/typings';
 import { Button } from '../../../components/Button';
 import { toaster } from '../../../components/Toast';
-import { Modal } from '../../../components/Modal';
+import { PageModal } from '../../../components/PageModal';
 import { TextInput } from '../../../components/TextInput';
 import { createForm, validators } from '../../../utils/form';
 import { useAuth } from '../../../hooks/useAuth';
@@ -40,7 +40,7 @@ function createModal({ title, content, prefix }: Create) {
     const [form] = useForm();
 
     return (
-      <Modal title={title} onClose={navigation.goBack}>
+      <PageModal title={title} onClose={navigation.goBack}>
         <Form
           style={styles.content}
           form={form}
@@ -55,7 +55,7 @@ function createModal({ title, content, prefix }: Create) {
             onPress={form.submit}
           />
         </Form>
-      </Modal>
+      </PageModal>
     );
   };
 }

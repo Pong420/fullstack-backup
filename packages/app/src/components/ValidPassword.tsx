@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Password } from './Password';
 import { Button } from './Button';
 import { toaster } from './Toast';
-import { Modal } from './Modal';
-import { createForm, FormProps } from '../utils/form';
+import { PageModal } from './PageModal';
+import { createForm, FormProps, validators } from '../utils/form';
 import { useAuth } from '../hooks/useAuth';
 import { login } from '../service';
 
@@ -29,7 +29,7 @@ export function ValidPasswordContent({
   const { goBack } = useNavigation();
 
   return (
-    <Modal title="Enter your password" onClose={goBack}>
+    <PageModal title="Enter your password" onClose={goBack}>
       <Form
         {...props}
         form={form}
@@ -38,7 +38,11 @@ export function ValidPasswordContent({
           onFinish && onFinish({ ...payload, username: user!.username })
         }
       >
-        <FormItem label="Password" name="password">
+        <FormItem
+          label="Password"
+          name="password"
+          validators={[validators.password.required]}
+        >
           <Password />
         </FormItem>
 
@@ -49,7 +53,7 @@ export function ValidPasswordContent({
           onPress={form?.submit}
         />
       </Form>
-    </Modal>
+    </PageModal>
   );
 }
 

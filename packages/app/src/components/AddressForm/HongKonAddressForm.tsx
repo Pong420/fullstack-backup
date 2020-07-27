@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Address$HongKong, Area } from '@fullstack/typings';
-import { addressParser } from '@fullstack/common/service';
+import { Address$HongKong } from '@fullstack/typings';
 import { district } from '@fullstack/common/constants/area/hongkong';
 import { createTextInput } from '../TextInput';
 import { Select, SelectValue } from '../Select';
@@ -11,7 +10,7 @@ interface Props extends FormProps<Address$HongKong, string[]> {
   editable?: boolean;
 }
 
-const { Form, FormItem } = createForm<Address$HongKong, string[]>({
+const { FormItem } = createForm<Address$HongKong, string[]>({
   style: { marginBottom: 0 },
   itemStyles: { label: { fontSize: 14, color: '#8a9ba8', marginBottom: 0 } }
 });
@@ -23,17 +22,11 @@ const options: SelectValue[] = district.map(district => ({
   value: district
 }));
 
-const parser = addressParser<Address$HongKong>(Area.HongKong);
-
 export function HongKonAddressForm({ editable, ...props }: Props) {
   return (
-    <Form
-      {...props}
-      beforeSubmit={parser.toArray}
-      transoformInitialValues={parser.parse}
-    >
+    <>
       <FormItem label="District" name="district">
-        <Select title="District" options={options} />
+        <Select title="District" options={options} editable={editable} />
       </FormItem>
 
       <FormItem label="Street" name="street">
@@ -59,7 +52,7 @@ export function HongKonAddressForm({ editable, ...props }: Props) {
           <TextInput editable={editable} />
         </FormItem>
       </View>
-    </Form>
+    </>
   );
 }
 

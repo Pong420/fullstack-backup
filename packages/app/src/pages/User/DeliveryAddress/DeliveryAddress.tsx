@@ -1,16 +1,19 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Feather } from '@expo/vector-icons';
+import { Area } from '@fullstack/typings';
 import { getAddresses } from '@fullstack/common/service';
+import {
+  createStackNavigator,
+  StackScreenProps
+} from '@react-navigation/stack';
 import { Header } from '../../../components/Header';
 import { Text } from '../../../components/Text';
 import { Button } from '../../../components/Button';
 import { AddressForm } from '../../../components/AddressForm';
-import { useBoolean } from '../../../hooks/useBoolean';
-import { CreateAddressModal } from './CreateAddressModal';
-import { Area } from '@fullstack/typings';
-import { ScrollView } from 'react-native-gesture-handler';
+import { CreateAddressScreen } from './CreateAddressScreen';
+import { RootStackParamList } from './route';
 
 function Empty() {
   return (
@@ -21,8 +24,9 @@ function Empty() {
   );
 }
 
-export function DeliveryAddress() {
-  const [modalOpend, openModal, closeModal] = useBoolean();
+const Stack = createStackNavigator<RootStackParamList>();
+
+function MainScreen({ navigation }: StackScreenProps<RootStackParamList>) {
   const { data, loading } = useRxAsync(getAddresses, {});
   const addressses = data ? data.data.data : [];
 
@@ -31,12 +35,13 @@ export function DeliveryAddress() {
       <Header title="Delivery Address" />
       <View style={styles.container}>
         {loading === false && addressses.length === 0 && <Empty />}
-        <ScrollView>
+        <ScrollView bounces={false}>
           {addressses.map(({ id, area, address }) => (
             <View key={id} style={styles.card}>
               <View style={styles.cardHead}>
                 <Feather name="trash-2" size={20} />
-                <Feather name="edit" size={20} style={{ marginLeft: 10 }} />
+                <View style={styles.spacer} />
+                <Feather name="edit" size={20} />
               </View>
               <AddressForm
                 area={area}
@@ -50,17 +55,22 @@ export function DeliveryAddress() {
           <Button
             intent="DARK"
             title="New Delivery Address"
-            onPress={openModal}
+            onPress={() =>
+              navigation.navigate('Create', { area: Area.HongKong })
+            }
           />
         </View>
-        <CreateAddressModal
-          area={Area.HongKong}
-          visible={modalOpend}
-          onClose={closeModal}
-          onCreated={() => {}}
-        />
       </View>
     </>
+  );
+}
+
+export function DeliveryAddress() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }} mode="modal">
+      <Stack.Screen name="Main" component={MainScreen} />
+      <Stack.Screen name="Create" component={CreateAddressScreen} />
+    </Stack.Navigator>
   );
 }
 
@@ -95,6 +105,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end'
+  },
+  spacer: {
+    width: 20
   },
   button: {
     padding: containerPadding,

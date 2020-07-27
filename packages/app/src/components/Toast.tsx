@@ -180,9 +180,9 @@ const styles = StyleSheet.create({
       shadowOffsetY: 3,
       shadowOpacity: 0.23,
       shadowRadius: 2.62,
-
       elevation: 4
-    })
+    }),
+    zIndex: 1000
   },
   indicator: {
     width: 5,

@@ -6,6 +6,7 @@ import {
   ValidPasswordContent,
   useForm
 } from '../../../components/ValidPassword';
+import { toaster } from '../../../components/Toast';
 import { Paths } from '../constants';
 import { login, getUserProfile } from '../../../service';
 import { useAuth } from '../../../hooks/useAuth';
@@ -17,6 +18,8 @@ const request = (params: Param$Login) =>
     )
   );
 
+const onFailure = toaster.apiError.bind(toaster, 'Validation failure');
+
 export function ValidPasswordModal({
   navigation
 }: StackScreenProps<Record<string, undefined>>) {
@@ -26,7 +29,11 @@ export function ValidPasswordModal({
     navigation.navigate(Paths.PeronsalInfo);
   });
   const [form] = useForm();
-  const { run, loading } = useRxAsync(request, { defer: true, onSuccess });
+  const { run, loading } = useRxAsync(request, {
+    defer: true,
+    onSuccess,
+    onFailure
+  });
 
   return <ValidPasswordContent form={form} loading={loading} onFinish={run} />;
 }

@@ -9,8 +9,6 @@ import {
 } from '@fullstack/typings';
 import { paths } from '../constants';
 
-type Addresses = Address$HongKong;
-
 export function getAddresses() {
   return api.get<Response$GetAddresses>(paths.get_addresses);
 }
@@ -23,28 +21,26 @@ export function updateAddress(params: Param$UpdateAddress) {
   return api.patch<Response$Address>(paths.update_address, params);
 }
 
-export function addressParser<T extends Addresses>(area: string) {
+export function addressParser<T>(area: string) {
   return {
     parse: (address: string[]) => parseAddress<T>(area, address),
-    toArray: (address: T) => formAddressArray<T>(area, address)
+    toArray: (address: T) => formAddressArray(area, address)
   };
 }
 
-export function parseAddress<T extends Addresses>(
-  area: string,
-  address: string[]
-): T {
+export function parseAddress<T>(area: string, address: string[]): T {
   switch (area) {
     case Area.HongKong:
       return (() => {
         const [district, street, buildingOrBlock, floor, flatOrRoom] = address;
-        return {
+        const result: unknown = {
           district,
           street,
           buildingOrBlock,
           floor,
           flatOrRoom
-        } as T;
+        };
+        return result as T;
       })();
 
     default:
@@ -52,10 +48,7 @@ export function parseAddress<T extends Addresses>(
   }
 }
 
-export function formAddressArray<T extends Addresses>(
-  area: string,
-  address: T
-): string[] {
+export function formAddressArray(area: string, address: unknown): string[] {
   switch (area) {
     case Area.HongKong:
       return (() => {
