@@ -1,12 +1,16 @@
 import React from 'react';
 import { createForm, validators } from '../../utils/form';
-import { TextInput } from '../../components/TextInput';
+import { TextInput, useFocusNextHandler } from '../../components/TextInput';
 import { Password } from '../../components/Password';
 import { createAuthPage, Param$Registration } from './AuthPage';
 
 const { FormItem } = createForm<Param$Registration>();
 
-export function RegistrationForm() {
+export function RegistrationForm({ onSubmit }: { onSubmit: () => void }) {
+  const { refProps, focusNextProps } = useFocusNextHandler<
+    Param$Registration
+  >();
+
   return (
     <>
       <FormItem
@@ -21,6 +25,8 @@ export function RegistrationForm() {
           keyboardType="email-address"
           textContentType="emailAddress"
           autoCompleteType="email"
+          ref={refProps('email')}
+          {...focusNextProps('username')}
         />
       </FormItem>
 
@@ -29,7 +35,12 @@ export function RegistrationForm() {
         label="Username"
         validators={[validators.username.required, validators.username.format]}
       >
-        <TextInput textContentType="username" autoCompleteType="username" />
+        <TextInput
+          textContentType="username"
+          autoCompleteType="username"
+          ref={refProps('username')}
+          {...focusNextProps('password')}
+        />
       </FormItem>
 
       <FormItem
@@ -42,7 +53,11 @@ export function RegistrationForm() {
           validators.password.equalToUsername(username)
         ]}
       >
-        <Password textContentType="newPassword" />
+        <Password
+          textContentType="newPassword"
+          ref={refProps('password')}
+          {...focusNextProps('confirmPassword')}
+        />
       </FormItem>
 
       <FormItem
@@ -57,7 +72,12 @@ export function RegistrationForm() {
           )
         ]}
       >
-        <Password textContentType="newPassword" />
+        <Password
+          textContentType="newPassword"
+          ref={refProps('confirmPassword')}
+          returnKeyType="send"
+          onSubmitEditing={onSubmit}
+        />
       </FormItem>
     </>
   );

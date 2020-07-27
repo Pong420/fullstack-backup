@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, ScrollView, ViewStyle } from 'react-native';
 import { Area } from '@fullstack/typings';
 import { parseAddress, formAddressArray } from '@fullstack/common/service';
 import { HongKonAddressForm } from './HongKonAddressForm';
@@ -8,6 +8,7 @@ import { createForm, FormProps } from '../../utils/form';
 interface ContentProps {
   area: string;
   editable?: boolean;
+  onSubmit?: () => void;
   contentContainerStyle?: ViewStyle;
 }
 
@@ -40,9 +41,13 @@ export function AddressForm({
       beforeSubmit={store => formAddressArray(area, store)}
       transoformInitialValues={values => parseAddress(area, values)}
     >
-      <View style={contentContainerStyle}>
-        <AddressFormContent area={area} editable={editable} />
-      </View>
+      <ScrollView bounces={false} style={contentContainerStyle}>
+        <AddressFormContent
+          area={area}
+          editable={editable}
+          onSubmit={props.form?.submit}
+        />
+      </ScrollView>
       {children}
     </Form>
   );

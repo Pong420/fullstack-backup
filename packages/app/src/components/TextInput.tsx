@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useRef } from 'react';
 import {
   View,
   TextInput as RNTextInput,
@@ -29,14 +29,35 @@ const themes = {
 
 const height = 40;
 
+export type ControlRef<T> = {
+  [K in keyof T]?: RNTextInput | null;
+};
+
+export function useFocusNextHandler<T>() {
+  const { current: controlRefs } = useRef<ControlRef<T>>({});
+  return {
+    controlRefs,
+    refProps: (name: keyof T) => (input: RNTextInput) => {
+      controlRefs[name] = input;
+    },
+    focusNextProps: (key: keyof T): TextInputProps => ({
+      returnKeyType: 'next',
+      onSubmitEditing: () => controlRefs[key]?.focus()
+    })
+  };
+}
+
 export function createTextInput(defaultProps?: TextInputProps) {
-  return function TextInput(_props: TextInputProps) {
+  return React.forwardRef<RNTextInput, TextInputProps>(function TextInput(
+    _props,
+    ref
+  ) {
     const {
       onChange,
       style,
       hasError,
       rightElement,
-      border = 'default',
+      border = 'bottom',
       intent = 'PRIMARY',
       ...props
     } = { ...defaultProps, ..._props };
@@ -72,10 +93,16 @@ export function createTextInput(defaultProps?: TextInputProps) {
           }}
         >
           <RNTextInput
+            ref={ref}
             autoCapitalize="none"
             onBlur={onBlur}
             onFocus={onFocus}
             onChangeText={onChange}
+            underlineColorAndroid={
+              border === 'bottom' && (hasError || focused)
+                ? theme.dark
+                : '#182026'
+            }
             style={{
               height,
               flex: 1,
@@ -95,7 +122,7 @@ export function createTextInput(defaultProps?: TextInputProps) {
         </View>
       </View>
     );
-  };
+  });
 }
 
 export const TextInput = createTextInput();

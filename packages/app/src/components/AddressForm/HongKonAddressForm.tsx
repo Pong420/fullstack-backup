@@ -2,12 +2,13 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Address$HongKong } from '@fullstack/typings';
 import { district } from '@fullstack/common/constants/area/hongkong';
-import { createTextInput } from '../TextInput';
+import { createTextInput, useFocusNextHandler } from '../TextInput';
 import { Select, SelectValue } from '../Select';
-import { createForm, FormProps } from '../../utils/form';
+import { createForm, validators } from '../../utils/form';
 
-interface Props extends FormProps<Address$HongKong, string[]> {
+interface Props {
   editable?: boolean;
+  onSubmit?: () => void;
 }
 
 const { FormItem } = createForm<Address$HongKong, string[]>({
@@ -22,34 +23,75 @@ const options: SelectValue[] = district.map(district => ({
   value: district
 }));
 
-export function HongKonAddressForm({ editable, ...props }: Props) {
+export function HongKonAddressForm({ editable, onSubmit }: Props) {
+  const { focusNextProps, refProps } = useFocusNextHandler<Address$HongKong>();
+
   return (
     <>
-      <FormItem label="District" name="district">
+      <FormItem
+        label="District"
+        name="district"
+        validators={[validators.required('District cannot be empty')]}
+      >
         <Select title="District" options={options} editable={editable} />
       </FormItem>
 
-      <FormItem label="Street" name="street">
+      <FormItem
+        label="Street"
+        name="street"
+        validators={[validators.required('Street cannot be empty')]}
+      >
         <TextInput
           editable={editable}
           textContentType="fullStreetAddress"
           autoCompleteType="street-address"
+          ref={refProps('street')}
+          {...focusNextProps('buildingOrBlock')}
         />
       </FormItem>
 
-      <FormItem label="Building name / block" name="buildingOrBlock">
-        <TextInput editable={editable} />
+      <FormItem
+        label="Building name / block"
+        name="buildingOrBlock"
+        validators={[
+          validators.required('Building name / block cannot be empty')
+        ]}
+      >
+        <TextInput
+          editable={editable}
+          ref={refProps('buildingOrBlock')}
+          {...focusNextProps('floor')}
+        />
       </FormItem>
 
       <View style={styles.row}>
-        <FormItem label="Floor" name="floor" style={styles.half}>
-          <TextInput editable={editable} />
+        <FormItem
+          label="Floor"
+          name="floor"
+          style={styles.half}
+          validators={[validators.required('Floor cannot be empty')]}
+        >
+          <TextInput
+            editable={editable}
+            ref={refProps('floor')}
+            {...focusNextProps('flatOrRoom')}
+          />
         </FormItem>
 
         <View style={styles.spacer} />
 
-        <FormItem label="Flat / room" name="flatOrRoom" style={styles.half}>
-          <TextInput editable={editable} />
+        <FormItem
+          label="Flat / room"
+          name="flatOrRoom"
+          style={styles.half}
+          validators={[validators.required('Flat / form cannot be empty')]}
+        >
+          <TextInput
+            editable={editable}
+            ref={refProps('flatOrRoom')}
+            onSubmitEditing={onSubmit}
+            returnKeyType={onSubmit ? 'send' : undefined}
+          />
         </FormItem>
       </View>
     </>
@@ -58,8 +100,7 @@ export function HongKonAddressForm({ editable, ...props }: Props) {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: 'row'
   },
   half: {
     flex: 1

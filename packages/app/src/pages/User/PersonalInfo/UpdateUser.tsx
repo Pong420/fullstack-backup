@@ -14,7 +14,10 @@ import { updateUser } from '../../../service';
 interface Create {
   title: string;
   prefix: string;
-  content: (user: Partial<Schema$User>) => ReactNode;
+  content: (payload: {
+    user: Partial<Schema$User>;
+    onSubmit: () => void;
+  }) => ReactNode;
 }
 
 const { Form, FormItem, useForm } = createForm<Param$UpdateUser>();
@@ -46,7 +49,7 @@ function createModal({ title, content, prefix }: Create) {
           form={form}
           onFinish={changes => user && run({ id: user.user_id, ...changes })}
         >
-          {user && content(user)}
+          {user && content({ user, onSubmit: form.submit })}
 
           <Button
             intent="DARK"
@@ -63,18 +66,22 @@ function createModal({ title, content, prefix }: Create) {
 export const NewNickNameModal = createModal({
   prefix: 'nickname',
   title: 'New nickname',
-  content: ({ nickname }) => (
+  content: ({ user, onSubmit }) => (
     <FormItem
       name="nickname"
       validators={[
         validators.required('Please input new nickname'),
         validators.shouldNotBeEqual(
-          nickname,
+          user.nickname,
           'Should not equal to the old nickname'
         )
       ]}
     >
-      <TextInput textContentType="nickname" autoCompleteType="name" />
+      <TextInput
+        textContentType="nickname"
+        autoCompleteType="name"
+        onSubmitEditing={onSubmit}
+      />
     </FormItem>
   )
 });
@@ -82,19 +89,23 @@ export const NewNickNameModal = createModal({
 export const NewEmailModal = createModal({
   prefix: 'email address',
   title: 'New email address',
-  content: ({ email }) => (
+  content: ({ user, onSubmit }) => (
     <FormItem
       name="email"
       validators={[
         validators.required('Please input new email address'),
         validators.shouldNotBeEqual(
-          email,
+          user.email,
           'Should not equal to the old email address'
         )
         // TODO:
       ]}
     >
-      <TextInput textContentType="emailAddress" autoCompleteType="email" />
+      <TextInput
+        textContentType="emailAddress"
+        autoCompleteType="email"
+        onSubmitEditing={onSubmit}
+      />
     </FormItem>
   )
 });

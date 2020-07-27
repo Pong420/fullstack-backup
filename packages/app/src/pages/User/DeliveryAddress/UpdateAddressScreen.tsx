@@ -16,7 +16,7 @@ const request = (...args: Parameters<typeof updateAddress>) =>
 
 const onFailure = toaster.apiError.bind(
   toaster,
-  'Update deliver address failure'
+  'Update delivery address failure'
 );
 
 export function UpdateAddressScreen({
@@ -29,7 +29,7 @@ export function UpdateAddressScreen({
       address: payload,
       action: { type: 'UPDATE', payload }
     });
-    toaster.success({ message: 'Update deliver address success' });
+    toaster.success({ message: 'Update delivery address success' });
   });
   const { run, loading } = useRxAsync(request, {
     defer: true,
@@ -40,7 +40,7 @@ export function UpdateAddressScreen({
   const [form] = useForm();
 
   return (
-    <PageModal title="Update Deliver Address" onClose={navigation.goBack}>
+    <PageModal title="Update Delivery Address" onClose={navigation.goBack}>
       <AddressForm
         area={area}
         form={form}

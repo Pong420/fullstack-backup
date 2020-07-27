@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, Modal, View, StyleSheet, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { TextInput } from './TextInput';
+import { TextInput, TextInputProps } from './TextInput';
 import { useBoolean } from '../hooks/useBoolean';
 import { ModalHeader } from './PageModal';
 import {
@@ -15,7 +15,7 @@ export interface SelectValue {
   label: string;
 }
 
-export interface SelectProps {
+export interface SelectProps extends TextInputProps {
   title?: string;
   value?: string;
   editable?: boolean;
@@ -51,7 +51,8 @@ export function Select({
   options,
   editable,
   value,
-  onChange
+  onChange,
+  ...props
 }: SelectProps) {
   const [visible, openModal, closeModal] = useBoolean();
   const [search, setSearch] = useState('');
@@ -64,6 +65,7 @@ export function Select({
         onPress={openModal}
       >
         <TextInput
+          {...props}
           border="bottom"
           editable={false}
           value={value}
@@ -83,6 +85,7 @@ export function Select({
               <TextInput
                 border="none"
                 placeholder="Search"
+                returnKeyType="done"
                 value={search}
                 onChangeText={setSearch}
               />

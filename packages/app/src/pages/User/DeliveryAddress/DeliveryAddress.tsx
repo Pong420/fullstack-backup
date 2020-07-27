@@ -67,7 +67,7 @@ function MainScreen({
         {loading === false && addressses.length === 0 && (
           <Empty content="You have not add any deilvery address" />
         )}
-        <ScrollView bounces={false}>
+        <ScrollView bounces={false} style={styles.scrollView}>
           {addressses.map(payload => {
             const { id, area, address } = payload;
             return (
@@ -129,6 +129,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  scrollView: {
+    paddingVertical: 5
+  },
   card: {
     flex: 1,
     marginHorizontal: containerPadding,
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
       height: 2
     },
     shadowOpacity: 0.22,
-    shadowRadius: 2.22,
+    shadowRadius: 2.72,
     elevation: 3
   },
   cardHead: {

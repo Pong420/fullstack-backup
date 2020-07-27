@@ -24,10 +24,10 @@ export function KeyboardAvoidingViewFooter({
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
-                height: -1
+                height: -2
               },
-              shadowOpacity: 0.15,
-              shadowRadius: 10,
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
               elevation: 5
             }
           : {}

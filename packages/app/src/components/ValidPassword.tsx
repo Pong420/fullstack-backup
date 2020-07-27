@@ -43,7 +43,10 @@ export function ValidPasswordContent({
           name="password"
           validators={[validators.password.required]}
         >
-          <Password />
+          <Password
+            returnKeyType={form ? 'send' : undefined}
+            onSubmitEditing={form?.submit}
+          />
         </FormItem>
 
         <Button

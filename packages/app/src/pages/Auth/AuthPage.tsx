@@ -11,7 +11,7 @@ import { Param$Login, Param$CreateUser } from '@fullstack/typings';
 
 interface Props {
   title: string;
-  content: ComponentType<unknown>;
+  content: ComponentType<{ onSubmit: () => void }>;
 }
 
 export type { Param$Login };
@@ -41,7 +41,7 @@ export function createAuthPage<T extends Schema>({
             <InkPainting fontSize={70}>{title}</InkPainting>
           </View>
 
-          <Content />
+          <Content onSubmit={form.submit} />
         </ScrollView>
         <KeyboardAvoidingViewFooter style={styles.buttonContainer}>
           <Button

@@ -14,7 +14,10 @@ import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoiding
 const request = (...args: Parameters<typeof createAddress>) =>
   createAddress(...args).then(res => res.data.data);
 
-const onFailure = toaster.apiError.bind(toaster, 'New deliver address failure');
+const onFailure = toaster.apiError.bind(
+  toaster,
+  'New delivery address failure'
+);
 
 export function CreateAddressScreen({
   navigation,
@@ -26,7 +29,7 @@ export function CreateAddressScreen({
       address: payload,
       action: { type: 'CREATE', payload }
     });
-    toaster.success({ message: 'New deliver address success' });
+    toaster.success({ message: 'New delivery address success' });
   });
   const { run, loading } = useRxAsync(request, {
     defer: true,
@@ -37,7 +40,7 @@ export function CreateAddressScreen({
   const [form] = useForm();
 
   return (
-    <PageModal title="New Deliver Address" onClose={navigation.goBack}>
+    <PageModal title="New Delivery Address" onClose={navigation.goBack}>
       <AddressForm
         area={area}
         form={form}

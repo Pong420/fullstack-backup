@@ -4,6 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
 import { Header } from '../../components/Header';
+import { useFocusNextHandler } from '../../components/TextInput';
 import { Password } from '../../components/Password';
 import { Button } from '../../components/Button';
 import { toaster } from '../../components/Toast';
@@ -36,6 +37,10 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
     onFailure
   });
 
+  const { refProps, focusNextProps } = useFocusNextHandler<
+    Param$ModifyPassword
+  >();
+
   return (
     <Form style={styles.container} form={form} onFinish={run}>
       <Header title="Chnage Password" />
@@ -48,7 +53,7 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
           name="password"
           validators={validators.oldPassword}
         >
-          <Password />
+          <Password {...focusNextProps('newPassword')} />
         </FormItem>
 
         <FormItem
@@ -57,7 +62,10 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
           deps={['password']}
           validators={validators.newPassword}
         >
-          <Password />
+          <Password
+            ref={refProps('newPassword')}
+            {...focusNextProps('confirmNewPassword')}
+          />
         </FormItem>
 
         <FormItem
@@ -66,7 +74,7 @@ export function ChangePassword({ navigation }: StackScreenProps<{}>) {
           deps={['newPassword']}
           validators={validators.confirmNewPassword}
         >
-          <Password />
+          <Password ref={refProps('confirmNewPassword')} />
         </FormItem>
       </ScrollView>
 
