@@ -1,39 +1,46 @@
-import React from 'react';
+import React, { useLayoutEffect, useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Feather } from '@expo/vector-icons';
-import { Area } from '@fullstack/typings';
+import { Area, Schema$Address } from '@fullstack/typings';
 import { getAddresses, deleteAddress } from '@fullstack/common/service';
 import {
   createStackNavigator,
   StackScreenProps
 } from '@react-navigation/stack';
 import { Header } from '../../../components/Header';
-import { Text, SemiBold } from '../../../components/Text';
+import { SemiBold } from '../../../components/Text';
 import { Button } from '../../../components/Button';
 import { AddressForm } from '../../../components/AddressForm';
 import { openConfirmModal } from '../../../components/ConfirmModal';
 import { toaster } from '../../../components/Toast';
+import { Empty } from '../../../components/Empty';
+import { createUseCRUDReducer } from '../../../hooks/crud';
 import { CreateAddressScreen } from './CreateAddressScreen';
 import { UpdateAddressScreen } from './UpdateAddressScreen';
 import { RootStackParamList } from './route';
 
-function Empty() {
-  return (
-    <View style={styles.empty}>
-      <Feather name="info" color="#666" size={50} />
-      <Text>You have not add any deilvery address</Text>
-    </View>
-  );
-}
-
 const Stack = createStackNavigator<RootStackParamList>();
 
-const delay = (ms: number) => new Promise(_ => setTimeout(_, ms));
+const useAddressReducer = createUseCRUDReducer<Schema$Address, 'id'>('id');
 
-function MainScreen({ navigation }: StackScreenProps<RootStackParamList>) {
-  const { data, loading } = useRxAsync(getAddresses, {});
-  const addressses = data ? data.data.data : [];
+const request = () => getAddresses().then(res => res.data.data);
+function MainScreen({
+  navigation,
+  route
+}: StackScreenProps<RootStackParamList, 'Main'>) {
+  const [state, actions] = useAddressReducer();
+  const { loading } = useRxAsync(request, {
+    effect: useLayoutEffect,
+    onSuccess: actions.list
+  });
+  const addressses = state.list;
+
+  useEffect(() => {
+    if (route.params?.action) {
+      actions.dispatch(route.params.action);
+    }
+  }, [route, actions]);
 
   const removeAddressModal = (id: string, address: string[]) =>
     openConfirmModal({
@@ -46,18 +53,20 @@ function MainScreen({ navigation }: StackScreenProps<RootStackParamList>) {
         </>
       ),
       onConfirm: () =>
-        delay(1000).then(() =>
-          deleteAddress({ id }).catch(error => {
+        deleteAddress({ id })
+          .then(() => actions.delete({ id }))
+          .catch(error => {
             toaster.apiError('Remove delivery address failure', error);
           })
-        )
     });
 
   return (
     <>
       <Header title="Delivery Address" />
       <View style={styles.container}>
-        {loading === false && addressses.length === 0 && <Empty />}
+        {loading === false && addressses.length === 0 && (
+          <Empty content="You have not add any deilvery address" />
+        )}
         <ScrollView bounces={false}>
           {addressses.map(payload => {
             const { id, area, address } = payload;
@@ -79,6 +88,7 @@ function MainScreen({ navigation }: StackScreenProps<RootStackParamList>) {
                 <AddressForm
                   area={area}
                   editable={false}
+                  key={JSON.stringify(address)}
                   initialValues={address}
                 />
               </View>

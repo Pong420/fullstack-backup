@@ -20,8 +20,12 @@ export function CreateAddressScreen({
   navigation,
   route
 }: StackScreenProps<RootStackParamList, 'Create'>) {
+  const { area } = route.params;
   const { current: onSuccess } = useRef((payload: Schema$Address) => {
-    navigation.navigate('Main', { address: payload });
+    navigation.navigate('Main', {
+      address: payload,
+      action: { type: 'CREATE', payload }
+    });
     toaster.success({ message: 'New deliver address success' });
   });
   const { run, loading } = useRxAsync(request, {
@@ -30,7 +34,6 @@ export function CreateAddressScreen({
     onFailure,
     effect: useLayoutEffect
   });
-  const { area } = route.params;
   const [form] = useForm();
 
   return (

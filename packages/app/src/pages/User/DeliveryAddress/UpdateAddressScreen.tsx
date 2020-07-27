@@ -23,8 +23,12 @@ export function UpdateAddressScreen({
   navigation,
   route
 }: StackScreenProps<RootStackParamList, 'Update'>) {
+  const { id, area, address } = route.params;
   const { current: onSuccess } = useRef((payload: Schema$Address) => {
-    navigation.navigate('Main', { address: payload });
+    navigation.navigate('Main', {
+      address: payload,
+      action: { type: 'UPDATE', payload }
+    });
     toaster.success({ message: 'Update deliver address success' });
   });
   const { run, loading } = useRxAsync(request, {
@@ -33,7 +37,6 @@ export function UpdateAddressScreen({
     onFailure,
     effect: useLayoutEffect
   });
-  const { id, area, address } = route.params;
   const [form] = useForm();
 
   return (
