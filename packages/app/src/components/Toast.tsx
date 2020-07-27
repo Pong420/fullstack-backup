@@ -17,7 +17,6 @@ import { Feather } from '@expo/vector-icons';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
 import { Bold, TextWrap } from './Text';
-import { shadow } from '../styles';
 
 interface Theme {
   color?: string;
@@ -175,14 +174,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#fff',
     flexDirection: 'row',
-    ...shadow({
-      shadowColor: '#000',
-      shadowOffsetY: 3,
-      shadowOpacity: 0.23,
-      shadowRadius: 2.62,
-      elevation: 4
-    }),
-    zIndex: 1000
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
   },
   indicator: {
     width: 5,

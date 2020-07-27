@@ -7,6 +7,7 @@ import { enableScreens } from 'react-native-screens';
 import { Main } from './src/Main';
 import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
+import { ConfirmModalContainer } from './src/components/ConfirmModal';
 import { AuthProvider } from './src/hooks/useAuth';
 import { navigationRef } from './src/utils/navigation';
 
@@ -28,6 +29,7 @@ function App() {
       <NavigationContainer theme={theme} ref={navigationRef}>
         <StatusBar style="auto" />
         <Main />
+        <ConfirmModalContainer />
         <ToastContainer />
       </NavigationContainer>
     );

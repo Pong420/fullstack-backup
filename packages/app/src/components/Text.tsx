@@ -25,15 +25,18 @@ export interface TextProps extends RnTextProps, FontStyle {
   fontSize?: number;
   style?: TextStyle & FontStyle;
   children?: ReactNode;
+  color?: TextStyle['color'];
 }
 
 function createText(fontFamily: FontFamily) {
-  return function Text({ style, fontSize = 16, ...props }: TextProps) {
+  return function Text({
+    style,
+    fontSize = 16,
+    color = '#182026',
+    ...props
+  }: TextProps) {
     return (
-      <RnText
-        {...props}
-        style={{ fontFamily, fontSize, color: '#182026', ...style }}
-      />
+      <RnText {...props} style={{ fontFamily, fontSize, color, ...style }} />
     );
   };
 }

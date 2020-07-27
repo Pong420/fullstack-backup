@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Address } from '@fullstack/typings';
-import { createAddress } from '@fullstack/common/service';
+import { updateAddress } from '@fullstack/common/service';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button } from '../../../components/Button';
 import { PageModal } from '../../../components/PageModal';
@@ -11,18 +11,21 @@ import { AddressForm, useForm } from '../../../components/AddressForm';
 import { RootStackParamList } from './route';
 import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoidingViewFooter';
 
-const request = (...args: Parameters<typeof createAddress>) =>
-  createAddress(...args).then(res => res.data.data);
+const request = (...args: Parameters<typeof updateAddress>) =>
+  updateAddress(...args).then(res => res.data.data);
 
-const onFailure = toaster.apiError.bind(toaster, 'New deliver address failure');
+const onFailure = toaster.apiError.bind(
+  toaster,
+  'Update deliver address failure'
+);
 
-export function CreateAddressScreen({
+export function UpdateAddressScreen({
   navigation,
   route
-}: StackScreenProps<RootStackParamList, 'Create'>) {
+}: StackScreenProps<RootStackParamList, 'Update'>) {
   const { current: onSuccess } = useRef((payload: Schema$Address) => {
     navigation.navigate('Main', { address: payload });
-    toaster.success({ message: 'New deliver address success' });
+    toaster.success({ message: 'Update deliver address success' });
   });
   const { run, loading } = useRxAsync(request, {
     defer: true,
@@ -30,16 +33,17 @@ export function CreateAddressScreen({
     onFailure,
     effect: useLayoutEffect
   });
-  const { area } = route.params;
+  const { id, area, address } = route.params;
   const [form] = useForm();
 
   return (
-    <PageModal title="New Deliver Address" onClose={navigation.goBack}>
+    <PageModal title="Update Deliver Address" onClose={navigation.goBack}>
       <AddressForm
         area={area}
         form={form}
+        initialValues={address}
         contentContainerStyle={styles.content}
-        onFinish={address => run({ area, address })}
+        onFinish={address => run({ id, address })}
       >
         <KeyboardAvoidingViewFooter style={styles.button}>
           <Button

@@ -5,7 +5,8 @@ import {
   Param$UpdateAddress,
   Response$Address,
   Response$GetAddresses,
-  Address$HongKong
+  Address$HongKong,
+  Param$Address
 } from '@fullstack/typings';
 import { paths } from '../constants';
 
@@ -17,8 +18,15 @@ export function createAddress(params: Param$CreateAddress) {
   return api.post<Response$Address>(paths.create_address, params);
 }
 
-export function updateAddress(params: Param$UpdateAddress) {
-  return api.patch<Response$Address>(paths.update_address, params);
+export function updateAddress({ id, ...params }: Param$UpdateAddress) {
+  return api.patch<Response$Address>(
+    paths.update_address.generatePath({ id }),
+    params
+  );
+}
+
+export function deleteAddress({ id }: Param$Address) {
+  return api.delete(paths.delete_address.generatePath({ id }));
 }
 
 export function addressParser<T>(area: string) {
