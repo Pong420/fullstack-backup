@@ -17,6 +17,7 @@ import { Feather } from '@expo/vector-icons';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
 import { Bold, TextWrap } from './Text';
+import { shadow, colors } from '../styles';
 
 interface Theme {
   color?: string;
@@ -46,22 +47,22 @@ function createToster(defaultProps: Theme & Partial<ToastItem>) {
 
 export const toaster = {
   success: createToster({
-    color: '#0F9960',
+    color: colors.green,
     iconName: 'check',
     title: 'Success'
   }),
   info: createToster({
-    color: '#2965CC',
+    color: colors.blue,
     iconName: 'info',
     title: 'Info'
   }),
   warn: createToster({
-    color: '#D9822B',
+    color: colors.yellow,
     iconName: 'alert-octagon',
     title: 'Warning'
   }),
   error: createToster({
-    color: '#DB3737',
+    color: colors.red,
     iconName: 'x-octagon',
     title: 'Error'
   }),
@@ -156,7 +157,7 @@ export function Toast({
 
             <Feather
               name="x"
-              color="#182026"
+              color={colors.black}
               size={iconSize}
               style={styles.closeIcon}
               onPress={onClose}
@@ -174,14 +175,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#fff',
     flexDirection: 'row',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3
+    ...shadow(2)
   },
   indicator: {
     width: 5,

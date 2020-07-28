@@ -24,6 +24,7 @@ import {
   compose as composeValidator
 } from '@fullstack/common/utils/form';
 import { SemiBold, Text, TextProps } from '../../components/Text';
+import { colors } from '../../styles';
 
 export type FormInstance<
   S extends {} = Store,
@@ -121,8 +122,6 @@ export function createShouldUpdate(
   };
 }
 
-const RED = '#DB3737';
-
 export function createForm<S extends {} = Store, V = S>({
   itemStyles = {},
   ...defaultProps
@@ -204,7 +203,7 @@ export function createForm<S extends {} = Store, V = S>({
             Text,
             {
               style: {
-                color: RED,
+                color: colors.red,
                 fontSize: 14,
                 minHeight: 20,
                 lineHeight: 20,

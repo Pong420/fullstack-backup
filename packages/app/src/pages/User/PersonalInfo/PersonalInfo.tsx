@@ -8,6 +8,7 @@ import {
 } from '@react-navigation/stack';
 import { Text, SemiBold } from '../../../components/Text';
 import { Header } from '../../../components/Header';
+import { card, containerPadding, colors } from '../../../styles';
 import { ValidPasswordModal } from './ValidPasswordModal';
 import { NewEmailModal, NewNickNameModal } from './UpdateUser';
 import { PersonalInfoParamList } from './routes';
@@ -85,27 +86,16 @@ export function PersonalInfo() {
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: { flex: 1, padding: containerPadding, paddingTop: 0 },
   card: {
-    padding: containerPadding,
-    borderRadius: 3,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3
+    ...card
   },
   item: {
     marginTop: 20
   },
   itemLabel: {
-    color: '#8a9ba8'
+    color: colors.textMuted
   },
   itemValue: {
     flexDirection: 'row',

@@ -9,12 +9,13 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { User } from './pages/User';
 import { useAuth } from './hooks/useAuth';
+import { colors } from './styles';
 
 const Tab = createBottomTabNavigator();
 
 const tabBarOptions: BottomTabBarOptions = {
   showLabel: false,
-  activeTintColor: '#182026',
+  activeTintColor: colors.black,
   style: {
     height: 90
   },

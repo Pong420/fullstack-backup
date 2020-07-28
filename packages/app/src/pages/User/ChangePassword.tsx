@@ -12,6 +12,7 @@ import { createForm, validators } from '../../utils/form';
 import { useAuth } from '../../hooks/useAuth';
 import { modifyPassword } from '../../service';
 import { UserStackScreenProps } from './constants';
+import { containerPadding } from '../../styles';
 
 const { Form, FormItem, useForm } = createForm<Param$ModifyPassword>({
   style: { marginBottom: 15 }
@@ -92,12 +93,11 @@ export function ChangePassword({
   );
 }
 
-const contianerPadding = 24;
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: contianerPadding },
-  scrollViewContent: { paddingHorizontal: contianerPadding },
+  container: { flex: 1, paddingTop: containerPadding },
+  scrollViewContent: { paddingHorizontal: containerPadding },
   buttonContainer: {
-    padding: contianerPadding,
+    padding: containerPadding,
     backgroundColor: '#fff'
   }
 });

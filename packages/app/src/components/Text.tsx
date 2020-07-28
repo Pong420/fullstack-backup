@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { colors } from '../styles';
 
 export const fonts = {
   // prettier-ignore
@@ -32,7 +33,7 @@ function createText(fontFamily: FontFamily) {
   return function Text({
     style,
     fontSize = 16,
-    color = '#182026',
+    color = colors.black,
     ...props
   }: TextProps) {
     return (

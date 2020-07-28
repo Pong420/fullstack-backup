@@ -5,6 +5,7 @@ import { district } from '@fullstack/common/constants/area/hongkong';
 import { createTextInput, useFocusNextHandler } from '../TextInput';
 import { Select, SelectValue } from '../Select';
 import { createForm, validators } from '../../utils/form';
+import { colors } from '../../styles';
 
 interface Props {
   editable?: boolean;
@@ -13,7 +14,9 @@ interface Props {
 
 const { FormItem } = createForm<Address$HongKong, string[]>({
   style: { marginBottom: 0 },
-  itemStyles: { label: { fontSize: 14, color: '#8a9ba8', marginBottom: 0 } }
+  itemStyles: {
+    label: { fontSize: 14, color: colors.textMuted, marginBottom: 0 }
+  }
 });
 
 export const TextInput = createTextInput({ border: 'bottom' });

@@ -8,6 +8,7 @@ import { PageModal } from '../../../components/PageModal';
 import { toaster } from '../../../components/Toast';
 import { AddressForm, useForm } from '../../../components/AddressForm';
 import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoidingViewFooter';
+import { containerPadding } from '../../../styles';
 import { DeliveryAddressScreenProps } from './routes';
 
 const request = (...args: Parameters<typeof createAddress>) =>
@@ -59,7 +60,6 @@ export function CreateAddressScreen({
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1

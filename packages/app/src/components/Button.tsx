@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SemiBold } from './Text';
-import { shadow } from '../styles';
+import { shadow, colors } from '../styles';
 
 export interface ButtonProps extends TouchableHighlightProps {
   intent?: keyof typeof themes;
@@ -19,10 +19,11 @@ export interface ButtonProps extends TouchableHighlightProps {
   style?: ViewStyle;
 }
 
+// TODO: remove gradient?
 const themes = {
   NONE: {
     gradient: ['hsla(0,0%,100%,.8)', 'hsla(0,0%,100%,0)'],
-    textColor: '#182026',
+    textColor: colors.black,
     shadowColor: 'rgba(16,22,26,.3)',
     backgroundColor: '#f5f8fa',
     underlayColor: undefined,
@@ -32,7 +33,7 @@ const themes = {
     gradient: ['hsla(0,0%,100%,.1)', 'hsla(0,0%,100%,0)'],
     textColor: '#fff',
     shadowColor: 'rgba(16,22,26,1)',
-    backgroundColor: '#137cbd',
+    backgroundColor: colors.blue,
     underlayColor: '#eee',
     activeOpacity: undefined
   },
@@ -40,8 +41,8 @@ const themes = {
     gradient: undefined,
     textColor: '#fff',
     shadowColor: '#000',
-    backgroundColor: '#182026',
-    underlayColor: '#ddd',
+    backgroundColor: colors.black,
+    underlayColor: colors.divider,
     activeOpacity: 0.6
   }
 };
@@ -73,12 +74,12 @@ export function Button({
     <TouchableHighlight
       {...props}
       disabled={active}
-      underlayColor={ghost ? '#ddd' : theme.underlayColor}
+      underlayColor={ghost ? colors.divider : theme.underlayColor}
       activeOpacity={theme.activeOpacity}
       style={StyleSheet.compose(style, {
         borderWidth: 1,
         borderRadius: 3,
-        borderColor: intent === 'NONE' ? '#ddd' : theme.backgroundColor
+        borderColor: intent === 'NONE' ? colors.divider : theme.backgroundColor
       })}
     >
       <LinearGradientWrapper
@@ -89,13 +90,9 @@ export function Button({
           paddingHorizontal: 15,
           height: 44,
           ...(!ghost &&
-            shadow({
+            shadow(4, {
               backgroundColor: theme.backgroundColor,
-              shadowColor: theme.shadowColor,
-              shadowOffsetY: 2,
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5
+              shadowColor: theme.shadowColor
             }))
         }}
       >

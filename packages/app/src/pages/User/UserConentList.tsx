@@ -15,6 +15,7 @@ import { useAuth, IAuthContext } from '../../hooks/useAuth';
 import { toaster } from '../../components/Toast';
 import { Button } from '../../components/Button';
 import { DATA } from './constants';
+import { containerPadding, colors } from '../../styles';
 
 function Header({ user, logout }: Pick<IAuthContext, 'user' | 'logout'>) {
   return (
@@ -48,7 +49,7 @@ function Footer() {
 }
 
 const iconSize = 26;
-const iconColor = '#182026';
+const iconColor = colors.black;
 const workingInProgress = () =>
   toaster.info({
     message: 'This feature is working in progress'
@@ -108,7 +109,6 @@ export function UserConentList() {
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   grow: { flexGrow: 1 },
   header: {

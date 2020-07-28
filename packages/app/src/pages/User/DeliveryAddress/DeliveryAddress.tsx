@@ -16,6 +16,7 @@ import { openConfirmModal } from '../../../components/ConfirmModal';
 import { toaster } from '../../../components/Toast';
 import { Empty } from '../../../components/Empty';
 import { createUseCRUDReducer } from '../../../hooks/crud';
+import { card, containerPadding, colors } from '../../../styles';
 import { CreateAddressScreen } from './CreateAddressScreen';
 import { UpdateAddressScreen } from './UpdateAddressScreen';
 import { DeliveryAddressParamList } from './routes';
@@ -48,8 +49,8 @@ function MainScreen({
       content: (
         <>
           Are you sure to remove the address{' '}
-          <SemiBold color="#db3737">{address.join(' ')}</SemiBold>? This action
-          is irreversible
+          <SemiBold color={colors.red}>{address.join(' ')}</SemiBold>? This
+          action is irreversible
         </>
       ),
       onConfirm: () =>
@@ -119,7 +120,6 @@ export function DeliveryAddress() {
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -133,20 +133,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5
   },
   card: {
-    flex: 1,
-    marginHorizontal: containerPadding,
-    padding: containerPadding,
-    borderRadius: 3,
-    backgroundColor: '#fff',
-    marginBottom: containerPadding,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.72,
-    elevation: 3
+    ...card,
+    marginHorizontal: containerPadding
   },
   cardHead: {
     flex: 1,

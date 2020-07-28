@@ -6,7 +6,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { useBoolean } from '../hooks/useBoolean';
-import { shadow } from '../styles';
+import { shadow, colors } from '../styles';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   onChange?: (value: string) => void;
@@ -18,11 +18,11 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
 
 const themes = {
   PRIMARY: {
-    dark: '#137cbd',
+    dark: colors.blue,
     light: 'rgba(19,124,189,.2)'
   },
   DANGER: {
-    dark: '#db3737',
+    dark: colors.red,
     light: 'rgba(219,55,55,.3)'
   }
 };
@@ -69,7 +69,7 @@ export function createTextInput(defaultProps?: TextInputProps) {
       borderWidth: 1,
       borderRadius: 3,
       ...(focused || hasError
-        ? shadow({
+        ? shadow(0, {
             shadowRadius: 1,
             shadowOffsetY: 2,
             shadowColor: theme.light,
@@ -89,7 +89,7 @@ export function createTextInput(defaultProps?: TextInputProps) {
               : border === 'bottom'
               ? { borderBottomWidth: 1 }
               : {}),
-            borderColor: hasError || focused ? theme.dark : '#ddd'
+            borderColor: hasError || focused ? theme.dark : colors.divider
           }}
         >
           <RNTextInput
@@ -98,11 +98,6 @@ export function createTextInput(defaultProps?: TextInputProps) {
             onBlur={onBlur}
             onFocus={onFocus}
             onChangeText={onChange}
-            underlineColorAndroid={
-              border === 'bottom' && (hasError || focused)
-                ? theme.dark
-                : '#182026'
-            }
             style={{
               height,
               flex: 1,
@@ -110,13 +105,13 @@ export function createTextInput(defaultProps?: TextInputProps) {
               color:
                 border === 'bottom' && (hasError || focused)
                   ? theme.dark
-                  : '#182026'
+                  : colors.black
             }}
             {...props}
             {...(props &&
               typeof props.value === 'undefined' &&
               onChange && { value: '' })}
-            placeholderTextColor="#8a9ba8"
+            placeholderTextColor={colors.textMuted}
           />
           {rightElement}
         </View>

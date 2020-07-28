@@ -12,10 +12,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback
 } from 'react-native';
-import { SemiBold, Text } from './Text';
-import { Button } from './Button';
 import { Subject } from 'rxjs';
 import { useRxAsync } from 'use-rx-hooks';
+import { SemiBold, Text } from './Text';
+import { Button } from './Button';
+import { shadow, containerPadding } from '../styles';
 
 export interface ConfirmModalProps {
   title?: ReactNode;
@@ -145,7 +146,6 @@ export function ConfirmModal({
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   backdrop: {
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -168,14 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: 90,
     paddingTop: containerPadding * 0.75,
     paddingBottom: containerPadding,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8
+    ...shadow(7)
   },
   modalBody: {
     paddingHorizontal: containerPadding

@@ -3,6 +3,7 @@ import { TouchableNativeFeedback, StyleSheet, View } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { SemiBold } from './Text';
+import { containerPadding } from '../styles';
 
 export interface ModalHeaderProps {
   title: ReactNode;
@@ -42,7 +43,6 @@ export function PageModal({ title, children, onClose }: ModalProps) {
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   goBack: {

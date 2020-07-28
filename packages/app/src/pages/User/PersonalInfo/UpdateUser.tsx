@@ -9,15 +9,18 @@ import { TextInput } from '../../../components/TextInput';
 import { createForm, validators } from '../../../utils/form';
 import { useAuth } from '../../../hooks/useAuth';
 import { updateUser } from '../../../service';
+import { containerPadding } from '../../../styles';
 import { PersonalInfoScreenProps } from './routes';
+
+interface ContentProps {
+  user: Partial<Schema$User>;
+  onSubmit: () => void;
+}
 
 interface Create {
   title: string;
   prefix: string;
-  content: ComponentType<{
-    user: Partial<Schema$User>;
-    onSubmit: () => void;
-  }>;
+  content: ComponentType<ContentProps>;
 }
 
 const { Form, FormItem, useForm } = createForm<Param$UpdateUser>();
@@ -112,7 +115,6 @@ export const NewEmailModal = createModal({
   )
 });
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1

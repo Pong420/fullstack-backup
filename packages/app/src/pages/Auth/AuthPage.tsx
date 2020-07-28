@@ -1,13 +1,14 @@
 import React, { ComponentType } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
+import { Param$Login, Param$CreateUser } from '@fullstack/typings';
 import { Header } from '../../components/Header';
 import { InkPainting } from '../../components/Text';
 import { Button } from '../../components/Button';
 import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingViewFooter';
 import { useAuth } from '../../hooks/useAuth';
 import { createForm } from '../../utils/form';
-import { Param$Login, Param$CreateUser } from '@fullstack/typings';
+import { containerPadding } from '../../styles';
 
 interface Props {
   title: string;
@@ -56,16 +57,15 @@ export function createAuthPage<T extends Schema>({
   };
 }
 
-const contianerPadding = 24;
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollViewContent: { paddingHorizontal: contianerPadding },
+  scrollViewContent: { paddingHorizontal: containerPadding },
   logo: {
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 20
   },
   buttonContainer: {
-    padding: contianerPadding
+    padding: containerPadding
   }
 });

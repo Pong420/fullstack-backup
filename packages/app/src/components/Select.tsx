@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Text, Modal, View, StyleSheet, FlatList } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { useSafeArea } from 'react-native-safe-area-context';
-import { TextInput, TextInputProps } from './TextInput';
-import { useBoolean } from '../hooks/useBoolean';
-import { ModalHeader } from './PageModal';
 import {
+  Text,
+  Modal,
+  View,
+  StyleSheet,
+  FlatList,
   TouchableNativeFeedback,
   TouchableWithoutFeedback
-} from 'react-native-gesture-handler';
+} from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useSafeArea } from 'react-native-safe-area-context';
+import { useBoolean } from '../hooks/useBoolean';
+import { containerPadding, colors } from '../styles';
+import { TextInput, TextInputProps } from './TextInput';
+import { ModalHeader } from './PageModal';
 
 export interface SelectValue {
   value: string;
@@ -80,7 +85,7 @@ export function Select({
         <View style={styles.content}>
           <ModalHeader title={title} onClose={closeModal} />
           <View style={styles.search}>
-            <Feather name="search" color="#8a9ba8" size={20} />
+            <Feather name="search" color={colors.textMuted} size={20} />
             <View style={styles.searchInput}>
               <TextInput
                 border="none"
@@ -116,10 +121,8 @@ export function Select({
   );
 }
 
-const containerPadding = 24;
-const borderColor = '#ddd';
 const divider = {
-  borderColor,
+  borderColor: colors.divider,
   borderBottomWidth: 1
 };
 const styles = StyleSheet.create({

@@ -9,6 +9,7 @@ import { toaster } from '../../../components/Toast';
 import { AddressForm, useForm } from '../../../components/AddressForm';
 import { DeliveryAddressScreenProps } from './routes';
 import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoidingViewFooter';
+import { containerPadding } from '../../../styles';
 
 const request = (...args: Parameters<typeof updateAddress>) =>
   updateAddress(...args).then(res => res.data.data);
@@ -60,7 +61,6 @@ export function UpdateAddressScreen({
   );
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1

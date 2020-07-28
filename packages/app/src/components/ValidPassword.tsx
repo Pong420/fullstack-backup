@@ -10,6 +10,7 @@ import { PageModal } from './PageModal';
 import { createForm, FormProps, validators } from '../utils/form';
 import { useAuth } from '../hooks/useAuth';
 import { login } from '../service';
+import { containerPadding } from '../styles';
 
 interface Props {
   onSuccess: () => void;
@@ -71,7 +72,6 @@ export function ValidPassword({ onSuccess }: Props) {
   return <ValidPasswordContent form={form} loading={loading} onFinish={run} />;
 }
 
-const containerPadding = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1
