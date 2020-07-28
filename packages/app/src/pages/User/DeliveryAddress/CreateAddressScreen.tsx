@@ -3,13 +3,12 @@ import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Address } from '@fullstack/typings';
 import { createAddress } from '@fullstack/common/service';
-import { StackScreenProps } from '@react-navigation/stack';
 import { Button } from '../../../components/Button';
 import { PageModal } from '../../../components/PageModal';
 import { toaster } from '../../../components/Toast';
 import { AddressForm, useForm } from '../../../components/AddressForm';
-import { RootStackParamList } from './route';
 import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoidingViewFooter';
+import { DeliveryAddressScreenProps } from './routes';
 
 const request = (...args: Parameters<typeof createAddress>) =>
   createAddress(...args).then(res => res.data.data);
@@ -22,7 +21,7 @@ const onFailure = toaster.apiError.bind(
 export function CreateAddressScreen({
   navigation,
   route
-}: StackScreenProps<RootStackParamList, 'Create'>) {
+}: DeliveryAddressScreenProps<'Create'>) {
   const { area } = route.params;
   const { current: onSuccess } = useRef((payload: Schema$Address) => {
     navigation.navigate('Main', {

@@ -4,57 +4,27 @@ import {
   StackNavigationOptions
 } from '@react-navigation/stack';
 import { UserConentList } from './UserConentList';
-import {
-  PersonalInfo,
-  NewEmailModal,
-  NewNickNameModal,
-  ValidPasswordModal
-} from './PersonalInfo';
+import { PersonalInfo } from './PersonalInfo';
 import { ChangePassword } from './ChangePassword';
 import { DeliveryAddress } from './DeliveryAddress';
 import { Login, Registration } from '../Auth';
-import { Paths } from './constants';
-
-const RootStack = createStackNavigator();
-const MainStack = createStackNavigator();
+import { UserStackParamList } from './constants';
 
 const screenOptions: StackNavigationOptions = {
   headerShown: false
 };
 
-function MainStackScreen() {
-  return (
-    <MainStack.Navigator screenOptions={screenOptions} headerMode="screen">
-      <MainStack.Screen name={Paths.User} component={UserConentList} />
-      <MainStack.Screen name={Paths.PeronsalInfo} component={PersonalInfo} />
-      <MainStack.Screen
-        name={Paths.ChangePassword}
-        component={ChangePassword}
-      />
-      <MainStack.Screen
-        name={Paths.DeliveryAddress}
-        component={DeliveryAddress}
-      />
-      <MainStack.Screen name={Paths.Login} component={Login} />
-      <MainStack.Screen name={Paths.Registration} component={Registration} />
-    </MainStack.Navigator>
-  );
-}
+const UserStack = createStackNavigator<UserStackParamList>();
 
 export function User() {
   return (
-    <RootStack.Navigator
-      mode="modal"
-      headerMode="screen"
-      screenOptions={screenOptions}
-    >
-      <RootStack.Screen name="Main" component={MainStackScreen} />
-      <RootStack.Screen
-        name={Paths.VaildatePassword}
-        component={ValidPasswordModal}
-      />
-      <RootStack.Screen name={Paths.NewNickName} component={NewNickNameModal} />
-      <RootStack.Screen name={Paths.NewEmail} component={NewEmailModal} />
-    </RootStack.Navigator>
+    <UserStack.Navigator screenOptions={screenOptions} headerMode="screen">
+      <UserStack.Screen name="User" component={UserConentList} />
+      <UserStack.Screen name="PeronsalInfo" component={PersonalInfo} />
+      <UserStack.Screen name="ChangePassword" component={ChangePassword} />
+      <UserStack.Screen name="DeliveryAddress" component={DeliveryAddress} />
+      <UserStack.Screen name="Login" component={Login} />
+      <UserStack.Screen name="Registration" component={Registration} />
+    </UserStack.Navigator>
   );
 }

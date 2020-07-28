@@ -1,34 +1,36 @@
 import { Linking } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
 import { toaster } from '../../components/Toast';
 import { navigate } from '../../utils/navigation';
 import Languages from '../../assets/languages.svg';
 
 const githubUrl = 'https://github.com/Pong420/fullstack';
 
-export enum Paths {
-  User = 'User',
-  PeronsalInfo = 'Personal Information',
-  ChangePassword = 'Change Password',
-  DeliveryAddress = 'Delivery Address',
-  Login = 'Login',
-  Registration = 'Registration',
-  VaildatePassword = 'VaildatePassword',
-  NewNickName = 'New NickName',
-  NewEmail = 'New Email Address'
-}
+export type UserStackParamList = {
+  User: undefined;
+  PeronsalInfo: undefined;
+  ChangePassword: undefined;
+  DeliveryAddress: undefined;
+  Login: undefined;
+  Registration: undefined;
+};
+
+export type UserStackScreenProps<
+  T extends keyof UserStackParamList
+> = StackScreenProps<UserStackParamList, T>;
 
 export const DATA = [
   {
     auth: true,
     icon: 'user',
     title: 'Personal Information',
-    onPress: () => navigate(Paths.VaildatePassword)
+    onPress: () => navigate('VaildatePassword')
   },
   {
     auth: true,
     icon: 'lock',
     title: 'Change Password',
-    onPress: () => navigate(Paths.ChangePassword)
+    onPress: () => navigate('ChangePassword')
   },
   {
     auth: true,
@@ -39,7 +41,7 @@ export const DATA = [
     auth: true,
     icon: 'map-pin',
     title: 'Delivery Address',
-    onPress: () => navigate(Paths.DeliveryAddress)
+    onPress: () => navigate('DeliveryAddress')
   },
   {
     icon: 'message-circle',

@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
 import { Header } from '../../components/Header';
@@ -12,6 +11,7 @@ import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingVie
 import { createForm, validators } from '../../utils/form';
 import { useAuth } from '../../hooks/useAuth';
 import { modifyPassword } from '../../service';
+import { UserStackScreenProps } from './constants';
 
 const { Form, FormItem, useForm } = createForm<Param$ModifyPassword>({
   style: { marginBottom: 15 }
@@ -19,7 +19,9 @@ const { Form, FormItem, useForm } = createForm<Param$ModifyPassword>({
 
 const onFailure = toaster.apiError.bind(toaster, 'Change Password Failure');
 
-export function ChangePassword({ navigation }: StackScreenProps<{}>) {
+export function ChangePassword({
+  navigation
+}: UserStackScreenProps<'ChangePassword'>) {
   const [form] = useForm();
   const { logout } = useAuth();
   const { current: onSuccess } = useRef(() => {

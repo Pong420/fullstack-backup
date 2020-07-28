@@ -1,7 +1,6 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { useRef, ComponentType } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
-import { StackScreenProps } from '@react-navigation/stack';
 import { Param$UpdateUser, Schema$User } from '@fullstack/typings';
 import { Button } from '../../../components/Button';
 import { toaster } from '../../../components/Toast';
@@ -10,14 +9,15 @@ import { TextInput } from '../../../components/TextInput';
 import { createForm, validators } from '../../../utils/form';
 import { useAuth } from '../../../hooks/useAuth';
 import { updateUser } from '../../../service';
+import { PersonalInfoScreenProps } from './routes';
 
 interface Create {
   title: string;
   prefix: string;
-  content: (payload: {
+  content: ComponentType<{
     user: Partial<Schema$User>;
     onSubmit: () => void;
-  }) => ReactNode;
+  }>;
 }
 
 const { Form, FormItem, useForm } = createForm<Param$UpdateUser>();
@@ -25,14 +25,16 @@ const { Form, FormItem, useForm } = createForm<Param$UpdateUser>();
 const request = (...args: Parameters<typeof updateUser>) =>
   updateUser(...args).then(res => res.data.data);
 
-function createModal({ title, content, prefix }: Create) {
+function createModal({ title, content: Content, prefix }: Create) {
   const onFailure = toaster.apiError.bind(toaster, `Update ${prefix} Failure`);
 
-  return function ({ navigation }: StackScreenProps<{}>) {
+  return function ({
+    navigation
+  }: PersonalInfoScreenProps<'NewNickName' | 'NewEmail'>) {
     const { user, updateProfile } = useAuth();
     const { current: onSuccess } = useRef((payload: Schema$User) => {
       updateProfile(payload);
-      navigation.goBack();
+      navigation.navigate('Main', { user: payload });
       toaster.success({ message: `Update ${prefix} success` });
     });
     const { run, loading } = useRxAsync(request, {
@@ -49,7 +51,7 @@ function createModal({ title, content, prefix }: Create) {
           form={form}
           onFinish={changes => user && run({ id: user.user_id, ...changes })}
         >
-          {user && content({ user, onSubmit: form.submit })}
+          {user && <Content {...{ user, onSubmit: form.submit }} />}
 
           <Button
             intent="DARK"

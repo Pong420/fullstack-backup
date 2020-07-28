@@ -18,9 +18,9 @@ import { Empty } from '../../../components/Empty';
 import { createUseCRUDReducer } from '../../../hooks/crud';
 import { CreateAddressScreen } from './CreateAddressScreen';
 import { UpdateAddressScreen } from './UpdateAddressScreen';
-import { RootStackParamList } from './route';
+import { DeliveryAddressParamList } from './routes';
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<DeliveryAddressParamList>();
 
 const useAddressReducer = createUseCRUDReducer<Schema$Address, 'id'>('id');
 
@@ -28,7 +28,7 @@ const request = () => getAddresses().then(res => res.data.data);
 function MainScreen({
   navigation,
   route
-}: StackScreenProps<RootStackParamList, 'Main'>) {
+}: StackScreenProps<DeliveryAddressParamList, 'Main'>) {
   const [state, actions] = useAddressReducer();
   const { loading } = useRxAsync(request, {
     effect: useLayoutEffect,
