@@ -3,16 +3,18 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { toaster } from '../../components/Toast';
 import { navigate } from '../../utils/navigation';
 import Languages from '../../assets/languages.svg';
+import { PersonalInfoParamList } from './PersonalInfo/routes';
 
 const githubUrl = 'https://github.com/Pong420/fullstack';
 
 export type UserStackParamList = {
   User: undefined;
-  PeronsalInfo: undefined;
+  PersonalInfo: PersonalInfoParamList['Main'];
   ChangePassword: undefined;
   DeliveryAddress: undefined;
   Login: undefined;
   Registration: undefined;
+  ValidatePassword: undefined;
 };
 
 export type UserStackScreenProps<
@@ -24,7 +26,7 @@ export const DATA = [
     auth: true,
     icon: 'user',
     title: 'Personal Information',
-    onPress: () => navigate('VaildatePassword')
+    onPress: () => navigate('ValidatePassword')
   },
   {
     auth: true,

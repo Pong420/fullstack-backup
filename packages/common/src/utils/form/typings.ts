@@ -51,10 +51,13 @@ export type Paths<T, D extends number = 10> = [D] extends [never]
     }[keyof T]
   : [];
 
-export type DeepPartial<T> = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
-};
+export type DeepPartial<T> = T extends any[] | (() => void)
+  ? T
+  : T extends Record<PropertyKey, unknown>
+  ? {
+      [K in keyof T]?: DeepPartial<T[K]>;
+    }
+  : T;
 
 interface NextInt {
   0: 1;

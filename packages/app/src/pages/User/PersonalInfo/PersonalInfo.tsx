@@ -9,9 +9,9 @@ import {
 import { Text, SemiBold } from '../../../components/Text';
 import { Header } from '../../../components/Header';
 import { card, containerPadding, colors } from '../../../styles';
-import { ValidPasswordModal } from './ValidPasswordModal';
 import { NewEmailModal, NewNickNameModal } from './UpdateUser';
 import { PersonalInfoParamList } from './routes';
+import { UserStackScreenProps } from '../constants';
 
 interface ItemProps {
   label: string;
@@ -75,11 +75,14 @@ function MainScreen({
   );
 }
 
-export function PersonalInfo() {
+export function PersonalInfo({ route }: UserStackScreenProps<'PersonalInfo'>) {
   return (
     <Stack.Navigator mode="modal" screenOptions={screenOptions}>
-      <Stack.Screen name="ValidatePassword" component={ValidPasswordModal} />
-      <Stack.Screen name="Main" component={MainScreen} />
+      <Stack.Screen
+        name="Main"
+        component={MainScreen}
+        initialParams={route.params}
+      />
       <Stack.Screen name="NewNickName" component={NewNickNameModal} />
       <Stack.Screen name="NewEmail" component={NewEmailModal} />
     </Stack.Navigator>

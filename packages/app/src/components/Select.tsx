@@ -5,11 +5,14 @@ import {
   View,
   StyleSheet,
   FlatList,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback
+  TouchableNativeFeedback
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useSafeArea } from 'react-native-safe-area-context';
+// `TouchableWithoutFeedback` import from `react-native` not work on TextInput
+// `onTouchStart` / `onTouchEnd` props of `TextInput` work
+// but cannot not unfocused another `TextInput`
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useBoolean } from '../hooks/useBoolean';
 import { containerPadding, colors } from '../styles';
 import { TextInput, TextInputProps } from './TextInput';
@@ -72,9 +75,10 @@ export function Select({
         <TextInput
           {...props}
           border="bottom"
+          pointerEvents="none"
           editable={false}
           value={value}
-          rightElement={chevronDown}
+          rightElement={editable === false ? undefined : chevronDown}
         />
       </TouchableWithoutFeedback>
       <Modal
