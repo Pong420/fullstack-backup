@@ -16,6 +16,7 @@ import { defer, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { login, logout, register, getJwtToken } from '../service';
 import { toaster } from '../components/Toast';
+import { clearJwtToken } from '@fullstack/common/service';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
@@ -143,6 +144,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
             if (options?.slient !== true) {
               toaster.success({ message: 'Logout success' });
             }
+            clearJwtToken();
             dispatch({ type: 'LOGOUT' });
           })
           .catch(error => toaster.apiError('Logout failure', error));

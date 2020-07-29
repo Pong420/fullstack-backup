@@ -48,8 +48,11 @@ export const modifyPassword = (payload: Param$ModifyPassword) =>
 
 // ---------
 
+// jwtToken$ should only be defined after authentication
+// and clear after logout
 let jwtToken$: Observable<Schema$Authenticated> | null;
 
+// mainly for account swtching
 export function clearJwtToken() {
   jwtToken$ = null;
 }
@@ -61,34 +64,18 @@ const refreshToken$ = (): Observable<Schema$Authenticated> =>
   );
 
 export function getJwtToken() {
-  jwtToken$ = jwtToken$ || refreshToken$();
-  return jwtToken$.pipe(
+  return (jwtToken$ || refreshToken$()).pipe(
     switchMap(payload => {
       const expired = +new Date(payload.expiry) - +new Date() <= 30 * 1000;
-      if (expired) {
-        jwtToken$ = refreshToken$();
-      }
-      return jwtToken$ || of(payload);
+      jwtToken$ = expired ? refreshToken$() : jwtToken$ || of(payload);
+      return jwtToken$;
     })
   );
 }
 
-const excludeAuthUrls = [
-  paths.login,
-  paths.refresh_token,
-  paths.registration,
-  paths.guest_registration,
-  paths.get_product_category,
-  paths.get_product_tags
-];
-const authUrlRegex = new RegExp(
-  `(${excludeAuthUrls.join('|').replace(/\//g, '\\/')})$`
-);
-
-const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
-
 api.interceptors.request.use(async config => {
-  if (!isAuthUrl(config.url)) {
+  // attach jwtToken$ if defined
+  if (jwtToken$) {
     const { token } = await getJwtToken().toPromise();
     config.headers['Authorization'] = 'bearer ' + token;
   }

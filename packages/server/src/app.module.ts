@@ -37,7 +37,8 @@ const configure = (factory: ConfigFactory[] = []) =>
     load: [
       () => ({
         MONGODB_URI: 'mongodb://localhost:27017/fullstack',
-        JWT_TOKEN_EXPIRES_IN_MINUTES: 15,
+        // FIXME: 1 minutes is for testing
+        JWT_TOKEN_EXPIRES_IN_MINUTES: 1,
         REFRESH_TOKEN_EXPIRES_IN_MINUTES: 7 * 24 * 60
       }),
       ...factory

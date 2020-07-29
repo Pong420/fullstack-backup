@@ -21,7 +21,7 @@ api.interceptors.request.use(async config => {
         config.data[image]
       ).toPromise();
     } catch (error) {
-      throw new Error('Image upload failure');
+      throw error;
     }
   }
   return config;

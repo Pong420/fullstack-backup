@@ -1,5 +1,5 @@
 import { from, of, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, catchError } from 'rxjs/operators';
 import { FastifyRequest } from 'fastify';
 import {
   ExecutionContext,
@@ -40,16 +40,15 @@ export class AcessGuard extends AuthGuard('jwt') {
         context.getClass()
       ]) || [];
 
-    if (access.includes('EVERYONE')) {
-      return of(true);
-    }
-
     const canActive = super.canActivate(context);
 
-    const source$ =
+    const authorized$ =
       typeof canActive === 'boolean' ? of(canActive) : from(canActive);
 
-    return source$.pipe(
+    const evenyone = access.includes('EVERYONE');
+
+    return authorized$.pipe(
+      catchError(() => of(evenyone)),
       mergeMap<boolean, Promise<boolean>>(async active => {
         if (active) {
           const req = context.switchToHttp().getRequest<FastifyRequest>();
@@ -76,9 +75,7 @@ export class AcessGuard extends AuthGuard('jwt') {
           if (access.includes('SELF') && user_id && user_id === user.user_id)
             return true;
 
-          return access.length
-            ? access.includes(UserRole[user.role] as AccessType)
-            : true;
+          return evenyone || access.includes(UserRole[user.role] as AccessType);
         }
         return false;
       })

@@ -24,6 +24,9 @@ async function bootstrap() {
   });
 
   await app.listen(PORT, '0.0.0.0');
+
+  // eslint-disable-next-line
+  console.log(`server listening on port ${PORT}`);
 }
 
 bootstrap();
