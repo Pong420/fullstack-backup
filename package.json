@@ -13,8 +13,8 @@
     "common": "yarn workspace @fullstack/common",
     "typings": "yarn workspace @fullstack/typings",
     "dev": "lerna run dev --stream --parallel",
-    "dev:app": "lerna run dev --stream --parallel --ignore @fullstack/admin",
-    "dev:admin": "lerna run dev --stream --parallel --ignore @fullstack/app",
+    "dev:app": "yarn dev --ignore @fullstack/admin",
+    "dev:admin": "yarn dev --ignore @fullstack/app",
     "build": "rimraf dist && lerna run build --stream",
     "postinstall": "lerna run postinstall --stream --parallel",
     "heroku-postbuild": "yarn build --ignore @fullstack/app"

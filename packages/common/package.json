@@ -7,15 +7,16 @@
     "dist/**/*"
   ],
   "scripts": {
+    "dev": "tsc -p tsconfig.json --watch",
     "build": "tsc -p tsconfig.json",
     "postinstall": "yarn build"
   },
   "devDependencies": {
+    "@fullstack/typings": "1.0.0",
+    "axios": "^0.19.2",
+    "path-to-regexp": "^6.1.0",
+    "rxjs": "^6.6.0",
     "typescript": "^3.9.6",
     "use-rx-hooks": "^1.5.0"
-  },
-  "dependencies": {
-    "axios": "^0.19.2",
-    "path-to-regexp": "^6.1.0"
   }
 }
