@@ -15,19 +15,19 @@ import { RefreshToken } from './schemas/refreshToken.schema';
 export class RefreshTokenService extends MongooseCRUDService<RefreshToken> {
   constructor(
     @InjectModel(RefreshToken.name)
-    model: PaginateModel<RefreshToken & Document>,
+    private refreshTokenModel: PaginateModel<RefreshToken & Document>,
     private readonly configService: ConfigService
   ) {
-    super(model);
+    super(refreshTokenModel);
 
     const index: keyof RefreshToken = 'updatedAt';
     const num = 1;
     async function init() {
       try {
-        await model.collection.dropIndex(`${index}_${num}`);
+        await refreshTokenModel.collection.dropIndex(`${index}_${num}`);
       } catch (error) {}
 
-      await model.collection.createIndex(
+      await refreshTokenModel.collection.createIndex(
         { [index]: num },
         {
           expireAfterSeconds:

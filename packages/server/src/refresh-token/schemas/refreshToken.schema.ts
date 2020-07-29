@@ -10,13 +10,13 @@ import { UserRole, Schema$RefreshToken } from '@fullstack/typings';
 export class RefreshToken implements Schema$RefreshToken {
   id: string;
 
-  @Prop({ type: String, required: true, unique: true })
+  @Prop({ type: String, required: true })
   user_id: string;
 
-  @Prop({ type: String, required: true, unique: true })
+  @Prop({ type: String, required: true })
   username: string;
 
-  @Prop({ type: String, required: true, unique: true })
+  @Prop({ type: String, required: true })
   nickname: string;
 
   @Prop({ required: true })
