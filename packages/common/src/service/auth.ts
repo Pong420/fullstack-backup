@@ -73,14 +73,16 @@ export function getJwtToken() {
   );
 }
 
-const authUrls = [
+const excludeAuthUrls = [
   paths.login,
   paths.refresh_token,
   paths.registration,
-  paths.guest_registration
+  paths.guest_registration,
+  paths.get_product_category,
+  paths.get_product_tags
 ];
 const authUrlRegex = new RegExp(
-  `(${authUrls.join('|').replace(/\//g, '\\/')})$`
+  `(${excludeAuthUrls.join('|').replace(/\//g, '\\/')})$`
 );
 
 const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);

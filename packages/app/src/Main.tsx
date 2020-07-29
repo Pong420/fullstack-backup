@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableHighlight } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import {
   createBottomTabNavigator,
@@ -7,8 +7,10 @@ import {
   BottomTabScreenProps,
   BottomTabNavigationOptions
 } from '@react-navigation/bottom-tabs';
+import { Home } from './pages/Home';
 import { User } from './pages/User';
-import { useAuth } from './hooks/useAuth';
+import { Logo } from './components/Logo';
+import { InkPainting } from './components/Text';
 import { colors } from './styles';
 
 const Tab = createBottomTabNavigator();
@@ -46,11 +48,11 @@ const screenOptions: (
 export function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="User"
+      initialRouteName="Home"
       tabBarOptions={tabBarOptions}
       screenOptions={screenOptions}
     >
-      <Tab.Screen name="Home" component={WIP} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Compass" component={WIP} />
       <Tab.Screen name="Favourite" component={WIP} />
       <Tab.Screen name="Cart" component={WIP} />
@@ -60,7 +62,6 @@ export function Main() {
 }
 
 function WIP() {
-  const { logout } = useAuth();
   return (
     <SafeAreaView
       style={{
@@ -69,9 +70,8 @@ function WIP() {
         alignItems: 'center'
       }}
     >
-      <TouchableHighlight onPress={() => logout()}>
-        <Text>Working in progress</Text>
-      </TouchableHighlight>
+      <Logo />
+      <InkPainting fontSize={30}>Working in progress</InkPainting>
     </SafeAreaView>
   );
 }

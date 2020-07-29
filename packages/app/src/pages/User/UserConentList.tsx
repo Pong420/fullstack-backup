@@ -67,17 +67,16 @@ function Item({
   }
 
   return (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={onPress || workingInProgress}
-    >
-      {typeof Icon === 'string' ? (
-        <Feather name={Icon} size={iconSize} color={iconColor} />
-      ) : (
-        <Icon width={iconSize} height={iconSize} color={iconColor} />
-      )}
-      <Text style={styles.title}>{title}</Text>
-      <Feather name="chevron-right" size={iconSize} color="#666" />
+    <TouchableOpacity onPress={onPress || workingInProgress}>
+      <View style={{ ...styles.item, opacity: onPress ? undefined : 0.5 }}>
+        {typeof Icon === 'string' ? (
+          <Feather name={Icon} size={iconSize} color={iconColor} />
+        ) : (
+          <Icon width={iconSize} height={iconSize} color={iconColor} />
+        )}
+        <Text style={styles.title}>{title}</Text>
+        <Feather name="chevron-right" size={iconSize} color="#666" />
+      </View>
     </TouchableOpacity>
   );
 }
