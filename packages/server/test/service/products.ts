@@ -62,12 +62,14 @@ export function deleteProduct(token: string, id: string): SuperAgentRequest {
     .set('Authorization', `bearer ${token}`);
 }
 
-export function getTags(token: string): SuperAgentRequest {
-  return request.get(paths.get_tags).set('Authorization', `bearer ${token}`);
+export function getTags(token?: string): SuperAgentRequest {
+  return request
+    .get(paths.get_product_tags)
+    .set('Authorization', `bearer ${token}`);
 }
 
-export function getCategories(token: string): SuperAgentRequest {
+export function getCategories(token?: string): SuperAgentRequest {
   return request
-    .get(paths.get_category)
+    .get(paths.get_product_category)
     .set('Authorization', `bearer ${token}`);
 }

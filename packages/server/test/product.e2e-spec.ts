@@ -90,7 +90,7 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('success', async () => {
-      const response = await getTags(adminToken);
+      const response = await getTags();
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toIncludeSameMembers(
         tags.map<Schema$Tags>(tag => ({ tag, total: 1 }))
@@ -108,8 +108,9 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('success', async () => {
-      const response = await getCategories(adminToken);
+      const response = await getCategories();
       expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data.length).toBe(categories.length);
       expect(response.body.data).toIncludeSameMembers(
         categories.map<Schema$Category>(category => ({ category, total: 1 }))
       );

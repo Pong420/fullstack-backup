@@ -27,8 +27,8 @@
     "get_product": "/:id",
     "update_product": "/:id",
     "delete_product": "/:id",
-    "get_category": "/category",
-    "get_tags": "/tags"
+    "get_product_category": "/category",
+    "get_product_tags": "/tags"
   },
   "order": {
     "prefix": "/orders",

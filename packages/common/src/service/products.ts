@@ -20,15 +20,21 @@ export const updateProduct = ({
   id,
   ...payload
 }: Param$Product & Param$UpdateProduct) =>
-  api.patch<Response$Product>(`/products/${id}`, payload, { image });
+  api.patch<Response$Product>(
+    paths.update_product.generatePath({ id }),
+    payload,
+    { image }
+  );
 
 export const deleteProduct = ({ id }: Param$Product) =>
-  api.delete<unknown>(`/products/${id}`);
+  api.delete<unknown>(paths.delete_product.generatePath({ id }));
 
 export const getProducts = (params?: Param$GetProducts) =>
-  api.get<Response$GetProducts>('/products', { params });
+  api.get<Response$GetProducts>(paths.get_products, { params });
 
-export const getProductTags = () => api.get<Response$Tags>('/products/tags');
+export const getProductTags = () =>
+  api.get<Response$Tags>(paths.get_product_tags);
 
-export const getProductCategories = () =>
-  api.get<Response$Category>('/products/category');
+export const getProductCategories = () => {
+  return api.get<Response$Category>(paths.get_product_category);
+};

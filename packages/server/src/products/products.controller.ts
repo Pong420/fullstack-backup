@@ -23,7 +23,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
   }
 
   @Get()
-  @Access('ADMIN', 'MANAGER', 'CLIENT', 'GUEST')
+  @Access('EVERYONE')
   getAll(
     @Query() { tag, tags, hidden, ...query }: QueryProductDto,
     @Req() req: FastifyRequest
@@ -39,7 +39,7 @@ export class ProductsController extends MongooseCRUDController<Product> {
     }
 
     const extra: QueryProductDto = {
-      hidden: req.user.role === UserRole.CLIENT ? false : hidden
+      hidden: req.user?.role === UserRole.CLIENT ? false : hidden
     };
 
     return this.productService.paginate({
@@ -50,11 +50,13 @@ export class ProductsController extends MongooseCRUDController<Product> {
     });
   }
 
+  @Access('ADMIN', 'MANAGER', 'GUEST')
   @Post(paths.products.create_product)
   create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     return this.productService.create(createProductDto);
   }
 
+  @Access('ADMIN', 'MANAGER', 'GUEST')
   @Patch(paths.products.update_product)
   async update(
     @ObjectId() id: string,
@@ -63,12 +65,14 @@ export class ProductsController extends MongooseCRUDController<Product> {
     return this.productService.update({ _id: id }, changes);
   }
 
-  @Get(paths.products.get_category)
+  @Access('EVERYONE')
+  @Get(paths.products.get_product_category)
   async getCategories(): Promise<Schema$Category[]> {
     return this.productService.categories();
   }
 
-  @Get(paths.products.get_tags)
+  @Access('EVERYONE')
+  @Get(paths.products.get_product_tags)
   async getTags(): Promise<Schema$Tags[]> {
     return this.productService.tags();
   }
