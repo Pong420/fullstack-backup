@@ -1,13 +1,4 @@
-import {
-  of,
-  merge,
-  empty,
-  defer,
-  fromEvent,
-  race,
-  from,
-  throwError
-} from 'rxjs';
+import { of, merge, empty, defer, fromEvent, race, throwError } from 'rxjs';
 import {
   switchMap,
   mergeMap,
@@ -18,12 +9,7 @@ import {
 } from 'rxjs/operators';
 import { Epic, ofType } from 'redux-observable';
 import { RouterAction, replace } from 'connected-react-router';
-import {
-  login,
-  logout,
-  getJwtToken,
-  clearJwtToken
-} from '@fullstack/common/service';
+import { logout, getJwtToken, clearJwtToken } from '@fullstack/common/service';
 import { Location } from 'history';
 import { AuthActions, AuthActionMap, AuthActionTypes } from '../actions/auth';
 import { RootState } from '../reducers';
@@ -48,17 +34,11 @@ const loginEpic: AuthEpic = (action$, state$) =>
       AuthActionTypes.AUTHENTICATE
     ),
     switchMap(action => {
-      const request$ = action.payload
-        ? from(login(action.payload)).pipe(
-            map(res => res.data.data),
-            catchError(error => {
-              Toaster.apiError('Login failure', error);
-              return throwError(error);
-            })
-          )
-        : getJwtToken();
-
-      return request$.pipe(
+      return getJwtToken(action.payload).pipe(
+        catchError(error => {
+          action.payload && Toaster.apiError('Login failure', error);
+          return throwError(error);
+        }),
         mergeMap(payload => {
           const { location } = state$.value.router;
           const redirect = payload.isDefaultAc

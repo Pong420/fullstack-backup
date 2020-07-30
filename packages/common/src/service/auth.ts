@@ -48,23 +48,25 @@ export const modifyPassword = (payload: Param$ModifyPassword) =>
 
 // ---------
 
-let jwtToken$: Observable<Schema$Authenticated> | null;
+let jwtToken$: Observable<Schema$Authenticated> | null = null;
 
 export function clearJwtToken() {
   jwtToken$ = null;
 }
 
-const refreshToken$ = (): Observable<Schema$Authenticated> =>
-  defer(() => refreshToken()).pipe(
+export const authenticate$ = (
+  payload?: Param$Login
+): Observable<Schema$Authenticated> =>
+  (payload ? defer(() => login(payload)) : defer(() => refreshToken())).pipe(
     map(res => res.data.data),
     shareReplay(1)
   );
 
-export function getJwtToken() {
-  return (jwtToken$ || refreshToken$()).pipe(
+export function getJwtToken(payload?: Param$Login) {
+  return (jwtToken$ || authenticate$(payload)).pipe(
     switchMap(payload => {
       const expired = +new Date(payload.expiry) - +new Date() <= 30 * 1000;
-      jwtToken$ = expired ? refreshToken$() : jwtToken$ || of(payload);
+      jwtToken$ = expired ? authenticate$() : jwtToken$ || of(payload);
       return jwtToken$;
     })
   );
@@ -83,7 +85,7 @@ const authUrlRegex = new RegExp(
 const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
 
 api.interceptors.request.use(async config => {
-  if (!isAuthUrl(config.url) || jwtToken$) {
+  if (!isAuthUrl(config.url) && jwtToken$) {
     const { token } = await getJwtToken().toPromise();
     config.headers['Authorization'] = 'bearer ' + token;
   }

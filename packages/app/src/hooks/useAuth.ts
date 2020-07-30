@@ -13,8 +13,8 @@ import {
 } from '@fullstack/typings';
 import AsyncStorage from '@react-native-community/async-storage';
 import { defer, throwError } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
-import { login, logout, register, getJwtToken } from '../service';
+import { catchError, switchMap } from 'rxjs/operators';
+import { logout, register, getJwtToken } from '../service';
 import { toaster } from '../components/Toast';
 import { clearJwtToken } from '@fullstack/common/service';
 
@@ -107,33 +107,22 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
   const { loginStatus } = state;
 
   const authContext = React.useMemo<IAuthContext>(() => {
-    const login$ = (payload: Param$Login) =>
-      defer(() => login(payload)).pipe(
-        map(res => res.data.data),
-        catchError(error => {
-          toaster.apiError('Login failure', error);
-          return throwError(error);
-        })
-      );
-
     const authenticate$ = (payload?: AuthenticatePayload) =>
-      payload
-        ? 'email' in payload
-          ? defer(() => register(payload)).pipe(
-              switchMap(() => {
-                toaster.success({ message: 'Registration Success' });
-                return login$({
-                  username: payload.username,
-                  password: payload.password
-                });
-              }),
-              catchError(error => {
-                toaster.apiError('Registration failure', error);
-                return throwError(error);
-              })
-            )
-          : login$(payload)
-        : getJwtToken();
+      payload && 'email' in payload
+        ? defer(() => register(payload)).pipe(
+            switchMap(() => {
+              toaster.success({ message: 'Registration Success' });
+              return getJwtToken({
+                username: payload.username,
+                password: payload.password
+              });
+            }),
+            catchError(error => {
+              toaster.apiError('Registration failure', error);
+              return throwError(error);
+            })
+          )
+        : getJwtToken(payload);
 
     return {
       ...state,
@@ -159,7 +148,10 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
               expiry instanceof Date ? expiry.toISOString() : expiry
             );
           },
-          () => dispatch({ type: 'AUTHENTICATE_FAILURE' })
+          error => {
+            toaster.apiError('Authenticate Failure', error);
+            dispatch({ type: 'AUTHENTICATE_FAILURE' });
+          }
         );
       }
     };

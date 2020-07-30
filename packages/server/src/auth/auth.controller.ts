@@ -7,7 +7,6 @@ import {
   HttpStatus,
   Body,
   BadRequestException,
-  UnauthorizedException,
   Delete,
   Patch
 } from '@nestjs/common';
@@ -148,7 +147,7 @@ export class AuthController {
 
     return reply
       .status(HttpStatus.UNAUTHORIZED)
-      .send(new UnauthorizedException());
+      .send(new BadRequestException());
   }
 
   @Post(paths.auth.logout)

@@ -7,8 +7,10 @@ import {
 
 type State = LoggedIn | NotLoggedIn;
 
+const key = 'loggedIn';
+
 const initialState: State = {
-  loginStatus: 'unknown',
+  loginStatus: localStorage.getItem(key) ? 'unknown' : 'required',
   user: null
 };
 
@@ -25,6 +27,7 @@ export default function (
       };
 
     case AuthActionTypes.SCCUESS:
+      localStorage.setItem(key, 'true');
       return {
         ...state,
         user: action.payload,
@@ -33,6 +36,7 @@ export default function (
 
     case AuthActionTypes.LOGOUT:
     case AuthActionTypes.FAILURE:
+      localStorage.removeItem(key);
       return {
         ...state,
         user: null,
