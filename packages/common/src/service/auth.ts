@@ -48,11 +48,8 @@ export const modifyPassword = (payload: Param$ModifyPassword) =>
 
 // ---------
 
-// jwtToken$ should only be defined after authentication
-// and clear after logout
 let jwtToken$: Observable<Schema$Authenticated> | null;
 
-// mainly for account swtching
 export function clearJwtToken() {
   jwtToken$ = null;
 }
@@ -73,9 +70,20 @@ export function getJwtToken() {
   );
 }
 
+const excludeAuthUrls = [
+  paths.login,
+  paths.refresh_token,
+  paths.registration,
+  paths.guest_registration
+];
+const authUrlRegex = new RegExp(
+  `(${excludeAuthUrls.join('|').replace(/\//g, '\\/')})$`
+);
+
+const isAuthUrl = (url?: string) => url && authUrlRegex.test(url);
+
 api.interceptors.request.use(async config => {
-  // attach jwtToken$ if defined
-  if (jwtToken$) {
+  if (!isAuthUrl(config.url) || jwtToken$) {
     const { token } = await getJwtToken().toPromise();
     config.headers['Authorization'] = 'bearer ' + token;
   }
