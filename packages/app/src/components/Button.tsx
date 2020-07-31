@@ -7,7 +7,6 @@ import {
   ViewStyle,
   StyleSheet
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { shadow, colors } from '@/styles';
 import { SemiBold } from './Text';
 
@@ -19,10 +18,8 @@ export interface ButtonProps extends TouchableHighlightProps {
   style?: ViewStyle;
 }
 
-// TODO: remove gradient?
 const themes = {
   NONE: {
-    gradient: ['hsla(0,0%,100%,.8)', 'hsla(0,0%,100%,0)'],
     textColor: colors.black,
     shadowColor: 'rgba(16,22,26,.3)',
     backgroundColor: '#f5f8fa',
@@ -30,7 +27,6 @@ const themes = {
     activeOpacity: undefined
   },
   PRIMARY: {
-    gradient: ['hsla(0,0%,100%,.1)', 'hsla(0,0%,100%,0)'],
     textColor: '#fff',
     shadowColor: 'rgba(16,22,26,1)',
     backgroundColor: colors.blue,
@@ -38,24 +34,12 @@ const themes = {
     activeOpacity: undefined
   },
   DARK: {
-    gradient: undefined,
     textColor: '#fff',
     shadowColor: '#000',
     backgroundColor: colors.black,
     underlayColor: colors.divider,
     activeOpacity: 0.6
   }
-};
-
-const LinearGradientWrapper: React.FC<{
-  colors?: string[];
-  style?: ViewStyle;
-}> = ({ colors, ...props }) => {
-  return colors ? (
-    <LinearGradient colors={colors} {...props} />
-  ) : (
-    <View {...props} />
-  );
 };
 
 export function Button({
@@ -82,8 +66,7 @@ export function Button({
         borderColor: intent === 'NONE' ? colors.divider : theme.backgroundColor
       })}
     >
-      <LinearGradientWrapper
-        colors={active || ghost ? undefined : theme.gradient}
+      <View
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -112,7 +95,7 @@ export function Button({
             {title}
           </SemiBold>
         )}
-      </LinearGradientWrapper>
+      </View>
     </TouchableHighlight>
   );
 }

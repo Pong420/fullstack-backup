@@ -122,7 +122,13 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
               return throwError(error);
             })
           )
-        : getJwtToken(payload);
+        : getJwtToken(payload).pipe(
+            catchError(error => {
+              const isLogin = !!payload;
+              isLogin && toaster.apiError('Login failure', error);
+              return throwError(error);
+            })
+          );
 
     return {
       ...state,
@@ -134,6 +140,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
               toaster.success({ message: 'Logout success' });
             }
             clearJwtToken();
+            AsyncStorage.removeItem(StorageKey);
             dispatch({ type: 'LOGOUT' });
           })
           .catch(error => toaster.apiError('Logout failure', error));
@@ -148,10 +155,7 @@ export function AuthProvider({ children }: { children?: ReactNode }) {
               expiry instanceof Date ? expiry.toISOString() : expiry
             );
           },
-          error => {
-            toaster.apiError('Authenticate Failure', error);
-            dispatch({ type: 'AUTHENTICATE_FAILURE' });
-          }
+          () => dispatch({ type: 'AUTHENTICATE_FAILURE' })
         );
       }
     };

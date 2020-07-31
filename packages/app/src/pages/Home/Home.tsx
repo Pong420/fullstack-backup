@@ -19,7 +19,7 @@ export function Home() {
           indicatorColor={colors.black}
           items={categires || []}
           onItemRender={({ item, style, index }) => (
-            <View style={[style, { height: 230 }]} key={index}>
+            <View style={[style, { height: 250 }]} key={index}>
               <View style={styles.card}>
                 <InkPainting style={styles.text}>{item.category}</InkPainting>
               </View>
@@ -43,10 +43,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 16,
     marginVertical: 10,
-    borderRadius: 5
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#000'
   },
   text: {
     textTransform: 'capitalize',
-    fontSize: 70
+    fontSize: 50
   }
 });
