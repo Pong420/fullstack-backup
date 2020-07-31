@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Address } from '@fullstack/typings';
 import { updateAddress } from '@fullstack/common/service';
-import { Button } from '../../../components/Button';
-import { PageModal } from '../../../components/PageModal';
-import { toaster } from '../../../components/Toast';
-import { AddressForm, useForm } from '../../../components/AddressForm';
+import { Button } from '@/components/Button';
+import { PageModal } from '@/components/PageModal';
+import { toaster } from '@/components/Toast';
+import { AddressForm, useForm } from '@/components/AddressForm';
+import { KeyboardAvoidingViewFooter } from '@/components/KeyboardAvoidingViewFooter';
+import { containerPadding } from '@/styles';
 import { DeliveryAddressScreenProps } from './routes';
-import { KeyboardAvoidingViewFooter } from '../../../components/KeyboardAvoidingViewFooter';
-import { containerPadding } from '../../../styles';
 
 const request = (...args: Parameters<typeof updateAddress>) =>
   updateAddress(...args).then(res => res.data.data);

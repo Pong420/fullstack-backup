@@ -6,9 +6,9 @@ import {
   StackNavigationOptions,
   StackScreenProps
 } from '@react-navigation/stack';
-import { Text, SemiBold } from '../../../components/Text';
-import { Header } from '../../../components/Header';
-import { card, containerPadding, colors } from '../../../styles';
+import { Text, SemiBold } from '@/components/Text';
+import { Header } from '@/components/Header';
+import { card, containerPadding, colors } from '@/styles';
 import { NewEmailModal, NewNickNameModal } from './UpdateUser';
 import { PersonalInfoParamList } from './routes';
 import { UserStackScreenProps } from '../constants';

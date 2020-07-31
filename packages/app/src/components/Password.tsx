@@ -6,9 +6,9 @@ import {
   TextInput as RNTextInput
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useBoolean } from '@/hooks/useBoolean';
+import { dimen } from '@/styles';
 import { TextInput, TextInputProps } from './TextInput';
-import { useBoolean } from '../hooks/useBoolean';
-import { dimen } from '../styles';
 
 interface Props extends TextInputProps {
   visible?: boolean;

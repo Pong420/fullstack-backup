@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { TouchableNativeFeedback, StyleSheet, View } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
+import { containerPadding } from '@/styles';
 import { SemiBold } from './Text';
-import { containerPadding } from '../styles';
 
 export interface ModalHeaderProps {
   title: ReactNode;

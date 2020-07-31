@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
-import { colors } from '../styles';
+import { colors } from '@/styles';
 
 export const fonts = {
   // prettier-ignore

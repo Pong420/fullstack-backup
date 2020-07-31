@@ -13,8 +13,8 @@ import { useSafeArea } from 'react-native-safe-area-context';
 // `onTouchStart` / `onTouchEnd` props of `TextInput` work
 // but cannot not unfocused another `TextInput`
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { useBoolean } from '../hooks/useBoolean';
-import { containerPadding, colors } from '../styles';
+import { useBoolean } from '@/hooks/useBoolean';
+import { containerPadding, colors } from '@/styles';
 import { TextInput, TextInputProps } from './TextInput';
 import { ModalHeader } from './PageModal';
 

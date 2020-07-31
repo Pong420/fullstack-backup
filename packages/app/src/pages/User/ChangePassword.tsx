@@ -2,17 +2,17 @@ import React, { useRef } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$ModifyPassword } from '@fullstack/typings';
-import { Header } from '../../components/Header';
-import { useFocusNextHandler } from '../../components/TextInput';
-import { Password } from '../../components/Password';
-import { Button } from '../../components/Button';
-import { toaster } from '../../components/Toast';
-import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingViewFooter';
-import { createForm, validators } from '../../utils/form';
-import { useAuth } from '../../hooks/useAuth';
-import { modifyPassword } from '../../service';
+import { Header } from '@/components/Header';
+import { useFocusNextHandler } from '@/components/TextInput';
+import { Password } from '@/components/Password';
+import { Button } from '@/components/Button';
+import { toaster } from '@/components/Toast';
+import { KeyboardAvoidingViewFooter } from '@/components/KeyboardAvoidingViewFooter';
+import { createForm, validators } from '@/utils/form';
+import { useAuth } from '@/hooks/useAuth';
+import { modifyPassword } from '@/service';
+import { containerPadding } from '@/styles';
 import { UserStackScreenProps } from './constants';
-import { containerPadding } from '../../styles';
 
 const { Form, FormItem, useForm } = createForm<Param$ModifyPassword>({
   style: { marginBottom: 15 }

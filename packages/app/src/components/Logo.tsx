@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, TextStyle, ViewStyle } from 'react-native';
+import { dimen } from '@/styles';
 import { InkPainting } from './Text';
-import { dimen } from '../styles';
-import Cart from '../assets/cart.svg';
+import Cart from '@/assets/cart.svg';
 
 interface Props {
   size?: number;

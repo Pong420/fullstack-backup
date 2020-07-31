@@ -17,7 +17,7 @@ import { Feather } from '@expo/vector-icons';
 import { ApiError } from '@fullstack/typings';
 import { getErrorMessage } from '@fullstack/common/service';
 import { Bold, TextWrap } from './Text';
-import { shadow, colors } from '../styles';
+import { shadow, colors } from '@/styles';
 
 interface Theme {
   color?: string;

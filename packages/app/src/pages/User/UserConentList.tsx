@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Bold, SemiBold } from '../../components/Text';
-import { useAuth, IAuthContext } from '../../hooks/useAuth';
-import { toaster } from '../../components/Toast';
-import { Button } from '../../components/Button';
+import { Bold, SemiBold } from '@/components/Text';
+import { useAuth, IAuthContext } from '@/hooks/useAuth';
+import { toaster } from '@/components/Toast';
+import { Button } from '@/components/Button';
+import { containerPadding, colors } from '@/styles';
 import { DATA } from './constants';
-import { containerPadding, colors } from '../../styles';
 
 function Header({ user, logout }: Pick<IAuthContext, 'user' | 'logout'>) {
   return (

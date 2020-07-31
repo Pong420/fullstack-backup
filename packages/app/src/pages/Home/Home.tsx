@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Carousel } from '../../components/Carousel';
-import { getProductCategories } from '../../service';
-import { InkPainting } from '../../components/Text';
-import { containerPadding, colors, shadow } from '../../styles';
+import { Carousel } from '@/components/Carousel';
+import { InkPainting } from '@/components/Text';
+import { getProductCategories } from '@/service';
+import { containerPadding, colors, shadow } from '@/styles';
 
 const request = () =>
   getProductCategories().then(res => res.data.data.slice(0, 6));

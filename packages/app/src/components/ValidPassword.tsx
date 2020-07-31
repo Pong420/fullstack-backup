@@ -7,10 +7,10 @@ import { Password } from './Password';
 import { Button } from './Button';
 import { toaster } from './Toast';
 import { PageModal } from './PageModal';
-import { createForm, FormProps, validators } from '../utils/form';
-import { useAuth } from '../hooks/useAuth';
-import { login } from '../service';
-import { containerPadding } from '../styles';
+import { createForm, FormProps, validators } from '@/utils/form';
+import { useAuth } from '@/hooks/useAuth';
+import { login } from '@/service';
+import { containerPadding } from '@/styles';
 
 interface Props {
   onSuccess: () => void;

@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 import { useRxAsync } from 'use-rx-hooks';
 import { SemiBold, Text } from './Text';
 import { Button } from './Button';
-import { shadow, containerPadding } from '../styles';
+import { shadow, containerPadding } from '@/styles';
 
 export interface ConfirmModalProps {
   title?: ReactNode;

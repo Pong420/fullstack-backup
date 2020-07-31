@@ -1,7 +1,7 @@
 import React from 'react';
-import { createForm, validators } from '../../utils/form';
-import { TextInput, useFocusNextHandler } from '../../components/TextInput';
-import { Password } from '../../components/Password';
+import { TextInput, useFocusNextHandler } from '@/components/TextInput';
+import { Password } from '@/components/Password';
+import { createForm, validators } from '@/utils/form';
 import { createAuthPage, Param$Login } from './AuthPage';
 
 const { FormItem } = createForm<Param$Login>();

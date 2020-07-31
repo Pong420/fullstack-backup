@@ -2,13 +2,13 @@ import React, { ComponentType } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Param$Login, Param$CreateUser } from '@fullstack/typings';
-import { Header } from '../../components/Header';
-import { InkPainting } from '../../components/Text';
-import { Button } from '../../components/Button';
-import { KeyboardAvoidingViewFooter } from '../../components/KeyboardAvoidingViewFooter';
-import { useAuth } from '../../hooks/useAuth';
-import { createForm } from '../../utils/form';
-import { containerPadding } from '../../styles';
+import { Header } from '@/components/Header';
+import { InkPainting } from '@/components/Text';
+import { Button } from '@/components/Button';
+import { KeyboardAvoidingViewFooter } from '@/components/KeyboardAvoidingViewFooter';
+import { useAuth } from '@/hooks/useAuth';
+import { createForm } from '@/utils/form';
+import { containerPadding } from '@/styles';
 
 interface Props {
   title: string;

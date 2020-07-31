@@ -1,8 +1,8 @@
 import { Linking } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { toaster } from '../../components/Toast';
-import { navigate } from '../../utils/navigation';
-import Languages from '../../assets/languages.svg';
+import { toaster } from '@/components/Toast';
+import { navigate } from '@/utils/navigation';
+import Languages from '@/assets/languages.svg';
 import { PersonalInfoParamList } from './PersonalInfo/routes';
 
 const githubUrl = 'https://github.com/Pong420/fullstack';

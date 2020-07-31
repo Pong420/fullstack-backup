@@ -5,8 +5,8 @@ import {
   TextInputProps as RNTextInputProps,
   ViewStyle
 } from 'react-native';
-import { useBoolean } from '../hooks/useBoolean';
-import { shadow, colors } from '../styles';
+import { useBoolean } from '@/hooks/useBoolean';
+import { shadow, colors } from '@/styles';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
   onChange?: (value: string) => void;

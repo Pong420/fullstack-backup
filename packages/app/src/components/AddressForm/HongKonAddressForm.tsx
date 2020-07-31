@@ -2,10 +2,10 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Address$HongKong } from '@fullstack/typings';
 import { district } from '@fullstack/common/constants/area/hongkong';
+import { createForm, validators } from '@/utils/form';
+import { colors } from '@/styles';
 import { createTextInput, useFocusNextHandler } from '../TextInput';
 import { Select, SelectValue } from '../Select';
-import { createForm, validators } from '../../utils/form';
-import { colors } from '../../styles';
 
 interface Props {
   editable?: boolean;

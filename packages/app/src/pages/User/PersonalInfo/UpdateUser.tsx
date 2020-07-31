@@ -2,14 +2,14 @@ import React, { useRef, ComponentType } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$UpdateUser, Schema$User } from '@fullstack/typings';
-import { Button } from '../../../components/Button';
-import { toaster } from '../../../components/Toast';
-import { PageModal } from '../../../components/PageModal';
-import { TextInput } from '../../../components/TextInput';
-import { createForm, validators } from '../../../utils/form';
-import { useAuth } from '../../../hooks/useAuth';
-import { updateUser } from '../../../service';
-import { containerPadding } from '../../../styles';
+import { Button } from '@/components/Button';
+import { toaster } from '@/components/Toast';
+import { PageModal } from '@/components/PageModal';
+import { TextInput } from '@/components/TextInput';
+import { createForm, validators } from '@/utils/form';
+import { useAuth } from '@/hooks/useAuth';
+import { updateUser } from '@/service';
+import { containerPadding } from '@/styles';
 import { PersonalInfoScreenProps } from './routes';
 
 interface ContentProps {

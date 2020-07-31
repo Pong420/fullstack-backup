@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
 import { Param$Login, Schema$User } from '@fullstack/typings';
-import { ValidPasswordContent, useForm } from '../../components/ValidPassword';
-import { toaster } from '../../components/Toast';
-import { login, getUserProfile } from '../../service';
-import { useAuth } from '../../hooks/useAuth';
+import { ValidPasswordContent, useForm } from '@/components/ValidPassword';
+import { toaster } from '@/components/Toast';
+import { login, getUserProfile } from '@/service';
+import { useAuth } from '@/hooks/useAuth';
 import { UserStackScreenProps } from './constants';
 
 const request = (params: Param$Login) =>

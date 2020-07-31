@@ -8,8 +8,8 @@ import {
   StyleSheet
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { shadow, colors } from '@/styles';
 import { SemiBold } from './Text';
-import { shadow, colors } from '../styles';
 
 export interface ButtonProps extends TouchableHighlightProps {
   intent?: keyof typeof themes;
