@@ -26,28 +26,24 @@ import {
 import { SemiBold, Text, TextProps } from '../../components/Text';
 import { colors } from '../../styles';
 
-export type FormInstance<
-  S extends {} = Store,
-  V = S,
-  K extends keyof S = keyof S
-> = {
-  getFieldValue(name: K): S[K];
+export type FormInstance<S extends {} = Store, V = S> = {
+  getFieldValue<K extends keyof S>(name: K): S[K];
   getFieldValue<T extends Paths<S>>(name: T): PathType<S, T>;
-  getFieldsValue: (nameList?: NamePath<S>[]) => S;
-  getFieldError: (name: NamePath<S>) => string[];
-  getFieldsError: (nameList?: NamePath<S>[]) => FieldError[];
+  getFieldsValue(nameList?: NamePath<S>[]): S;
+  getFieldError(name: NamePath<S>): string[];
+  getFieldsError(nameList?: NamePath<S>[]): FieldError[];
   isFieldsTouched(
     nameList?: NamePath<S>[],
     allFieldsTouched?: boolean
   ): boolean;
   isFieldsTouched(allFieldsTouched?: boolean): boolean;
-  isFieldTouched: (name: NamePath<S>) => boolean;
-  isFieldValidating: (name: NamePath<S>) => boolean;
-  isFieldsValidating: (nameList: NamePath<S>[]) => boolean;
-  resetFields: (fields?: NamePath<S>[]) => void;
-  setFields: (fields: FieldData[]) => void;
-  setFieldsValue: (value: DeepPartial<S>) => void;
-  validateFields: (nameList?: NamePath<K>[]) => Promise<V>;
+  isFieldTouched(name: NamePath<S>): boolean;
+  isFieldValidating(name: NamePath<S>): boolean;
+  isFieldsValidating(nameList: NamePath<S>[]): boolean;
+  resetFields(fields?: NamePath<S>[]): void;
+  setFields(fields: FieldData[]): void;
+  setFieldsValue(value: DeepPartial<S>): void;
+  validateFields<K extends keyof S>(nameList?: NamePath<K>[]): Promise<V>;
   submit: () => void;
 };
 
@@ -57,6 +53,7 @@ export interface FormProps<S extends {} = Store, V = S>
   initialValues?: DeepPartial<V>;
   onFinish?: (values: V) => void;
   onValuesChange?: (changes: DeepPartial<S>, values: S) => void;
+  ref?: React.Ref<FormInstance<S>>;
   transoformInitialValues?: (payload: DeepPartial<V>) => DeepPartial<S>;
   beforeSubmit?: (payload: S) => V;
   keyboardViewProps?: KeyboardAvoidingViewProps;
