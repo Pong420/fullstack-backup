@@ -13,6 +13,7 @@ import { tap, switchMap, map, startWith } from 'rxjs/operators';
 export type OnItemRender<T> = (payload: {
   item: T;
   style: ViewStyle;
+  width: number;
   index: number;
 }) => ReactNode;
 
@@ -123,7 +124,12 @@ export function Carousel<T>({
         showsHorizontalScrollIndicator={false}
       >
         {items.map((item, index) =>
-          onItemRender({ item, index, style: { width: windowWidth } })
+          onItemRender({
+            item,
+            index,
+            width: windowWidth,
+            style: { width: windowWidth }
+          })
         )}
       </ScrollView>
       <View style={styles.indicatorContainer}>
