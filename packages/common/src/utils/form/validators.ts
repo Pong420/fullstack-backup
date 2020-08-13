@@ -42,7 +42,7 @@ export const required = (msg: string): Validator => (_, value) => {
 };
 
 export const number: Validator = (_, value) =>
-  !value || value === '-' || /^-?\d*\.?\d*$/.test(value)
+  !value || /^-?\d+\.?\d*$/.test(value)
     ? Promise.resolve()
     : Promise.reject('Plase input number only');
 
@@ -50,12 +50,14 @@ export const integer = (msg = 'Plase input integer only'): Validator => (
   _,
   value
 ) =>
-  value === '' || /^(-)?\d*$/.test(value)
+  value === '' || isNaN(Number(value)) || /^(-)?\d*$/.test(value)
     ? Promise.resolve()
     : Promise.reject(msg);
 
 export const maxDecimal = (max: number): Validator => (_, value) =>
-  value === '' || new RegExp(`^(\\d+|\\d\\.\\d{0,${max}})$`).test(value)
+  value === '' ||
+  isNaN(Number(value)) ||
+  new RegExp(`^(\\d+|\\d+\\.\\d{0,${max}})$`).test(value)
     ? Promise.resolve()
     : Promise.reject(`Should not more then ${max} decimal`);
 
@@ -98,6 +100,13 @@ export const minLength = lengthComparation(
 export const maxLength = lengthComparation(
   (length, maxLength) => length <= maxLength
 );
+
+export const passwordFormat = (
+  msg = 'Password must contain number and english character'
+): Validator => (_, value) =>
+  /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z_]{6,20}$/.test(value)
+    ? Promise.resolve()
+    : Promise.reject(msg);
 
 export const shouldBeEqual = (val: any, msg: string): Validator => (_, value) =>
   value === val ? Promise.resolve() : Promise.reject(msg);

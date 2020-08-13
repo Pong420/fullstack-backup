@@ -26,7 +26,7 @@ import {
 import { SemiBold, Text, TextProps } from '../../components/Text';
 import { colors } from '../../styles';
 
-export type FormInstance<S extends {} = Store, V = S> = {
+export type FormInstance<S extends {} = Store> = {
   getFieldValue<K extends keyof S>(name: K): S[K];
   getFieldValue<T extends Paths<S>>(name: T): PathType<S, T>;
   getFieldsValue(nameList?: NamePath<S>[]): S;
@@ -43,13 +43,13 @@ export type FormInstance<S extends {} = Store, V = S> = {
   resetFields(fields?: NamePath<S>[]): void;
   setFields(fields: FieldData[]): void;
   setFieldsValue(value: DeepPartial<S>): void;
-  validateFields<K extends keyof S>(nameList?: NamePath<K>[]): Promise<V>;
+  validateFields<K extends keyof S>(nameList?: NamePath<K>[]): Promise<S>;
   submit: () => void;
 };
 
 export interface FormProps<S extends {} = Store, V = S>
   extends Omit<RcFormProps, 'form' | 'onFinish' | 'onValuesChange'> {
-  form?: FormInstance<S, V>;
+  form?: FormInstance<S>;
   initialValues?: DeepPartial<V>;
   onFinish?: (values: V) => void;
   onValuesChange?: (changes: DeepPartial<S>, values: S) => void;
@@ -162,7 +162,7 @@ export function createForm<S extends {} = Store, V = S>({
           : {}),
         ...props
       },
-      (control: any, { errors }: FieldData, form: FormInstance<S, V>) => {
+      (control: any, { errors }: FieldData, form: FormInstance<S>) => {
         const { getFieldsValue } = form;
 
         const error = errors && errors[0];
@@ -215,7 +215,7 @@ export function createForm<S extends {} = Store, V = S>({
     );
   };
 
-  const Form = React.forwardRef<FormInstance<S, V>, FormProps<S, V>>(
+  const Form = React.forwardRef<FormInstance<S>, FormProps<S, V>>(
     (
       {
         children,
@@ -263,7 +263,7 @@ export function createForm<S extends {} = Store, V = S>({
     }
   );
 
-  const useForm: () => [FormInstance<S, V>] = RcUseForm as any;
+  const useForm: () => [FormInstance<S>] = RcUseForm as any;
 
   return {
     Form,
