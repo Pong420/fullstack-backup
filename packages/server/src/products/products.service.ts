@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Schema$Tags, Schema$Category } from '@fullstack/typings';
 import { Document, PaginateModel, Aggregate } from 'mongoose';
-import { Product } from './schemas/products.schema.dto';
+import { Product } from './schemas/products.schema';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { MongooseCRUDService } from '../utils/mongoose-crud.service';
 import fs from 'fs';

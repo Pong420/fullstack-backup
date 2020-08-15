@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Query, Patch, Req } from '@nestjs/common';
 import { paths } from '@fullstack/common/constants';
 import { FastifyRequest } from 'fastify';
-import { Product } from './schemas/products.schema.dto';
+import { Product } from './schemas/products.schema';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';

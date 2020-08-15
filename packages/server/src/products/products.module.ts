@@ -5,7 +5,7 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
-import { Product, ProductSchema } from './schemas/products.schema.dto';
+import { Product, ProductSchema } from './schemas/products.schema';
 import paginate from 'mongoose-paginate-v2';
 
 type Changes = Partial<Product> & { $inc?: Partial<Product> };

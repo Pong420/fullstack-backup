@@ -1,4 +1,4 @@
-import { Product } from '../../src/products/schemas/products.schema.dto';
+import { Product } from '../../src/products/schemas/products.schema';
 import { createProduct, CreateProductDto } from '../service/products';
 
 declare global {

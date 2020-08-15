@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { Schema$Tags, Schema$Category } from '@fullstack/typings';
 import { ProductsService } from '../src/products/products.service';
-import { Product } from '../src/products/schemas/products.schema.dto';
+import { Product } from '../src/products/schemas/products.schema';
 import { setupUsers } from './utils/setupUsers';
 import { setupProducts } from './utils/setupProducts';
 import {
