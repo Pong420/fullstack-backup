@@ -12,7 +12,7 @@ export function HomeProductsSlide({ products }: Props) {
   return (
     <ScrollView
       horizontal
-      style={styles.scroller}
+      contentContainerStyle={styles.scroller}
       showsHorizontalScrollIndicator={false}
     >
       {products.map(({ id, images, name, category, price, discount }) => {
@@ -29,7 +29,7 @@ export function HomeProductsSlide({ products }: Props) {
                 <SemiBold style={styles.productName}>{name}</SemiBold>
                 <Text style={styles.category}>{category}</Text>
 
-                <View style={styles.bottomFooter}>
+                <View style={styles.footerBottom}>
                   <Text style={styles.price}>
                     ${finalPrice}
                     {finalPrice !== price && (
@@ -47,16 +47,17 @@ export function HomeProductsSlide({ products }: Props) {
 }
 
 const width = 180;
-const fontSize = 13;
+const fontSize = 14;
+const spaceBetweenCard = 14;
 const styles = StyleSheet.create({
   scroller: {
-    paddingHorizontal: containerPadding,
+    paddingHorizontal: containerPadding - spaceBetweenCard / 2,
     paddingBottom: 10
   },
   card: {
     ...shadow(1),
     width,
-    marginRight: 15
+    marginHorizontal: spaceBetweenCard / 2
   },
   cardContent: {
     overflow: 'hidden',
@@ -69,19 +70,22 @@ const styles = StyleSheet.create({
   footer: {
     paddingTop: 5,
     paddingBottom: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    height: 100
   },
   productName: {
-    fontSize
+    fontSize,
+    lineHeight: fontSize * 1.2
   },
   category: {
     fontSize: fontSize - 1,
     lineHeight: (fontSize - 1) * 1.2,
     color: colors.textMuted
   },
-  bottomFooter: {
-    marginTop: 15,
-    alignItems: 'flex-end'
+  footerBottom: {
+    flexGrow: 1,
+    alignSelf: 'flex-end',
+    justifyContent: 'flex-end'
   },
   price: {
     fontSize

@@ -21,7 +21,7 @@ export function HomeCategories() {
         {categires.map(({ category }) => (
           <View key={category} style={styles.category}>
             <View style={styles.image}>
-              <Feather name="image" style={styles.imageIcon} size={32} />
+              <Feather name="hexagon" style={styles.imageIcon} size={32} />
             </View>
             <SemiBold style={styles.categoryName}>{category}</SemiBold>
           </View>
