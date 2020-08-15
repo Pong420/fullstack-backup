@@ -22,7 +22,7 @@ export interface PaginateResult<T> {
   data: T[];
   total: number;
   limit: number;
-  page?: number;
+  page: number;
   totalPages: number;
   nextPage?: number | null;
   prevPage?: number | null;

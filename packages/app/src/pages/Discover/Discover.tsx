@@ -4,49 +4,65 @@ import {
   SafeAreaView,
   StyleSheet,
   Animated,
-  Keyboard
+  Keyboard,
+  ViewProps,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { getProducts } from '@fullstack/common/service';
-import { Param$GetProducts } from '@fullstack/typings';
+import { Param$GetProducts, Schema$Product } from '@fullstack/typings';
 import { SearchInput, RNTextInputProps } from '@/components/SearchInput';
 import { ProductList } from '@/components/ProductList';
-import { InkPainting } from '@/components/Text';
+import { PageHeader } from '@/components/PageHeader';
+import { Text } from '@/components/Text';
 import { useBoolean } from '@/hooks/useBoolean';
-import { containerPadding } from '@/styles';
+import { createUsePaginateCRUDReducer } from '@/hooks/crud';
+import { containerPadding, colors } from '@/styles';
 import { RecentSearches, updateRecentSearches } from './RecentSearches';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Empty } from '@/components/Empty';
 
 /**
  * TODO:
- * - clear all recenct search
  * - suggest
- * - no result
  * */
 
-const delay = (ms: number) => new Promise(_ => setTimeout(_, ms));
-
 const request = (params?: Param$GetProducts) =>
-  delay(2000).then(() => getProducts(params).then(res => res.data.data));
+  getProducts(params).then(res => res.data.data);
+
+const useProductReducer = createUsePaginateCRUDReducer<Schema$Product, 'id'>(
+  'id'
+);
 
 export function Discover() {
   const anim = useRef(new Animated.Value(0));
   const [isFocused, onFocus, onBlur] = useBoolean();
   const [isAnimating, animatedStart, animateEnd] = useBoolean();
   const [offsetY, setOffsetY] = useState(0);
+  const [inputHeight, setInputHeight] = useState(0);
   const [search, setSearch] = useState('');
   const prevSearch = useRef(search);
-  const { data: products, run } = useRxAsync(request, {
-    defer: true
+
+  const [product, actions] = useProductReducer();
+  const { run, loading } = useRxAsync(request, {
+    defer: true,
+    onSuccess: actions.paginate
   });
 
-  const { toggleCollapse, onSubmitEditing, onItemPress } = useMemo(() => {
+  const {
+    toggleCollapse,
+    onSubmitEditing,
+    onItemPress,
+    handleOffsetY,
+    handleInputHeight
+  } = useMemo(() => {
     const toggleCollapse = (toValue: number) => {
       return new Promise(resolve => {
         Animated.spring(anim.current, {
           toValue,
-          bounciness: 0,
-          overshootClamping: false,
-          useNativeDriver: true
+          useNativeDriver: true,
+          overshootClamping: true
         }).start(resolve);
       });
     };
@@ -63,10 +79,17 @@ export function Discover() {
       Keyboard.dismiss();
     };
 
+    const handleOffsetY: ViewProps['onLayout'] = event =>
+      setOffsetY(event.nativeEvent.layout.y);
+    const handleInputHeight: ViewProps['onLayout'] = event =>
+      setInputHeight(event.nativeEvent.layout.height);
+
     return {
       toggleCollapse,
       onSubmitEditing,
-      onItemPress
+      onItemPress,
+      handleOffsetY,
+      handleInputHeight
     };
   }, []);
 
@@ -77,23 +100,21 @@ export function Discover() {
   });
 
   useEffect(() => {
-    if (!isAnimating && !isFocused && search && search !== prevSearch.current) {
+    if (!isFocused && search && search !== prevSearch.current) {
       prevSearch.current = search;
-      run({ search });
+      actions.reset();
+      run({ search, page: 1 });
     }
-  }, [isAnimating, isFocused, search, run]);
-
-  useEffect(() => {
-    animate(isFocused ? 1 : 0);
-  }, [isFocused, animate]);
+  }, [isFocused, search, run, actions]);
 
   return (
     <SafeAreaView style={styles.grow}>
       <View style={styles.container}>
-        <InkPainting style={styles.header}>Discover</InkPainting>
-        <View onLayout={event => setOffsetY(event.nativeEvent.layout.y)} />
+        <PageHeader text="Discover" />
+        <View onLayout={handleOffsetY} />
         <Animated.View
           style={[
+            { paddingTop: 10 },
             ...(isAnimating || isFocused
               ? [
                   StyleSheet.absoluteFill,
@@ -110,23 +131,64 @@ export function Discover() {
                     ]
                   }
                 ]
-              : []),
-            styles.searchConainer
+              : [])
           ]}
         >
-          <SearchInput
-            placeholder="type ..."
-            value={search}
-            onChange={setSearch}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onSubmitEditing={onSubmitEditing}
-          />
-          {isFocused && (
-            <RecentSearches currentValue={search} onItemPress={onItemPress} />
-          )}
+          <View style={styles.searchInputConainer}>
+            <View style={styles.searchInput}>
+              <SearchInput
+                onLayout={handleInputHeight}
+                placeholder="type ..."
+                returnKeyType="search"
+                value={search}
+                onChange={setSearch}
+                onFocus={() => {
+                  animate(1);
+                  onFocus();
+                }}
+                onBlur={() => {
+                  animate(0);
+                  onBlur();
+                }}
+                onSubmitEditing={onSubmitEditing}
+              />
+            </View>
+            {isFocused && (
+              <TouchableOpacity
+                onPress={() => {
+                  animate(0);
+                  Keyboard.dismiss();
+                }}
+              >
+                <Text style={styles.cancelButton}>Cancel</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={inputHeight}
+            style={styles.grow}
+          >
+            {isFocused && (
+              <RecentSearches currentValue={search} onItemPress={onItemPress} />
+            )}
+          </KeyboardAvoidingView>
         </Animated.View>
-        <ProductList products={products?.data} total={products?.total} />
+
+        <ProductList
+          data={product.list}
+          ListEmptyComponent={
+            !search || product.total > 0 ? undefined : (
+              <Empty content="Products not found" />
+            )
+          }
+          onEndReached={() => {
+            const hasNext = product.total > product.ids.length;
+            if (hasNext && !loading && product.ids.length) {
+              run({ search, page: product.page + 1 });
+            }
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -140,13 +202,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
-  header: {
-    fontSize: 40,
-    marginTop: 15,
-    textAlign: 'center'
-  },
-  searchConainer: {
-    paddingTop: 10,
+  searchInputConainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: containerPadding
+  },
+  searchInput: {
+    flex: 1
+  },
+  cancelButton: {
+    color: colors.blue,
+    marginRight: containerPadding * -0.5,
+    paddingHorizontal: 10
   }
 });

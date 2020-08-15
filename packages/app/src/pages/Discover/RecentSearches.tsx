@@ -7,14 +7,15 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  SectionListProps
 } from 'react-native';
+import { useRxAsync } from 'use-rx-hooks';
 import { JSONParse } from '@fullstack/common/utils/JSONParse';
 import { Text, SemiBold } from '@/components/Text';
-import { colors } from '@/styles';
-import AsyncStorage from '@react-native-community/async-storage';
-import { useRxAsync } from 'use-rx-hooks';
+import { colors, containerPadding } from '@/styles';
 import { removeFromArray } from '@/hooks/crud';
+import AsyncStorage from '@react-native-community/async-storage';
 
 interface ItemProps extends TouchableOpacityProps {}
 
@@ -35,6 +36,7 @@ export async function updateRecentSearches(search?: string): Promise<void> {
   let result: string[] = [];
 
   if (typeof search === 'string') {
+    search = search.trim();
     result = removeFromArray(searches, searches.indexOf(search));
     result = [search, ...result];
   }
@@ -59,8 +61,8 @@ function useAnimate() {
   useLayoutEffect(() => {
     Animated.spring(anim.current, {
       toValue: 1,
-      bounciness: 0,
-      useNativeDriver: true
+      useNativeDriver: true,
+      overshootClamping: true
     }).start();
   }, []);
 
@@ -80,6 +82,11 @@ function useAnimate() {
   ];
 }
 
+const defaultListProps: Omit<SectionListProps<string>, 'sections'> = {
+  keyExtractor: (item, index) => item + index,
+  ItemSeparatorComponent: () => <View style={styles.separator} />
+};
+
 export function RecentSearches({ currentValue, onItemPress }: Props) {
   const [data, setData] = useState<string[]>([]);
 
@@ -96,24 +103,30 @@ export function RecentSearches({ currentValue, onItemPress }: Props) {
       {data.length ? (
         <Animated.View style={animStyle}>
           <SectionList
+            {...defaultListProps}
             sections={[
               {
                 title: 'Recent Search',
                 data
               }
             ]}
+            contentContainerStyle={styles.list}
+            bounces={false}
             alwaysBounceVertical={false}
             keyboardShouldPersistTaps="handled"
-            keyExtractor={(item, index) => item + index}
             renderItem={({ item }) => (
               <Item onPress={() => onItemPress(item)}>{item}</Item>
             )}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
             renderSectionHeader={({ section: { title } }) => (
               <View style={styles.header}>
                 <SemiBold>{title}</SemiBold>
-                <TouchableOpacity onPress={() => updateRecentSearches()}>
-                  <Text>clear all</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    updateRecentSearches();
+                    setData([]);
+                  }}
+                >
+                  <Text>Clear all</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -131,9 +144,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10
   },
+  list: {
+    paddingHorizontal: containerPadding
+  },
   header: {
     borderBottomWidth: 1,
     borderColor: colors.divider,
+    backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 10

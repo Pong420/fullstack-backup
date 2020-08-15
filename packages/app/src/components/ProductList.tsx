@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Image, FlatList, StyleSheet, FlatListProps } from 'react-native';
 import { Schema$Product } from '@fullstack/typings';
 import { Text } from '@/components/Text';
 import { containerPadding, colors, shadow } from '@/styles';
 
-interface Props {
-  total?: number;
-  products?: Schema$Product[];
+type ListProps = FlatListProps<Schema$Product>;
+interface Props extends Partial<ListProps> {
+  data: Schema$Product[];
 }
 
 function Product({ name, price, discount, images }: Schema$Product) {
@@ -32,21 +32,19 @@ function Product({ name, price, discount, images }: Schema$Product) {
   );
 }
 
-export function ProductList({ products, total }: Props) {
+const defaultProps: Omit<ListProps, 'data'> = {
+  // keyExtractor: (p, index) => `${p.id}-${index}`,
+  keyExtractor: p => p.id,
+  renderItem: ({ item }) => <Product {...item}></Product>
+};
+
+export function ProductList({ contentContainerStyle, ...props }: Props) {
   return (
     <FlatList
-      // ListHeaderComponent={
-      //   total ? (
-      //     <View style={styles.header}>
-      //       <Text>Total {total} results</Text>
-      //     </View>
-      //   ) : null
-      // }
-      // bounces={false}
-      contentContainerStyle={styles.contianer}
-      data={products}
-      keyExtractor={p => p.id}
-      renderItem={({ item }) => <Product {...item}></Product>}
+      contentContainerStyle={[styles.contianer, contentContainerStyle]}
+      onEndReachedThreshold={0.1}
+      {...defaultProps}
+      {...props}
     />
   );
 }
@@ -55,6 +53,7 @@ const fontSize = 13;
 const thunbnailWidth = 120;
 const styles = StyleSheet.create({
   contianer: {
+    flexGrow: 1,
     paddingHorizontal: containerPadding,
     paddingBottom: 20
   },
