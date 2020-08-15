@@ -2,7 +2,8 @@ import {
   Pagination,
   Timestamp,
   PaginateApiResponse,
-  ApiResponse
+  ApiResponse,
+  Search
 } from './index';
 
 export interface Schema$Product extends Timestamp {
@@ -46,7 +47,10 @@ export interface Param$Product {
   id: string;
 }
 
-export interface Param$GetProducts extends Pagination, Partial<Timestamp> {
+export interface Param$GetProducts
+  extends Pagination,
+    Search,
+    Partial<Timestamp> {
   name?: string;
   price?: [number, number];
   amount?: [number, number];

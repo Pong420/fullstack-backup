@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
+import { Feather } from '@expo/vector-icons';
 import { getProductCategories } from '@/service';
 import { SemiBold } from '@/components/Text';
-import { containerPadding } from '@/styles';
+import { containerPadding, colors } from '@/styles';
 import { HomeSection } from './HomeSection';
 
 export function HomeCategories() {
@@ -19,7 +20,9 @@ export function HomeCategories() {
       >
         {categires.map(({ category }) => (
           <View key={category} style={styles.category}>
-            <View style={styles.image}></View>
+            <View style={styles.image}>
+              <Feather name="image" style={styles.imageIcon} size={32} />
+            </View>
             <SemiBold style={styles.categoryName}>{category}</SemiBold>
           </View>
         ))}
@@ -43,8 +46,15 @@ const styles = StyleSheet.create({
     width: imageSize,
     height: imageSize,
     borderRadius: 50,
-    borderWidth: 2,
-    borderColor: '#000'
+    borderWidth: 2.5,
+    borderColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 3,
+    paddingLeft: 1
+  },
+  imageIcon: {
+    color: colors.black
   },
   categoryName: {
     fontSize: 12,

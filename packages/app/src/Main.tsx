@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { Home } from './pages/Home';
 import { User } from './pages/User';
+import { Discover } from './pages/Discover';
 import { Logo } from './components/Logo';
 import { InkPainting } from './components/Text';
 import { colors } from './styles';
@@ -48,12 +49,12 @@ const screenOptions: (
 export function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Compass"
       tabBarOptions={tabBarOptions}
       screenOptions={screenOptions}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Compass" component={WIP} />
+      <Tab.Screen name="Compass" component={Discover} />
       <Tab.Screen name="Favourite" component={WIP} />
       <Tab.Screen name="Cart" component={WIP} />
       <Tab.Screen name="User" component={User} />

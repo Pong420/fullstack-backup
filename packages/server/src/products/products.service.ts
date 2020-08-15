@@ -15,7 +15,9 @@ export class ProductsService extends MongooseCRUDService<Product> {
     private productModel: PaginateModel<Product & Document>,
     private cloudinaryService: CloudinaryService
   ) {
-    super(productModel);
+    super(productModel, {
+      searchKeys: ['name', 'category', 'tags', 'description']
+    });
   }
 
   async stub(): Promise<void> {
