@@ -20,10 +20,10 @@ import {
   Order,
   Timestamp
 } from '@fullstack/typings';
-import { formatSearchQuery, Condition } from './format-search-query';
 import { DateRannge } from '../decorators/range.decorator';
+import { nGrams } from 'mongoose-fuzzy-searching/helpers';
 
-export { Condition };
+export type Condition = Record<string, unknown>;
 
 type QuerySchema = {
   [K in keyof (Pagination & Search & Timestamp)]?: unknown;
@@ -69,15 +69,10 @@ class Base implements QuerySchema {
 export class QueryDto extends Base
   implements Required<Omit<QuerySchema, keyof Base>> {}
 
-interface Options<T> {
-  searchKeys?: (keyof T)[];
-}
+export const TEXT_SCORE = 'TEXT_SCORE';
 
 export class MongooseCRUDService<T, D extends T & Document = T & Document> {
-  constructor(
-    private model: PaginateModel<D>,
-    private readonly options: Options<T> = {}
-  ) {}
+  constructor(private model: PaginateModel<D>) {}
 
   async create(createDto: unknown): Promise<T> {
     const created = new this.model(createDto);
@@ -117,7 +112,7 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
 
   paginate<Query extends QueryDto>(
     query?: Query,
-    options: PaginateOptions = {}
+    { projection, ...options }: PaginateOptions = {}
   ): Promise<PaginateResult<T>> {
     const {
       page = 1,
@@ -128,19 +123,30 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
       ...fullMatches
     } = query;
 
+    const [$text, $meta] = search
+      ? [
+          //https://github.com/VassilisPallas/mongoose-fuzzy-searching/blob/fb98625735a431e00bfd192a13be86d6ed0d2eaa/index.js#L180-L182
+          { $text: { $search: nGrams(search, false, 2, false).join(' ') } },
+          { [TEXT_SCORE]: { $meta: 'textScore' } }
+        ]
+      : [{}, {}, {}];
+
     return this.model.paginate(
       {
-        $and: [
-          ...condition,
-          fullMatches,
-          formatSearchQuery(this.options.searchKeys as string[], search)
-        ]
+        $and: [...condition, fullMatches, $text]
       } as any,
       {
         customLabels: { docs: 'data', totalDocs: 'total' },
-        sort,
         page,
         limit: size,
+        sort: {
+          ...(typeof sort === 'object' ? sort : {}),
+          ...$meta
+        },
+        projection: {
+          ...projection,
+          ...$meta
+        },
         ...options
       }
     ) as any;

@@ -9,9 +9,7 @@ import { MongooseCRUDService } from '../utils/mongoose-crud.service';
 @Injectable()
 export class UserService extends MongooseCRUDService<User> {
   constructor(@InjectModel(User.name) model: PaginateModel<User & Document>) {
-    super(model, {
-      searchKeys: ['username', 'email', 'nickname']
-    });
+    super(model);
   }
 
   create(createUserDto: CreateUserDto): Promise<User> {

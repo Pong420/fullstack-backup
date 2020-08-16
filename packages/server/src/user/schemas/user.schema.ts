@@ -10,7 +10,7 @@ function hashPassword(pwd: string) {
 @Schema({
   timestamps: true,
   toJSON: {
-    transform: (_model, { _id, ...raw }) => new User(raw)
+    transform: (_model, raw) => new User(raw)
   }
 })
 export class User implements Omit<Schema$User, 'avatar'> {

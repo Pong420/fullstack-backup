@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   },
   oroginPrice: {
     fontSize,
+    color: colors.textMuted,
     textDecorationLine: 'line-through'
   }
 });

@@ -63,7 +63,8 @@ describe('UserController (e2e)', () => {
       expect(response).toSatisfyAll(res => Array.isArray(res.body.data.data));
       expect(response).toSatisfyAll(res =>
         res.body.data.data.every(
-          (user: User) => typeof user.password === 'undefined'
+          (user: User) =>
+            typeof user.password === 'undefined' && '_id' in user === false
         )
       );
     });
@@ -120,6 +121,7 @@ describe('UserController (e2e)', () => {
       for (const res of response) {
         expect(res.status).toBe(HttpStatus.OK);
         expect(res.body.data).toEqual(user);
+        expect(res.body.data._id).toBeUndefined();
       }
     });
 

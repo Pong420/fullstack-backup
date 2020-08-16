@@ -49,7 +49,7 @@ describe('AuthController (e2e)', () => {
     it('Login with default admin', async done => {
       // Check auth guard for registerAdmin
       let response = await registerAdmin(undefined, mockAdmin);
-      expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+      expect(response.status).toBe(HttpStatus.FORBIDDEN);
 
       // Check login with default admin
       response = await loginAsDefaultAdmin();
@@ -118,7 +118,7 @@ describe('AuthController (e2e)', () => {
     expect(response.status).toBe(HttpStatus.CREATED);
     await delay(jwtExpires * 2);
     response = await registerAdmin(token, createUserDto());
-    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+    expect(response.status).toBe(HttpStatus.FORBIDDEN);
   });
 
   describe('Modify password', () => {

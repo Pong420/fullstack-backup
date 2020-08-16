@@ -42,6 +42,9 @@ describe('ProductsController (e2e)', () => {
       const response = await getProducts(adminToken);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(products.length);
+      expect(response.body.data.data).toSatisfyAll(
+        product => typeof product._id === 'undefined'
+      );
     });
 
     it.each([
@@ -56,9 +59,10 @@ describe('ProductsController (e2e)', () => {
       expect(response.body.data.data.length).toBe(expected);
     });
 
-    it('client should not find freeze/amount/remain of the product', async () => {
+    it('client should not find these field of the product', async () => {
       const response = await getProducts(clientToken);
       expect(response.status).toBe(HttpStatus.OK);
+
       expect(response.body.data.data).toSatisfyAll(
         product =>
           typeof product.freeze === 'undefined' &&
@@ -127,6 +131,7 @@ describe('ProductsController (e2e)', () => {
     it('success', async () => {
       const response = await getProduct(adminToken, product.id);
       expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data._id).toBeUndefined();
     });
   });
 

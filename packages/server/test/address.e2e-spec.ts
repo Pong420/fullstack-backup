@@ -74,7 +74,7 @@ describe('AddresssController (e2e)', () => {
       const response = await updateAddress(otherClientToken, address.id, {
         address: address_1
       });
-      expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+      expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
   });
 });

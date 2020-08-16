@@ -5,7 +5,7 @@ import { Group } from '../../utils/access.guard';
 @Schema({
   timestamps: true,
   toJSON: {
-    transform: (_model, { _id, ...raw }) => new Product(raw)
+    transform: (_model, raw) => new Product(raw)
   }
 })
 export class Product implements Schema$Product {

@@ -19,6 +19,7 @@ import {
 import { CLASS_SERIALIZER_OPTIONS } from '@nestjs/common/serializer/class-serializer.constants';
 import { ClassTransformOptions } from '@nestjs/common/interfaces/external/class-transform-options.interface';
 import { PaginateResult, UserRole } from '@fullstack/typings';
+import { TEXT_SCORE } from './mongoose-crud.service';
 
 type Res =
   | PlainLiteralObject
@@ -84,9 +85,16 @@ export class MongooseSerializerInterceptor implements NestInterceptor {
     if (plainOrClass instanceof Model) {
       plainOrClass = plainOrClass.toJSON();
     }
-    return plainOrClass && plainOrClass.constructor !== Object
-      ? classToPlain(plainOrClass, options)
-      : plainOrClass;
+
+    const plainObject: PlainLiteralObject =
+      plainOrClass && plainOrClass.constructor !== Object
+        ? classToPlain(plainOrClass, options)
+        : plainOrClass;
+
+    delete plainObject[TEXT_SCORE];
+    delete plainObject['_id'];
+
+    return plainObject;
   }
 
   getContextOptions(

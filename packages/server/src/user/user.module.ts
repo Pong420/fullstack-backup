@@ -1,12 +1,20 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Schema$User } from '@fullstack/typings';
+import {
+  Model,
+  Schema,
+  Document,
+  Query,
+  MongooseFuzzySearchingField
+} from 'mongoose';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { UserService } from './user.service';
-import { User, UserSchema } from './schemas/user.schema';
 import { UserController } from './user.controller';
 import { UserRolePipe } from './user-role.pipe';
-import { Model, Schema, Document, Query } from 'mongoose';
+import { User, UserSchema } from './schemas/user.schema';
+import { fuzzySearch } from '../utils/mongoose-fuzzy-search';
 import paginate from 'mongoose-paginate-v2';
 
 @Module({
@@ -17,6 +25,18 @@ import paginate from 'mongoose-paginate-v2';
         inject: [CloudinaryService],
         name: User.name,
         useFactory: async (cloudinaryService: CloudinaryService) => {
+          const schema = UserSchema as Schema<User>;
+
+          const fields: MongooseFuzzySearchingField<Schema$User>[] = [
+            { name: 'username' },
+            { name: 'nickname' },
+            { name: 'email', escapeSpecialCharacters: false }
+          ];
+
+          schema.plugin(fuzzySearch, { fields });
+
+          schema.plugin(paginate);
+
           async function removeImageFromCloudinary(this: Query<unknown>) {
             const model: Model<User & Document> = (this as any).model;
             const user = await model.findOne(this.getQuery());
@@ -25,12 +45,10 @@ import paginate from 'mongoose-paginate-v2';
             }
           }
 
-          const schema = UserSchema as Schema<User>;
-          schema.plugin(paginate);
           schema.pre('deleteOne', removeImageFromCloudinary);
           schema.pre('findOneAndUpdate', async function () {
             const changes: Partial<User> = this.getUpdate();
-            if (changes?.avatar) {
+            if (typeof changes?.avatar !== 'undefined') {
               await removeImageFromCloudinary.call(this);
             }
           });
