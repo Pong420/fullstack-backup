@@ -129,7 +129,7 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
           { $text: { $search: nGrams(search, false, 2, false).join(' ') } },
           { [TEXT_SCORE]: { $meta: 'textScore' } }
         ]
-      : [{}, {}, {}];
+      : [{}, {}];
 
     return this.model.paginate(
       {
@@ -140,8 +140,8 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
         page,
         limit: size,
         sort: {
-          ...(typeof sort === 'object' ? sort : {}),
-          ...$meta
+          ...$meta,
+          ...(typeof sort === 'object' ? sort : {})
         },
         projection: {
           ...projection,

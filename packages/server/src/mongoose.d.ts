@@ -3,7 +3,7 @@ declare module 'mongoose' {
     projection?: Record<string, any>;
   }
 
-  type MongooseFuzzySearchingField<T> =
+  type MongooseFuzzySearchingField<T = any> =
     | keyof T
     | {
         name: keyof T;
@@ -14,8 +14,29 @@ declare module 'mongoose' {
         keys?: (string | number)[];
       };
 
+  interface MongooseFuzzySearchingMiddlewares<T = unknown> {
+    preSave(this: Query<T>): void;
+    preInsertMany(this: Query<T>): Promise<void>;
+    preUpdate(this: Query<T>): Promise<void>;
+    preUpdateOne(): Promise<void>;
+    preFindOneAndUpdate(this: Query<T>): Promise<void>;
+    preUpdateMany(this: Query<T>): Promise<void>;
+  }
+
   interface MongooseFuzzySearchingOptions<T extends Record<string, unknown>> {
-    fields: MongooseFuzzySearchingField<T>[];
+    fields?: MongooseFuzzySearchingField<T>[];
+    middlewares?: MongooseFuzzySearchingMiddlewares<T>;
+  }
+
+  interface MongooseFuzzySearchingParams {
+    query: string;
+    minSize?: string;
+    prefixOnly?: boolean;
+    exact?: boolean;
+  }
+
+  interface Model<T extends Document> {
+    fuzzySearch(query: string | MongooseFuzzySearchingParams): Promise<T[]>;
   }
 }
 
