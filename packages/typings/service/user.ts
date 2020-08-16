@@ -46,7 +46,6 @@ export interface Schema$User
     Timestamp {
   id: string;
   avatar: string | null;
-  address: string[] | null;
 }
 
 export type Response$GetUsers = PaginateApiResponse<Schema$User>;

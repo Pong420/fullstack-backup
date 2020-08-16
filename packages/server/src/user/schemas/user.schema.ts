@@ -45,9 +45,6 @@ export class User implements Omit<Schema$User, 'avatar'> {
   })
   nickname: string;
 
-  @Prop({ type: [String] })
-  address: string[];
-
   createdAt: string;
 
   updatedAt: string;
