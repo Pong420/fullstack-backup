@@ -78,7 +78,7 @@ describe('OrdersController (e2e)', () => {
       await delay(100);
     });
 
-    it('forbidden', async () => {
+    it('bad request', async () => {
       const response = await Promise.all([
         updateOrder(client.token, order.id, { status: OrderStatus.PENDING }),
         updateOrder(client.token, order.id, { status: OrderStatus.SHIPPING }),
@@ -87,7 +87,9 @@ describe('OrdersController (e2e)', () => {
           status: OrderStatus.SHIPPING
         }).then(() => updateOrder(client.token, order.id, { address: rid() }))
       ]);
-      expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
+      expect(response).toSatisfyAll(
+        res => res.status === HttpStatus.BAD_REQUEST
+      );
     });
 
     it('shipping', async () => {

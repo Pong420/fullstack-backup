@@ -29,12 +29,12 @@ export interface Schema$OrderProduct
 export interface Schema$OrderUser
   extends Pick<Schema$User, 'id' | 'nickname' | 'username' | 'email'> {}
 
-export interface Schema$Order
+export interface Schema$Order<User = string | Schema$OrderUser>
   extends Timestamp,
     Omit<Param$CreateOrder, 'products'> {
   id: string;
   products: Schema$OrderProduct[];
-  user: Schema$OrderUser;
+  user: User;
   status: OrderStatus;
 }
 

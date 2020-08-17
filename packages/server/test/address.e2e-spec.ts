@@ -1,9 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { Schema$Address, UserRole } from '@fullstack/typings';
 import { setupUsers } from './utils/setupUsers';
-import { getAddresses, createAddress, updateAddress } from './service/address';
-import { createUser } from './service/users';
-import { getToken } from './service/auth';
+import {
+  getAddresses,
+  createAddress,
+  updateAddress,
+  deleteAddress
+} from './service/address';
+import { getToken, createAndLogin } from './service/auth';
 
 describe('AddresssController (e2e)', () => {
   beforeAll(async () => {
@@ -16,18 +20,22 @@ describe('AddresssController (e2e)', () => {
     beforeAll(async () => {
       addresses = await Promise.all(
         [
-          ...Array.from({ length: 3 }, () =>
-            createAddress(client.token, { address: [''] })
-          ),
+          createAddress(client.token, { address: [''] }),
+          createAddress(client.token, { address: [''] }),
+          createAddress(client.token, { address: [''] }),
           createAddress(admin.token, { address: [''] })
         ].map(req => req.then(res => res.body.data))
       );
     });
 
     it('success', async () => {
-      const response = await getAddresses(client.token);
+      let response = await getAddresses(client.token);
       expect(response.status).toBe(HttpStatus.OK);
-      expect(response.body.data.length).toBe(addresses.length - 1);
+      expect(response.body.data).toIncludeAllMembers(addresses.slice(0, 3));
+
+      response = await getAddresses(admin.token);
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data).toIncludeAllMembers(addresses.slice(3, 4));
     });
   });
 
@@ -46,14 +54,14 @@ describe('AddresssController (e2e)', () => {
     const address_1 = ['3', '2', '1'];
     const address_2 = ['4', '5', '6'];
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const response = await createAddress(client.token, {
         address: ['1', '2', '3']
       });
       address = response.body.data;
     });
 
-    it('success', async () => {
+    it('can be updated by self or admin', async () => {
       let response = await updateAddress(client.token, address.id, {
         address: address_1
       });
@@ -67,14 +75,52 @@ describe('AddresssController (e2e)', () => {
       expect(response.body.data.address).toEqual(address_2);
     });
 
-    it('unauthorized', async () => {
+    it("cannot update other client's address", async () => {
       const otherClientToken = await getToken(
-        createUser(admin.token, { role: UserRole.CLIENT })
+        createAndLogin(admin.token, { role: UserRole.CLIENT })
       );
       const response = await updateAddress(otherClientToken, address.id, {
         address: address_1
       });
-      expect(response.status).toBe(HttpStatus.FORBIDDEN);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('(Del) Del Address', () => {
+    let address: Schema$Address;
+
+    beforeEach(async () => {
+      const response = await createAddress(client.token, {
+        address: ['1', '2', '3']
+      });
+      address = response.body.data;
+    });
+
+    it('can be deleted by self', async () => {
+      let response = await deleteAddress(client.token, address.id);
+      expect(response.status).toBe(HttpStatus.OK);
+
+      response = await getAddresses(client.token);
+      expect(response.body.data).not.toIncludeAllMembers([address]);
+    });
+
+    it('can be deleted by admin', async () => {
+      let response = await deleteAddress(admin.token, address.id);
+      expect(response.status).toBe(HttpStatus.OK);
+
+      response = await getAddresses(client.token);
+      expect(response.body.data).not.toIncludeAllMembers([address]);
+    });
+
+    it('cannot deleted by other clients', async () => {
+      const otherClientToken = await getToken(
+        createAndLogin(admin.token, { role: UserRole.CLIENT })
+      );
+      let response = await deleteAddress(otherClientToken, address.id);
+      expect(response.status).toBe(HttpStatus.OK);
+
+      response = await getAddresses(client.token);
+      expect(response.body.data).toIncludeAllMembers([address]);
     });
   });
 });

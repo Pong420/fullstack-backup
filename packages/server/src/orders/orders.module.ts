@@ -6,7 +6,6 @@ import { OrdersController } from './orders.controller';
 import { OrderSchema, Order } from './schema/order.schema';
 import { ProductsPipe } from './pipe/products.pipe';
 import { ProductsModule } from '../products/products.module';
-import { AttachUserPipe } from '../utils/attach-user.pipe';
 import autopopulate from 'mongoose-autopopulate';
 import paginate from 'mongoose-paginate-v2';
 
@@ -25,7 +24,7 @@ import paginate from 'mongoose-paginate-v2';
     ]),
     ProductsModule
   ],
-  providers: [OrdersService, AttachUserPipe, ProductsPipe],
+  providers: [OrdersService, ProductsPipe],
   controllers: [OrdersController]
 })
 export class OrdersModule {}

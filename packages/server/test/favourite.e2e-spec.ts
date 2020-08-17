@@ -80,7 +80,7 @@ describe('FavouriteController (e2e)', () => {
       expect(response.body.data.data).not.toIncludeSameMembers([favourite]);
     });
 
-    it('cannot delete by other clients', async () => {
+    it('cannot deleted by other clients', async () => {
       const otherClientToken = await getToken(
         createUser(admin.token, { role: UserRole.CLIENT })
       );
@@ -95,7 +95,7 @@ describe('FavouriteController (e2e)', () => {
       expect(response.body.data.data).toIncludeAnyMembers([favourite]);
     });
 
-    it('can be delete by admin', async () => {
+    it('can be deleted by admin', async () => {
       let response = await deleteFavourite(admin.token, {
         id: favourite.id
       });

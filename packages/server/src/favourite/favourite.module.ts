@@ -3,7 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Schema } from 'mongoose';
 import { FavouriteService } from './favourite.service';
 import { FavouriteController } from './favourite.controller';
-import { AttachUserPipe } from '../utils/attach-user.pipe';
 import { Favourite, FavouriteSchema } from './schema/favourite.schema';
 import autopopulate from 'mongoose-autopopulate';
 import paginate from 'mongoose-paginate-v2';
@@ -22,7 +21,7 @@ import paginate from 'mongoose-paginate-v2';
       }
     ])
   ],
-  providers: [FavouriteService, AttachUserPipe],
+  providers: [FavouriteService],
   controllers: [FavouriteController]
 })
 export class FavouriteModule {}

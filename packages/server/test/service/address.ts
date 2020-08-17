@@ -30,3 +30,9 @@ export function updateAddress(
     .set('Authorization', `bearer ${token}`)
     .send(changes);
 }
+
+export function deleteAddress(token: string, id: string): SuperAgentRequest {
+  return request
+    .delete(paths.delete_address.generatePath({ id }))
+    .set('Authorization', `bearer ${token}`);
+}

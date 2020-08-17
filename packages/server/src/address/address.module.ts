@@ -4,7 +4,6 @@ import { Schema } from 'mongoose';
 import { AddressService } from './address.service';
 import { AddressController } from './address.controller';
 import { Address, AddressSchema } from './schema/address.schema';
-import { AttachUserPipe } from '../utils/attach-user.pipe';
 
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { AttachUserPipe } from '../utils/attach-user.pipe';
       }
     ])
   ],
-  providers: [AddressService, AttachUserPipe],
+  providers: [AddressService],
   controllers: [AddressController]
 })
 export class AddressModule {}

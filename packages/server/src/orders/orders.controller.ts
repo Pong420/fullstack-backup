@@ -3,24 +3,21 @@ import {
   Post,
   Body,
   Patch,
-  Req,
-  ForbiddenException
+  BadRequestException
 } from '@nestjs/common';
-import { OrderStatus, UserRole } from '@fullstack/typings';
+import { OrderStatus, UserRole, JWTSignPayload } from '@fullstack/typings';
 import { paths } from '@fullstack/common/constants';
-import { FastifyRequest } from 'fastify';
 import { Order } from './schema/order.schema';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ProductsPipe } from './pipe/products.pipe';
 import { ProductsService } from '../products/products.service';
-import { AttachUserPipe } from '../utils/attach-user.pipe';
-import { ObjectId } from '../utils/mongoose-crud.controller';
+import { ObjectId, User, UserId } from '../decorators';
 import { Access } from '../utils/access.guard';
 
 @Controller(paths.order.prefix)
-@Access('ADMIN', 'MANAGER')
+@Access('ADMIN', 'MANAGER', 'CLIENT')
 export class OrdersController {
   constructor(
     private readonly orderService: OrdersService,
@@ -28,30 +25,38 @@ export class OrdersController {
   ) {}
 
   @Post(paths.order.create_order)
-  @Access('ADMIN', 'MANAGER', 'CLIENT')
   async create(
-    @Body(AttachUserPipe, ProductsPipe) createOrderDto: CreateOrderDto
+    @Body(ProductsPipe) createOrderDto: CreateOrderDto,
+    @UserId() user: UserId
   ): Promise<Order> {
-    const order = await this.orderService.create(createOrderDto);
-    return order;
+    return this.orderService.create({
+      ...createOrderDto,
+      ...user
+    });
   }
 
   @Patch(paths.order.update_order)
-  @Access('ADMIN', 'MANAGER', 'CLIENT')
   async update(
     @ObjectId() id: string,
     @Body() changes: UpdateOrderDto,
-    @Req() { user }: FastifyRequest
+    @User() user: JWTSignPayload
   ): Promise<Order> {
     if (user.role === UserRole.CLIENT) {
-      const order = await this.orderService.findOne({ id });
-      if (
-        order.user.id !== user.user_id ||
-        order.status !== OrderStatus.PENDING || // client update order only if the status is pending
-        (typeof changes.status !== 'undefined' &&
-          changes.status !== OrderStatus.CACNELED)
-      ) {
-        throw new ForbiddenException('Permission Denied');
+      const order = await this.orderService.findOne({ id, user: user.user_id });
+      if (order) {
+        if (order.status !== OrderStatus.PENDING) {
+          throw new BadRequestException(
+            'Not allowed to update order in current status'
+          );
+        }
+        if (
+          typeof changes.status !== 'undefined' &&
+          changes.status !== OrderStatus.CACNELED
+        ) {
+          throw new BadRequestException('Incorrect status');
+        }
+      } else {
+        throw new BadRequestException('Order not found');
       }
     }
 

@@ -22,6 +22,7 @@ import {
 } from '@fullstack/typings';
 import { DateRannge } from '../decorators/range.decorator';
 import { nGrams } from 'mongoose-fuzzy-searching/helpers';
+import { BadRequestException } from '@nestjs/common';
 
 export type Condition = Record<string, unknown>;
 
@@ -89,11 +90,13 @@ export class MongooseCRUDService<T, D extends T & Document = T & Document> {
     options?: QueryFindOneAndUpdateOptions
   ): Promise<T> {
     return this.model
-      .findOneAndUpdate(query, changes, {
-        ...options,
-        new: true
-      })
-      .then(model => model.toJSON());
+      .findOneAndUpdate(query, changes, { ...options, new: true })
+      .then(model => {
+        if (model) {
+          return model.toJSON();
+        }
+        throw new BadRequestException('Data not found');
+      });
   }
 
   async findOne(

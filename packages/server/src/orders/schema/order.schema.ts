@@ -13,7 +13,7 @@ import { Group } from '../../utils/access.guard';
     transform: (_model, { _id, ...raw }) => new Order(raw)
   }
 })
-export class Order implements Schema$Order {
+export class Order implements Schema$Order<string> {
   id: string;
 
   @Prop({ required: true })
@@ -23,12 +23,11 @@ export class Order implements Schema$Order {
   @Prop({
     type: Types.ObjectId,
     ref: User.name,
-    required: true,
-    autopopulate: true
+    required: true
   })
   @Type(() => OrderUser)
   @Group(['ADMIN', 'MANAGER'])
-  user: OrderUser;
+  user: string;
 
   @Prop({ default: OrderStatus.PENDING })
   status: OrderStatus;
