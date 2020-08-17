@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import { Schema$Favourite, Schema$Product } from '@fullstack/typings';
+import { Schema$Favourite } from '@fullstack/typings';
 import { User } from '../../user/schemas/user.schema';
 import { Product } from '../../products/schemas/products.schema';
 import { Group } from '../../utils/access.guard';
@@ -11,7 +11,7 @@ import { Group } from '../../utils/access.guard';
     transform: (_model, { _id, ...raw }) => new Favourite(raw)
   }
 })
-export class Favourite implements Schema$Favourite {
+export class Favourite implements Omit<Schema$Favourite, 'product'> {
   id: string;
 
   @Prop({
@@ -28,7 +28,7 @@ export class Favourite implements Schema$Favourite {
     required: true,
     autopopulate: true
   })
-  product: Schema$Product;
+  product: string;
 
   createdAt: string;
 

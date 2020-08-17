@@ -1,7 +1,5 @@
 import { SuperAgentRequest } from 'superagent';
 import { paths } from '@fullstack/common/constants';
-import { Param$Favourite } from '@fullstack/typings';
-import { CreateFavouriteDto } from '../../src/favourite/dto/create-favourite.dto';
 
 export function getFavourites(token: string): SuperAgentRequest {
   return request
@@ -10,21 +8,19 @@ export function getFavourites(token: string): SuperAgentRequest {
     .send();
 }
 
-export function createFavourite(
+export function toggleFavourite(
   token: string,
-  dto: CreateFavouriteDto
+  product: string
 ): SuperAgentRequest {
   return request
-    .post(paths.create_favourite)
+    .post(paths.toggle_favourite.generatePath({ product }))
     .set('Authorization', `bearer ${token}`)
-    .send(dto);
+    .send();
 }
 
-export function deleteFavourite(
-  token: string,
-  { id }: Param$Favourite
-): SuperAgentRequest {
+export function deleteFavourite(token: string, id: string): SuperAgentRequest {
   return request
     .delete(paths.delete_favourite.generatePath({ id }))
-    .set('Authorization', `bearer ${token}`);
+    .set('Authorization', `bearer ${token}`)
+    .send();
 }

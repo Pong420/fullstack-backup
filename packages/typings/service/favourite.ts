@@ -12,7 +12,7 @@ export interface Param$GetFavourite {
   user?: string;
 }
 
-export interface Param$CreateFavourite {
+export interface Param$ToggleFavourite {
   product: string;
 }
 

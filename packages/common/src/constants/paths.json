@@ -49,7 +49,7 @@
   "favourite": {
     "prefix": "/favourite",
     "get_favourites": "",
-    "create_favourite": "/:id",
-    "delete_favourite": "/:id"
+    "delete_favourite": "/:id",
+    "toggle_favourite": "/:product"
   }
 }
