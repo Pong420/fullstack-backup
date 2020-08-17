@@ -45,5 +45,11 @@
     "create_address": "",
     "update_address": "/:id",
     "delete_address": "/:id"
+  },
+  "favourite": {
+    "prefix": "/favourite",
+    "get_favourites": "",
+    "create_favourite": "/:id",
+    "delete_favourite": "/:id"
   }
 }

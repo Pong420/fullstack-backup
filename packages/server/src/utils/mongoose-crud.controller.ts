@@ -23,7 +23,7 @@ export class MongooseCRUDController<T, D extends T & Document = T & Document> {
 
   @Get()
   async getAll(
-    @Query() query: QueryDto,
+    @Query() query: FilterQuery<T> & QueryDto,
     ..._args: unknown[]
   ): Promise<PaginateResult<T>> {
     return this.service.paginate(query);

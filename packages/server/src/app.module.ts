@@ -16,6 +16,7 @@ import { AcessGuard } from './utils/access.guard';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { AddressModule } from './address/address.module';
+import { FavouriteModule } from './favourite/favourite.module';
 import Joi from '@hapi/joi';
 import mongoose from 'mongoose';
 import path from 'path';
@@ -80,7 +81,8 @@ const meta: ModuleMetadata = {
     CloudinaryModule,
     ProductsModule,
     OrdersModule,
-    AddressModule
+    AddressModule,
+    FavouriteModule
   ],
   controllers: [AppController],
   providers: [

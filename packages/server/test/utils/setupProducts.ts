@@ -6,7 +6,7 @@ declare global {
 }
 
 export async function setupProducts(
-  options: Partial<CreateProductDto | Record<string, any>>[] = []
+  options: Partial<CreateProductDto | Record<string, any>>[]
 ): Promise<void> {
   products = await Promise.all(
     options.map(dto =>

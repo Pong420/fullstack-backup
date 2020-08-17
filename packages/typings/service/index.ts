@@ -7,6 +7,7 @@ export * from './auth';
 export * from './products';
 export * from './orders';
 export * from './address';
+export * from './favourite';
 
 export interface ApiResponse<T> {
   statusCode: number;

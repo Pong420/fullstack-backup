@@ -13,6 +13,7 @@
     "common": "yarn workspace @fullstack/common",
     "typings": "yarn workspace @fullstack/typings",
     "dev": "lerna run dev --stream --parallel",
+    "dev:server": "yarn dev --ignore @fullstack/admin --ignore @fullstack/app",
     "dev:app": "yarn dev --ignore @fullstack/admin",
     "dev:admin": "yarn dev --ignore @fullstack/app",
     "build": "rimraf dist && lerna run build --stream",

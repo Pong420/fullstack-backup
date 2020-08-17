@@ -11,6 +11,9 @@
     "adminToken": "",
     "managerToken": "",
     "clientToken": "",
+    "admin": {},
+    "manager": {},
+    "client": {},
     "products": []
   },
   "setupFilesAfterEnv": ["jest-extended"]

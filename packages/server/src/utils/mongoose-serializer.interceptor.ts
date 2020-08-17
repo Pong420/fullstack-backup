@@ -47,6 +47,8 @@ export class MongooseSerializerInterceptor implements NestInterceptor {
       map((res: Res) =>
         this.serialize(res, {
           ...options,
+          // remove _id
+          excludePrefixes: ['_'],
           groups: [...(options.groups || []), role]
         })
       )
@@ -92,7 +94,6 @@ export class MongooseSerializerInterceptor implements NestInterceptor {
         : plainOrClass;
 
     delete plainObject[TEXT_SCORE];
-    delete plainObject['_id'];
 
     return plainObject;
   }

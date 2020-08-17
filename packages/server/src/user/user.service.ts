@@ -12,10 +12,12 @@ export class UserService extends MongooseCRUDService<User> {
     super(model);
   }
 
+  // TODO: check this
   create(createUserDto: CreateUserDto): Promise<User> {
     return super.create(createUserDto);
   }
 
+  // TODO: check this
   update(
     query: FilterQuery<User>,
     updateUserDto: UpdateUserDto

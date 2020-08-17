@@ -10,7 +10,10 @@ export class AttachUserPipe implements PipeTransform {
 
   async transform(value: unknown): Promise<unknown> {
     if (value && typeof value === 'object') {
-      value['user'] = this.request.user.user_id;
+      const user_id = this.request?.user?.user_id;
+      if (user_id) {
+        value['user'] = user_id;
+      }
     }
     return value;
   }
