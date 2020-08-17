@@ -43,14 +43,14 @@ describe('UserController (e2e)', () => {
       ];
       users = await Promise.all(
         options.map(dto =>
-          createUser(adminToken, dto).then(res => res.body.data)
+          createUser(admin.token, dto).then(res => res.body.data)
         )
       );
     });
 
     it('success ', async () => {
       const response = await Promise.all(
-        [adminToken, managerToken].map(token => getUsers(token))
+        [admin.token, manager.token].map(token => getUsers(token))
       );
 
       expect(response[0].body.data.data).toSatisfyAll(
@@ -70,13 +70,13 @@ describe('UserController (e2e)', () => {
     });
 
     it('forbidden', async () => {
-      const response = await getUsers(clientToken);
+      const response = await getUsers(client.token);
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
 
     it('query - size', async () => {
       const query = { size: 20 };
-      const response = await getUsers(adminToken).query(query);
+      const response = await getUsers(admin.token).query(query);
       const {
         data: newUsers,
         limit
@@ -88,7 +88,7 @@ describe('UserController (e2e)', () => {
 
     it('query - empty', async () => {
       const query = { username: uuidv4() };
-      const response = await getUsers(adminToken).query(query);
+      const response = await getUsers(admin.token).query(query);
       const { data: newUsers }: PaginateResult<User> = response.body.data;
       expect(newUsers.length).toBe(0);
     });
@@ -96,7 +96,7 @@ describe('UserController (e2e)', () => {
     it('query - unique property', async () => {
       [{ username: users[0].username }, { email: users[0].email }].map(
         async query => {
-          const response = await getUsers(adminToken).query(query);
+          const response = await getUsers(admin.token).query(query);
           expect(response.body.data.data.length).toBe(1);
         }
       );
@@ -107,15 +107,15 @@ describe('UserController (e2e)', () => {
     let user: User;
     const mockUser = createUserDto({ role: UserRole.CLIENT });
     beforeAll(async () => {
-      const response = await createUser(adminToken, mockUser);
+      const response = await createUser(admin.token, mockUser);
       user = response.body.data;
     });
 
     it('success', async () => {
       const mockUserToken = await getToken(login(mockUser));
       const response = await Promise.all([
-        getUser(adminToken, user.id),
-        getUser(managerToken, user.id),
+        getUser(admin.token, user.id),
+        getUser(manager.token, user.id),
         getUser(mockUserToken, user.id)
       ]);
       for (const res of response) {
@@ -126,7 +126,7 @@ describe('UserController (e2e)', () => {
     });
 
     it('forbidden', async () => {
-      const response = await getUser(clientToken, user.id);
+      const response = await getUser(client.token, user.id);
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
   });
@@ -136,7 +136,7 @@ describe('UserController (e2e)', () => {
 
     it('success', async () => {
       const { password, ...match } = mockUser;
-      const response = await createUser(adminToken, mockUser);
+      const response = await createUser(admin.token, mockUser);
       user = response.body.data;
 
       expect(response.status).toBe(HttpStatus.CREATED);
@@ -146,9 +146,9 @@ describe('UserController (e2e)', () => {
 
     it('unique property', async () => {
       const response = await Promise.all([
-        createUser(adminToken, mockUser),
-        createUser(adminToken, omit(mockUser, 'username')),
-        createUser(adminToken, omit(mockUser, 'email'))
+        createUser(admin.token, mockUser),
+        createUser(admin.token, omit(mockUser, 'username')),
+        createUser(admin.token, omit(mockUser, 'email'))
       ]);
       expect(response).toSatisfyAll(
         res => res.status === HttpStatus.BAD_REQUEST
@@ -156,7 +156,7 @@ describe('UserController (e2e)', () => {
     });
 
     it('forbidden', async () => {
-      const response = await createUser(clientToken, mockUser);
+      const response = await createUser(client.token, mockUser);
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
   });
@@ -168,15 +168,15 @@ describe('UserController (e2e)', () => {
     let user: User;
     const mockUser = createUserDto({ role: UserRole.CLIENT });
     beforeAll(async () => {
-      const response = await createUser(adminToken, mockUser);
+      const response = await createUser(admin.token, mockUser);
       user = response.body.data;
     });
 
     it('suceess', async () => {
       const mockUserToken = await getToken(login(mockUser));
       const response = await Promise.all([
-        updateUser(adminToken, { id: user.id, ...changes }),
-        updateUser(managerToken, { id: user.id, ...changes }),
+        updateUser(admin.token, { id: user.id, ...changes }),
+        updateUser(manager.token, { id: user.id, ...changes }),
         updateUser(mockUserToken, { id: user.id, ...changes })
       ]);
       for (const res of response) {
@@ -188,10 +188,10 @@ describe('UserController (e2e)', () => {
 
     it('forbidden', async () => {
       const response = await Promise.all([
-        updateUser(clientToken, { id: user.id, ...changes }),
-        updateUser(clientToken, { id: user.id, role: UserRole.MANAGER }),
-        updateUser(managerToken, { id: user.id, role: UserRole.MANAGER }),
-        updateUser(managerToken, { id: user.id, role: UserRole.ADMIN })
+        updateUser(client.token, { id: user.id, ...changes }),
+        updateUser(client.token, { id: user.id, role: UserRole.MANAGER }),
+        updateUser(manager.token, { id: user.id, role: UserRole.MANAGER }),
+        updateUser(manager.token, { id: user.id, role: UserRole.ADMIN })
       ]);
       expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
     });
@@ -201,12 +201,12 @@ describe('UserController (e2e)', () => {
     let user: User;
     const mockUser = createUserDto({ role: UserRole.CLIENT });
     beforeAll(async () => {
-      const response = await createUser(adminToken, mockUser);
+      const response = await createUser(admin.token, mockUser);
       user = response.body.data;
     });
 
     it('forbidden', async () => {
-      const response = await deleteUser(clientToken, user.id);
+      const response = await deleteUser(client.token, user.id);
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
 
@@ -214,7 +214,7 @@ describe('UserController (e2e)', () => {
       const mockUserToken = await getToken(login(mockUser));
       const response = await Promise.all([
         deleteUser(mockUserToken, user.id),
-        deleteUser(adminToken, user.id)
+        deleteUser(admin.token, user.id)
       ]);
       response.forEach(res => {
         expect(res.status).toBe(HttpStatus.OK);
@@ -225,16 +225,16 @@ describe('UserController (e2e)', () => {
   test.skip('cloudinary image should be removed', async () => {
     jest.setTimeout(60 * 1000);
 
-    let response = await createUser(adminToken, createUserDto());
+    let response = await createUser(admin.token, createUserDto());
     let user: User = response.body.data;
-    const signPayload = await cloudinarySign(adminToken);
+    const signPayload = await cloudinarySign(admin.token);
 
     const attach = async () => {
       const uploaded = await cloudinaryUpload({
         ...signPayload,
         file: path.resolve(__dirname, './utils/1x1.png')
       });
-      return updateUser(adminToken, {
+      return updateUser(admin.token, {
         id: user.id,
         avatar: uploaded.secure_url
       });
@@ -245,9 +245,9 @@ describe('UserController (e2e)', () => {
       // replace
       () => attach(),
       // remove
-      () => updateUser(adminToken, { id: user.id, avatar: null }),
+      () => updateUser(admin.token, { id: user.id, avatar: null }),
       // delete
-      () => deleteUser(adminToken, user.id)
+      () => deleteUser(admin.token, user.id)
     ];
 
     for (const action of actions) {

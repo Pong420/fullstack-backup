@@ -8,9 +8,6 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "globals": {
-    "adminToken": "",
-    "managerToken": "",
-    "clientToken": "",
     "admin": {},
     "manager": {},
     "client": {},

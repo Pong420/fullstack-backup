@@ -21,14 +21,14 @@ describe('OrdersController (e2e)', () => {
     });
     it('success', async () => {
       const amount = 1;
-      let response = await createOrder(clientToken, {
+      let response = await createOrder(client.token, {
         address,
         products: products.map(({ id }) => ({ id, amount }))
       });
       expect(response.status).toBe(HttpStatus.CREATED);
       expect(response.body.data.user).toBeUndefined();
 
-      response = await getProducts(adminToken);
+      response = await getProducts(admin.token);
       expect(response.body.data.data).toSatisfyAll(
         ({ freeze }) => freeze === amount
       );
@@ -36,18 +36,18 @@ describe('OrdersController (e2e)', () => {
 
     it('bad request', async () => {
       const response = await Promise.all([
-        createOrder(adminToken, {
+        createOrder(admin.token, {
           address,
           products: products.map(({ id, amount }) => ({
             id,
             amount: amount + 1
           }))
         }),
-        createOrder(adminToken, {
+        createOrder(admin.token, {
           address,
           products: products.map(({ id }) => ({ id, amount: undefined }))
         }),
-        createOrder(adminToken, {
+        createOrder(admin.token, {
           address,
           products: [{ id: rid(), amount: 1 }]
         })
@@ -66,12 +66,12 @@ describe('OrdersController (e2e)', () => {
 
     beforeEach(async () => {
       product = null;
-      product = await createProduct(adminToken, { amount: totalAmount }).then(
+      product = await createProduct(admin.token, { amount: totalAmount }).then(
         res => res.body.data
       );
       await delay(100);
       order = null;
-      order = await createOrder(clientToken, {
+      order = await createOrder(client.token, {
         address,
         products: [product].map(({ id }) => ({ id, amount }))
       }).then(res => res.body.data);
@@ -80,23 +80,23 @@ describe('OrdersController (e2e)', () => {
 
     it('forbidden', async () => {
       const response = await Promise.all([
-        updateOrder(clientToken, order.id, { status: OrderStatus.PENDING }),
-        updateOrder(clientToken, order.id, { status: OrderStatus.SHIPPING }),
-        updateOrder(clientToken, order.id, { status: OrderStatus.DONE }),
-        updateOrder(adminToken, order.id, {
+        updateOrder(client.token, order.id, { status: OrderStatus.PENDING }),
+        updateOrder(client.token, order.id, { status: OrderStatus.SHIPPING }),
+        updateOrder(client.token, order.id, { status: OrderStatus.DONE }),
+        updateOrder(admin.token, order.id, {
           status: OrderStatus.SHIPPING
-        }).then(() => updateOrder(clientToken, order.id, { address: rid() }))
+        }).then(() => updateOrder(client.token, order.id, { address: rid() }))
       ]);
       expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
     });
 
     it('shipping', async () => {
-      const response = await updateOrder(adminToken, order.id, {
+      const response = await updateOrder(admin.token, order.id, {
         status: OrderStatus.SHIPPING
       });
       expect(response.status).toBe(HttpStatus.OK);
       expect(
-        getProduct(adminToken, product.id).then(res => res.body.data)
+        getProduct(admin.token, product.id).then(res => res.body.data)
       ).resolves.toMatchObject({
         amount: totalAmount - amount,
         remain: totalAmount - amount,
@@ -105,19 +105,19 @@ describe('OrdersController (e2e)', () => {
     });
 
     it('client update', async () => {
-      const response = await updateOrder(clientToken, order.id, {
+      const response = await updateOrder(client.token, order.id, {
         address: rid()
       });
       expect(response.status).toBe(HttpStatus.OK);
     });
 
     it('cancel order', async () => {
-      let response = await updateOrder(clientToken, order.id, {
+      let response = await updateOrder(client.token, order.id, {
         status: OrderStatus.CACNELED
       });
       expect(response.status).toBe(HttpStatus.OK);
 
-      response = await getProduct(adminToken, product.id);
+      response = await getProduct(admin.token, product.id);
       expect(response.body.data.freeze).toBe(0);
     });
   });

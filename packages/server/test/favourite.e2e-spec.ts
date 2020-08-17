@@ -22,15 +22,15 @@ describe('FavouriteController (e2e)', () => {
     beforeAll(async () => {
       favourites = await Promise.all([
         ...products.map(({ id }) =>
-          createFavourite(clientToken, { product: id })
+          createFavourite(client.token, { product: id })
         ),
         // this make sure client will only get its favourite
-        createFavourite(adminToken, { product: products[0].id })
+        createFavourite(admin.token, { product: products[0].id })
       ]).then(responses => responses.map(res => res.body.data));
     });
 
     it('success', async () => {
-      const response = await getFavourites(clientToken);
+      const response = await getFavourites(client.token);
       expect(response.status).toBe(HttpStatus.OK);
 
       expect(response.body.data.data.length).toBe(products.length);
@@ -47,7 +47,7 @@ describe('FavouriteController (e2e)', () => {
   describe('(POST) Create Favourite', () => {
     it('success', async () => {
       const product = products[0];
-      const response = await createFavourite(clientToken, {
+      const response = await createFavourite(client.token, {
         product: product.id
       });
       expect(response.status).toBe(HttpStatus.CREATED);
@@ -61,20 +61,20 @@ describe('FavouriteController (e2e)', () => {
     let favourite: Schema$Favourite;
 
     beforeEach(async () => {
-      const response = await createFavourite(clientToken, {
+      const response = await createFavourite(client.token, {
         product: products[0].id
       });
       favourite = response.body.data;
     });
 
     it('success', async () => {
-      let response = await deleteFavourite(clientToken, {
+      let response = await deleteFavourite(client.token, {
         id: favourite.id
       });
 
       expect(response.status).toBe(HttpStatus.OK);
 
-      response = await getFavourites(clientToken);
+      response = await getFavourites(client.token);
 
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).not.toIncludeSameMembers([favourite]);
@@ -82,25 +82,25 @@ describe('FavouriteController (e2e)', () => {
 
     it('cannot delete by other clients', async () => {
       const otherClientToken = await getToken(
-        createUser(adminToken, { role: UserRole.CLIENT })
+        createUser(admin.token, { role: UserRole.CLIENT })
       );
 
       let response = await deleteFavourite(otherClientToken, {
         id: favourite.id
       });
 
-      response = await getFavourites(clientToken);
+      response = await getFavourites(client.token);
 
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).toIncludeAnyMembers([favourite]);
     });
 
     it('can be delete by admin', async () => {
-      let response = await deleteFavourite(adminToken, {
+      let response = await deleteFavourite(admin.token, {
         id: favourite.id
       });
 
-      response = await getFavourites(clientToken);
+      response = await getFavourites(client.token);
 
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).not.toIncludeAnyMembers([favourite]);

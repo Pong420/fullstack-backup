@@ -17,15 +17,15 @@ describe('AddresssController (e2e)', () => {
       addresses = await Promise.all(
         [
           ...Array.from({ length: 3 }, () =>
-            createAddress(clientToken, { address: [''] })
+            createAddress(client.token, { address: [''] })
           ),
-          createAddress(adminToken, { address: [''] })
+          createAddress(admin.token, { address: [''] })
         ].map(req => req.then(res => res.body.data))
       );
     });
 
     it('success', async () => {
-      const response = await getAddresses(clientToken);
+      const response = await getAddresses(client.token);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.length).toBe(addresses.length - 1);
     });
@@ -33,7 +33,7 @@ describe('AddresssController (e2e)', () => {
 
   describe('(POST) Create Address', () => {
     it('success', async () => {
-      const response = await createAddress(clientToken, {
+      const response = await createAddress(client.token, {
         address: ['1', '2', '3']
       });
       expect(response.status).toBe(HttpStatus.CREATED);
@@ -47,20 +47,20 @@ describe('AddresssController (e2e)', () => {
     const address_2 = ['4', '5', '6'];
 
     beforeAll(async () => {
-      const response = await createAddress(clientToken, {
+      const response = await createAddress(client.token, {
         address: ['1', '2', '3']
       });
       address = response.body.data;
     });
 
     it('success', async () => {
-      let response = await updateAddress(clientToken, address.id, {
+      let response = await updateAddress(client.token, address.id, {
         address: address_1
       });
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.address).toEqual(address_1);
 
-      response = await updateAddress(adminToken, address.id, {
+      response = await updateAddress(admin.token, address.id, {
         address: address_2
       });
       expect(response.status).toBe(HttpStatus.OK);
@@ -69,7 +69,7 @@ describe('AddresssController (e2e)', () => {
 
     it('unauthorized', async () => {
       const otherClientToken = await getToken(
-        createUser(adminToken, { role: UserRole.CLIENT })
+        createUser(admin.token, { role: UserRole.CLIENT })
       );
       const response = await updateAddress(otherClientToken, address.id, {
         address: address_1

@@ -39,7 +39,7 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('success', async () => {
-      const response = await getProducts(adminToken);
+      const response = await getProducts(admin.token);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(products.length);
       expect(response.body.data.data).toSatisfyAll(
@@ -54,13 +54,13 @@ describe('ProductsController (e2e)', () => {
       [2, [...tags]],
       [options.length, []]
     ])('query - tags %s', async (expected, query) => {
-      const response = await getProducts(adminToken, { tags: query });
+      const response = await getProducts(admin.token, { tags: query });
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data.length).toBe(expected);
     });
 
     it('client should not find these field of the product', async () => {
-      const response = await getProducts(clientToken);
+      const response = await getProducts(client.token);
       expect(response.status).toBe(HttpStatus.OK);
 
       expect(response.body.data.data).toSatisfyAll(
@@ -73,7 +73,7 @@ describe('ProductsController (e2e)', () => {
 
     it('client should not find hidden product', async () => {
       const hiddenProducts = products.filter(({ hidden }) => hidden);
-      const response = await getProducts(clientToken);
+      const response = await getProducts(client.token);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).toSatisfyAll(
         product => typeof product.hidden === 'undefined'
@@ -89,7 +89,7 @@ describe('ProductsController (e2e)', () => {
     beforeAll(async () => {
       await productsService.clear();
       await Promise.all(
-        tags.map(tag => createProduct(adminToken, { tags: [tag] }))
+        tags.map(tag => createProduct(admin.token, { tags: [tag] }))
       );
     });
 
@@ -107,7 +107,7 @@ describe('ProductsController (e2e)', () => {
     beforeAll(async () => {
       await productsService.clear();
       await Promise.all(
-        categories.map(category => createProduct(adminToken, { category }))
+        categories.map(category => createProduct(admin.token, { category }))
       );
     });
 
@@ -124,12 +124,12 @@ describe('ProductsController (e2e)', () => {
   describe('(GET)  Get Product', () => {
     let product: Product;
     beforeAll(async () => {
-      const response = await createProduct(adminToken);
+      const response = await createProduct(admin.token);
       product = response.body.data;
     });
 
     it('success', async () => {
-      const response = await getProduct(adminToken, product.id);
+      const response = await getProduct(admin.token, product.id);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data._id).toBeUndefined();
     });
@@ -138,21 +138,21 @@ describe('ProductsController (e2e)', () => {
   describe('(POST) Create Product', () => {
     it('success', async () => {
       const response = await Promise.all([
-        createProduct(adminToken),
-        createProduct(managerToken)
+        createProduct(admin.token),
+        createProduct(manager.token)
       ]);
       expect(response).toSatisfyAll(res => res.status === HttpStatus.CREATED);
     });
 
     it('tags', async () => {
       const tags = ['1', '2', '3'];
-      const response = await createProduct(adminToken, { tags });
+      const response = await createProduct(admin.token, { tags });
       expect(response.status).toBe(HttpStatus.CREATED);
       expect(response.body.data.tags).toEqual(tags);
     });
 
     it('forbidden', async () => {
-      const response = await Promise.all([createProduct(clientToken)]);
+      const response = await Promise.all([createProduct(client.token)]);
       expect(response).toSatisfyAll(res => res.status === HttpStatus.FORBIDDEN);
     });
   });
@@ -161,12 +161,12 @@ describe('ProductsController (e2e)', () => {
     let product: Product;
     const newName = 'e2e-name';
     beforeAll(async () => {
-      const response = await createProduct(adminToken);
+      const response = await createProduct(admin.token);
       product = response.body.data;
     });
 
     it('suceess', async () => {
-      const response = await updateProduct(adminToken, product.id, {
+      const response = await updateProduct(admin.token, product.id, {
         name: newName
       });
       expect(response.status).toBe(HttpStatus.OK);
@@ -174,7 +174,7 @@ describe('ProductsController (e2e)', () => {
     });
 
     it('forbidden', async () => {
-      const response = await updateProduct(clientToken, product.id, {
+      const response = await updateProduct(client.token, product.id, {
         name: newName
       });
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
@@ -184,19 +184,19 @@ describe('ProductsController (e2e)', () => {
   describe('(DEL)  Delete Product', () => {
     let product: Product;
     beforeAll(async () => {
-      const response = await createProduct(adminToken);
+      const response = await createProduct(admin.token);
       product = response.body.data;
     });
 
     it('forbidden', async () => {
-      const response = await deleteProduct(clientToken, product.id);
+      const response = await deleteProduct(client.token, product.id);
       expect(response.status).toBe(HttpStatus.FORBIDDEN);
     });
 
     it('success', async () => {
-      let response = await deleteProduct(adminToken, product.id);
+      let response = await deleteProduct(admin.token, product.id);
       expect(response.status).toBe(HttpStatus.OK);
-      response = await getProduct(adminToken, product.id);
+      response = await getProduct(admin.token, product.id);
       expect(response.status).toBe(HttpStatus.NOT_FOUND);
     });
   });
@@ -204,13 +204,13 @@ describe('ProductsController (e2e)', () => {
   test.skip('cloudinary image should be removed', async () => {
     jest.setTimeout(60 * 1000);
 
-    const signPayload = await cloudinarySign(adminToken);
+    const signPayload = await cloudinarySign(admin.token);
 
-    let response = await createProduct(adminToken);
+    let response = await createProduct(admin.token);
     let product: Product = response.body.data;
 
     const update = async () =>
-      updateProduct(adminToken, product.id, {
+      updateProduct(admin.token, product.id, {
         images: [
           await cloudinaryUpload({
             ...signPayload,
@@ -224,9 +224,9 @@ describe('ProductsController (e2e)', () => {
       // replace
       () => update(),
       // remove
-      () => updateProduct(adminToken, product.id, { images: [] }),
+      () => updateProduct(admin.token, product.id, { images: [] }),
       // delete
-      () => deleteProduct(adminToken, product.id)
+      () => deleteProduct(admin.token, product.id)
     ];
 
     for (const action of actions) {

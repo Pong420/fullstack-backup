@@ -10,7 +10,7 @@ export async function setupProducts(
 ): Promise<void> {
   products = await Promise.all(
     options.map(dto =>
-      createProduct(adminToken, dto).then(res => res.body.data)
+      createProduct(admin.token, dto).then(res => res.body.data)
     )
   );
 }
