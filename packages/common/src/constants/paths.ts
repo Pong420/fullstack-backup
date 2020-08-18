@@ -12,7 +12,8 @@ type UnionToIntersection<U> = (
 
 declare global {
   interface String {
-    generatePath(params?: Record<string, unknown>): string;
+    // eslint-disable-next-line
+    generatePath(params?: object): string;
   }
 }
 
@@ -34,6 +35,6 @@ export const paths = {
   }, {} as Record<AllKeys, string>)
 };
 
-String.prototype.generatePath = function (params?: Record<string, unknown>) {
+String.prototype.generatePath = function (params) {
   return generatePath(this.toString(), params);
 };

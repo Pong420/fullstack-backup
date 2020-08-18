@@ -1,19 +1,25 @@
 import { Timestamp, Pagination, PaginateApiResponse, ApiResponse } from './';
 import { Schema$Product } from './products';
 
-export interface Schema$Favourite extends Timestamp, Pagination {
-  id: string;
-  user: string;
-  product: Schema$Product;
+export enum FavouriteAction {
+  Add = 'add',
+  Remove = 'remove'
 }
 
-export interface Param$GetFavourite {
+export interface Schema$Favourite extends Timestamp {
+  id: string;
+  user: string;
+  product?: Schema$Product;
+}
+
+export interface Param$GetFavourites extends Pagination {
   id?: string;
   user?: string;
 }
 
 export interface Param$ToggleFavourite {
   product: string;
+  action: FavouriteAction;
 }
 
 export interface Param$Favourite {

@@ -1,5 +1,11 @@
 import { HttpStatus } from '@nestjs/common';
-import { Schema$Favourite, UserRole, Schema$Product } from '@fullstack/typings';
+import {
+  Schema$Favourite,
+  UserRole,
+  Schema$Product,
+  FavouriteAction
+} from '@fullstack/typings';
+import { ObjectID } from 'mongodb';
 import {
   getFavourites,
   toggleFavourite,
@@ -23,9 +29,17 @@ describe('FavouriteController (e2e)', () => {
       products = await setupProducts([{}, {}, {}]);
 
       favourites = await Promise.all([
-        ...products.map(product => toggleFavourite(client.token, product.id)),
+        ...products.map(product =>
+          toggleFavourite(client.token, {
+            product: product.id,
+            action: FavouriteAction.Add
+          })
+        ),
         // this make sure client will only get its favourite
-        toggleFavourite(admin.token, products[0].id)
+        toggleFavourite(admin.token, {
+          product: products[0].id,
+          action: FavouriteAction.Add
+        })
       ]).then(responses => responses.map(res => res.body.data));
     });
 
@@ -52,14 +66,20 @@ describe('FavouriteController (e2e)', () => {
     });
 
     it('success', async () => {
-      let response = await toggleFavourite(client.token, product.id);
+      let response = await toggleFavourite(client.token, {
+        product: product.id,
+        action: FavouriteAction.Add
+      });
       const favourite = response.body.data;
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toBeDefined();
       expect(response.body.data.product).toBeObject();
       expect(response.body.data.product._id).toBeUndefined();
 
-      response = await toggleFavourite(client.token, product.id);
+      response = await toggleFavourite(client.token, {
+        product: product.id,
+        action: FavouriteAction.Remove
+      });
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toBeUndefined();
 
@@ -69,18 +89,34 @@ describe('FavouriteController (e2e)', () => {
     });
 
     it('cannot controlled by others', async () => {
-      let response = await toggleFavourite(client.token, product.id);
+      let response = await toggleFavourite(client.token, {
+        product: product.id,
+        action: FavouriteAction.Add
+      });
       const favourite = response.body.data;
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data).toBeDefined();
 
-      response = await toggleFavourite(admin.token, product.id);
+      response = await toggleFavourite(admin.token, {
+        product: product.id,
+        action: FavouriteAction.Remove
+      });
       expect(response.status).toBe(HttpStatus.OK);
-      expect(response.body.data).toBeDefined();
+      expect(response.body.data).toBeUndefined();
 
       response = await getFavourites(client.token);
       expect(response.status).toBe(HttpStatus.OK);
       expect(response.body.data.data).toIncludeAnyMembers([favourite]);
+    });
+
+    it('unknown product ', async () => {
+      const response = await toggleFavourite(client.token, {
+        product: new ObjectID().toHexString(),
+        action: FavouriteAction.Add
+      });
+      expect(response.status).toBe(HttpStatus.OK);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data.product).toBe(null);
     });
   });
 
@@ -89,7 +125,10 @@ describe('FavouriteController (e2e)', () => {
 
     beforeEach(async () => {
       const [product] = await setupProducts([{}]);
-      const response = await toggleFavourite(client.token, product.id);
+      const response = await toggleFavourite(client.token, {
+        product: product.id,
+        action: FavouriteAction.Add
+      });
       favourite = response.body.data;
     });
 

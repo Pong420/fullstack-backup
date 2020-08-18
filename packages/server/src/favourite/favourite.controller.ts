@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Delete, HttpCode, Param } from '@nestjs/common';
 import { paths } from '@fullstack/common/constants';
+import { PaginateResult, UserRole, FavouriteAction } from '@fullstack/typings';
 import { FavouriteService } from './favourite.service';
-import { PaginateResult, UserRole } from '@fullstack/typings';
 import { Favourite } from './schema/favourite.schema';
+import { ToggleFavouriteDto } from './dto/toggle-favourite.dto';
 import { ObjectId, UserId } from '../decorators';
 import { Access } from '../utils/access.guard';
 
@@ -19,14 +20,14 @@ export class FavouriteController {
   @Post(paths.favourite.toggle_favourite)
   @HttpCode(200)
   async toggleFavourites(
-    @ObjectId('product') product: string,
-    @UserId() user: UserId
+    @ObjectId('product') _for_checking: string,
+    @UserId() user: UserId,
+    @Param() { action, product }: ToggleFavouriteDto
   ): Promise<Favourite | void> {
     const query = { product, ...user };
-    const favourite = await this.favouriteService.findOne(query);
-    return favourite
-      ? this.favouriteService.delete(query)
-      : this.favouriteService.create(query);
+    return action === FavouriteAction.Add
+      ? this.favouriteService.update(query, { product }, { upsert: true })
+      : this.favouriteService.delete(query);
   }
 
   @Delete(paths.favourite.delete_favourite)

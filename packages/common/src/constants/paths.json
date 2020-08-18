@@ -50,6 +50,6 @@
     "prefix": "/favourite",
     "get_favourites": "",
     "delete_favourite": "/:id",
-    "toggle_favourite": "/:product"
+    "toggle_favourite": "/:action/:product"
   }
 }

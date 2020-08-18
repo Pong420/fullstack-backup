@@ -1,5 +1,6 @@
 import { SuperAgentRequest } from 'superagent';
 import { paths } from '@fullstack/common/constants';
+import { Param$ToggleFavourite } from '@fullstack/typings';
 
 export function getFavourites(token: string): SuperAgentRequest {
   return request
@@ -10,10 +11,10 @@ export function getFavourites(token: string): SuperAgentRequest {
 
 export function toggleFavourite(
   token: string,
-  product: string
+  params: Param$ToggleFavourite
 ): SuperAgentRequest {
   return request
-    .post(paths.toggle_favourite.generatePath({ product }))
+    .post(paths.toggle_favourite.generatePath(params))
     .set('Authorization', `bearer ${token}`)
     .send();
 }
