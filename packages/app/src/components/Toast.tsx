@@ -15,9 +15,9 @@ import {
 import { Subject } from 'rxjs';
 import { Feather } from '@expo/vector-icons';
 import { ApiError } from '@fullstack/typings';
-import { getErrorMessage } from '@fullstack/common/service';
-import { Bold, TextWrap } from './Text';
+import { getErrorMessage } from '@/service';
 import { shadow, colors } from '@/styles';
+import { Bold, TextWrap } from './Text';
 
 interface Theme {
   color?: string;

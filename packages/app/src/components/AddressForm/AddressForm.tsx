@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, ScrollView, ViewStyle } from 'react-native';
 import { Area } from '@fullstack/typings';
-import { parseAddress, formAddressArray } from '@fullstack/common/service';
+import { parseAddress, formAddressArray } from '@/service';
 import { createForm, FormProps } from '@/utils/form';
 import { HongKonAddressForm } from './HongKonAddressForm';
 

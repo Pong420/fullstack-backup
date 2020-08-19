@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Feather } from '@expo/vector-icons';
 import { Area, Schema$Address } from '@fullstack/typings';
-import { getAddresses, deleteAddress } from '@fullstack/common/service';
 import {
   createStackNavigator,
   StackScreenProps
@@ -16,6 +15,7 @@ import { openConfirmModal } from '@/components/ConfirmModal';
 import { toaster } from '@/components/Toast';
 import { Empty } from '@/components/Empty';
 import { createUseCRUDReducer } from '@/hooks/crud';
+import { getAddresses, deleteAddress } from '@/service';
 import { card, containerPadding, colors } from '@/styles';
 import { CreateAddressScreen } from './CreateAddressScreen';
 import { UpdateAddressScreen } from './UpdateAddressScreen';

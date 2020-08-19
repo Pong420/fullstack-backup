@@ -7,10 +7,10 @@ import {
   Keyboard,
   ViewProps,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
-import { getProducts } from '@fullstack/common/service';
 import { Param$GetProducts, Schema$Product } from '@fullstack/typings';
 import { SearchInput, RNTextInputProps } from '@/components/SearchInput';
 import { ProductList } from '@/components/ProductList';
@@ -18,10 +18,10 @@ import { PageHeader } from '@/components/PageHeader';
 import { Text } from '@/components/Text';
 import { useBoolean } from '@/hooks/useBoolean';
 import { createUsePaginateCRUDReducer } from '@/hooks/crud';
+import { getProducts } from '@/service';
 import { containerPadding, colors } from '@/styles';
-import { RecentSearches, updateRecentSearches } from './RecentSearches';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Empty } from '@/components/Empty';
+import { RecentSearches, updateRecentSearches } from './RecentSearches';
 
 /**
  * TODO:

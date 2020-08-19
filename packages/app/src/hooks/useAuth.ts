@@ -5,18 +5,18 @@ import React, {
   ProviderProps,
   ReactNode
 } from 'react';
+import { defer, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import {
   JWTSignPayload,
   Param$Login,
   Schema$User,
   Param$CreateUser
 } from '@fullstack/typings';
-import { clearJwtToken } from '@fullstack/common/service';
-import AsyncStorage from '@react-native-community/async-storage';
-import { defer, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { clearJwtToken } from '@/service';
 import { logout, register, getJwtToken } from '@/service';
 import { toaster } from '@/components/Toast';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 

@@ -18,7 +18,7 @@ import {
 } from 'rxjs/operators';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Product, FavouriteAction } from '@fullstack/typings';
-import { getFavourites, toggleFavourite } from '@fullstack/common/service';
+import { getFavourites, toggleFavourite } from '@/service';
 import { toaster } from '@/components/Toast';
 import { useAuth } from './useAuth';
 import { createUseRxCRUDReducer } from './crud';

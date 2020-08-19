@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRxAsync } from 'use-rx-hooks';
-import { getProducts } from '@fullstack/common/service';
+import { getProducts } from '@/service';
 import { HomeSection } from './HomeSection';
 import { HomeProductsSlide } from './HomeProductsSlide';
 

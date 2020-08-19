@@ -2,12 +2,12 @@ import React, { useRef, useLayoutEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Address } from '@fullstack/typings';
-import { createAddress } from '@fullstack/common/service';
 import { Button } from '@/components/Button';
 import { PageModal } from '@/components/PageModal';
 import { toaster } from '@/components/Toast';
 import { AddressForm, useForm } from '@/components/AddressForm';
 import { KeyboardAvoidingViewFooter } from '@/components/KeyboardAvoidingViewFooter';
+import { createAddress } from '@/service';
 import { containerPadding } from '@/styles';
 import { DeliveryAddressScreenProps } from './routes';
 
