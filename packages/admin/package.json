@@ -2,6 +2,7 @@
   "name": "@fullstack/admin",
   "version": "1.0.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build && yarn move",
@@ -11,7 +12,7 @@
     "component": "node scripts/component.js",
     "redux": "node scripts/redux.js",
     "get": "node scripts/type.js",
-    "move": "rimraf ../../dist/src/admin && mv build ../../dist/src/admin || move build ../../dist/src/admin"
+    "move": "rimraf ../../dist/public/admin && mv build ../../dist/public/admin || move build ../../dist/public/admin"
   },
   "devDependencies": {
     "@types/node": "^14.0.14",

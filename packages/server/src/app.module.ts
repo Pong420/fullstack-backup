@@ -26,6 +26,8 @@ mongoose.set('toJSON', {
   versionKey: false // remove '__v',
 });
 
+const publicPath = path.resolve(__dirname, '../public');
+
 const configure = (factory: ConfigFactory[] = []) =>
   ConfigModule.forRoot({
     isGlobal: true,
@@ -73,7 +75,7 @@ const meta: ModuleMetadata = {
       })
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, 'admin')
+      rootPath: publicPath
     }),
     UserModule,
     AuthModule,
