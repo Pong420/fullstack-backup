@@ -6,19 +6,9 @@ import { Empty } from '@/components/Empty';
 import { Button } from '@/components/Button';
 import { useFavouriteList } from '@/hooks/useFavourite';
 import { useAuth } from '@/hooks/useAuth';
+import { navigate } from '@/utils/navigation';
 
 const pageHeader = <PageHeader text="Favourite" />;
-
-function NotAuthenticated() {
-  return (
-    <Empty
-      style={{ flex: 1, justifyContent: 'center' }}
-      content="Login Required"
-    >
-      <Button intent="DARK" title="Login" />
-    </Empty>
-  );
-}
 
 export function Favourite() {
   const { loginStatus } = useAuth();
@@ -27,11 +17,19 @@ export function Favourite() {
   return (
     <SafeAreaView style={styles.grow}>
       {loginStatus === 'loggedIn' ? (
-        list.length ? null : (
+        list.length ? (
+          <Empty content="You have not any favorite product added." />
+        ) : (
           <ProductList data={list} ListHeaderComponent={pageHeader} />
         )
       ) : (
-        <NotAuthenticated />
+        <Empty content="Login Required">
+          <Button
+            intent="DARK"
+            title="Login"
+            onPress={() => navigate('Login')}
+          />
+        </Empty>
       )}
     </SafeAreaView>
   );

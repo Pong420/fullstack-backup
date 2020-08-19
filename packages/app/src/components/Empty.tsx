@@ -8,11 +8,13 @@ interface Props extends ViewProps {
   content: ReactNode;
   children?: ReactNode;
   fontSize?: number;
+  logo?: boolean;
 }
 
 export function Empty({
   style,
-  fontSize = 40,
+  fontSize = 30,
+  logo = true,
   content,
   children,
   ...props
@@ -20,10 +22,12 @@ export function Empty({
   return (
     <View {...props} style={[styles.empty, style]}>
       <View style={styles.container}>
-        <Logo />
-        <InkPainting fontSize={40}>{content}</InkPainting>
+        {logo && <Logo />}
+        <InkPainting fontSize={fontSize} style={styles.text}>
+          {content}
+        </InkPainting>
       </View>
-      <View style={styles.content}>{children}</View>
+      <View style={styles.extraContent}>{children}</View>
     </View>
   );
 }
@@ -39,7 +43,8 @@ const styles = StyleSheet.create({
     ...container,
     padding: containerPadding
   },
-  content: {
+  text: { textAlign: 'center' },
+  extraContent: {
     alignSelf: 'stretch'
   }
 });

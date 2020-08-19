@@ -21,11 +21,14 @@ import { CreateAddressScreen } from './CreateAddressScreen';
 import { UpdateAddressScreen } from './UpdateAddressScreen';
 import { DeliveryAddressParamList } from './routes';
 
+// TODO: use flatlist ?
+
 const Stack = createStackNavigator<DeliveryAddressParamList>();
 
 const useAddressReducer = createUseCRUDReducer<Schema$Address, 'id'>('id');
 
 const request = () => getAddresses().then(res => res.data.data);
+
 function MainScreen({
   navigation,
   route
@@ -65,37 +68,38 @@ function MainScreen({
     <>
       <Header title="Delivery Address" />
       <View style={styles.container}>
-        {loading === false && addressses.length === 0 && (
-          <Empty content="You have not add any deilvery address" />
-        )}
-        <ScrollView bounces={false} style={styles.scrollView}>
-          {addressses.map(payload => {
-            const { id, area, address } = payload;
-            return (
-              <View key={id} style={styles.card}>
-                <View style={styles.cardHead}>
-                  <Feather
-                    name="trash-2"
-                    size={20}
-                    onPress={() => removeAddressModal(id, address)}
-                  />
-                  <View style={styles.spacer} />
-                  <Feather
-                    name="edit"
-                    size={20}
-                    onPress={() => navigation.navigate('Update', payload)}
+        {loading === false && addressses.length === 0 ? (
+          <Empty content="You have not any deilvery address added." />
+        ) : (
+          <ScrollView bounces={false} style={styles.scrollView}>
+            {addressses.map(payload => {
+              const { id, area, address } = payload;
+              return (
+                <View key={id} style={styles.card}>
+                  <View style={styles.cardHead}>
+                    <Feather
+                      name="trash-2"
+                      size={20}
+                      onPress={() => removeAddressModal(id, address)}
+                    />
+                    <View style={styles.spacer} />
+                    <Feather
+                      name="edit"
+                      size={20}
+                      onPress={() => navigation.navigate('Update', payload)}
+                    />
+                  </View>
+                  <AddressForm
+                    area={area}
+                    editable={false}
+                    key={JSON.stringify(address)}
+                    initialValues={address}
                   />
                 </View>
-                <AddressForm
-                  area={area}
-                  editable={false}
-                  key={JSON.stringify(address)}
-                  initialValues={address}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
+        )}
         <View style={styles.button}>
           <Button
             intent="DARK"
