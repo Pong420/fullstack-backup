@@ -3,8 +3,7 @@ import {
   View,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  ViewStyle,
-  StyleSheet
+  ViewStyle
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useBoolean } from '@/hooks/useBoolean';
@@ -30,8 +29,6 @@ const themes = {
     light: 'rgba(219,55,55,.3)'
   }
 };
-
-const height = 40;
 
 export type ControlRef<T> = {
   [K in keyof T]?: RNTextInput | null;
@@ -118,18 +115,19 @@ export function createTextInput(defaultProps?: TextInputProps) {
             onBlur={onBlur}
             onFocus={onFocus}
             onChangeText={onChange}
-            style={StyleSheet.compose(
+            style={[
               {
-                height,
+                height: border === 'bottom' ? 40 : 34,
                 flex: 1,
-                paddingHorizontal: 7,
+                alignSelf: 'flex-end',
+                fontSize: 16,
                 color:
                   border === 'bottom' && (hasError || focused)
                     ? theme.dark
                     : colors.black
               },
               style
-            )}
+            ]}
             {...props}
             {...(props &&
               typeof props.value === 'undefined' &&
