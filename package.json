@@ -18,7 +18,7 @@
     "dev:admin": "yarn dev --ignore @fullstack/app",
     "build": "rimraf dist && npx mkdirp ./dist/public && lerna run build --stream",
     "postinstall": "lerna run postinstall --stream --parallel",
-    "heroku-postbuild": "yarn build"
+    "heroku-postbuild": "yarn build --ignore @fullstack/app"
   },
   "workspaces": [
     "packages/*"
