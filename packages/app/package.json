@@ -12,7 +12,7 @@
     "eject": "expo eject",
     "postinstall": "expo-yarn-workspaces postinstall",
     "build": "yarn export && yarn move",
-    "export": "expo export --public-url https://pong-fullstack.herokuapp.com/app",
+    "export": "expo export --public-url https://pong-fullstack.herokuapp.com/app --force",
     "move": "rimraf ../../dist/public/app && mv dist ../../dist/public/app || move dist ../../dist/public/app"
   },
   "dependencies": {

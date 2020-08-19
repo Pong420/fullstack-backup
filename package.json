@@ -6,7 +6,7 @@
   "repository": "https://github.com/Pong420/fullstack.git",
   "author": "Pong <samfunghp@gmail.com>",
   "scripts": {
-    "start": "node ./dist/src/main.js",
+    "start": "node ./dist",
     "app": "yarn workspace @fullstack/app",
     "admin": "yarn workspace @fullstack/admin",
     "server": "yarn workspace @fullstack/server",
@@ -16,9 +16,9 @@
     "dev:server": "yarn dev --ignore @fullstack/admin --ignore @fullstack/app",
     "dev:app": "yarn dev --ignore @fullstack/admin",
     "dev:admin": "yarn dev --ignore @fullstack/app",
-    "build": "rimraf dist && lerna run build --stream",
+    "build": "rimraf dist && npx mkdirp ./dist/public && lerna run build --stream",
     "postinstall": "lerna run postinstall --stream --parallel",
-    "heroku-postbuild": "yarn build --ignore @fullstack/app"
+    "heroku-postbuild": "yarn build"
   },
   "workspaces": [
     "packages/*"
