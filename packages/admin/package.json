@@ -12,7 +12,7 @@
     "component": "node scripts/component.js",
     "redux": "node scripts/redux.js",
     "get": "node scripts/type.js",
-    "move": "rimraf ../../dist/public/admin && mv build ../../dist/public/admin || move build ../../dist/public/admin"
+    "move": "rimraf ../../dist/public/admin && mv build ../../dist/public/admin"
   },
   "devDependencies": {
     "@types/node": "^14.0.14",
