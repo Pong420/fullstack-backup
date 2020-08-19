@@ -2,30 +2,63 @@ import React from 'react';
 import { View, Image, FlatList, StyleSheet, FlatListProps } from 'react-native';
 import { Schema$Product } from '@fullstack/typings';
 import { Text } from '@/components/Text';
+import { Button } from '@/components/Button';
+import { ToggleFavourite } from '@/components/ToggleFavourite';
+import { useFavouriteActions } from '@/hooks/useFavourite';
 import { containerPadding, colors, shadow } from '@/styles';
 
-type ListProps = FlatListProps<Schema$Product>;
+export type Partial$Product = Schema$Product | { id: string };
+type ListProps = FlatListProps<Partial$Product>;
+
 interface Props extends Partial<ListProps> {
-  data: Schema$Product[];
+  data: Partial$Product[];
 }
 
-function Product({ name, price, discount, images }: Schema$Product) {
-  const finalPrice = (price * discount) / 100;
+function isProduct(payload: Partial$Product): payload is Schema$Product {
+  return 'name' in payload;
+}
+
+function Product(payload: Partial$Product) {
+  const actions = useFavouriteActions();
+
+  if (isProduct(payload)) {
+    const { name, price, discount, images } = payload;
+    const finalPrice = (price * discount) / 100;
+    return (
+      <View style={styles.product}>
+        <View style={styles.productInner}>
+          <View>
+            <Image style={styles.thumbnail} source={{ uri: images[0] || '' }} />
+          </View>
+          <View style={styles.productContent}>
+            <Text style={styles.productName}>{name}</Text>
+            <Text style={styles.price}>
+              ${finalPrice}
+              {finalPrice !== price && (
+                <Text style={styles.oroginPrice}> ${price}</Text>
+              )}
+            </Text>
+          </View>
+          <View style={styles.faviourite}>
+            <ToggleFavourite product={payload} />
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.product}>
       <View style={styles.productInner}>
-        <View>
-          <Image style={styles.thumbnail} source={{ uri: images[0] || '' }} />
-        </View>
-        <View style={styles.productContent}>
-          <Text>{name}</Text>
-          <Text style={styles.price}>
-            ${finalPrice}
-            {finalPrice !== price && (
-              <Text style={styles.oroginPrice}> ${price}</Text>
-            )}
+        <View style={styles.offshelf}>
+          <Text style={styles.offsetText}>
+            The product probably off the shelf
           </Text>
+          <Button
+            intent="DARK"
+            title="Remove it from list"
+            onPress={() => actions.delete(payload)}
+          />
         </View>
       </View>
     </View>
@@ -33,9 +66,8 @@ function Product({ name, price, discount, images }: Schema$Product) {
 }
 
 const defaultProps: Omit<ListProps, 'data'> = {
-  // keyExtractor: (p, index) => `${p.id}-${index}`,
   keyExtractor: p => p.id,
-  renderItem: ({ item }) => <Product {...item}></Product>
+  renderItem: ({ item }) => <Product {...item} />
 };
 
 export function ProductList({ contentContainerStyle, ...props }: Props) {
@@ -51,6 +83,7 @@ export function ProductList({ contentContainerStyle, ...props }: Props) {
 
 const fontSize = 13;
 const thunbnailWidth = 120;
+const padding = 10;
 const styles = StyleSheet.create({
   contianer: {
     flexGrow: 1,
@@ -72,20 +105,37 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   productContent: {
-    padding: 10
+    flex: 1,
+    padding
   },
   thumbnail: {
     flex: 1,
     width: thunbnailWidth,
     height: thunbnailWidth * 0.8
   },
+  productName: {
+    lineHeight: fontSize * 1.4
+  },
   price: {
-    fontSize,
-    color: colors.textMuted
+    color: colors.textMuted,
+    fontSize
   },
   oroginPrice: {
-    fontSize,
     color: colors.textMuted,
+    fontSize,
     textDecorationLine: 'line-through'
+  },
+  faviourite: {
+    paddingTop: padding * 1.2,
+    paddingRight: padding
+  },
+  offshelf: {
+    alignItems: 'stretch',
+    flex: 1,
+    padding
+  },
+  offsetText: {
+    marginBottom: 10,
+    textAlign: 'center'
   }
 });

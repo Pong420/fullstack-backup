@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  ProviderProps,
-  ReactNode,
-  useState
-} from 'react';
+import React, { useEffect, useRef, ProviderProps, ReactNode } from 'react';
 import { defer, Subject, empty } from 'rxjs';
 import {
   map,
@@ -26,9 +20,9 @@ import { createUseRxCRUDReducer } from './crud';
 type Schema = Schema$Product | { id: string };
 
 const [
-  favourite$,
-  favouriteStore,
-  useFavouriteReducer
+  //
+  useFavouriteReducer,
+  createSelector
 ] = createUseRxCRUDReducer<Schema, 'id'>('id');
 
 type Payload = [boolean, Schema];
@@ -40,6 +34,16 @@ type Actions = ReturnType<typeof useFavouriteReducer>[1] & {
 const StateContext = React.createContext({} as State);
 const ActionsContext = React.createContext({} as Actions);
 
+export function useFavouriteState() {
+  const context = React.useContext(StateContext);
+  if (context === undefined) {
+    throw new Error(
+      'useFavouriteState must be used within a FavouriteProvider'
+    );
+  }
+  return context;
+}
+
 export function useFavouriteActions() {
   const context = React.useContext(ActionsContext);
   if (context === undefined) {
@@ -50,21 +54,21 @@ export function useFavouriteActions() {
   return context;
 }
 
-export function useFavourite(id: string) {
-  const [isFavourite, setIsFavourite] = useState(
-    favouriteStore.getState().ids.includes(id)
-  );
+export const useFavouriteIds = createSelector(
+  state => state.ids,
+  (i, o) => i.length === o.length
+);
 
-  useEffect(() => {
-    const subscription = favourite$.subscribe(state => {
-      const value = state.ids.includes(id);
-      if (value !== isFavourite) {
-        setIsFavourite(value);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [id, isFavourite]);
+export const useFavouriteList = createSelector(
+  state => state.list,
+  (i, o) => i.length === o.length
+);
 
+export function useToggleFavourite(id: string) {
+  const isFavourite = createSelector(
+    state => state.ids.includes(id),
+    (i, o) => i === o
+  )();
   return [isFavourite, useFavouriteActions()] as const;
 }
 
@@ -83,7 +87,8 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
   const { loginStatus } = useAuth();
 
   const trigger$ = useRef(new Subject<Payload>());
-  const actionConext = useRef<Actions>({
+
+  const { current: actionConext } = useRef<Actions>({
     ...actions,
     toggleFavourite: payload => {
       trigger$.current.next(payload);
@@ -92,7 +97,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
 
   const { run } = useRxAsync(request, {
     defer: true,
-    onSuccess: actions.list
+    onSuccess: actionConext.list
   });
 
   useEffect(() => {
@@ -119,8 +124,6 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
               return defer(() =>
                 toggleFavourite({ product: product.id, action })
               ).pipe(
-                map(res => res.data?.data?.product as Schema | null),
-                map(payload => [product.id, payload] as const),
                 catchError(error => {
                   toaster.apiError(`Failed to ${action} favourite`, error);
                   return empty();
@@ -130,9 +133,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
           );
         })
       )
-      .subscribe(([id, product]) => {
-        // product ? actions.update(product) : actions.delete({ id });
-      });
+      .subscribe();
     return () => subscription.unsubscribe();
   }, [actions]);
 
@@ -141,7 +142,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
     { value: state },
     React.createElement<ProviderProps<Actions>>(
       ActionsContext.Provider,
-      { value: actionConext.current },
+      { value: actionConext },
       children
     )
   );

@@ -5,6 +5,8 @@ import { AllowedNames, createCRUDActionsCreators } from './crudActions';
 import { bindDispatch } from './bindDispatch';
 import { createPaginatedCRUDActionsCreators } from './paginatedCRUDActions';
 import { createPaginatedCRUDReducer } from './paginatedCRUDReducer';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export function createUseCRUDReducer<
   I extends {},
@@ -49,6 +51,9 @@ class Store<T> {
   }
 }
 
+type EqualityFn<T> = (oldState: T, newState: T) => boolean;
+type Selector<I, O> = (state: I) => O;
+
 export function createUseRxCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
@@ -56,6 +61,25 @@ export function createUseRxCRUDReducer<
   let [crudState, reducer] = createCRUDReducer<I, K>(key);
   const subject = new Subject<typeof crudState>();
   const store = new Store(crudState);
+
+  function createSelector<O>(
+    selector: Selector<typeof crudState, O>,
+    equalityFn: EqualityFn<O> = () => false
+  ) {
+    return function useSelector() {
+      const [state, setState] = useState(store.getState());
+      useEffect(() => {
+        const subscription = subject.subscribe(newState => {
+          if (!equalityFn(selector(state), selector(newState))) {
+            setState(newState);
+          }
+        });
+        return () => subscription.unsubscribe();
+      }, [state]);
+
+      return selector(state);
+    };
+  }
 
   function useCRUDReducer() {
     const [state, dispatch] = useReducer(reducer, crudState);
@@ -76,5 +100,5 @@ export function createUseRxCRUDReducer<
     return [state, actions] as const;
   }
 
-  return [subject, store, useCRUDReducer] as const;
+  return [useCRUDReducer, createSelector, subject, store] as const;
 }
