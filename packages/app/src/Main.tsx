@@ -50,7 +50,7 @@ const screenOptions: (
 export function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="Favourite"
+      initialRouteName="Home"
       tabBarOptions={tabBarOptions}
       screenOptions={screenOptions}
     >

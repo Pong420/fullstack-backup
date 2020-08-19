@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { View, ViewProps, StyleSheet } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { shadow } from '@/styles';
 
@@ -17,10 +17,10 @@ export function KeyboardAvoidingViewFooter({
   return (
     <View
       {...props}
-      style={StyleSheet.compose(
+      style={[
         style,
-        visbile ? shadow(4, { shadowOffsetY: -2 }) : {}
-      )}
+        visbile ? shadow(4, { shadowOffsetY: -2, backgroundColor: '#fff' }) : {}
+      ]}
     />
   );
 }

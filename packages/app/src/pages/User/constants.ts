@@ -12,8 +12,6 @@ export type UserStackParamList = {
   PersonalInfo: PersonalInfoParamList['Main'];
   ChangePassword: undefined;
   DeliveryAddress: undefined;
-  Login: undefined;
-  Registration: undefined;
   ValidatePassword: undefined;
 };
 

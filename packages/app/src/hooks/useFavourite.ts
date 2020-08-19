@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, ProviderProps, ReactNode } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  useRef,
+  ProviderProps,
+  ReactNode
+} from 'react';
 import { defer, Subject, empty } from 'rxjs';
 import {
   map,
@@ -13,7 +19,10 @@ import {
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Product, FavouriteAction } from '@fullstack/typings';
 import { getFavourites, toggleFavourite } from '@/service';
+import { openConfirmModal } from '@/components/ConfirmModal';
 import { toaster } from '@/components/Toast';
+import { SemiBold } from '@/components/Text';
+import { navigate } from '@/utils/navigation';
 import { useAuth } from './useAuth';
 import { createUseRxCRUDReducer } from './crud';
 
@@ -88,12 +97,30 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
 
   const trigger$ = useRef(new Subject<Payload>());
 
-  const { current: actionConext } = useRef<Actions>({
-    ...actions,
-    toggleFavourite: payload => {
-      trigger$.current.next(payload);
-    }
-  });
+  const actionConext = useMemo<Actions>(() => {
+    return {
+      ...actions,
+      toggleFavourite: payload => {
+        if (loginStatus === 'loggedIn') {
+          trigger$.current.next(payload);
+        } else {
+          openConfirmModal({
+            vertialFooter: true,
+            title: '',
+            content: React.createElement(
+              SemiBold,
+              { style: { fontSize: 20, textAlign: 'center' } },
+              'Login required'
+            ),
+            confirmText: 'Login',
+            onConfirm: () => {
+              navigate('Login');
+            }
+          });
+        }
+      }
+    };
+  }, [actions, loginStatus]);
 
   const { run } = useRxAsync(request, {
     defer: true,

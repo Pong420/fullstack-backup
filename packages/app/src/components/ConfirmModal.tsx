@@ -9,11 +9,11 @@ import React, {
 import {
   Animated,
   View,
+  ViewStyle,
   StyleSheet,
   TouchableWithoutFeedback
 } from 'react-native';
 import { Subject } from 'rxjs';
-import { useRxAsync } from 'use-rx-hooks';
 import { SemiBold, Text } from './Text';
 import { Button } from './Button';
 import { shadow, containerPadding } from '@/styles';
@@ -23,7 +23,8 @@ export interface ConfirmModalProps {
   content?: ReactNode;
   cancelText?: string;
   confirmText?: string;
-  onConfirm: () => Promise<unknown>;
+  vertialFooter?: boolean;
+  onConfirm?: () => void | Promise<unknown>;
 }
 
 interface OnClose {
@@ -69,9 +70,11 @@ export function ConfirmModal({
   cancelText,
   confirmText,
   onConfirm,
-  onClose
+  onClose,
+  vertialFooter
 }: ConfirmModalProps & OnClose) {
   const anim = useRef(new Animated.Value(0));
+  const [loading, setLoading] = useState(false);
 
   const { current: handleClose } = useRef(() =>
     Animated.timing(anim.current, {
@@ -80,11 +83,6 @@ export function ConfirmModal({
       useNativeDriver: true
     }).start(() => onClose())
   );
-
-  const { run, loading } = useRxAsync(onConfirm, {
-    defer: true,
-    onSuccess: handleClose
-  });
 
   const closeModal = loading ? undefined : handleClose;
 
@@ -124,27 +122,53 @@ export function ConfirmModal({
               <Text>{content}</Text>
             </View>
           </View>
-          <View style={styles.footer}>
-            <Button
-              style={styles.button}
-              ghost
-              intent="DARK"
-              title={cancelText}
-              onPress={closeModal}
-            />
-            <Button
-              intent="DARK"
-              loading={loading}
-              style={styles.button}
-              title={confirmText}
-              onPress={run}
-            />
+          <View
+            style={vertialFooter ? styles.footerVertial : styles.footerHorzonal}
+          >
+            {!!cancelText && (
+              <Button
+                ghost
+                intent="DARK"
+                title={cancelText}
+                onPress={closeModal}
+                style={vertialFooter ? undefined : styles.buttonHorizonal}
+              />
+            )}
+            {!!confirmText && (
+              <Button
+                intent="DARK"
+                loading={loading}
+                title={confirmText}
+                style={
+                  vertialFooter ? styles.buttonVertial : styles.buttonHorizonal
+                }
+                onPress={() => {
+                  if (onConfirm) {
+                    const promise = onConfirm();
+                    if (promise instanceof Promise) {
+                      promise
+                        .then(() => {
+                          setLoading(true);
+                          handleClose();
+                        })
+                        .catch(() => setLoading(false));
+                    } else {
+                      handleClose();
+                    }
+                  }
+                }}
+              />
+            )}
           </View>
         </Animated.View>
       </View>
     </View>
   );
 }
+
+const footer: ViewStyle = {
+  marginTop: 20
+};
 
 const styles = StyleSheet.create({
   backdrop: {
@@ -176,13 +200,21 @@ const styles = StyleSheet.create({
   modalContent: {
     paddingVertical: 10
   },
-  footer: {
+  footerHorzonal: {
+    ...footer,
     flexDirection: 'row',
-    marginTop: 20,
     paddingHorizontal: containerPadding / 2
   },
-  button: {
+  footerVertial: {
+    ...footer,
+    flexDirection: 'column-reverse',
+    paddingHorizontal: containerPadding
+  },
+  buttonHorizonal: {
     flex: 1,
     marginHorizontal: containerPadding / 2
+  },
+  buttonVertial: {
+    marginBottom: 10
   }
 });

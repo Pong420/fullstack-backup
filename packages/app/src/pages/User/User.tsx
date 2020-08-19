@@ -8,7 +8,6 @@ import { PersonalInfo } from './PersonalInfo';
 import { ChangePassword } from './ChangePassword';
 import { DeliveryAddress } from './DeliveryAddress';
 import { ValidatePasswordScreen } from './ValidatePasswordScreen';
-import { Login, Registration } from '../Auth';
 import { UserStackParamList } from './constants';
 
 const screenOptions: StackNavigationOptions = {
@@ -24,8 +23,6 @@ export function User() {
       <UserStack.Screen name="PersonalInfo" component={PersonalInfo} />
       <UserStack.Screen name="ChangePassword" component={ChangePassword} />
       <UserStack.Screen name="DeliveryAddress" component={DeliveryAddress} />
-      <UserStack.Screen name="Login" component={Login} />
-      <UserStack.Screen name="Registration" component={Registration} />
       <UserStack.Screen
         name="ValidatePassword"
         component={ValidatePasswordScreen}

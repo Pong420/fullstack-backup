@@ -35,29 +35,32 @@ export function createAuthPage<T extends Schema>({
     loginStatus === 'loggedIn' && navigation.goBack();
 
     return (
-      <Form style={styles.container} form={form} onFinish={authenticate}>
-        <Header title="Go Back" />
-        <ScrollView bounces={false} style={styles.scrollViewContent}>
-          <View style={styles.logo}>
-            <InkPainting fontSize={70}>{title}</InkPainting>
-          </View>
+      <View style={styles.outecr}>
+        <Form style={styles.container} form={form} onFinish={authenticate}>
+          <Header title="Go Back" />
+          <ScrollView bounces={false} style={styles.scrollViewContent}>
+            <View style={styles.logo}>
+              <InkPainting fontSize={70}>{title}</InkPainting>
+            </View>
 
-          <Content onSubmit={form.submit} />
-        </ScrollView>
-        <KeyboardAvoidingViewFooter style={styles.buttonContainer}>
-          <Button
-            intent="DARK"
-            title={title}
-            onPress={form.submit}
-            loading={loginStatus === 'loading'}
-          />
-        </KeyboardAvoidingViewFooter>
-      </Form>
+            <Content onSubmit={form.submit} />
+          </ScrollView>
+          <KeyboardAvoidingViewFooter style={styles.buttonContainer}>
+            <Button
+              intent="DARK"
+              title={title}
+              onPress={form.submit}
+              loading={loginStatus === 'loading'}
+            />
+          </KeyboardAvoidingViewFooter>
+        </Form>
+      </View>
     );
   };
 }
 
 const styles = StyleSheet.create({
+  outecr: { flex: 1, paddingBottom: containerPadding },
   container: { flex: 1 },
   scrollViewContent: { paddingHorizontal: containerPadding },
   logo: {
