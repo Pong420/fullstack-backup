@@ -1,7 +1,9 @@
 import {
   CRUDActions,
   AllowedNames,
-  createCRUDActionsCreators
+  createCRUDActionsCreators,
+  CRUDActionCreators,
+  Creator
 } from './crudActions';
 
 export type PaginatePayload<I> =
@@ -22,15 +24,19 @@ export type PaginatedCRUDActions<
   K extends AllowedNames<I, string>
 > = CRUDActions<I, K> | Paginate<I>;
 
-export function createPaginatedCRUDActionsCreators<
-  I extends Record<string, unknown>,
+export type PaginatedCRUDActionCreators<
+  I extends {},
   K extends AllowedNames<I, string>
->() {
+> = CRUDActionCreators<I, K> & {
+  paginate: Creator<Paginate<I>>;
+};
+
+export function createPaginatedCRUDActionsCreators<
+  I extends {},
+  K extends AllowedNames<I, string>
+>(): PaginatedCRUDActionCreators<I, K> {
   return {
     ...createCRUDActionsCreators<I, K>(),
-    paginate: (payload: Paginate<I>['payload']): Paginate<I> => ({
-      type: 'PAGINATE',
-      payload
-    })
+    paginate: payload => ({ type: 'PAGINATE', payload })
   };
 }

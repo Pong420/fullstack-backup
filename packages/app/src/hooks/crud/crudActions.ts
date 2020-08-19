@@ -50,27 +50,37 @@ export type CRUDActions<I extends {}, K extends AllowedNames<I, string>> =
   | Delete<I, K>
   | Reset;
 
+export type ExtractAction<
+  T1 extends { type: string },
+  T2 extends T1['type']
+> = T1 extends { type: T2 } ? T1 : never;
+
+export type Creator<
+  T1 extends { type: string; payload?: unknown }
+> = ExtractAction<T1, T1['type']> extends { payload: any }
+  ? (payload: ExtractAction<T1, T1['type']>['payload']) => T1
+  : (payload?: ExtractAction<T1, T1['type']>['payload']) => T1;
+
+export type CRUDActionCreators<
+  I extends {},
+  K extends AllowedNames<I, string>
+> = {
+  list: Creator<List<I>>;
+  create: Creator<Create<I>>;
+  update: Creator<Update<I, K>>;
+  delete: Creator<Delete<I, K>>;
+  reset: Creator<Reset>;
+};
+
 export function createCRUDActionsCreators<
   I extends Record<string, unknown>,
   K extends AllowedNames<I, string>
->() {
+>(): CRUDActionCreators<I, K> {
   return {
-    list: (payload: List<I>['payload']): List<I> => ({
-      type: 'LIST',
-      payload
-    }),
-    create: (payload: Create<I>['payload']): Create<I> => ({
-      type: 'CREATE',
-      payload
-    }),
-    update: (payload: Update<I, K>['payload']): Update<I, K> => ({
-      type: 'UPDATE',
-      payload
-    }),
-    delete: (payload: Delete<I, K>['payload']): Delete<I, K> => ({
-      type: 'DELETE',
-      payload
-    }),
-    reset: (): Reset => ({ type: 'RESET' })
+    list: payload => ({ type: 'LIST', payload }),
+    create: payload => ({ type: 'CREATE', payload }),
+    update: payload => ({ type: 'UPDATE', payload }),
+    delete: payload => ({ type: 'DELETE', payload }),
+    reset: () => ({ type: 'RESET' })
   };
 }

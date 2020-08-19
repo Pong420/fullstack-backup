@@ -1,10 +1,9 @@
 import { Reducer } from 'react';
 import { AllowedNames } from './crudActions';
 import { createCRUDReducer, CRUDState } from './crudReducer';
-import { PaginatedCRUDActions } from './paginatedCrudActions';
+import { PaginatedCRUDActions } from './paginatedCRUDActions';
 
-export interface PaginatedCRUDState<I extends Record<string, unknown>>
-  extends CRUDState<I> {
+export interface PaginatedCRUDState<I extends {}> extends CRUDState<I> {
   page: number;
   pageSize: number;
   total: number;
@@ -19,7 +18,7 @@ type ReturnCreatePaginatedCURDReducer<
   Reducer<PaginatedCRUDState<I>, PaginatedCRUDActions<I, K>>
 ];
 
-export function createPaginatedCrudReducer<
+export function createPaginatedCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
 >(key: K): ReturnCreatePaginatedCURDReducer<I, K> {
