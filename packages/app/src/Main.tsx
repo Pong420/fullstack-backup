@@ -49,7 +49,7 @@ const screenOptions: (
 export function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="Compass"
+      initialRouteName="Home"
       tabBarOptions={tabBarOptions}
       screenOptions={screenOptions}
     >

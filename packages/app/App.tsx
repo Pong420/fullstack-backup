@@ -9,6 +9,7 @@ import { fonts } from './src/components/Text';
 import { ToastContainer } from './src/components/Toast';
 import { ConfirmModalContainer } from './src/components/ConfirmModal';
 import { AuthProvider } from './src/hooks/useAuth';
+import { FavouriteProvider } from './src/hooks/useFavourite';
 import { navigationRef } from './src/utils/navigation';
 
 enableScreens();
@@ -41,7 +42,9 @@ function App() {
 export default function () {
   return (
     <AuthProvider>
-      <App />
+      <FavouriteProvider>
+        <App />
+      </FavouriteProvider>
     </AuthProvider>
   );
 }

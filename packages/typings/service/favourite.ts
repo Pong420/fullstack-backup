@@ -9,7 +9,7 @@ export enum FavouriteAction {
 export interface Schema$Favourite extends Timestamp {
   id: string;
   user: string;
-  product?: Schema$Product;
+  product: Schema$Product | null;
 }
 
 export interface Param$GetFavourites extends Pagination {

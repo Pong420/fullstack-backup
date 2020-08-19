@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { Schema$Product } from '@fullstack/typings';
 import { containerPadding, shadow, colors } from '@/styles';
 import { SemiBold, Text } from '@/components/Text';
+import { ToggleFavourite } from '@/components/ToggleFavourite';
 
 interface Props {
   products: Schema$Product[];
@@ -15,16 +16,20 @@ export function HomeProductsSlide({ products }: Props) {
       contentContainerStyle={styles.scroller}
       showsHorizontalScrollIndicator={false}
     >
-      {products.map(({ id, images, name, category, price, discount }) => {
+      {products.map(product => {
+        const { id, images, name, category, price, discount } = product;
         const finalPrice = (price * discount) / 100;
 
         return (
           <View key={id} style={styles.card}>
             <View style={styles.cardContent}>
-              <Image
-                style={styles.thumbnail}
-                source={{ uri: images[0] || '' }}
-              />
+              <View>
+                <Image
+                  style={styles.thumbnail}
+                  source={{ uri: images[0] || '' }}
+                />
+                <ToggleFavourite style={styles.favourite} product={product} />
+              </View>
               <View style={styles.footer}>
                 <SemiBold style={styles.productName}>{name}</SemiBold>
                 <Text style={styles.category}>{category}</Text>
@@ -66,6 +71,11 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     height: (width * 617) / 925
+  },
+  favourite: {
+    position: 'absolute',
+    right: 5,
+    bottom: 5
   },
   footer: {
     paddingTop: 5,
