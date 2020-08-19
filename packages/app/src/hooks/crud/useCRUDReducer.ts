@@ -36,20 +36,36 @@ export function createUsePaginateCRUDReducer<
   };
 }
 
+class Store<T> {
+  value: T;
+  constructor(value: T) {
+    this.value = value;
+  }
+  getState(): T {
+    return this.value;
+  }
+  setState(value: T) {
+    this.value = value;
+  }
+}
+
 export function createUseRxCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
 >(key: K) {
   let [crudState, reducer] = createCRUDReducer<I, K>(key);
   const subject = new Subject<typeof crudState>();
+  const store = new Store(crudState);
 
   function useCRUDReducer() {
     const [state, dispatch] = useReducer(reducer, crudState);
     const actions = useMemo(() => {
       const dispatch$: typeof dispatch = payload => {
         dispatch(payload);
-        crudState = reducer(crudState, payload);
-        subject.next(crudState);
+
+        const newState = reducer(store.getState(), payload);
+        store.setState(newState);
+        subject.next(newState);
       };
       return bindDispatch(
         createPaginatedCRUDActionsCreators<I, K>(),
@@ -60,5 +76,5 @@ export function createUseRxCRUDReducer<
     return [state, actions] as const;
   }
 
-  return [subject, crudState, useCRUDReducer] as const;
+  return [subject, store, useCRUDReducer] as const;
 }

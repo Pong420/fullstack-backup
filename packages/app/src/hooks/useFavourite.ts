@@ -27,7 +27,7 @@ type Schema = Schema$Product | { id: string };
 
 const [
   favourite$,
-  favouriteState,
+  favouriteStore,
   useFavouriteReducer
 ] = createUseRxCRUDReducer<Schema, 'id'>('id');
 
@@ -52,7 +52,7 @@ export function useFavouriteActions() {
 
 export function useFavourite(id: string) {
   const [isFavourite, setIsFavourite] = useState(
-    favouriteState.ids.includes(id)
+    favouriteStore.getState().ids.includes(id)
   );
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
 
   const { run } = useRxAsync(request, {
     defer: true,
-    onSuccess: actions.paginate
+    onSuccess: actions.list
   });
 
   useEffect(() => {
@@ -131,7 +131,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
         })
       )
       .subscribe(([id, product]) => {
-        product ? actions.update(product) : actions.delete({ id });
+        // product ? actions.update(product) : actions.delete({ id });
       });
     return () => subscription.unsubscribe();
   }, [actions]);
