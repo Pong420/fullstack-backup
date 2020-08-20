@@ -83,6 +83,18 @@ export function createTextInput(defaultProps?: TextInputProps) {
         : { borderColor: '#fff' })
     };
 
+    const _leftElement =
+      leftElement ||
+      (leftIcon ? (
+        <Feather
+          name={leftIcon}
+          size={TEXT_INPUT_ICON_SIZE}
+          style={{
+            color: hasError || focused ? theme.dark : colors.black
+          }}
+        />
+      ) : null);
+
     return (
       <View style={border === 'default' ? defaultOuterStyle : undefined}>
         <View
@@ -99,16 +111,7 @@ export function createTextInput(defaultProps?: TextInputProps) {
             borderColor: hasError || focused ? theme.dark : colors.divider
           }}
         >
-          {leftElement ||
-            (leftIcon ? (
-              <Feather
-                name={leftIcon}
-                size={TEXT_INPUT_ICON_SIZE}
-                style={{
-                  color: hasError || focused ? theme.dark : colors.black
-                }}
-              />
-            ) : null)}
+          {_leftElement}
           <RNTextInput
             ref={ref}
             autoCapitalize="none"
@@ -117,14 +120,15 @@ export function createTextInput(defaultProps?: TextInputProps) {
             onChangeText={onChange}
             style={[
               {
-                height: border === 'bottom' ? 40 : 34,
-                flex: 1,
                 alignSelf: 'flex-end',
-                fontSize: 16,
                 color:
                   border === 'bottom' && (hasError || focused)
                     ? theme.dark
-                    : colors.black
+                    : colors.black,
+                flex: 1,
+                fontSize: 16,
+                height: border === 'bottom' ? 40 : 34,
+                paddingLeft: _leftElement ? 5 : 0
               },
               style
             ]}

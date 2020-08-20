@@ -175,10 +175,12 @@ export function Discover() {
           </KeyboardAvoidingView>
         </Animated.View>
 
+        {/* TODO: loading */}
+
         <ProductList
           data={product.list}
           ListEmptyComponent={
-            !search || product.total > 0 ? undefined : (
+            !search || loading || product.total > 0 ? undefined : (
               <Empty content="Products not found" />
             )
           }

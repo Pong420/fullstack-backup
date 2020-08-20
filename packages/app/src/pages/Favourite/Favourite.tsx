@@ -18,9 +18,9 @@ export function Favourite() {
     <SafeAreaView style={styles.grow}>
       {loginStatus === 'loggedIn' ? (
         list.length ? (
-          <Empty content="You have not any favorite product added." />
-        ) : (
           <ProductList data={list} ListHeaderComponent={pageHeader} />
+        ) : (
+          <Empty content="You have not any favorite product added." />
         )
       ) : (
         <Empty content="Login Required">
