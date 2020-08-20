@@ -1,0 +1,55 @@
+{
+    "base_url": "/api",
+    "auth": {
+        "prefix": "/auth",
+        "login": "/login",
+        "logout": "/logout",
+        "registration": "/register",
+        "admin_registration": "/register/admin",
+        "guest_registration": "/register/guest",
+        "refresh_token": "/refresh-token",
+        "modify_password": "/modify-password",
+        "delete_account": "/delete-account",
+        "cloudinary_sign": "/cloudinary/sign"
+    },
+    "user": {
+        "prefix": "/user",
+        "create_user": "",
+        "get_users": "",
+        "get_user": "/:id?",
+        "update_user": "/:id",
+        "delete_user": "/:id"
+    },
+    "products": {
+        "prefix": "/products",
+        "create_product": "",
+        "get_products": "",
+        "get_product": "/:id",
+        "update_product": "/:id",
+        "delete_product": "/:id",
+        "get_product_category": "/category",
+        "get_product_tags": "/tags"
+    },
+    "order": {
+        "prefix": "/orders",
+        "get_order": "/:id",
+        "get_orders": "",
+        "create_order": "",
+        "update_order": "/:id",
+        "delete_order": "/:id"
+    },
+    "address": {
+        "prefix": "/address",
+        "get_address": "/:id",
+        "get_addresses": "",
+        "create_address": "",
+        "update_address": "/:id",
+        "delete_address": "/:id"
+    },
+    "favourite": {
+        "prefix": "/favourite",
+        "get_favourites": "",
+        "delete_favourite": "/:id",
+        "toggle_favourite": "/:action/:product"
+    }
+}
