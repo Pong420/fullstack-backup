@@ -2,7 +2,7 @@
   "name": "@fullstack/admin",
   "version": "1.0.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "/admin",
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build && yarn move",

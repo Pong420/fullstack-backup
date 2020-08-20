@@ -7,7 +7,7 @@ import { createBrowserHistory } from 'history';
 import rootEpic from './epics';
 import createRootReducer from './reducers';
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory({ basename: '/admin' });
 
 const epic$ = new BehaviorSubject(rootEpic);
 const hotReloadingEpic: Epic = (...args) =>
