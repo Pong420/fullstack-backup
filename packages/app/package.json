@@ -11,8 +11,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "postinstall": "expo-yarn-workspaces postinstall",
-    "build": "yarn export && yarn move",
-    "export": "expo export --public-url https://pong-fullstack.herokuapp.com/app --force",
+    "deploy": "node gh-pages",
     "move": "rimraf ../../dist/public/app && mv dist ../../dist/public/app"
   },
   "dependencies": {
@@ -42,6 +41,7 @@
     "@types/react-native": "~0.62.13",
     "expo-cli": "^3.24.2",
     "expo-yarn-workspaces": "^1.2.1",
+    "gh-pages": "^3.1.0",
     "react-devtools": "^4.8.2",
     "react-native-svg-transformer": "^0.14.3",
     "typescript": "3.9.5"

@@ -10,12 +10,9 @@ A project for learning fullstack develop
   - [x] settings
   - [x] products
   - [ ] orders
-- **Admin Panel**: Create-React-App + Blueprintjs **[WIP]** [Preview](https://pong-fullstack.herokuapp.com/admin)
-  <img src="./screenshot/admin-products.png">
-  <img src="./screenshot/admin-users.png">
-  <img src="./screenshot/admin-settings.png">
+- **Admin Panel**: Create-React-App + Blueprintjs **[WIP]** [Preview](./packages/admin)
 - **Frontend**: NextJS
-- **Apps**: React Native
+- **Apps**: React Native **[WIP]** [Preview](./packages/app)
 
 ## Development
 
