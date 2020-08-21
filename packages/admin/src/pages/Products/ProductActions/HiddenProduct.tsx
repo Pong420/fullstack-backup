@@ -2,9 +2,9 @@ import React, { useRef, useEffect } from 'react';
 import { Subject, defer } from 'rxjs';
 import { tap, debounceTime, switchMap } from 'rxjs/operators';
 import { updateProduct } from '@fullstack/common/service';
+import { useBoolean } from '@fullstack/common/hooks';
 import { OnUpdate } from './UpdateProduct';
 import { ButtonPopover } from '../../../components/ButtonPopover';
-import { useBoolean } from '../../../hooks/useBoolean';
 import { Toaster } from '../../../utils/toaster';
 
 interface Props extends OnUpdate {

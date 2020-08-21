@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, IButtonProps } from '@blueprintjs/core';
-import { useBoolean } from '../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks';
 
 export function DangerButton(props: IButtonProps) {
   const [hover, on, off] = useBoolean();

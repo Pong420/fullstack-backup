@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fromEvent } from 'rxjs';
 import { Button, Popover, H5, IPopoverProps } from '@blueprintjs/core';
 import { DateRangeInput } from '@blueprintjs/datetime';
 import { Timestamp } from '@fullstack/typings';
+import { useBoolean } from '@fullstack/common/hooks';
 import { ButtonPopover } from '../../components/ButtonPopover';
 import { createForm, FormProps, FormItemProps } from '../../utils/form';
 import { setSearchParam, hasQuery } from '../../utils/setSearchParam';
-import { useBoolean } from '../../hooks/useBoolean';
 import { Input } from '../Input';
 import dayjs from 'dayjs';
-import { useLocation } from 'react-router-dom';
 
 interface FilterInputProps {
   deps?: undefined;

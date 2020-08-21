@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Dialog } from '@blueprintjs/core';
+import { useBoolean } from '@fullstack/common/hooks';
 import { UploadImage, Value } from './UploadImage';
 import { Image } from '../Image';
-import { useBoolean } from '../../hooks/useBoolean';
 
 interface Control {
   value?: Value[];

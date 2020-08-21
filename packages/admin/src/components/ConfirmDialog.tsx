@@ -14,8 +14,8 @@ import {
   Intent
 } from '@blueprintjs/core';
 import { DIALOG_FOOTER_ACTIONS } from '@blueprintjs/core/lib/esm/common/classes';
+import { useBoolean } from '@fullstack/common/hooks';
 import { useRxAsync } from 'use-rx-hooks';
-import { useBoolean } from '../hooks/useBoolean';
 import { createOpenDialog } from '../utils/openDialog';
 
 export interface ConfirmDialogProps extends IDialogProps {

@@ -10,7 +10,7 @@ import {
   HTMLInputProps,
   ControlGroup
 } from '@blueprintjs/core';
-import { useBoolean } from '../hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks';
 
 interface InputProps
   extends IInputGroupProps,
