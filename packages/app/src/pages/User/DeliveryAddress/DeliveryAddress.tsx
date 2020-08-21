@@ -7,6 +7,7 @@ import {
   createStackNavigator,
   StackScreenProps
 } from '@react-navigation/stack';
+import { createUseCRUDReducer } from '@fullstack/common/hooks';
 import { Header } from '@/components/Header';
 import { SemiBold } from '@/components/Text';
 import { Button } from '@/components/Button';
@@ -14,7 +15,6 @@ import { AddressForm } from '@/components/AddressForm';
 import { openConfirmModal } from '@/components/ConfirmModal';
 import { toaster } from '@/components/Toast';
 import { Empty } from '@/components/Empty';
-import { createUseCRUDReducer } from '@/hooks/crud';
 import { getAddresses, deleteAddress } from '@/service';
 import { card, containerPadding, colors } from '@/styles';
 import { CreateAddressScreen } from './CreateAddressScreen';

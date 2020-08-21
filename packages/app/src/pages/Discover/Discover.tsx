@@ -16,8 +16,7 @@ import { SearchInput, RNTextInputProps } from '@/components/SearchInput';
 import { ProductList } from '@/components/ProductList';
 import { PageHeader } from '@/components/PageHeader';
 import { Text } from '@/components/Text';
-import { useBoolean } from '@/hooks/useBoolean';
-import { createUsePaginateCRUDReducer } from '@/hooks/crud';
+import { useBoolean, createUseCRUDReducer } from '@fullstack/common/hooks';
 import { getProducts } from '@/service';
 import { containerPadding, colors } from '@/styles';
 import { Empty } from '@/components/Empty';
@@ -29,11 +28,15 @@ import { RecentSearches, updateRecentSearches } from './RecentSearches';
  * */
 
 const request = (params?: Param$GetProducts) =>
-  getProducts(params).then(res => res.data.data);
+  getProducts(params).then(res => {
+    const payload = res.data.data;
+    return {
+      ...payload,
+      pageNo: payload.page
+    };
+  });
 
-const useProductReducer = createUsePaginateCRUDReducer<Schema$Product, 'id'>(
-  'id'
-);
+const useProductReducer = createUseCRUDReducer<Schema$Product, 'id'>('id');
 
 export function Discover() {
   const anim = useRef(new Animated.Value(0));
@@ -187,7 +190,7 @@ export function Discover() {
           onEndReached={() => {
             const hasNext = product.total > product.ids.length;
             if (hasNext && !loading && product.ids.length) {
-              run({ search, page: product.page + 1 });
+              run({ search, page: product.pageNo + 1 });
             }
           }}
         />

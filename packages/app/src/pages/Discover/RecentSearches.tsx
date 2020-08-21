@@ -14,7 +14,7 @@ import { useRxAsync } from 'use-rx-hooks';
 import { JSONParse } from '@fullstack/common/utils/JSONParse';
 import { Text, SemiBold } from '@/components/Text';
 import { colors, containerPadding } from '@/styles';
-import { removeFromArray } from '@/hooks/crud';
+import { removeFromArray } from '@fullstack/common/hooks/crud';
 import AsyncStorage from '@react-native-community/async-storage';
 
 interface ItemProps extends TouchableOpacityProps {}

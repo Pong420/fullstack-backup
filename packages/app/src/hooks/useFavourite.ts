@@ -18,13 +18,13 @@ import {
 } from 'rxjs/operators';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Product, FavouriteAction } from '@fullstack/typings';
+import { createUseRxCRUDReducer } from '@fullstack/common/hooks';
 import { getFavourites, toggleFavourite } from '@/service';
 import { openConfirmModal } from '@/components/ConfirmModal';
 import { toaster } from '@/components/Toast';
 import { SemiBold } from '@/components/Text';
 import { navigate } from '@/utils/navigation';
 import { useAuth } from './useAuth';
-import { createUseRxCRUDReducer } from './crud';
 
 type Schema = Schema$Product | { id: string };
 

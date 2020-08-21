@@ -6,7 +6,7 @@ import {
   TextInput as RNTextInput
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useBoolean } from '@/hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 import { dimen } from '@/styles';
 import { TextInput, TextInputProps } from './TextInput';
 

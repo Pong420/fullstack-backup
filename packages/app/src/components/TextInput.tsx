@@ -6,7 +6,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useBoolean } from '@/hooks/useBoolean';
+import { useBoolean } from '@fullstack/common/hooks/useBoolean';
 import { shadow, colors } from '@/styles';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'onChange'> {
