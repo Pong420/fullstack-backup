@@ -1,54 +1,65 @@
-import { useCallback } from 'react';
-import { AllowedNames, paginationSelector } from '@pong420/redux-crud';
+import qs from 'qs';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+  createUseCRUDReducer,
+  AllowedNames,
+  CRUDState
+} from '@fullstack/common/hooks';
 import {
   usePagination,
-  UsePaginationProps,
-  PaginationPayload
+  PaginateAsyncRequst,
+  UsePaginationOptions
 } from './usePagination';
-import { useCRUDReducer } from './useCRUDReducer';
 
-export type onSuceess<I> = (payload: PaginationPayload<I>) => void;
+interface Props<I extends {}>
+  extends Omit<Partial<UsePaginationOptions<I>>, 'onSuccess'> {}
 
-interface Props<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey>
-> extends Pick<UsePaginationProps<I>, 'fn' | 'onFailure'> {
-  key: K;
-  pageSize?: number;
-  cache?: boolean;
-  onSuccess?: onSuceess<I>;
+export function paginationSelector<State extends CRUDState<any>>({
+  list,
+  ids: _ids,
+  pageNo,
+  pageSize,
+  params,
+  total
+}: State) {
+  const start = (pageNo - 1) * pageSize;
+  const data = list.slice(start, start + pageSize);
+  const ids = _ids.slice(start, start + pageSize);
+
+  let hasData = !!data.length;
+  for (const item of data) {
+    if (Object.keys(item).length === 0) {
+      hasData = false;
+      break;
+    }
+  }
+
+  return { data, ids, pageNo, params, pageSize, total, hasData };
 }
 
-const defaultPageSize = 10;
+export function createUsePaginationLocal<
+  I extends {},
+  K extends AllowedNames<I, string>
+>(key: K, request: PaginateAsyncRequst<I>) {
+  const useCRUDReducer = createUseCRUDReducer<I, K>(key);
 
-export function usePaginationLocal<
-  I extends Record<PropertyKey, any>,
-  K extends AllowedNames<I, PropertyKey> = AllowedNames<I, PropertyKey>
->({
-  key,
-  pageSize = defaultPageSize,
-  onSuccess,
-  cache = true,
-  ...props
-}: Props<I, K>) {
-  const [state, actions] = useCRUDReducer<I, K>({ key, pageSize });
-  const onSuccessCallback = useCallback<onSuceess<I>>(
-    payload => {
-      actions.paginate(payload);
-      onSuccess && onSuccess(payload);
-    },
-    [actions, onSuccess]
-  );
+  return function usePaginationLocal(options: Props<I>) {
+    const [state, actions] = useCRUDReducer();
+    const { search } = useLocation();
 
-  const payload = paginationSelector(state);
+    useEffect(() => {
+      actions.params(qs.parse(search.slice(1)));
+    }, [actions, search]);
 
-  const { loading, pagination, run } = usePagination({
-    ...props,
-    ...payload,
-    pageSize,
-    hasData: cache && payload.hasData,
-    onSuccess: onSuccessCallback
-  });
+    const payload = paginationSelector(state);
 
-  return { ...payload, run, actions, loading, pagination };
+    const { loading, pagination, run } = usePagination(request, {
+      ...options,
+      ...payload,
+      onSuccess: actions.paginate
+    });
+
+    return { ...payload, run, actions, loading, pagination };
+  };
 }

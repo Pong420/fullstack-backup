@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { useReducer, useRef, useMemo } from 'react';
+import { useState, useEffect, useReducer, useRef, useMemo } from 'react';
 import { Subject } from 'rxjs';
-import { createCRUDReducer } from './crudReducer';
+import { createCRUDReducer, CreateCRUDReducerOptions } from './crudReducer';
 import { AllowedNames, createCRUDActionsCreators } from './crudActions';
 import { bindDispatch } from './bindDispatch';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 export function createUseCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
->(key: K) {
-  const [intialState, reducer] = createCRUDReducer<I, K>(key);
+>(key: K, options?: CreateCRUDReducerOptions) {
+  const [intialState, reducer] = createCRUDReducer<I, K>(key, options);
   return function useCRUDReducer() {
     const [state, dispatch] = useReducer(reducer, intialState);
     const { current: actions } = useRef({
@@ -42,8 +40,8 @@ type Selector<I, O> = (state: I) => O;
 export function createUseRxCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
->(key: K) {
-  const [crudState, reducer] = createCRUDReducer<I, K>(key);
+>(key: K, options?: CreateCRUDReducerOptions) {
+  const [crudState, reducer] = createCRUDReducer<I, K>(key, options);
   const subject = new Subject<typeof crudState>();
   const store = new Store(crudState);
 

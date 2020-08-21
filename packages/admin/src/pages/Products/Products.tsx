@@ -5,23 +5,21 @@ import { NewProduct } from './ProductActions/NewProduct';
 import { ProductsGridView } from './ProductsGridView';
 import { ProductFilter } from './ProductFilter';
 import { Layout } from '../../components/Layout';
-import { usePaginationLocal } from '../../hooks/usePaginationLocal';
+import { createUsePaginationLocal } from '../../hooks/usePaginationLocal';
 import { Toaster } from '../../utils/toaster';
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Get products failure');
 
+const useProductPagination = createUsePaginationLocal<Schema$Product, 'id'>(
+  'id',
+  getProducts
+);
+
+const pageSize = 12;
+
 export function Products() {
-  const {
-    data,
-    pageNo,
-    pagination,
-    params,
-    actions
-    //
-  } = usePaginationLocal<Schema$Product, 'id'>({
-    key: 'id',
-    pageSize: 12,
-    fn: getProducts,
+  const { data, pageNo, pagination, params, actions } = useProductPagination({
+    pageSize,
     onFailure
   });
 

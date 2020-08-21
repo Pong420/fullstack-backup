@@ -7,7 +7,7 @@ import { createFilter } from '../../components/Filter';
 import { UserRoleSelect } from '../../components/UserRoleSelect';
 import { CreateUser } from './CreateUser';
 import { UserTable } from './UserTable';
-import { usePaginationLocal } from '../../hooks/usePaginationLocal';
+import { createUsePaginationLocal } from '../../hooks/usePaginationLocal';
 import { Toaster } from '../../utils/toaster';
 
 const onFailure = Toaster.apiError.bind(Toaster, 'Get users failure');
@@ -19,17 +19,14 @@ const {
   FilterDateRange
 } = createFilter<Param$GetUsers>();
 
+const useUserPagination = createUsePaginationLocal<Schema$User, 'id'>(
+  'id',
+  getUsers
+);
+
 export function Users() {
-  const {
-    data, //
-    loading,
-    pagination,
-    params,
-    actions
-  } = usePaginationLocal<Schema$User, 'id'>({
-    key: 'id',
-    onFailure,
-    fn: getUsers
+  const { data, loading, pagination, params, actions } = useUserPagination({
+    onFailure
   });
 
   return (

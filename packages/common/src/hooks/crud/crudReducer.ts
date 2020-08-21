@@ -2,25 +2,49 @@
 
 import { AllowedNames, CRUDActions } from './crudActions';
 
-export interface CRUDState<I extends {}> {
+export interface CRUDState<I extends {}, Prefill extends boolean = true> {
   byIds: Record<string, I>;
-  ids: string[];
-  list: I[];
+  ids: Prefill extends true ? Array<string | null> : string[];
+  list: Prefill extends true ? Array<I | Partial<I>> : I[];
   pageNo: number;
   pageSize: number;
   total: number;
   params: any;
 }
 
-export type CRUDReducer<I extends {}, K extends AllowedNames<I, string>> = (
-  state: CRUDState<I>,
-  action: CRUDActions<I, K>
-) => CRUDState<I>;
+export type CRUDReducer<
+  I extends {},
+  K extends AllowedNames<I, string>,
+  Prefill extends boolean = true
+> = (state: CRUDState<I>, action: CRUDActions<I, K>) => CRUDState<I, Prefill>;
+
+export interface CreateCRUDReducerOptions {
+  prefill?: boolean;
+}
 
 export function createCRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>
->(key: K) {
+>(
+  key: K,
+  options: CreateCRUDReducerOptions & { prefill: false }
+): [CRUDState<I, false>, CRUDReducer<I, K, false>];
+
+export function createCRUDReducer<
+  I extends {},
+  K extends AllowedNames<I, string>
+>(
+  key: K,
+  options?: CreateCRUDReducerOptions
+): [CRUDState<I, true>, CRUDReducer<I, K, true>];
+
+export function createCRUDReducer<
+  I extends {},
+  K extends AllowedNames<I, string>
+>(
+  key: K,
+  options: CreateCRUDReducerOptions = {}
+): [CRUDState<I, boolean>, CRUDReducer<I, K, boolean>] {
   const defaultState: CRUDState<I> = {
     byIds: {},
     ids: [],
@@ -31,6 +55,8 @@ export function createCRUDReducer<
     params: {}
   };
 
+  const { prefill = true } = options;
+
   const reducer: CRUDReducer<I, K> = (state = defaultState, action) => {
     switch (action.type) {
       case 'PAGINATE':
@@ -39,14 +65,41 @@ export function createCRUDReducer<
             ? { total: action.payload.length, data: action.payload, pageNo: 1 }
             : action.payload;
 
+          if (prefill === false) {
+            return reducer(state, { type: 'LIST', payload: data });
+          }
+
+          const start = (pageNo - 1) * state.pageSize;
+
+          const insert = <T1, T2>(arr: T1[], ids: T2[]) => {
+            return [
+              ...arr.slice(0, start),
+              ...ids,
+              ...arr.slice(start + pageSize)
+            ];
+          };
+
+          const { list, ids, byIds } = reducer(defaultState, {
+            type: 'LIST',
+            payload: data
+          });
+
           return {
             ...state,
-            ...data.reduce(
-              (state, payload) => reducer(state, { type: 'CREATE', payload }),
-              pageNo === 1 ? defaultState : state
-            ),
             total,
-            pageNo
+            pageNo,
+            byIds: {
+              ...state.byIds,
+              ...byIds
+            },
+            ids: insert(
+              [...state.ids, ...new Array<null>(total).fill(null)],
+              ids
+            ).slice(0, total),
+            list: insert(
+              [...state.list, ...new Array<Partial<I>>(total).fill({})],
+              list
+            ).slice(0, total)
           };
         })();
 
@@ -103,7 +156,9 @@ export function createCRUDReducer<
       case 'PARAMS':
         const { pageNo, pageSize, ...params } = action.payload;
         const toNum = (value: unknown, num: number) =>
-          isNaN(Number(value)) ? num : Number(value);
+          typeof value === 'undefined' || isNaN(Number(value))
+            ? num
+            : Number(value);
 
         return {
           ...state,
@@ -120,7 +175,7 @@ export function createCRUDReducer<
     }
   };
 
-  return [defaultState, reducer] as const;
+  return [defaultState, reducer];
 }
 
 export function removeFromArray<T>(arr: T[], index: number) {
