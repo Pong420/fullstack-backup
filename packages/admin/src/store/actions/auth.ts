@@ -1,6 +1,9 @@
 import { JWTSignPayload, Param$Login, Schema$User } from '@fullstack/typings';
-import { UnionCRUDActions } from '@fullstack/common/hooks/crud';
-import { useActions, ActionsMap } from '../../hooks/useActions';
+import {
+  UnionCRUDActions,
+  useActions,
+  ActionsMap
+} from '@fullstack/common/hooks';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
