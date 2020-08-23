@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Feather } from '@expo/vector-icons';
@@ -34,8 +34,8 @@ function MainScreen({
   route
 }: StackScreenProps<DeliveryAddressParamList, 'Main'>) {
   const [state, actions] = useAddressReducer();
-  const { loading } = useRxAsync(request, {
-    effect: useLayoutEffect,
+  const [{ loading }] = useRxAsync(request, {
+    // effect: useLayoutEffect, // TODO:
     onSuccess: actions.list
   });
   const addressses = state.list;
@@ -80,16 +80,22 @@ function MainScreen({
                     <Feather
                       name="trash-2"
                       size={20}
+                      // TODO:
+                      // @ts-ignore
                       onPress={() => removeAddressModal(id, address)}
                     />
                     <View style={styles.spacer} />
                     <Feather
                       name="edit"
                       size={20}
+                      // TODO:
+                      // @ts-ignore
                       onPress={() => navigation.navigate('Update', payload)}
                     />
                   </View>
                   <AddressForm
+                    // TODO:
+                    // @ts-ignore
                     area={area}
                     editable={false}
                     key={JSON.stringify(address)}

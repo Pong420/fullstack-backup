@@ -5,10 +5,10 @@ import { HomeSection } from './HomeSection';
 import { HomeProductsSlide } from './HomeProductsSlide';
 
 export function HomeRecommend() {
-  const { data, run } = useRxAsync(getProducts, { defer: true });
+  const [{ data }, { fetch }] = useRxAsync(getProducts, { defer: true });
   const products = data?.data.data.data || [];
 
-  useEffect(() => run({ category: 'jewelry' }), [run]);
+  useEffect(() => fetch({ category: 'jewelry' }), [fetch]);
 
   return (
     <HomeSection label="Recommend">

@@ -48,7 +48,7 @@ export function Discover() {
   const prevSearch = useRef(search);
 
   const [product, actions] = useProductReducer();
-  const { run, loading } = useRxAsync(request, {
+  const [{ loading }, { fetch }] = useRxAsync(request, {
     defer: true,
     onSuccess: actions.paginate
   });
@@ -96,7 +96,7 @@ export function Discover() {
     };
   }, []);
 
-  const { run: animate } = useRxAsync(toggleCollapse, {
+  const [, { fetch: animate }] = useRxAsync(toggleCollapse, {
     defer: true,
     onStart: animatedStart,
     onSuccess: animateEnd
@@ -106,9 +106,9 @@ export function Discover() {
     if (!isFocused && search && search !== prevSearch.current) {
       prevSearch.current = search;
       actions.reset();
-      run({ search, page: 1 });
+      fetch({ search, page: 1 });
     }
-  }, [isFocused, search, run, actions]);
+  }, [isFocused, search, fetch, actions]);
 
   return (
     <SafeAreaView style={styles.grow}>
@@ -181,7 +181,7 @@ export function Discover() {
         {/* TODO: loading */}
 
         <ProductList
-          data={product.list}
+          data={product.list as any} // TODO:
           ListEmptyComponent={
             !search || loading || product.total > 0 ? undefined : (
               <Empty content="Products not found" />
@@ -190,7 +190,7 @@ export function Discover() {
           onEndReached={() => {
             const hasNext = product.total > product.ids.length;
             if (hasNext && !loading && product.ids.length) {
-              run({ search, page: product.pageNo + 1 });
+              fetch({ search, page: product.pageNo + 1 });
             }
           }}
         />

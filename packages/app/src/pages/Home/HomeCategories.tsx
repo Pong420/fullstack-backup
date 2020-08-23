@@ -8,7 +8,7 @@ import { containerPadding, colors } from '@/styles';
 import { HomeSection } from './HomeSection';
 
 export function HomeCategories() {
-  const { data } = useRxAsync(getProductCategories, {});
+  const [{ data }] = useRxAsync(getProductCategories, {});
   const categires = (data && data.data.data) || [];
 
   return (

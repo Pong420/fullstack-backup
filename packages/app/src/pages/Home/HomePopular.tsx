@@ -5,10 +5,10 @@ import { HomeSection } from './HomeSection';
 import { HomeProductsSlide } from './HomeProductsSlide';
 
 export function HomePopular() {
-  const { data, run } = useRxAsync(getProducts, { defer: true });
+  const [{ data }, { fetch }] = useRxAsync(getProducts, { defer: true });
   const products = data?.data.data.data || [];
 
-  useEffect(() => run({ category: 'clothes' }), [run]);
+  useEffect(() => fetch({ category: 'clothes' }), [fetch]);
 
   return (
     <HomeSection label="Popular">

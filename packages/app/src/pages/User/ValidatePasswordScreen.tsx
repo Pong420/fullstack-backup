@@ -25,7 +25,7 @@ export function ValidatePasswordScreen({
     navigation.replace('PersonalInfo', { user });
   });
 
-  const { run, loading } = useRxAsync(request, {
+  const [{ loading }, { fetch }] = useRxAsync(request, {
     defer: true,
     onSuccess,
     onFailure
@@ -33,5 +33,7 @@ export function ValidatePasswordScreen({
 
   const [form] = useForm();
 
-  return <ValidPasswordContent form={form} loading={loading} onFinish={run} />;
+  return (
+    <ValidPasswordContent form={form} loading={loading} onFinish={fetch} />
+  );
 }

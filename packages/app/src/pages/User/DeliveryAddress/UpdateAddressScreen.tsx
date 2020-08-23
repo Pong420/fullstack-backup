@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRxAsync } from 'use-rx-hooks';
 import { Schema$Address } from '@fullstack/typings';
@@ -31,11 +31,11 @@ export function UpdateAddressScreen({
     });
     toaster.success({ message: 'Update delivery address success' });
   });
-  const { run, loading } = useRxAsync(request, {
+  const [{ loading }, { fetch }] = useRxAsync(request, {
     defer: true,
     onSuccess,
-    onFailure,
-    effect: useLayoutEffect
+    onFailure
+    // effect: useLayoutEffect // TODO:
   });
   const [form] = useForm();
 
@@ -46,7 +46,7 @@ export function UpdateAddressScreen({
         form={form}
         initialValues={address}
         contentContainerStyle={styles.content}
-        onFinish={address => run({ id, address })}
+        onFinish={address => fetch({ id, address })}
       >
         <KeyboardAvoidingViewFooter style={styles.button}>
           <Button

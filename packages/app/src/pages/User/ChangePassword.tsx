@@ -34,7 +34,7 @@ export function ChangePassword({
     });
   });
 
-  const { run, loading } = useRxAsync(modifyPassword, {
+  const [{ loading }, { fetch }] = useRxAsync(modifyPassword, {
     defer: true,
     onSuccess,
     onFailure
@@ -45,7 +45,7 @@ export function ChangePassword({
   >();
 
   return (
-    <Form style={styles.container} form={form} onFinish={run}>
+    <Form style={styles.container} form={form} onFinish={fetch}>
       <Header title="Chnage Password" />
       <ScrollView
         bounces={false}

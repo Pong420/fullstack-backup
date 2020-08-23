@@ -42,13 +42,11 @@ export function usePagination<I>(
     [onSuccess, pageNo]
   );
 
-  const asyncState = useRxAsync(asyncFn, {
+  const [asyncState, { fetch }] = useRxAsync(asyncFn, {
     defer: true,
     onFailure,
     onSuccess: onSuccessCallback
   });
-
-  const { run } = asyncState;
 
   const pagination: PaginationProps | undefined = {
     total,
@@ -59,9 +57,9 @@ export function usePagination<I>(
 
   useEffect(() => {
     if (!hasData) {
-      run({ page: pageNo, size: pageSize, ...params });
+      fetch({ page: pageNo, size: pageSize, ...params });
     }
-  }, [hasData, run, pageNo, pageSize, params]);
+  }, [hasData, fetch, pageNo, pageSize, params]);
 
   return { ...asyncState, pagination };
 }

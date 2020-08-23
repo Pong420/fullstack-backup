@@ -51,7 +51,7 @@
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.5",
     "typeface-muli": "^1.1.3",
-    "use-rx-hooks": "1.5.0"
+    "use-rx-hooks": "1.6.0"
   },
   "eslintConfig": {
     "extends": "react-app",

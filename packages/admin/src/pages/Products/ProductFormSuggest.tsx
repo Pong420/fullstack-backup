@@ -70,7 +70,7 @@ export function ProductCategoryInput({
   value: category,
   onChange
 }: ProductCategorySuggestProps) {
-  const { data = [] } = useRxAsync(categoryReq);
+  const [{ data = [] }] = useRxAsync(categoryReq);
   const handleChange = onChange || nil;
 
   return (
@@ -101,7 +101,7 @@ export function ProductTagsInput({
   value: selectedTags,
   onChange
 }: ProductTagsSuggestProps) {
-  const { data = [] } = useRxAsync(tagsReq);
+  const [{ data = [] }] = useRxAsync(tagsReq);
   const handleChange = onChange || nil;
 
   return (

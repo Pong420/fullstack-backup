@@ -74,7 +74,7 @@ export function ConfirmDialog({
   intent = 'primary',
   ...props
 }: ConfirmDialogProps) {
-  const { run, loading } = useRxAsync(onConfirm || asyncFn, {
+  const [{ loading }, { fetch }] = useRxAsync(onConfirm || asyncFn, {
     defer: true,
     onSuccess: onClose
   });
@@ -93,7 +93,7 @@ export function ConfirmDialog({
           <Button onClick={onClose} disabled={loading}>
             Cancel
           </Button>
-          <Button intent={intent} onClick={run} loading={loading}>
+          <Button intent={intent} onClick={fetch} loading={loading}>
             Confirm
           </Button>
         </div>

@@ -22,7 +22,7 @@ const onFailure = Toaster.apiError.bind(Toaster, 'Register admin failure');
 
 export function AdminRegistrationForm() {
   const [form] = useForm();
-  const { run, loading } = useRxAsync(registerAdmin, {
+  const [{ loading }, { fetch }] = useRxAsync(registerAdmin, {
     defer: true,
     onSuccess: backToLogin,
     onFailure
@@ -31,7 +31,7 @@ export function AdminRegistrationForm() {
   return (
     <Form
       form={form}
-      onFinish={({ confirmPassword, ...params }) => run(params)}
+      onFinish={({ confirmPassword, ...params }) => fetch(params)}
     >
       <Username
         validators={[

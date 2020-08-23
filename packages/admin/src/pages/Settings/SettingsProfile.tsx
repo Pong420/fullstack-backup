@@ -51,12 +51,12 @@ export function SettingsProfile() {
     };
   }, [profileUpdate]);
 
-  const { loading: loadingProfile } = useRxAsync(getProfile, {
+  const [profile] = useRxAsync(getProfile, {
     onSuccess: profileUpdate,
     onFailure: getProfileFailure
   });
 
-  const { run, loading } = useRxAsync(updateUserReq, {
+  const [updateProfile, updateProfileActions] = useRxAsync(updateUserReq, {
     defer: true,
     onSuccess: updateProfileSuccess,
     onFailure: updateProfileFailure
@@ -68,7 +68,9 @@ export function SettingsProfile() {
         key={id} // for update initialValues
         form={form}
         initialValues={initialValues} // for rest
-        onFinish={payload => id && run({ id, ...payload })}
+        onFinish={payload =>
+          id && updateProfileActions.fetch({ id, ...payload })
+        }
       >
         <div className="form-content">
           <div className="left">
@@ -77,16 +79,19 @@ export function SettingsProfile() {
           </div>
           <div className="right">
             <FormItem name="avatar">
-              <UpdateAvatar fallback={loadingProfile ? undefined : username} />
+              <UpdateAvatar fallback={profile.loading ? undefined : username} />
             </FormItem>
           </div>
         </div>
         <Divider />
         <div className="form-footer">
-          <Button disabled={loading} onClick={() => form.resetFields()}>
+          <Button
+            disabled={updateProfile.loading}
+            onClick={() => form.resetFields()}
+          >
             Reset
           </Button>
-          <Button loading={loading} onClick={form.submit}>
+          <Button loading={updateProfile.loading} onClick={form.submit}>
             Apply
           </Button>
         </div>

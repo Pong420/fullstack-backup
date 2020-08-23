@@ -62,14 +62,16 @@ export function ValidPasswordContent({
 }
 
 export function ValidPassword({ onSuccess }: Props) {
-  const { run, loading } = useRxAsync(login, {
+  const [{ loading }, { fetch }] = useRxAsync(login, {
     defer: true,
     onSuccess,
     onFailure
   });
   const [form] = useForm();
 
-  return <ValidPasswordContent form={form} loading={loading} onFinish={run} />;
+  return (
+    <ValidPasswordContent form={form} loading={loading} onFinish={fetch} />
+  );
 }
 
 const styles = StyleSheet.create({

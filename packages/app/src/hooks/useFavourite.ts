@@ -122,7 +122,7 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
     };
   }, [actions, loginStatus]);
 
-  const { run } = useRxAsync(request, {
+  const [, { fetch }] = useRxAsync(request, {
     defer: true,
     onSuccess: actionConext.list
   });
@@ -132,9 +132,9 @@ export function FavouriteProvider({ children }: { children: ReactNode }) {
       actions.reset();
     }
     if (loginStatus === 'loggedIn') {
-      run();
+      fetch();
     }
-  }, [run, actions, loginStatus]);
+  }, [fetch, actions, loginStatus]);
 
   useEffect(() => {
     const subscription = trigger$.current

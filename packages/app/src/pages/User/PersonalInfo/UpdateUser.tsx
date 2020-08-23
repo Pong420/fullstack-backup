@@ -40,7 +40,7 @@ function createModal({ title, content: Content, prefix }: Create) {
       navigation.navigate('Main', { user: payload });
       toaster.success({ message: `Update ${prefix} success` });
     });
-    const { run, loading } = useRxAsync(request, {
+    const [{ loading }, { fetch }] = useRxAsync(request, {
       defer: true,
       onSuccess,
       onFailure
@@ -52,7 +52,7 @@ function createModal({ title, content: Content, prefix }: Create) {
         <Form
           style={styles.content}
           form={form}
-          onFinish={changes => user && run({ id: user.user_id, ...changes })}
+          onFinish={changes => user && fetch({ id: user.user_id, ...changes })}
         >
           {user && <Content {...{ user, onSubmit: form.submit }} />}
 
