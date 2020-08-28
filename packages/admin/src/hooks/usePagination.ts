@@ -61,5 +61,5 @@ export function usePagination<I>(
     }
   }, [hasData, fetch, pageNo, pageSize, params]);
 
-  return { ...asyncState, pagination };
+  return { ...asyncState, fetch, pagination };
 }

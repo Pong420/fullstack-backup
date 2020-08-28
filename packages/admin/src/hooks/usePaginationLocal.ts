@@ -54,12 +54,12 @@ export function createUsePaginationLocal<
 
     const payload = paginationSelector(state);
 
-    const { loading, pagination, run } = usePagination(request, {
+    const { loading, pagination, fetch } = usePagination(request, {
       ...options,
       ...payload,
       onSuccess: actions.paginate
     });
 
-    return { ...payload, run, actions, loading, pagination };
+    return { ...payload, fetch, actions, loading, pagination };
   };
 }
