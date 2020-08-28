@@ -4,7 +4,7 @@ import React, { ReactElement, ReactNode } from 'react';
 import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
-import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
+import { Meta, FieldError, Store } from 'rc-field-form/lib/interface';
 import {
   View,
   ViewStyle,
@@ -13,7 +13,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  StyleSheet
+  StyleSheet,
+  ViewProps,
+  TouchableWithoutFeedbackProps
 } from 'react-native';
 import {
   NamePath,
@@ -21,10 +23,21 @@ import {
   PathType,
   DeepPartial,
   Validator,
-  compose as composeValidator
+  compose as composeValidator,
+  Control
 } from '@fullstack/common/utils/form';
 import { SemiBold, Text, TextProps } from '../../components/Text';
 import { colors } from '../../styles';
+
+export interface FieldData<S extends {} = Store, Name = NamePath<S>>
+  extends Partial<Omit<Meta, 'name'>> {
+  name: Name;
+  value?: Name extends Paths<S>
+    ? PathType<S, Name>
+    : Name extends keyof S
+    ? S[Name]
+    : undefined;
+}
 
 export type FormInstance<S extends {} = Store> = {
   getFieldValue<K extends keyof S>(name: K): S[K];
@@ -95,15 +108,15 @@ type FormItemPropsDeps<S extends {} = Store> =
 export type FormItemProps<S extends {} = Store> = BasicFormItemProps<S> &
   FormItemPropsDeps<S>;
 
-type Rule = NonNullable<RcFieldProps['rules']>[number];
-
 interface FormItemStyles {
   label?: TextProps['style'];
   help?: TextProps['style'];
 }
 
+type Rule = NonNullable<RcFieldProps['rules']>[number];
+
 const getValues = (obj: any, paths: (string | number)[]) =>
-  paths.reduce<any>((result, key) => result[key] && result[key], obj);
+  paths.reduce((result, key) => result && result[key], obj);
 
 export function createShouldUpdate(
   names: Array<string | number | (string | number)[]> = []
@@ -123,7 +136,7 @@ export function createForm<S extends {} = Store, V = S>({
   itemStyles = {},
   ...defaultProps
 }: Partial<FormItemProps<S>> & { itemStyles?: FormItemStyles } = {}) {
-  const FormItem = (props_: FormItemProps<S>) => {
+  const FormItem = (itemProps: FormItemProps<S>) => {
     const {
       name,
       children,
@@ -135,22 +148,19 @@ export function createForm<S extends {} = Store, V = S>({
       ...props
     } = {
       ...defaultProps,
-      ...props_
+      ...itemProps
     } as FormItemProps<S> & {
       deps?: Array<string | number | (string | number)[]>;
       name: string | number;
     };
 
-    const rules: Rule[] =
+    const rules: Rule[] = [
       typeof validators === 'function'
-        ? [
-            ({ getFieldsValue }) => ({
-              validator: composeValidator(
-                validators(getFieldsValue(deps) as any)
-              )
-            })
-          ]
-        : [{ validator: composeValidator(validators) }];
+        ? ({ getFieldsValue }) => ({
+            validator: composeValidator(validators(getFieldsValue(deps) as S))
+          })
+        : { validator: composeValidator(validators) }
+    ];
 
     return React.createElement(
       RcField,
@@ -162,7 +172,11 @@ export function createForm<S extends {} = Store, V = S>({
           : {}),
         ...props
       },
-      (control: any, { errors }: FieldData, form: FormInstance<S>) => {
+      (
+        control: Control<unknown>,
+        { errors }: FieldData<S>,
+        form: FormInstance<S>
+      ) => {
         const { getFieldsValue } = form;
 
         const error = errors && errors[0];
@@ -181,10 +195,10 @@ export function createForm<S extends {} = Store, V = S>({
           return childNode;
         }
 
-        return React.createElement(
+        return React.createElement<ViewProps>(
           View,
           { style: { marginBottom: 10, ...style } },
-          React.createElement(
+          React.createElement<TextProps>(
             SemiBold,
             {
               style: {
@@ -196,7 +210,7 @@ export function createForm<S extends {} = Store, V = S>({
             label
           ),
           childNode,
-          React.createElement(
+          React.createElement<TextProps>(
             Text,
             {
               style: {
@@ -228,7 +242,7 @@ export function createForm<S extends {} = Store, V = S>({
       },
       ref
     ) => {
-      return React.createElement(
+      return React.createElement<KeyboardAvoidingViewProps>(
         KeyboardAvoidingView,
         {
           ...keyboardViewProps,
@@ -237,7 +251,7 @@ export function createForm<S extends {} = Store, V = S>({
           }),
           behavior: Platform.OS === 'ios' ? 'padding' : 'height'
         },
-        React.createElement(
+        React.createElement<TouchableWithoutFeedbackProps>(
           TouchableWithoutFeedback,
           { onPress: Keyboard.dismiss },
           React.createElement(
@@ -251,11 +265,13 @@ export function createForm<S extends {} = Store, V = S>({
                   : initialValues,
               onFinish:
                 onFinish &&
-                ((store: any) => {
-                  onFinish(beforeSubmit ? beforeSubmit(store) : store);
+                ((store: unknown) => {
+                  onFinish(
+                    beforeSubmit ? beforeSubmit(store as S) : (store as V)
+                  );
                 }),
               component: View
-            } as any,
+            } as RcFormProps,
             children
           )
         )

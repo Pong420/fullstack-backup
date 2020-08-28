@@ -4,7 +4,7 @@ import React, { ReactElement, ReactNode } from 'react';
 import RcForm, { Field as RcField, useForm as RcUseForm } from 'rc-field-form';
 import { FormProps as RcFormProps } from 'rc-field-form/es/Form';
 import { FieldProps as RcFieldProps } from 'rc-field-form/es/Field';
-import { FieldData, FieldError, Store } from 'rc-field-form/lib/interface';
+import { Meta, FieldError, Store } from 'rc-field-form/lib/interface';
 import { FormGroup, IFormGroupProps } from '@blueprintjs/core';
 import {
   NamePath,
@@ -12,8 +12,24 @@ import {
   PathType,
   DeepPartial,
   Validator,
-  compose as composeValidator
+  compose as composeValidator,
+  Control
 } from '@fullstack/common/utils/form';
+
+type HTMLDivProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>;
+
+export interface FieldData<S extends {} = Store, Name = NamePath<S>>
+  extends Partial<Omit<Meta, 'name'>> {
+  name: Name;
+  value?: Name extends Paths<S>
+    ? PathType<S, Name>
+    : Name extends keyof S
+    ? S[Name]
+    : undefined;
+}
 
 export type FormInstance<S extends {} = Store> = {
   getFieldValue<K extends keyof S>(name: K): S[K];
@@ -30,7 +46,7 @@ export type FormInstance<S extends {} = Store> = {
   isFieldValidating(name: NamePath<S>): boolean;
   isFieldsValidating(nameList: NamePath<S>[]): boolean;
   resetFields(fields?: NamePath<S>[]): void;
-  setFields(fields: FieldData[]): void;
+  setFields(fields: FieldData<S, keyof S | NamePath<S>>[]): void;
   setFieldsValue(value: DeepPartial<S>): void;
   validateFields<K extends keyof S>(nameList?: NamePath<K>[]): Promise<S>;
   submit: () => void;
@@ -52,6 +68,10 @@ type OmititedRcFieldProps = Omit<
   RcFieldProps,
   'name' | 'dependencies' | 'children' | 'rules'
 >;
+
+export interface FormItemLabelProps extends HTMLDivProps {
+  label?: ReactNode;
+}
 
 interface BasicFormItemProps<S extends {} = Store>
   extends OmititedRcFieldProps {
@@ -96,7 +116,7 @@ export interface FormItemClassName {
 type Rule = NonNullable<RcFieldProps['rules']>[number];
 
 const getValues = (obj: any, paths: (string | number)[]) =>
-  paths.reduce<any>((result, key) => result[key] && result[key], obj);
+  paths.reduce((result, key) => result && result[key], obj);
 
 export function createShouldUpdate(
   names: Array<string | number | (string | number)[]> = []
@@ -126,7 +146,7 @@ export function createForm<S extends {} = Store, V = S>({
 }: Partial<FormItemProps<S>> & { itemClassName?: FormItemClassName } = {}) {
   const ClassNames = { ...defaultFormItemClassName, ...itemClassName };
 
-  const FormItem = (props_: FormItemProps<S>) => {
+  const FormItem = (itemProps: FormItemProps<S>) => {
     const {
       name,
       children,
@@ -139,22 +159,19 @@ export function createForm<S extends {} = Store, V = S>({
       ...props
     } = {
       ...defaultProps,
-      ...props_
+      ...itemProps
     } as FormItemProps<S> & {
       deps?: Array<string | number | (string | number)[]>;
       name: string | number;
     };
 
-    const rules: Rule[] =
+    const rules: Rule[] = [
       typeof validators === 'function'
-        ? [
-            ({ getFieldsValue }) => ({
-              validator: composeValidator(
-                validators(getFieldsValue(deps) as any)
-              )
-            })
-          ]
-        : [{ validator: composeValidator(validators) }];
+        ? ({ getFieldsValue }) => ({
+            validator: composeValidator(validators(getFieldsValue(deps) as S))
+          })
+        : { validator: composeValidator(validators) }
+    ];
 
     return React.createElement(
       RcField,
@@ -167,11 +184,13 @@ export function createForm<S extends {} = Store, V = S>({
         ...props
       },
       (
-        control: any,
-        { touched, validating, errors }: FieldData,
+        control: Control<unknown>,
+        { touched, validating, errors }: FieldData<S>,
         form: FormInstance<S>
       ) => {
         const { getFieldsValue } = form;
+
+        const error = errors && errors[0];
 
         const childNode =
           typeof children === 'function'
@@ -185,8 +204,6 @@ export function createForm<S extends {} = Store, V = S>({
         if (noStyle) {
           return childNode;
         }
-
-        const error = errors && errors[0];
 
         return React.createElement<IFormGroupProps>(
           FormGroup,
@@ -205,7 +222,11 @@ export function createForm<S extends {} = Store, V = S>({
               .trim()
           },
           childNode,
-          React.createElement('div', { className: ClassNames.help }, error)
+          React.createElement<HTMLDivProps>(
+            'div',
+            { className: ClassNames.help },
+            error
+          )
         );
       }
     );
@@ -223,8 +244,8 @@ export function createForm<S extends {} = Store, V = S>({
         ...props
       },
       ref
-    ) => {
-      return React.createElement(
+    ) =>
+      React.createElement(
         RcForm,
         {
           ...props,
@@ -239,10 +260,9 @@ export function createForm<S extends {} = Store, V = S>({
             ((store: any) => {
               onFinish(beforeSubmit ? beforeSubmit(store) : store);
             })
-        } as any,
+        } as RcFormProps,
         children
-      );
-    }
+      )
   );
 
   const useForm: () => [FormInstance<S>] = RcUseForm as any;
