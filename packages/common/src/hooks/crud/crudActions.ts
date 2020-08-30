@@ -19,10 +19,6 @@ export interface ActionCreators {
   [k: string]: (...args: any[]) => AnyAction;
 }
 
-export type UnionCRUDActions<
-  T extends Record<string, (...args: any[]) => any>
-> = ReturnType<T[keyof T]>;
-
 export interface List<I extends {}> {
   type: 'LIST';
   payload: I[];

@@ -16,7 +16,10 @@ export type CRUDReducer<
   I extends {},
   K extends AllowedNames<I, string>,
   Prefill extends boolean = true
-> = (state: CRUDState<I>, action: CRUDActions<I, K>) => CRUDState<I, Prefill>;
+> = (
+  state: CRUDState<I, Prefill>,
+  action: CRUDActions<I, K>
+) => CRUDState<I, Prefill>;
 
 export interface CreateCRUDReducerOptions {
   prefill?: boolean;
@@ -45,7 +48,7 @@ export function createCRUDReducer<
   key: K,
   options: CreateCRUDReducerOptions = {}
 ): [CRUDState<I, boolean>, CRUDReducer<I, K, boolean>] {
-  const defaultState: CRUDState<I> = {
+  const defaultState: CRUDState<I, boolean> = {
     byIds: {},
     ids: [],
     list: [],
@@ -57,7 +60,10 @@ export function createCRUDReducer<
 
   const { prefill = true } = options;
 
-  const reducer: CRUDReducer<I, K> = (state = defaultState, action) => {
+  const reducer: CRUDReducer<I, K, boolean> = (
+    state = defaultState,
+    action
+  ) => {
     switch (action.type) {
       case 'PAGINATE':
         return (() => {

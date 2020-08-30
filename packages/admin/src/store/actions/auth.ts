@@ -1,9 +1,5 @@
 import { JWTSignPayload, Param$Login, Schema$User } from '@fullstack/typings';
-import {
-  UnionCRUDActions,
-  useActions,
-  ActionsMap
-} from '@fullstack/common/hooks';
+import { UnionActions, useActions, ActionsMap } from '@fullstack/common/hooks';
 
 export type LoginStatus = 'unknown' | 'loading' | 'loggedIn' | 'required';
 
@@ -66,7 +62,7 @@ const actions = {
   profileUpdate
 };
 
-export type AuthActions = UnionCRUDActions<typeof actions>;
+export type AuthActions = UnionActions<typeof actions>;
 export type AuthActionMap = ActionsMap<AuthActions>;
 
 export const useAuthActions = () => useActions(actions);
